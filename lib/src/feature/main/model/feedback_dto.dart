@@ -1,0 +1,106 @@
+// ignore_for_file: invalid_annotation_target
+
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/main/model/main_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'feedback_dto.freezed.dart';
+part 'feedback_dto.g.dart';
+
+@freezed
+class FeedbackDTO with _$FeedbackDTO {
+  const factory FeedbackDTO({
+    required int? id,
+    required UserDTO? user,
+    required FeedbackItemDTO? item,
+    required String? comment,
+    required int? rating,
+    String? image,
+    List<ImageDTO>? images,
+    int? likes,
+    int? dislikes,
+    int? views,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'is_like') int? isLike,
+    @JsonKey(name: 'is_dislike') int? isDislike,
+    @JsonKey(name: 'replies_count') int? repliesCount,
+    List<RepliesDTO>? replies,
+  }) = _FeedbackDTO;
+
+  factory FeedbackDTO.fromJson(Map<String, dynamic> json) => _$FeedbackDTOFromJson(json);
+}
+
+@freezed
+class FeedbackItemDTO with _$FeedbackItemDTO {
+  const factory FeedbackItemDTO({
+    required int? id,
+    required String? name,
+    // required String? branch,
+    required CatalogDTO? catalog,
+    required SubCatalogDTO? subCatalog,
+    required CountryDTO? country,
+    required CityDTO? city,
+    // required int? rating,
+    @JsonKey(name: 'feedback_count') int? feedbackCount,
+  }) = _FeedbackItemDTO;
+
+  factory FeedbackItemDTO.fromJson(Map<String, dynamic> json) => _$FeedbackItemDTOFromJson(json);
+}
+
+@freezed
+class ImageDTO with _$ImageDTO {
+  const factory ImageDTO({
+    required int? id,
+    required String? image,
+  }) = _ImageDTO;
+
+  factory ImageDTO.fromJson(Map<String, dynamic> json) => _$ImageDTOFromJson(json);
+}
+
+@freezed
+class RepliesDTO with _$RepliesDTO {
+  const factory RepliesDTO({
+    required int? id,
+    required UserDTO? user,
+    required String? coment,
+    @JsonKey(name: 'parent_id') int? parentId,
+    @JsonKey(name: 'feedback_id') int? feedbackId,
+    @JsonKey(name: 'created_at') String? createdAt,
+    required String? comment,
+    List<ReplyDTO>? reply,
+  }) = _RepliesDTO;
+
+  factory RepliesDTO.fromJson(Map<String, dynamic> json) => _$RepliesDTOFromJson(json);
+}
+
+@freezed
+class ReplyDTO with _$ReplyDTO {
+  const factory ReplyDTO({
+    required int? id,
+    required UserDTO? user,
+    required String? coment,
+    @JsonKey(name: 'parent_id') int? parentId,
+    @JsonKey(name: 'feedback_id') int? feedbackId,
+    @JsonKey(name: 'created_at') String? createdAt,
+    required String? comment,
+    List<ReplyTwoDTO>? reply,
+  }) = _ReplyDTO;
+
+  factory ReplyDTO.fromJson(Map<String, dynamic> json) => _$ReplyDTOFromJson(json);
+}
+
+@freezed
+class ReplyTwoDTO with _$ReplyTwoDTO {
+  const factory ReplyTwoDTO({
+    required int? id,
+    required UserDTO? user,
+    required String? coment,
+    @JsonKey(name: 'parent_id') int? parentId,
+    @JsonKey(name: 'feedback_id') int? feedbackId,
+    @JsonKey(name: 'created_at') String? createdAt,
+    required String? comment,
+    List<ReplyDTO>? reply,
+  }) = _ReplyTwoDTO;
+
+  factory ReplyTwoDTO.fromJson(Map<String, dynamic> json) => _$ReplyTwoDTOFromJson(json);
+}
