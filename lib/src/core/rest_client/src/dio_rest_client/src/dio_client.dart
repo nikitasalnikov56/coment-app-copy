@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:coment_app/src/feature/settings/data/app_settings_datasource.dart';
 import 'package:dio/dio.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -66,6 +65,11 @@ class DioClient {
       dio.interceptors.add(
         InterceptorsWrapper(
           onRequest: (options, handler) async {
+              // ДОБАВЬТЕ CORS headers ЗДЕСЬ:
+          options.headers['Access-Control-Allow-Origin'] = '*';
+          options.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
+          options.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization, X-Requested-With';
+            
             final appSettings = await appSettingsDS.getAppSettings();
             options.headers['Accept'] = 'application/json';
             options.headers['version'] = packageInfo.version;
@@ -94,6 +98,8 @@ class DioClient {
             printResponseHeaders: false, printRequestHeaders: true, printResponseData: true, printRequestData: true),
       ),
     );
+
+    
 
     dio.interceptors.add(dioInterceptor);
   }

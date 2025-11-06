@@ -63,7 +63,12 @@ class ReviewWidgetItem extends StatelessWidget {
                         Text(feedbackDTO.user?.name ?? '',
                             style: AppTextStyles.fs14w600.copyWith(color: const Color(0xff605b5b), height: 1.3)),
                         const SizedBox(height: 4),
-                        Text(formatDate(feedbackDTO.createdAt ?? '', context.currentLocale.toString()),
+                        Text(
+                          // formatDate(feedbackDTO.createdAt ?? '', context.currentLocale.toString()),
+                          feedbackDTO.createdAt != null
+                                      ? formatDate(feedbackDTO.createdAt!,
+                                          context.currentLocale.toString())
+                                      : '—',
                             style: AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
                       ],
                     ),

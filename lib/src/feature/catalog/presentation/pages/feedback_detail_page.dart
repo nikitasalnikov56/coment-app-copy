@@ -230,7 +230,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                                   },
                                   imageAva: feedbackDTO.replies?[index].user?.avatar ?? NOT_FOUND_IMAGE,
                                   name: feedbackDTO.replies?[index].user?.name ?? '',
-                                  date: feedbackDTO.replies?[index].createdAt ?? '',
+                                  date: feedbackDTO.replies?[index].createdAt ?? DateTime.now(),
                                   coment: feedbackDTO.replies?[index].comment ?? '',
                                   rating: feedbackDTO.replies?[index].user?.rating ?? 1,
                                   replies: feedbackDTO.replies?[index].reply ?? [],
@@ -314,7 +314,10 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                       Text(feedbackDTO.user?.name ?? '',
                           style: AppTextStyles.fs14w600.copyWith(color: const Color(0xff605b5b), height: 1.3)),
                       const SizedBox(height: 4),
-                      Text(formatDate(feedbackDTO.createdAt ?? '', context.currentLocale.toString()),
+                      Text(feedbackDTO.createdAt != null
+                                      ? formatDate(feedbackDTO.createdAt!,
+                                          context.currentLocale.toString())
+                                      : '—',
                           style: AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
                     ],
                   ),

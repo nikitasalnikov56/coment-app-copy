@@ -243,7 +243,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       style:
                                           AppTextStyles.fs14w600.copyWith(color: const Color(0xff605b5b), height: 1.3)),
                                   const SizedBox(height: 4),
-                                  Text(formatDate(feedback[index].createdAt ?? '', context.currentLocale.toString()),
+                                  Text(
+                                    feedback[index].createdAt != null
+                                      ? formatDate(feedback[index].createdAt!,
+                                          context.currentLocale.toString())
+                                      : '—',
                                       style:
                                           AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
                                 ],

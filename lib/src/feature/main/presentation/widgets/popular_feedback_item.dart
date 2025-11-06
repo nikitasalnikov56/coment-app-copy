@@ -25,7 +25,9 @@ class PopularFeedbackItem extends StatelessWidget {
     return Container(
       width: 330,
       margin: const EdgeInsets.only(right: 10),
-      decoration: const BoxDecoration(color: AppColors.grey2, borderRadius: BorderRadius.all(Radius.circular(12))),
+      decoration: const BoxDecoration(
+          color: AppColors.grey2,
+          borderRadius: BorderRadius.all(Radius.circular(12))),
       child: Material(
         borderRadius: BorderRadius.circular(12),
         color: Colors.transparent,
@@ -51,7 +53,8 @@ class PopularFeedbackItem extends StatelessWidget {
                               fit: BoxFit.cover,
                               height: 40,
                               width: 40,
-                              progressIndicatorBuilder: ImageUtil.cachedLoadingBuilder,
+                              progressIndicatorBuilder:
+                                  ImageUtil.cachedLoadingBuilder,
                             ),
                           ),
                           const Gap(14),
@@ -62,11 +65,17 @@ class PopularFeedbackItem extends StatelessWidget {
                                 Text(
                                   data.user?.name ?? '',
                                   overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.fs14w600.copyWith(height: 1.2),
+                                  style: AppTextStyles.fs14w600
+                                      .copyWith(height: 1.2),
                                 ),
                                 Text(
-                                  formatDate(data.createdAt ?? '', context.currentLocale.toString()),
-                                  style: AppTextStyles.fs12w700.copyWith(height: 1.2, color: AppColors.greyTextColor3),
+                                  data.createdAt != null
+                                      ? formatDate(data.createdAt!,
+                                          context.currentLocale.toString())
+                                      : '—',
+                                  style: AppTextStyles.fs12w700.copyWith(
+                                      height: 1.2,
+                                      color: AppColors.greyTextColor3),
                                 ),
                               ],
                             ),
@@ -85,7 +94,10 @@ class PopularFeedbackItem extends StatelessWidget {
                           return Padding(
                               padding: const EdgeInsets.only(right: 4),
                               child: SvgPicture.asset(AssetsConstants.icStar,
-                                  height: 10, width: 10, colorFilter: getStarColorFilter(data.rating ?? 0, index)));
+                                  height: 10,
+                                  width: 10,
+                                  colorFilter: getStarColorFilter(
+                                      data.rating ?? 0, index)));
                         },
                       ),
                     ),
@@ -112,27 +124,49 @@ class PopularFeedbackItem extends StatelessWidget {
     return rating == 5
         ? null
         : rating == 4
-            ? (index == 4 ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn) : null)
+            ? (index == 4
+                ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                : null)
             : rating == 3
-                ? (index == 3 || index == 4 ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn) : null)
+                ? (index == 3 || index == 4
+                    ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                    : null)
                 : rating == 2
                     ? (index == 2 || index == 3 || index == 4
-                        ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                        ? const ColorFilter.mode(
+                            AppColors.base400, BlendMode.srcIn)
                         : null)
                     : rating == 1
                         ? (index == 1 || index == 2 || index == 3 || index == 4
-                            ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                            ? const ColorFilter.mode(
+                                AppColors.base400, BlendMode.srcIn)
                             : null)
-                        : (index == 0 || index == 1 || index == 2 || index == 3 || index == 4
-                            ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                        : (index == 0 ||
+                                index == 1 ||
+                                index == 2 ||
+                                index == 3 ||
+                                index == 4
+                            ? const ColorFilter.mode(
+                                AppColors.base400, BlendMode.srcIn)
                             : null);
   }
 }
 
-String formatDate(String dateString, String locale) {
-  DateTime dateTime = DateTime.parse(dateString);
+String formatDate(DateTime dateTime, String locale) {
   String formattedDate = DateFormat("MMMM d, yyyy", locale).format(dateTime);
-
-  // Делаем первую букву заглавной
   return formattedDate[0].toUpperCase() + formattedDate.substring(1);
 }
+// String formatDate(String dateString, String locale) {
+//   DateTime? dateTime = DateTime.tryParse(dateString);
+//   if (dateTime == null) {
+//     String trimmed = dateString.replaceFirst(RegExp(r'\.\d{3}Z$'), '');
+//     dateTime = DateTime.tryParse(trimmed);
+//   }
+//   if (dateTime == null) {
+//     return dateString;
+//   }
+//   String formattedDate = DateFormat("MMMM d, yyyy", locale).format(dateTime);
+
+//   // Делаем первую букву заглавной
+//   return formattedDate[0].toUpperCase() + formattedDate.substring(1);
+// }

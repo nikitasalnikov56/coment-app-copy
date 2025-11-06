@@ -67,11 +67,13 @@ class RepositoryStorage implements IRepositoryStorage {
   ///
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
-        baseUrl: 'http://46.226.123.73/api/',
-        // baseUrl: 'http://localhost:3000/api/v1/',
+        // baseUrl: 'http://46.226.123.73/api/',
+        // baseUrl: 'http://localhost:3001/api/v1/',
+        baseUrl: 'http://10.0.2.2:3001/api/v1/',
         dioClient: DioClient(
-          // baseUrl: 'http://localhost:3000/api/v1/',
-          baseUrl: 'http://46.226.123.73/api/',
+          // baseUrl: 'http://localhost:3001/api/v1/',
+          baseUrl: 'http://10.0.2.2:3001/api/v1/',
+          // baseUrl: 'http://46.226.123.73/api/',
           interceptor: const DioInterceptor(),
           authDao: authDao,
           packageInfo: _packageInfo, appSettingsDS: _appSettingsDatasource,

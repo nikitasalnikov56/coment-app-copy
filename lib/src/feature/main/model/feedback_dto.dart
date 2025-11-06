@@ -7,12 +7,31 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'feedback_dto.freezed.dart';
 part 'feedback_dto.g.dart';
 
+DateTime? _fromJsonDateTime(String? dateString) {
+  if (dateString == null) return null;
+
+  // Пробуем стандартный парсинг
+  DateTime? parsed = DateTime.tryParse(dateString);
+  if (parsed != null) return parsed;
+
+  // Резервный парсинг: убираем миллисекунды и 'Z', заменяем 'T' на пробел
+  String cleaned = dateString
+      .replaceFirst(RegExp(r'\.\d{3}Z$'), '') // убираем .123Z
+      .replaceAll('T', ' '); // заменяем T на пробел
+  return DateTime.tryParse(cleaned);
+}
+
+String? _toJsonDateTime(DateTime? date) {
+  return date?.toIso8601String();
+}
+
 @freezed
 class FeedbackDTO with _$FeedbackDTO {
   const factory FeedbackDTO({
     required int? id,
     required UserDTO? user,
     required FeedbackItemDTO? item,
+    @JsonKey(name: 'text')
     required String? comment,
     required int? rating,
     String? image,
@@ -20,14 +39,20 @@ class FeedbackDTO with _$FeedbackDTO {
     int? likes,
     int? dislikes,
     int? views,
-    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(
+      name: 'createdAt',
+      fromJson: _fromJsonDateTime,
+      toJson: _toJsonDateTime,
+    )
+    DateTime? createdAt,
     @JsonKey(name: 'is_like') int? isLike,
     @JsonKey(name: 'is_dislike') int? isDislike,
     @JsonKey(name: 'replies_count') int? repliesCount,
     List<RepliesDTO>? replies,
   }) = _FeedbackDTO;
 
-  factory FeedbackDTO.fromJson(Map<String, dynamic> json) => _$FeedbackDTOFromJson(json);
+  factory FeedbackDTO.fromJson(Map<String, dynamic> json) =>
+      _$FeedbackDTOFromJson(json);
 }
 
 @freezed
@@ -44,7 +69,8 @@ class FeedbackItemDTO with _$FeedbackItemDTO {
     @JsonKey(name: 'feedback_count') int? feedbackCount,
   }) = _FeedbackItemDTO;
 
-  factory FeedbackItemDTO.fromJson(Map<String, dynamic> json) => _$FeedbackItemDTOFromJson(json);
+  factory FeedbackItemDTO.fromJson(Map<String, dynamic> json) =>
+      _$FeedbackItemDTOFromJson(json);
 }
 
 @freezed
@@ -54,7 +80,8 @@ class ImageDTO with _$ImageDTO {
     required String? image,
   }) = _ImageDTO;
 
-  factory ImageDTO.fromJson(Map<String, dynamic> json) => _$ImageDTOFromJson(json);
+  factory ImageDTO.fromJson(Map<String, dynamic> json) =>
+      _$ImageDTOFromJson(json);
 }
 
 @freezed
@@ -65,12 +92,18 @@ class RepliesDTO with _$RepliesDTO {
     required String? coment,
     @JsonKey(name: 'parent_id') int? parentId,
     @JsonKey(name: 'feedback_id') int? feedbackId,
-    @JsonKey(name: 'created_at') String? createdAt,
-    required String? comment,
+    @JsonKey(
+      name: 'createdAt',
+      fromJson: _fromJsonDateTime,
+      toJson: _toJsonDateTime,
+    )
+    DateTime? createdAt,
+    @JsonKey(name: 'text') required String? comment,
     List<ReplyDTO>? reply,
   }) = _RepliesDTO;
 
-  factory RepliesDTO.fromJson(Map<String, dynamic> json) => _$RepliesDTOFromJson(json);
+  factory RepliesDTO.fromJson(Map<String, dynamic> json) =>
+      _$RepliesDTOFromJson(json);
 }
 
 @freezed
@@ -81,12 +114,18 @@ class ReplyDTO with _$ReplyDTO {
     required String? coment,
     @JsonKey(name: 'parent_id') int? parentId,
     @JsonKey(name: 'feedback_id') int? feedbackId,
-    @JsonKey(name: 'created_at') String? createdAt,
-    required String? comment,
+    @JsonKey(
+      name: 'createdAt',
+      fromJson: _fromJsonDateTime,
+      toJson: _toJsonDateTime,
+    )
+    DateTime? createdAt,
+    @JsonKey(name: 'text') required String? comment,
     List<ReplyTwoDTO>? reply,
   }) = _ReplyDTO;
 
-  factory ReplyDTO.fromJson(Map<String, dynamic> json) => _$ReplyDTOFromJson(json);
+  factory ReplyDTO.fromJson(Map<String, dynamic> json) =>
+      _$ReplyDTOFromJson(json);
 }
 
 @freezed
@@ -97,10 +136,17 @@ class ReplyTwoDTO with _$ReplyTwoDTO {
     required String? coment,
     @JsonKey(name: 'parent_id') int? parentId,
     @JsonKey(name: 'feedback_id') int? feedbackId,
-    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(
+      name: 'createdAt',
+      fromJson: _fromJsonDateTime,
+      toJson: _toJsonDateTime,
+    )
+    DateTime? createdAt,
+     @JsonKey(name: 'text') 
     required String? comment,
     List<ReplyDTO>? reply,
   }) = _ReplyTwoDTO;
 
-  factory ReplyTwoDTO.fromJson(Map<String, dynamic> json) => _$ReplyTwoDTOFromJson(json);
+  factory ReplyTwoDTO.fromJson(Map<String, dynamic> json) =>
+      _$ReplyTwoDTOFromJson(json);
 }

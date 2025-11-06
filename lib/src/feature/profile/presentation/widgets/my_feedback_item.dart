@@ -73,7 +73,11 @@ class _MyFeedbackItemState extends State<MyFeedbackItem> {
                           Text(widget.feedbackDTO.user?.name ?? '',
                               style: AppTextStyles.fs14w600.copyWith(color: const Color(0xff605b5b), height: 1.3)),
                           const SizedBox(height: 4),
-                          Text(formatDate(widget.feedbackDTO.createdAt ?? '', context.currentLocale.toString()),
+                          Text(
+                             widget.feedbackDTO.createdAt != null
+                                      ? formatDate(widget.feedbackDTO.createdAt!,
+                                          context.currentLocale.toString())
+                                      : '—',
                               style: AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
                         ],
                       ),

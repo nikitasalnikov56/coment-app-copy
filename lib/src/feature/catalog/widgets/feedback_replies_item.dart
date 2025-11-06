@@ -13,7 +13,7 @@ import 'package:gap/gap.dart';
 class FeedbackRepliesItem extends StatefulWidget {
   final String imageAva;
   final String name;
-  final String date;
+  final DateTime date;
   final String coment;
   final int rating;
   final List<ReplyDTO> replies;
@@ -74,7 +74,8 @@ class _FeedbackRepliesItemState extends State<FeedbackRepliesItem> {
                           Text(widget.name,
                               style: AppTextStyles.fs14w600.copyWith(color: const Color(0xff605b5b), height: 1.3)),
                           const SizedBox(height: 4),
-                          Text(formatDate(widget.date, context.currentLocale.toString()),
+                          Text(
+                           formatDate(widget.date,  context.currentLocale.toString()),
                               style: AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
                         ],
                       ),
@@ -210,8 +211,10 @@ class ReplyFeedbackItem extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                              formatDate(
-                                  reply?.createdAt ?? replyTwo?.createdAt ?? '', context.currentLocale.toString()),
+                               reply?.createdAt != null
+                                      ? formatDate(reply!.createdAt!,
+                                          context.currentLocale.toString())
+                                      : '—',
                               style: AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
                         ],
                       ),
