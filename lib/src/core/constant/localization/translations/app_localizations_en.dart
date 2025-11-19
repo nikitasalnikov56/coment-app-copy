@@ -436,4 +436,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get your_response_to_the_comment => 'Your response to the comment';
+
+  @override
+  String get enterYourBirthDate => 'Enter your date of birth';
 }

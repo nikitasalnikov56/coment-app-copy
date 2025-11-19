@@ -5,6 +5,7 @@ import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textf
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gcaptcha_v3/web_view.dart';
 import 'package:gap/gap.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:coment_app/src/core/presentation/widgets/buttons/custom_button.dart';
@@ -34,7 +35,8 @@ class RegisterPage extends StatefulWidget implements AutoRouteWrapper {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => RegisterCubit(repository: context.repository.authRepository),
+          create: (context) =>
+              RegisterCubit(repository: context.repository.authRepository),
           child: this,
         ),
       ],
@@ -49,6 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
 
   final ValueNotifier<bool> _obscureText = ValueNotifier(true);
   final ValueNotifier<String?> _passwordError = ValueNotifier(null);
@@ -57,6 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final ValueNotifier<String?> _classError = ValueNotifier(null);
   final ValueNotifier<bool> _allowTapButton = ValueNotifier(false);
   final ValueNotifier<String?> _emailError = ValueNotifier(null);
+  final ValueNotifier<String?> birthDateError = ValueNotifier(null);
   CommonDTO? chosenClass;
   final String _prefix = "+";
   final FocusNode _focusNode = FocusNode();
@@ -97,6 +101,8 @@ class _RegisterPageState extends State<RegisterPage> {
     _allowTapButton.dispose();
     _focusNode.dispose();
     _phoneError.dispose();
+    birthDateController.dispose();
+    birthDateError.dispose();
     super.dispose();
   }
 
@@ -107,10 +113,29 @@ class _RegisterPageState extends State<RegisterPage> {
         ) ==
         null;
     final isPasswordValid = passwordController.text.length >= 6;
-    String phoneUnmasked = phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
+    String phoneUnmasked =
+        phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
     bool isPhoneValid = phoneUnmasked.length == selectedCountry!.digitLength;
-    return _allowTapButton.value =
-        isPasswordValid && isEmailValid && surnameNameController.text.isNotEmpty && isPhoneValid;
+    return _allowTapButton.value = isPasswordValid &&
+        isEmailValid &&
+        surnameNameController.text.isNotEmpty &&
+        isPhoneValid;
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().subtract(
+          const Duration(days: 18 * 365)), // по умолчанию 18 лет назад
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        birthDateController.text =
+            picked.toIso8601String().split('T')[0]; // YYYY-MM-DD
+      });
+    }
   }
 
   @override
@@ -133,7 +158,8 @@ class _RegisterPageState extends State<RegisterPage> {
             },
             loaded: (user) {
               context.loaderOverlay.hide();
-              BlocProvider.of<AppBloc>(context).add(AppEvent.logining(user: user));
+              BlocProvider.of<AppBloc>(context)
+                  .add(AppEvent.logining(user: user));
               context.router.replaceAll([LauncherRoute()]);
               Toaster.showTopShortToast(context, message: 'Успешно');
             },
@@ -174,7 +200,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const Gap(20),
                         Text(
-                          context.localized.enterYourFullName, //enterYourFullName
+                          context
+                              .localized.enterYourFullName, //enterYourFullName
                           style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                         ),
                         const Gap(8),
@@ -200,7 +227,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const Gap(16),
                         Text(
-                          context.localized.enterYourEmailAddress, // enterYourEmailAddress
+                          context.localized
+                              .enterYourEmailAddress, // enterYourEmailAddress
                           style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                         ),
                         const Gap(8),
@@ -223,6 +251,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const Gap(16),
                         Text(
+                          context.localized.enterYourBirthDate,
+                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                        ),
+                        const Gap(8),
+                        CustomValidatorTextfield(
+                          controller: birthDateController,
+                          valueListenable: birthDateError,
+                          hintText: context.localized.enterYourBirthDate,
+                          onTap: () => _selectDate(context),
+                        ),
+                        const Gap(16),
+                        Text(
                           context.localized.enterYourPhoneNumber,
                           style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                         ),
@@ -239,7 +279,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                     borderRadius: BorderRadius.circular(12)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                                    borderSide: const BorderSide(
+                                        width: 1,
+                                        color: AppColors.borderTextField),
                                     borderRadius: BorderRadius.circular(12)),
                                 prefixIconWidget: Padding(
                                   padding: const EdgeInsets.only(left: 18.0),
@@ -249,7 +291,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     items: countries.map((country) {
                                       return DropdownMenuItem<Country>(
                                         value: country,
-                                        child: Text('${country.name} ${country.code}'),
+                                        child: Text(
+                                            '${country.name} ${country.code}'),
                                       );
                                     }).toList(),
                                     onChanged: (Country? newCountry) {
@@ -272,16 +315,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ],
                                 keyboardType: TextInputType.phone,
-                                hintText: selectedCountry!.mask.replaceAll('#', '_'),
+                                hintText:
+                                    selectedCountry!.mask.replaceAll('#', '_'),
                                 onChanged: (value) {
                                   checkAllowTapButton();
                                 },
                                 validator: (String? value) {
                                   if (value == null || value.isEmpty) {
-                                    return _phoneError.value = context.localized.required_to_fill;
+                                    return _phoneError.value =
+                                        context.localized.required_to_fill;
                                   }
-                                  String unmasked = value.replaceAll(RegExp(r'[^0-9]'), '');
-                                  if (unmasked.length != selectedCountry!.digitLength) {
+                                  String unmasked =
+                                      value.replaceAll(RegExp(r'[^0-9]'), '');
+                                  if (unmasked.length !=
+                                      selectedCountry!.digitLength) {
                                     // return _phoneError.value =
                                     //     context.localized.incorrectNumberFormat;
                                   }
@@ -329,19 +376,22 @@ class _RegisterPageState extends State<RegisterPage> {
                           allowTapButton: _allowTapButton,
                           onPressed: () {
                             if (!_formKey.currentState!.validate()) return;
-                            String nationalNumber = phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
-                            String fullPhoneNumber = selectedCountry!.code + nationalNumber;
-                            // log(emailController.text);
-                            // log(surnameNameController.text);
-                            // log(passwordController.text);
-                            // log(fullPhoneNumber);
-                            // log('${Platform.isAndroid}');
+                            String nationalNumber = phoneController.text
+                                .replaceAll(RegExp(r'[^0-9]'), '');
+                            String fullPhoneNumber =
+                                selectedCountry!.code + nationalNumber;
+                            fullPhoneNumber = fullPhoneNumber
+                                .trim(); // ← убираем пробелы в начале/конце
+                            print('FINAL PHONE: "${fullPhoneNumber.runtimeType}"');
+                            
                             BlocProvider.of<RegisterCubit>(context).register(
                               email: emailController.text,
                               name: surnameNameController.text,
                               password: passwordController.text,
                               phone: fullPhoneNumber,
-                              deviceType: Platform.isAndroid ? 'Android' : 'IOS',
+                              deviceType:
+                                  Platform.isAndroid ? 'Android' : 'IOS',
+                              birthDate: birthDateController.text,
                             );
                           },
                           style: CustomButtonStyles.mainButtonStyle(context),
@@ -354,7 +404,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           children: [
                             Text(
                               context.localized.doYouHaveAccount,
-                              style: AppTextStyles.fs14w500.copyWith(height: 1.3, color: AppColors.grey969696),
+                              style: AppTextStyles.fs14w500.copyWith(
+                                  height: 1.3, color: AppColors.grey969696),
                             ),
                             const Gap(8),
                             GestureDetector(
@@ -363,12 +414,30 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                               child: Text(
                                 context.localized.login,
-                                style: AppTextStyles.fs14w600.copyWith(height: 1.3, color: AppColors.mainColor),
+                                style: AppTextStyles.fs14w600.copyWith(
+                                    height: 1.3, color: AppColors.mainColor),
                               ),
                             ),
                           ],
                         ),
                         const Gap(24),
+                        // Positioned(
+                        //   bottom: 0,
+                        //   left: 0,
+                        //   child: IgnorePointer(
+                        //     ignoring: true,
+                        //     child: ReCaptchaWebView(
+                        //       width: 1,
+                        //       height: 1,
+                        //       onTokenReceived: (token) {
+                        //         // Токен сохраняется автоматически в RecaptchaHandler.instance.captchaToken
+                        //       },
+                        //       // Обязательно укажите URL, где лежит валидный HTML-файл с reCAPTCHA
+                        //       url:
+                        //           'https://emerald-eran-52.tiiny.site', // 👈 ВАЖНО!
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

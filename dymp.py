@@ -109,7 +109,7 @@ include = [
 
 ]
 
-output_file = "lib1.txt"
+output_file = "lib3.txt"
 count = 0
 
 def dump_file(filepath, out):

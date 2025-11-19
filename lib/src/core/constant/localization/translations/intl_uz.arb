@@ -134,5 +134,6 @@
   "yes_get_out": "Ha, chiqing",
   "yourRating": "Sizning reytingingiz fikr-mulohazalaringizning ishonchliligi va ko'rinishini oshiradi! 😊",
   "your_rating_depends_on_the_number": "Sizning reytingingiz sharhlaringiz ostidagi yoqtirishlar soniga bog'liq: yoqtirishlar qancha ko'p bo'lsa, reyting shunchalik yuqori bo'ladi!",
-  "your_response_to_the_comment": "Sharhga javobingiz"
+  "your_response_to_the_comment": "Sharhga javobingiz",
+   "enterYourBirthDate": "Tug'ilgan sanangizni kiriting"
 }

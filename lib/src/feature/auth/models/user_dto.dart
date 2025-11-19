@@ -12,6 +12,7 @@ class UserDTO with _$UserDTO {
     @JsonKey(defaultValue: -1) int? id,
     @JsonKey(name: 'name') String? name,
     String? email,
+    @JsonKey(name: 'phoneNumber')
     String? phone,
     String? avatar,
     CityDTO? city,
@@ -23,6 +24,7 @@ class UserDTO with _$UserDTO {
     @JsonKey(name: 'access_token') String? accessToken,
     @JsonKey(name: 'device_token') String? deviceToken,
     @JsonKey(name: 'device_type') String? deviceType,
+    @JsonKey(name: 'refresh_token') String? refreshToken,
   }) = _UserDTO;
   factory UserDTO.fromJson(Map<String, dynamic> json) => _$UserDTOFromJson(json);
 }

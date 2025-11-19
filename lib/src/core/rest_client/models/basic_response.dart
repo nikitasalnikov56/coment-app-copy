@@ -16,18 +16,23 @@ class BasicResponse extends BaseModel<BasicResponse> {
     this.statusCode,
     this.message,
     this.data,
+    this.ok,
   });
 
-  factory BasicResponse.fromJson(Map<String, dynamic> json) => _$BasicResponseFromJson(json);
+  factory BasicResponse.fromJson(Map<String, dynamic> json) =>
+      _$BasicResponseFromJson(json);
   final int? statusCode;
   final String? message;
   final dynamic data;
-
+  final bool? ok;
   @override
-  BasicResponse fromJson(Map<String, dynamic> json) => BasicResponse.fromJson(json);
+  BasicResponse fromJson(Map<String, dynamic> json) =>
+      BasicResponse.fromJson(json);
 
   @override
   String toString() => 'BasicResponse(message: $message)';
 
-  void when({required Null Function(dynamic user) success, required Null Function(dynamic e) failure}) {}
+  void when(
+      {required Null Function(dynamic user) success,
+      required Null Function(dynamic e) failure}) {}
 }

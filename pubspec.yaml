@@ -75,7 +75,12 @@ dependencies:
   firebase_core: ^3.12.1
   firebase_messaging: ^15.2.4
   flutter_local_notifications: ^18.0.1
-
+  flutter_gcaptcha_v3: ^2.1.1
+  flutter_dotenv: ^6.0.0
+  dio_cookie_manager: ^3.3.0
+  cookie_jar: ^4.0.8
+  path_provider: ^2.1.5
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   auto_route_generator: ^9.0.0
@@ -92,26 +97,26 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-  
-  assets:
-    - assets/icons/
-    - assets/images/svg/
-    - assets/images/png/
-    - assets/images/webp/
-    - assets/lottie/
-    - assets/images/
-    - assets/fonts/
 
+  assets:
+  - assets/icons/
+  - assets/images/svg/
+  - assets/images/png/
+  - assets/images/webp/
+  - assets/lottie/
+  - assets/images/
+  - assets/fonts/
+  - .env
 
   fonts:
-     - family: Golos_Text
-       fonts:
-         - asset: assets/fonts/GolosText/GolosText-Black.ttf
-         - asset: assets/fonts/GolosText/GolosText-Bold.ttf
-         - asset: assets/fonts/GolosText/GolosText-ExtraBold.ttf
-         - asset: assets/fonts/GolosText/GolosText-Medium.ttf
-         - asset: assets/fonts/GolosText/GolosText-Regular.ttf
-         - asset: assets/fonts/GolosText/GolosText-Semibold.ttf
+  - family: Golos_Text
+    fonts:
+    - asset: assets/fonts/GolosText/GolosText-Black.ttf
+    - asset: assets/fonts/GolosText/GolosText-Bold.ttf
+    - asset: assets/fonts/GolosText/GolosText-ExtraBold.ttf
+    - asset: assets/fonts/GolosText/GolosText-Medium.ttf
+    - asset: assets/fonts/GolosText/GolosText-Regular.ttf
+    - asset: assets/fonts/GolosText/GolosText-Semibold.ttf
 
 flutter_web_plugins:
   sdk: flutter
@@ -122,4 +127,3 @@ flutter_gen:
     flutter_svg: true
     rive: true
     lottie: true
-

@@ -133,6 +133,7 @@ class _CatalogPageState extends State<CatalogPage> with SingleTickerProviderStat
                               ),
                               itemCount: mainDTO.catalog?.length,
                               itemBuilder: (context, index) {
+                                // print('Images: ${mainDTO.catalog?[index].image?.length}');
                                 return CatalogGridItem(
                                     title: context.currentLocale.toString() == 'kk'
                                         ? '${mainDTO.catalog?[index].nameKk}'

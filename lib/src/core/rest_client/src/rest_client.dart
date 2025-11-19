@@ -1,5 +1,7 @@
 /// A REST client for making HTTP requests.
 abstract interface class IRestClient {
+
+
   /// Sends a `GET` request to the given `path`.
   Future<Map<String, Object?>> get(
     String path, {

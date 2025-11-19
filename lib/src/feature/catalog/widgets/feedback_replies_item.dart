@@ -122,6 +122,7 @@ class _FeedbackRepliesItemState extends State<FeedbackRepliesItem> {
                               widget.selectedFeedback.call(
                                   widget.replies[subindex].user?.name ?? '', widget.replies[subindex].id ?? 0, true);
                             },
+                            depth: 0,
                           );
                         },
                         separatorBuilder: (context, index) => const Gap(1),
@@ -164,16 +165,19 @@ class ReplyFeedbackItem extends StatelessWidget {
     this.replyTwo,
     required this.selectedFeedback,
     required this.parentName,
+    this.depth = 0,
   });
 
   final ReplyDTO? reply;
   final String parentName;
   final ReplyTwoDTO? replyTwo;
+  final int depth;
   final void Function()? onAnswerTapped;
   final void Function(String name, int parentId, bool isAnswerBottomSheet) selectedFeedback;
 
   @override
   Widget build(BuildContext context) {
+    if(depth > 3) return const SizedBox();
     return Column(
       children: [
         Row(
@@ -246,9 +250,9 @@ class ReplyFeedbackItem extends StatelessWidget {
         ///
         /// <--`replies`-->
         ///
-        if (reply != null)
-          if ((reply?.reply ?? []).isNotEmpty)
-            ListView.separated(
+        if (reply != null && (reply?.reply ?? []).isNotEmpty)
+          // if ((reply?.reply ?? []).isNotEmpty)
+             ListView.separated(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
@@ -264,12 +268,13 @@ class ReplyFeedbackItem extends StatelessWidget {
                       selectedFeedback.call(name, parentId, isAnswerBottomSheet);
                     },
                     parentName: reply?.user?.name ?? '',
+                    depth: depth + 1,
                   );
                 },
                 separatorBuilder: (context, index) => const Gap(14),
                 itemCount: reply?.reply?.length ?? 0),
-        if (replyTwo != null)
-          if ((replyTwo?.reply ?? []).isNotEmpty)
+        if (replyTwo != null && (replyTwo?.reply ?? []).isNotEmpty)
+          // if ((replyTwo?.reply ?? []).isNotEmpty)
             ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -286,6 +291,7 @@ class ReplyFeedbackItem extends StatelessWidget {
                       selectedFeedback.call(name, parentId, isAnswerBottomSheet);
                     },
                     parentName: replyTwo?.user?.name ?? '',
+                    depth: depth + 1,
                   );
                 },
                 separatorBuilder: (context, index) => const Gap(14),

@@ -438,4 +438,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get your_response_to_the_comment => 'Сіздің пікірге жауап';
+
+  @override
+  String get enterYourBirthDate => 'Туған күніңізді енгізіңіз';
 }

@@ -36,6 +36,7 @@ class MaterialContext extends StatelessWidget {
         routeInformationParser: informationParser,
         theme: AppTheme.light,
         darkTheme: AppTheme.light,
+        debugShowCheckedModeBanner: false,
         // theme: theme.lightTheme,
         // darkTheme: theme.darkTheme,
         // themeMode: ThemeMode.light, // theme.mode,

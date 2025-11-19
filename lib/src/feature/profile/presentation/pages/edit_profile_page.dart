@@ -57,7 +57,8 @@ class EditProfilePage extends StatefulWidget implements AutoRouteWrapper {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController surnameController = TextEditingController(text: 'Mark');
+  final TextEditingController surnameController =
+      TextEditingController(text: 'Mark');
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -96,28 +97,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
+   
+    final phone = widget.user?.phone;
+    if (phone != null) {
+     parsePhoneNumber(phone);
+    } else {
+      selectedCountry = countries.first;
+      phoneController.text = '';
+    }
+
     surnameController.text = widget.user?.name ?? '';
     emailController.text = widget.user?.email ?? '';
     imageNetwork = widget.user?.avatar ?? '';
-    parsePhoneNumber('${widget.user?.phone}');
-
-    // phoneNumber = selectedCountry?.code + phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
-
-    // phoneController.text = widget.user?.phone ?? '';
-    // _nameController.text = widget.user.name ?? '';
     checkAllowTapButton();
   }
 
   void parsePhoneNumber(String phoneNumber) {
     if (phoneNumber.startsWith("+7")) {
-      selectedCountry = countries.firstWhere((c) => c.code == "+7", orElse: () => selectedCountry!);
-      phoneController.text = phoneNumber.substring(2); // Убираем "+7"
+      selectedCountry = countries.firstWhere((c) => c.code == "+7");
+         
+      phoneController.text = phoneNumber
+          .substring(2)
+          .replaceAll(RegExp(r'[^0-9]'), ''); // Убираем "+7"
     } else if (phoneNumber.startsWith("+998")) {
-      selectedCountry = countries.firstWhere((c) => c.code == "+998", orElse: () => selectedCountry!);
-      phoneController.text = phoneNumber.substring(4); // Убираем "+998"
+      selectedCountry = countries.firstWhere((c) => c.code == "+998");
+      phoneController.text = phoneNumber
+          .substring(4)
+          .replaceAll(RegExp(r'[^0-9]'), ''); // Убираем "+998"
     } else {
-      selectedCountry = null; // Если код неизвестен
-      phoneController.text = phoneNumber; // Записываем весь номер
+      selectedCountry = countries.first; 
+      phoneController.text = phoneNumber.replaceAll(RegExp(r'[^0-9]'), ''); // Записываем весь номер
     }
   }
 
@@ -127,11 +136,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
           errorLabel: 'Неверный логин',
         ) ==
         null;
-    final isPasswordValid = passwordController.text.length >= 6 || passwordController.text == '';
-    String phoneUnmasked = phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final isPasswordValid =
+        passwordController.text.length >= 6 || passwordController.text == '';
+    String phoneUnmasked =
+        phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
     bool isPhoneValid = phoneUnmasked.length == selectedCountry?.digitLength;
 
-    return _allowTapButton.value = surnameController.text.isNotEmpty && isEmailValid && isPhoneValid && isPasswordValid;
+    return _allowTapButton.value = surnameController.text.isNotEmpty &&
+        isEmailValid &&
+        isPhoneValid &&
+        isPasswordValid;
   }
 
   @override
@@ -187,7 +201,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       return CupertinoActionSheet(
                                         actions: [
                                           CupertinoActionSheetAction(
-                                            onPressed: () => pickImageFromGallery(
+                                            onPressed: () =>
+                                                pickImageFromGallery(
                                               ImageSource.camera,
                                             ).whenComplete(() {
                                               if (context.mounted) {
@@ -197,11 +212,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             }),
                                             child: Text(
                                               context.localized.camera,
-                                              style: AppTextStyles.fs16w400.copyWith(color: Colors.black),
+                                              style: AppTextStyles.fs16w400
+                                                  .copyWith(
+                                                      color: Colors.black),
                                             ),
                                           ),
                                           CupertinoActionSheetAction(
-                                            onPressed: () => pickImageFromGallery(
+                                            onPressed: () =>
+                                                pickImageFromGallery(
                                               ImageSource.gallery,
                                             ).whenComplete(() {
                                               if (context.mounted) {
@@ -211,17 +229,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             }),
                                             child: Text(
                                               context.localized.gallery,
-                                              style: AppTextStyles.fs16w400.copyWith(color: Colors.black),
+                                              style: AppTextStyles.fs16w400
+                                                  .copyWith(
+                                                      color: Colors.black),
                                             ),
                                           ),
                                         ],
-                                        cancelButton: CupertinoActionSheetAction(
+                                        cancelButton:
+                                            CupertinoActionSheetAction(
                                           onPressed: () {
                                             context.router.maybePop();
                                           },
                                           child: Text(
                                             context.localized.cancel,
-                                            style: AppTextStyles.fs16w400.copyWith(color: Colors.red),
+                                            style: AppTextStyles.fs16w400
+                                                .copyWith(color: Colors.red),
                                           ),
                                         ),
                                       );
@@ -240,7 +262,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         clipBehavior: Clip.antiAlias,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          border: Border.all(color: AppColors.mainColor, width: 3),
+                                          border: Border.all(
+                                              color: AppColors.mainColor,
+                                              width: 3),
 
                                           // boxShadow: [
                                           //   BoxShadow(
@@ -252,7 +276,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.6),
                                           child: ClipRRect(
-                                            borderRadius: const BorderRadius.all(Radius.circular(100)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(100)),
                                             child: image != null
                                                 ? Image.file(
                                                     File(image?.path ?? ''),
@@ -267,19 +293,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                                         children: [
                                                           Container(
                                                             // color: Colors.white,
-                                                            decoration: const BoxDecoration(
-                                                              shape: BoxShape.circle,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
                                                             ),
-                                                            child: Image.network(
+                                                            child:
+                                                                Image.network(
                                                               NOT_FOUND_IMAGE,
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
                                                           Container(
                                                             // margin: const EdgeInsets.all(10),
-                                                            decoration: BoxDecoration(
-                                                              shape: BoxShape.circle,
-                                                              color: Colors.black.withOpacity(0.4),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.4),
                                                             ),
                                                           ),
                                                         ],
@@ -291,9 +325,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         padding: const EdgeInsets.all(38.65),
                                         child: Container(
                                           decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(100)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(100)),
                                           ),
-                                          child: Center(child: SvgPicture.asset(AssetsConstants.icCamera)),
+                                          child: Center(
+                                              child: SvgPicture.asset(
+                                                  AssetsConstants.icCamera)),
                                         ),
                                       ),
                                     ],
@@ -305,7 +342,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                             Text(
                               context.localized.enterYourFullName,
-                              style: AppTextStyles.fs14w400.copyWith(color: AppColors.text),
+                              style: AppTextStyles.fs14w400
+                                  .copyWith(color: AppColors.text),
                             ),
                             const Gap(8),
 
@@ -321,7 +359,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               },
                               validator: (String? value) {
                                 if (value == null || value.isEmpty) {
-                                  return _surnameError.value = context.localized.required_to_fill;
+                                  return _surnameError.value =
+                                      context.localized.required_to_fill;
                                 }
 
                                 return _surnameError.value = null;
@@ -330,7 +369,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             const Gap(16),
                             Text(
                               context.localized.enterYourEmailAddress,
-                              style: AppTextStyles.fs14w400.copyWith(color: AppColors.text),
+                              style: AppTextStyles.fs14w400
+                                  .copyWith(color: AppColors.text),
                             ),
                             const Gap(8),
 
@@ -346,7 +386,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 checkAllowTapButton();
                               },
                               validator: (String? value) {
-                                return _emailError.value = ValidatorUtil.emailValidator(
+                                return _emailError.value =
+                                    ValidatorUtil.emailValidator(
                                   emailController.text,
                                   errorLabel: '',
                                 );
@@ -362,25 +403,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               children: [
                                 Expanded(
                                   child: CustomTextField(
+                                    key: Key(selectedCountry?.code ?? 'default'),
                                     height: 44,
                                     obscureText: false,
                                     focusedBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(12)),
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                     enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
-                                        borderRadius: BorderRadius.circular(12)),
+                                        borderSide: const BorderSide(
+                                            width: 1,
+                                            color: AppColors.borderTextField),
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                     prefixIconWidget: Padding(
-                                      padding: const EdgeInsets.only(left: 18.0),
+                                      padding:
+                                          const EdgeInsets.only(left: 18.0),
                                       child: DropdownButton<Country>(
                                         value: selectedCountry,
                                         borderRadius: BorderRadius.circular(12),
                                         items: countries.map((country) {
                                           return DropdownMenuItem<Country>(
                                             value: country,
-                                            child: Text('${country.name} ${country.code}'),
+                                            child: Text(
+                                                '${country.name} ${country.code}'),
                                           );
                                         }).toList(),
                                         onChanged: (Country? newCountry) {
@@ -403,16 +451,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       ),
                                     ],
                                     keyboardType: TextInputType.phone,
-                                    hintText: selectedCountry?.mask.replaceAll('#', '_'),
+                                    hintText: selectedCountry?.mask
+                                        .replaceAll('#', '_'),
                                     onChanged: (value) {
                                       checkAllowTapButton();
                                     },
                                     validator: (String? value) {
                                       if (value == null || value.isEmpty) {
-                                        return _phoneError.value = context.localized.required_to_fill;
+                                        return _phoneError.value =
+                                            context.localized.required_to_fill;
                                       }
-                                      String unmasked = value.replaceAll(RegExp(r'[^0-9]'), '');
-                                      if (unmasked.length != selectedCountry!.digitLength) {
+                                      String unmasked = value.replaceAll(
+                                          RegExp(r'[^0-9]'), '');
+                                      if (unmasked.length !=
+                                          selectedCountry!.digitLength) {
                                         // return _phoneError.value =
                                         //     context.localized.incorrectNumberFormat;
                                       }
@@ -427,7 +479,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                             Text(
                               context.localized.enterThePassword,
-                              style: AppTextStyles.fs14w400.copyWith(color: AppColors.text),
+                              style: AppTextStyles.fs14w400
+                                  .copyWith(color: AppColors.text),
                             ),
                             const Gap(8),
 
@@ -459,7 +512,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 state.maybeWhen(
                                   error: (message) {
                                     context.loaderOverlay.hide();
-                                    Toaster.showErrorTopShortToast(context, message);
+                                    Toaster.showErrorTopShortToast(
+                                        context, message);
                                     //
                                   },
                                   loading: () {
@@ -467,8 +521,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   },
                                   loaded: () {
                                     context.loaderOverlay.hide();
-                                    context.router.popUntil((route) => route.settings.name == LauncherRoute.name);
-                                    BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+                                    context.router.popUntil((route) =>
+                                        route.settings.name ==
+                                        LauncherRoute.name);
+                                    BlocProvider.of<ProfileBLoC>(context)
+                                        .add(const ProfileEvent.getProfile());
                                   },
                                   orElse: () {
                                     context.loaderOverlay.hide();
@@ -482,15 +539,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     log('$image', name: 'image');
                                     log(surnameController.text, name: 'name');
                                     log(emailController.text, name: 'email');
-                                    log("${selectedCountry?.code ?? ''}${phoneController.text}", name: 'phone');
-                                    log(passwordController.text, name: 'password');
+                                    log("${selectedCountry?.code ?? ''}${phoneController.text}",
+                                        name: 'phone');
+                                    log(passwordController.text,
+                                        name: 'password');
 
-                                    BlocProvider.of<ProfileEditCubit>(context).editAccount(
+                                    BlocProvider.of<ProfileEditCubit>(context)
+                                        .editAccount(
                                       password: passwordController.text,
                                       name: surnameController.text,
                                       email: emailController.text,
                                       avatar: image,
-                                      phone: "${selectedCountry?.code ?? ''}${phoneController.text}",
+                                      phone:
+                                          "${selectedCountry?.code ?? ''}${phoneController.text}",
                                       cityId: -1,
                                       languageId: -1,
                                     );
@@ -511,7 +572,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 state.maybeWhen(
                                   error: (message) {
                                     context.loaderOverlay.hide();
-                                    Toaster.showErrorTopShortToast(context, message);
+                                    Toaster.showErrorTopShortToast(
+                                        context, message);
                                   },
                                   loading: () {
                                     context.loaderOverlay.show();
@@ -521,9 +583,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   },
                                   exited: (message) {
                                     context.loaderOverlay.hide();
-                                    Toaster.showTopShortToast(context, message: 'Успешно');
-                                    context.router.popUntil((route) => route.settings.name == LauncherRoute.name);
-                                    BlocProvider.of<AppBloc>(context).add(const AppEvent.exiting());
+                                    Toaster.showTopShortToast(context,
+                                        message: 'Успешно');
+                                    context.router.popUntil((route) =>
+                                        route.settings.name ==
+                                        LauncherRoute.name);
+                                    BlocProvider.of<AppBloc>(context)
+                                        .add(const AppEvent.exiting());
                                   },
                                 );
                               },
@@ -533,7 +599,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     context,
                                     isDeleteAccount: true,
                                     onPressed: () {
-                                      BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.deleteAccount());
+                                      BlocProvider.of<ProfileBLoC>(context).add(
+                                          const ProfileEvent.deleteAccount());
                                       Navigator.pop(context);
                                     },
                                   ).whenComplete(() {
@@ -543,7 +610,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 child: Center(
                                   child: Text(
                                     context.localized.delete_an_account,
-                                    style: AppTextStyles.fs16w500.copyWith(color: Colors.red),
+                                    style: AppTextStyles.fs16w500
+                                        .copyWith(color: Colors.red),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),

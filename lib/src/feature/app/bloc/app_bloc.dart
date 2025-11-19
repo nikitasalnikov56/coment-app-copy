@@ -50,7 +50,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   int _getExtendedVersionNumber(String version) {
     final versionCellsStr = version.split('.');
     final versionCells = versionCellsStr.map(int.parse).toList();
-    return versionCells.first * 100000 + versionCells[1] * 1000 + versionCells[2];
+    return versionCells.first * 100000 +
+        versionCells[1] * 1000 +
+        versionCells[2];
   }
 
   String? _versionParser(Object? data) {
@@ -59,7 +61,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final list = data;
         if (list.isNotEmpty) {
           final map = list.firstWhereOrNull(
-            (element) => ((element as Map<String, dynamic>)['key'] as String?) == 'force_update_version',
+            (element) =>
+                ((element as Map<String, dynamic>)['key'] as String?) ==
+                'force_update_version',
           ) as Map<String, dynamic>?;
           return map?['value'] as String?;
         }
@@ -83,10 +87,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   ) async {
     emit(const AppState.loading());
     try {
+// 👇 ДОБАВЬ ЭТОТ БЛОК ДЛЯ ТЕСТА
+      try {
+        await _authRepository.refreshAccessToken();
+        TalkerLoggerUtil.talker.log('REFRESH SUCCESS');
+      } catch (e) {
+        TalkerLoggerUtil.talker.error('REFRESH FAILED: $e');
+      }
+
       final forceUpdateResult = await _authRepository.getForceUpdateVersion();
       final versionProj = _getExtendedVersionNumber(event.version);
       final versionFromBack = _versionParser(forceUpdateResult);
-      final versionFromServer = _getExtendedVersionNumber(versionFromBack ?? event.version);
+      final versionFromServer =
+          _getExtendedVersionNumber(versionFromBack ?? event.version);
 
       if (versionProj >= versionFromServer) {
         if (_authRepository.isAuthenticated) {

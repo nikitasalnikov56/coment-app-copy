@@ -923,6 +923,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your response to the comment'**
   String get your_response_to_the_comment;
+
+  /// No description provided for @enterYourBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your date of birth'**
+  String get enterYourBirthDate;
 }
 
 class _AppLocalizationsDelegate

@@ -103,11 +103,11 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   Future<List<ProductDTO>> searchProductList({required String search}) async {
     try {
       final Map<String, dynamic> response = await restClient.get(
-        '/main/search/',
-        queryParams: {'search': search},
+        '/companies/search/',
+        queryParams: {'q': search},
       );
 
-      if (response['data'] == null) {
+      if (response['items'] == null) {
         throw Exception();
       }
       final list = await compute<List<dynamic>, List<ProductDTO>>(
@@ -116,7 +116,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
               (e) => ProductDTO.fromJson(e as Map<String, dynamic>),
             )
             .toList(),
-        response['data'] as List,
+        response['items'] as List,
       );
       return list;
     } catch (e, st) {

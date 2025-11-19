@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:coment_app/src/core/constant/constants.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,25 @@ class CatalogGridItem extends StatelessWidget {
                   ),
                 ],
               ),
-              child: ClipRRect(borderRadius: BorderRadius.circular(50), child: Image.network(image ?? NOT_FOUND_IMAGE)),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: CachedNetworkImage(
+                    imageUrl: (image ?? '').trim(),
+                    placeholder: (context, url) =>
+                      const Center(
+                         child:  CircularProgressIndicator(
+                         strokeWidth: 2,
+                         constraints: BoxConstraints(
+                           minHeight: 15,
+                           minWidth: 15
+                         ),
+                                                  ),
+                       ),
+                        errorWidget: (context, url, error) => Image.asset(NOT_FOUND_IMAGE),
+                        fit: BoxFit.cover,
+                  )
+                  // Image.network(image ?? NOT_FOUND_IMAGE),
+                  ),
             ),
             const Gap(6),
             Text(

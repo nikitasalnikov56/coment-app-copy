@@ -8,6 +8,7 @@ abstract interface class IAuthRemoteDS {
     required String password,
     String? deviceToken,
     String? deviceType,
+    String? recaptchaToken,
   });
 
   Future<UserDTO> register({
@@ -17,6 +18,8 @@ abstract interface class IAuthRemoteDS {
     required String phone,
     String? deviceToken,
     String? deviceType,
+    required String birthDate,
+     String? recaptchaToken,
   });
 
   Future<String> forgotPassword({
@@ -38,6 +41,8 @@ abstract interface class IAuthRemoteDS {
     required String deviceToken,
     required String deviceType,
   });
+
+Future<Map<String, dynamic>> refreshToken(String refreshToken);
 }
 
 class AuthRemoteDSImpl implements IAuthRemoteDS {
@@ -52,6 +57,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     required String password,
     String? deviceToken,
     String? deviceType,
+    String? recaptchaToken,
   }) async {
     try {
       final Map<String, dynamic> response = await restClient.post(
@@ -59,6 +65,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         body: {
           'email': email,
           'password': password,
+          'recaptchaToken': recaptchaToken,
           if (deviceToken != null) 'device_token': deviceToken,
           if (deviceType != null) 'device_type': deviceType,
         },
@@ -80,6 +87,8 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     required String? phone,
     String? deviceToken,
     String? deviceType,
+    required String birthDate,
+    String? recaptchaToken,
   }) async {
     try {
       final Map<String, dynamic> response = await restClient.post(
@@ -88,9 +97,12 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
           'name': name,
           'email': email,
           'password': password,
-          'phone': phone,
+          'phoneNumber': phone,
+          // 'phone': phone,
           if (deviceToken != null) 'device_token': deviceToken,
           if (deviceType != null) 'device_type': deviceType,
+          'birthDate': birthDate,
+          'recaptchaToken': recaptchaToken,
         },
       );
 
@@ -169,7 +181,8 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
   }) async {
     try {
       await restClient.post(
-        '/auth/update-token',
+        // '/auth/update-token',
+        '/notifications/register-device',
         body: {
           'device_token': deviceToken,
           'device_type': deviceType,
@@ -180,4 +193,18 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
       rethrow;
     }
   }
+
+@override
+Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
+  try {
+    final response = await restClient.post('auth/refresh', body: {
+      'refresh_token': refreshToken,
+    });
+    return response; // должно содержать {"access_token": "..."}
+  } catch (e, st) {
+    TalkerLoggerUtil.talker.error('#refreshToken - $e', e, st);
+    rethrow;
+  }
+}
+
 }

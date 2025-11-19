@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
@@ -21,11 +23,16 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     try {
       emit(const LoginState.loading());
+      // 🔥 ОЧИЩАЕМ КЭШ перед логином
+      await _repository.clearUser();
 
+      // final deviceToken = await _repository.getDeviceToken();
+      const recaptchaToken = 'dev_token_for_local';
       final user = await _repository.login(
         email: email,
         password: password,
-        deviceType: deviceType,
+        deviceType: Platform.isAndroid ? 'Android' : 'IOS',
+        recaptchaToken: recaptchaToken,
       );
 
       if (isClosed) return;

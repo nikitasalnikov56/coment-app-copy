@@ -436,4 +436,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get your_response_to_the_comment => 'Ваш ответ на комментарий';
+
+  @override
+  String get enterYourBirthDate => 'Введите вашу дату рождения';
 }

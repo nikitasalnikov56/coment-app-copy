@@ -65,19 +65,31 @@ class RepositoryStorage implements IRepositoryStorage {
   ///
   /// Network
   ///
+  // @override
+  // IRestClient get restClient => _restClient ??= RestClientDio(
+  //       // baseUrl: 'http://localhost:3001/api/v1/',
+  //       // baseUrl: 'http://46.226.123.73/api/',
+  //       baseUrl: 'http://10.0.2.2:3001/api/v1/',
+  //       dioClient: DioClient(
+  //         // baseUrl: 'http://localhost:3001/api/v1/',
+  //         baseUrl: 'http://10.0.2.2:3001/api/v1/',
+  //         // baseUrl: 'http://46.226.123.73/api/',
+  //         interceptor: const DioInterceptor(),
+  //         authDao: authDao,
+  //         packageInfo: _packageInfo, appSettingsDS: _appSettingsDatasource,
+  //         // settings: SettingsDao(sharedPreferences: sharedPreferences),
+  //       ),
+  //     );
+
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
-        // baseUrl: 'http://46.226.123.73/api/',
-        // baseUrl: 'http://localhost:3001/api/v1/',
         baseUrl: 'http://10.0.2.2:3001/api/v1/',
         dioClient: DioClient(
-          // baseUrl: 'http://localhost:3001/api/v1/',
           baseUrl: 'http://10.0.2.2:3001/api/v1/',
-          // baseUrl: 'http://46.226.123.73/api/',
-          interceptor: const DioInterceptor(),
+          interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,
-          packageInfo: _packageInfo, appSettingsDS: _appSettingsDatasource,
-          // settings: SettingsDao(sharedPreferences: sharedPreferences),
+          packageInfo: _packageInfo,
+          appSettingsDS: _appSettingsDatasource,
         ),
       );
 
@@ -92,7 +104,7 @@ class RepositoryStorage implements IRepositoryStorage {
 
   @override
   IProfileRepository get profileRepository => ProfileRepositoryImpl(
-        remoteDS: profileRemoteDS,
+        remoteDS: profileRemoteDS, authDao: authDao,
       );
 
   @override
@@ -101,7 +113,8 @@ class RepositoryStorage implements IRepositoryStorage {
       );
 
   @override
-  ICatalogRepository get catalogRepository => CatalogRepositoryImpl(remoteDS: catalogRemoteDS);
+  ICatalogRepository get catalogRepository =>
+      CatalogRepositoryImpl(remoteDS: catalogRemoteDS);
 
   ///
   /// Remote datasources
@@ -122,7 +135,8 @@ class RepositoryStorage implements IRepositoryStorage {
       );
 
   @override
-  ICatalogRemoteDS get catalogRemoteDS => CatalogRemoteDsImpl(restClient: restClient);
+  ICatalogRemoteDS get catalogRemoteDS =>
+      CatalogRemoteDsImpl(restClient: restClient);
 
   ///
   /// Data Access Object

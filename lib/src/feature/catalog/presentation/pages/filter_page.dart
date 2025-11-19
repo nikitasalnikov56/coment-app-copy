@@ -8,13 +8,18 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:coment_app/src/feature/catalog/presentation/widgets/filter_wrap_item.dart';
 import 'package:coment_app/src/feature/main/bloc/city_cubit.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
+import 'package:coment_app/src/feature/main/model/main_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 @RoutePage()
 class FilterPage extends StatefulWidget implements AutoRouteWrapper {
-  const FilterPage({super.key, this.selectedFilter, required this.countryId, required this.cityId});
+  const FilterPage(
+      {super.key,
+      this.selectedFilter,
+      required this.countryId,
+      required this.cityId});
 
   final Function(int countryId, int cityId)? selectedFilter;
   final int countryId;
@@ -65,7 +70,8 @@ class _FilterPageState extends State<FilterPage> {
               padding: const EdgeInsets.only(right: 16),
               child: Text(
                 context.localized.cancel,
-                style: AppTextStyles.fs16w500.copyWith(color: AppColors.mainColor),
+                style:
+                    AppTextStyles.fs16w500.copyWith(color: AppColors.mainColor),
               ),
             ),
           ),
@@ -81,14 +87,16 @@ class _FilterPageState extends State<FilterPage> {
                 log('$selectedCountry dfsfdss');
                 if (selectedCountry != null && selectedCountry != 0) {
                   log('$selectedCity');
-                  BlocProvider.of<CityCubit>(context).getCityList(countryId: selectedCountry ?? 0);
+                  BlocProvider.of<CityCubit>(context)
+                      .getCityList(countryId: selectedCountry ?? 0);
                   visibleCity = true;
                 }
               } else {
                 selectedCountry = mainDTO.country?.first.id;
                 if (selectedCountry != null && selectedCountry != 0) {
                   log('$selectedCity');
-                  BlocProvider.of<CityCubit>(context).getCityList(countryId: selectedCountry ?? 0);
+                  BlocProvider.of<CityCubit>(context)
+                      .getCityList(countryId: selectedCountry ?? 0);
                   visibleCity = true;
                 }
               }
@@ -113,32 +121,42 @@ class _FilterPageState extends State<FilterPage> {
                               children: [
                                 Text(
                                   context.localized.country,
-                                  style: AppTextStyles.fs14w500.copyWith(height: 1.2),
+                                  style: AppTextStyles.fs14w500
+                                      .copyWith(height: 1.2),
                                 ),
                                 const Gap(10),
                                 Wrap(
                                   children: List.generate(
                                     (mainDTO.country ?? []).length,
                                     (index) => FilterWrapItem(
-                                      title: context.currentLocale.toString() == 'kk'
+                                      title: context.currentLocale.toString() ==
+                                              'kk'
                                           ? '${mainDTO.country?[index].nameKk}'
-                                          : context.currentLocale.toString() == 'en'
+                                          : context.currentLocale.toString() ==
+                                                  'en'
                                               ? '${mainDTO.country?[index].nameEn}'
-                                              : context.currentLocale.toString() == 'uz'
+                                              : context.currentLocale
+                                                          .toString() ==
+                                                      'uz'
                                                   ? '${mainDTO.country?[index].nameUz}'
                                                   : '${mainDTO.country?[index].name}',
                                       // title: mainDTO.country?[index].name ?? '',
-                                      selected: selectedCountry == mainDTO.country?[index].id,
+                                      selected: selectedCountry ==
+                                          mainDTO.country?[index].id,
                                       onTap: () {
-                                        if (selectedCountry == mainDTO.country?[index].id) {
+                                        if (selectedCountry ==
+                                            mainDTO.country?[index].id) {
                                           selectedCountry = null;
                                           selectedCity = null;
                                           visibleCity = false;
                                         } else {
-                                          selectedCountry = mainDTO.country?[index].id;
+                                          selectedCountry =
+                                              mainDTO.country?[index].id;
                                           selectedCity = null;
                                           BlocProvider.of<CityCubit>(context)
-                                              .getCityList(countryId: selectedCountry ?? 0);
+                                              .getCityList(
+                                                  countryId:
+                                                      selectedCountry ?? 0);
                                           visibleCity = true;
                                         }
                                         setState(() {});
@@ -149,7 +167,8 @@ class _FilterPageState extends State<FilterPage> {
                                 const Gap(12),
                                 Text(
                                   context.localized.city,
-                                  style: AppTextStyles.fs14w500.copyWith(height: 1.2),
+                                  style: AppTextStyles.fs14w500
+                                      .copyWith(height: 1.2),
                                 ),
                                 const Gap(10),
                                 if (visibleCity)
@@ -170,35 +189,16 @@ class _FilterPageState extends State<FilterPage> {
                                     builder: (context, state) {
                                       return state.maybeWhen(
                                           orElse: () => const Center(
-                                                child: CircularProgressIndicator.adaptive(
-                                                  backgroundColor: AppColors.mainColor,
+                                                child: CircularProgressIndicator
+                                                    .adaptive(
+                                                  backgroundColor:
+                                                      AppColors.mainColor,
                                                 ),
                                               ),
                                           loaded: (data) => data.isNotEmpty
-                                              ? Wrap(
-                                                  children: List.generate(
-                                                    data.length,
-                                                    (index) => FilterWrapItem(
-                                                      // title: data[index].name,
-                                                      title: context.currentLocale.toString() == 'kk'
-                                                          ? '${data[index].nameKk}'
-                                                          : context.currentLocale.toString() == 'en'
-                                                              ? '${data[index].nameEn}'
-                                                              : context.currentLocale.toString() == 'uz'
-                                                                  ? '${data[index].nameUz}'
-                                                                  : data[index].name,
-                                                      selected: selectedCity == data[index].id,
-                                                      onTap: () {
-                                                        if (selectedCity == data[index].id) {
-                                                          selectedCity = null;
-                                                        } else {
-                                                          selectedCity = data[index].id;
-                                                        }
-
-                                                        setState(() {});
-                                                      },
-                                                    ),
-                                                  ),
+                                              ? SelectedCity(
+                                                  selectedCity: selectedCity,
+                                                  data: data,
                                                 )
                                               : const SizedBox());
                                     },
@@ -206,15 +206,19 @@ class _FilterPageState extends State<FilterPage> {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 32, bottom: 16),
+                              padding:
+                                  const EdgeInsets.only(top: 32, bottom: 16),
                               child: CustomButton(
                                 onPressed: () {
                                   // log('$selectedCountry -- $selectedCity');
-                                  widget.selectedFilter?.call(selectedCountry ?? 0, selectedCity ?? 0);
+                                  widget.selectedFilter?.call(
+                                      selectedCountry ?? 0, selectedCity ?? 0);
                                   context.router.maybePop();
                                 },
-                                style: CustomButtonStyles.mainButtonStyle(context),
-                                child: Text(context.localized.done, style: AppTextStyles.fs16w600),
+                                style:
+                                    CustomButtonStyles.mainButtonStyle(context),
+                                child: Text(context.localized.done,
+                                    style: AppTextStyles.fs16w600),
                               ),
                             ),
                           ],
@@ -223,6 +227,60 @@ class _FilterPageState extends State<FilterPage> {
                     )
                   : Container());
         },
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class SelectedCity extends StatefulWidget {
+  SelectedCity({
+    super.key,
+    required this.selectedCity,
+    required this.data,
+  });
+
+  int? selectedCity;
+  final List<CityDTO> data;
+
+  @override
+  State<SelectedCity> createState() => _SelectedCityState();
+}
+
+class _SelectedCityState extends State<SelectedCity> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.65, // не более 50%
+      ),
+      child: SingleChildScrollView(
+        // physics: const NeverScrollableScrollPhysics(),
+        child: Wrap(
+          children: List.generate(
+            widget.data.length,
+            (index) => FilterWrapItem(
+              // title: data[index].name,
+              title: context.currentLocale.toString() == 'kk'
+                  ? '${widget.data[index].nameKk}'
+                  : context.currentLocale.toString() == 'en'
+                      ? '${widget.data[index].nameEn}'
+                      : context.currentLocale.toString() == 'uz'
+                          ? '${widget.data[index].nameUz}'
+                          : widget.data[index].name,
+              selected: widget.selectedCity == widget.data[index].id,
+              onTap: () {
+                if (widget.selectedCity == widget.data[index].id) {
+                  widget.selectedCity = null;
+                } else {
+                  widget.selectedCity = widget.data[index].id;
+                }
+
+                setState(() {});
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -438,4 +438,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get your_response_to_the_comment => 'Sharhga javobingiz';
+
+  @override
+  String get enterYourBirthDate => 'Tug\'ilgan sanangizni kiriting';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:coment_app/src/feature/auth/data/auth_repository.dart';
@@ -13,17 +14,48 @@ class RegisterCubit extends Cubit<RegisterState> {
         super(const RegisterState.initial());
   final IAuthRepository _repository;
 
+// Future<String?> _getRecaptchaToken() async {
+//     try {
+//       final token = await RecaptchaHandler.executeV3(action: 'register');
+//       return token;
+//     } catch (e) {
+//       emit(RegisterState.error(message: 'Ошибка reCAPTCHA: $e'));
+//       return null;
+//     }
+//   }
+
   Future<void> register({
     required String name,
     required String email,
     required String password,
     required String phone,
     String? deviceType,
+    required String birthDate,
+    String? recaptchaToken,
   }) async {
     try {
       emit(const RegisterState.loading());
+      // 🔥 ОЧИСТИТЕ КЭШ ПЕРЕД РЕГИСТРАЦИЕЙ
+      await _repository.clearUser();
 
-      final data = await _repository.register(email: email, name: name, password: password, deviceType: deviceType, phone: phone);
+      // ✅ Получаем токен reCAPTCHA
+      const recaptchaToken = 'dev_token_for_local';
+      // final recaptchaToken = await _getRecaptchaToken();
+      // if (recaptchaToken == null) return;
+
+      // Очищаем номер телефона
+      final String cleanedPhone = '+${phone.replaceAll(RegExp(r'[^0-9]'), '')}';
+
+      final data = await _repository.register(
+        email: email,
+        name: name,
+        password: password,
+        deviceType: deviceType,
+        phone: cleanedPhone,
+        // phone: phone,
+        birthDate: birthDate,
+        recaptchaToken: recaptchaToken,
+      );
 
       if (isClosed) return;
 
