@@ -552,6 +552,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       avatar: image,
                                       phone:
                                           "${selectedCountry?.code ?? ''}${phoneController.text}",
+                                          birthDate: 'Дата не выбрана', /// зменить на реальный выбор даты
                                       cityId: -1,
                                       languageId: -1,
                                     );

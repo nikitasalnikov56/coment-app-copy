@@ -21,21 +21,24 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     required String name,
     required String email,
     required String phone,
-    required int cityId,
-    required int languageId,
+    String? birthDate,
+    int cityId = -1,
+    int languageId = -1,
     XFile? avatar,
   }) async {
     try {
       emit(const ProfileEditState.loading());
 
       await _repository.editAccount(
-          password: password,
-          name: name,
-          email: email,
-          phone: phone,
-          cityId: cityId,
-          languageId: languageId,
-          avatar: avatar);
+        password: password,
+        name: name,
+        email: email,
+        phone: phone,
+        birthDate: birthDate,
+        cityId: cityId ,
+        languageId: languageId,
+        avatar: avatar,
+      );
       log('$avatar', name: 'cubit avatar');
       emit(const ProfileEditState.loaded());
     } on RestClientException catch (e) {

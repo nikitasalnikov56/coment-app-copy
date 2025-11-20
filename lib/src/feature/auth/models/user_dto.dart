@@ -14,6 +14,7 @@ class UserDTO with _$UserDTO {
     String? email,
     @JsonKey(name: 'phoneNumber')
     String? phone,
+    @JsonKey(name: 'avatar_url')
     String? avatar,
     CityDTO? city,
     LanguageDTO? language,
