@@ -83,6 +83,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final String obscuringCharacter;
   final int? errorMaxLines;
+
   final TextStyle? errorStyle;
   final String? counterText;
   final VoidCallback? onTap;
@@ -132,7 +133,8 @@ class CustomTextField extends StatelessWidget {
                 decoration: InputDecoration(
                   fillColor: fillColor,
                   border: OutlineInputBorder(
-                    borderRadius: borderR ?? const BorderRadius.all(Radius.circular(16)),
+                    borderRadius:
+                        borderR ?? const BorderRadius.all(Radius.circular(16)),
                   ),
                   enabledBorder: enabledBorder,
                   focusedBorder: focusedBorder,

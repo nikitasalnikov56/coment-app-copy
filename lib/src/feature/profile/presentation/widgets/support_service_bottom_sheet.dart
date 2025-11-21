@@ -1,6 +1,8 @@
 import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+
 import 'package:coment_app/src/feature/profile/bloc/write_tech_support_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,9 +14,11 @@ import 'package:coment_app/src/core/presentation/widgets/buttons/custom_button.d
 import 'package:coment_app/src/core/theme/resources.dart';
 
 class SupportServiceBottomSheet extends StatefulWidget {
-  const SupportServiceBottomSheet({super.key});
+  const SupportServiceBottomSheet({super.key, required this.user});
+  final UserDTO? user;
 
-  static Future<void> show(BuildContext context) => showModalBottomSheet(
+  static Future<void> show(BuildContext context, {required UserDTO user}) =>
+      showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
@@ -27,25 +31,39 @@ class SupportServiceBottomSheet extends StatefulWidget {
               ),
             ),
           ],
-          child: const SupportServiceBottomSheet(),
+          child: SupportServiceBottomSheet(
+            user: user,
+          ),
         ),
       );
 
   @override
-  State<SupportServiceBottomSheet> createState() => _SupportServiceBottomSheetState();
+  State<SupportServiceBottomSheet> createState() =>
+      _SupportServiceBottomSheetState();
 }
 
 class _SupportServiceBottomSheetState extends State<SupportServiceBottomSheet> {
   final TextEditingController textController = TextEditingController();
+  final TextEditingController themeController = TextEditingController();
+  final TextEditingController emailTextController = TextEditingController();
 
   bool? isLoading = false;
 
   @override
   void dispose() {
     textController.dispose();
+    themeController.dispose();
+    emailTextController.dispose();
     super.dispose();
   }
 
+  @override
+  initState() {
+    super.initState();
+    emailTextController.text = widget.user?.email ?? '';
+  }
+
+  String? selectedCategory;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -78,7 +96,7 @@ class _SupportServiceBottomSheetState extends State<SupportServiceBottomSheet> {
                       Navigator.of(context).pop();
                     },
                     icon: SvgPicture.asset(
-                     AssetsConstants.close,
+                      AssetsConstants.close,
                       height: 26,
                     ),
                   ),
@@ -94,8 +112,69 @@ class _SupportServiceBottomSheetState extends State<SupportServiceBottomSheet> {
             const Gap(12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(context.localized.if_you_have_any_questions_or_suggestions,
-                  textAlign: TextAlign.center, style: AppTextStyles.fs14w400),
+              child: Text(
+                  context.localized.if_you_have_any_questions_or_suggestions,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.fs14w400),
+            ),
+            const Gap(12),
+            SizedBox(
+              height: 40,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: CustomTextField(
+                  controller: themeController,
+                  hintText: context.localized.writeTheme,
+                  contentPadding: const EdgeInsets.only(left: 15, top: 16),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                  maxLines: 4,
+                ),
+              ),
+            ),
+            const Gap(12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                ),
+                value: selectedCategory,
+                hint: Text(
+                  context.localized.selectSupportCategory,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.fs14w400,
+                ),
+                items: [
+                  context.localized.technicalIssues,
+                  context.localized.accountProblems,
+                  context.localized.paymentsAndBilling,
+                  context.localized.featureRequest,
+                  context.localized.reportBug,
+                  context.localized.otherCategory,
+                ]
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(
+                          item,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.fs14w400,
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    selectedCategory = val;
+                  });
+                },
+              ),
             ),
             const Gap(12),
             SizedBox(
@@ -105,6 +184,8 @@ class _SupportServiceBottomSheetState extends State<SupportServiceBottomSheet> {
                 child: CustomTextField(
                   controller: textController,
                   hintText: context.localized.write,
+                  maxLength: 5000,
+                  showMaxLengthLabel: true,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: const BorderSide(color: Colors.grey),
@@ -113,7 +194,23 @@ class _SupportServiceBottomSheetState extends State<SupportServiceBottomSheet> {
                 ),
               ),
             ),
-
+            const Gap(12),
+            SizedBox(
+              height: 40,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: CustomTextField(
+                  controller: emailTextController,
+                  hintText: context.localized.enterYourEmailAddress,
+                  contentPadding: const EdgeInsets.only(left: 15, top: 16),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                  maxLines: 4,
+                ),
+              ),
+            ),
             BlocListener<TechSupportCubit, TechSupportState>(
               listener: (context, state) {
                 state.maybeWhen(
@@ -124,10 +221,18 @@ class _SupportServiceBottomSheetState extends State<SupportServiceBottomSheet> {
                   loading: () {
                     isLoading = true;
                   },
-                  loaded: () {
+                  loaded: (String message) {
                     isLoading = false;
                     setState(() {});
                     Navigator.of(context).pop();
+                    // После небольшой задержки (чтобы bottom sheet успел закрыться)
+                    Future.delayed(Duration.zero, () {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(message)),
+                        );
+                      }
+                    });
                   },
                 );
               },
@@ -135,20 +240,84 @@ class _SupportServiceBottomSheetState extends State<SupportServiceBottomSheet> {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: CustomButton(
                   onPressed: () {
-                    // log(textController.text);
-                    BlocProvider.of<TechSupportCubit>(context).writeTechSupport(text: textController.text);
+                    final subject = themeController.text.trim();
+                    final message = textController.text.trim();
+                    final contactEmail = emailTextController.text.trim();
+                    final category = selectedCategory;
+
+                    if (subject.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(context.localized.subjectIsRequired)));
+                      return;
+                    }
+                    if (subject.length > 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(context.localized.subjectTooLong)));
+                      return;
+                    }
+
+                    if (message.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(context.localized.messageIsRequired)));
+                      return;
+                    }
+                    if (message.length > 5000) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(context.localized.messageTooLong)),
+                      );
+                      return;
+                    }
+                    if (category == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(context.localized.categoryIsRequired)));
+                      return;
+                    }
+
+                    // 4. Проверяем email
+                    final emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                    if (contactEmail.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(context.localized.emailIsRequired)),
+                      );
+                      return;
+                    }
+                    if (!emailRegExp.hasMatch(contactEmail)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(context.localized.invalidEmail)),
+                      );
+                      return;
+                    }
+                    // 5. Маппинг категории из локализованного текста в enum-значение
+                    String? categoryValue;
+                    switch (category) {
+                      case final v when v == context.localized.technicalIssues:
+                        categoryValue = 'technical';
+                      case final v when v == context.localized.accountProblems:
+                        categoryValue = 'account';
+                      case final v
+                          when v == context.localized.paymentsAndBilling:
+                        categoryValue = 'payment';
+                      case final v when v == context.localized.featureRequest:
+                        categoryValue = 'feature_request';
+                      case final v when v == context.localized.reportBug:
+                        categoryValue = 'bug_report';
+                      case final v when v == context.localized.otherCategory:
+                        categoryValue = 'other';
+                      default:
+                        categoryValue = 'other';
+                    }
+
+                    BlocProvider.of<TechSupportCubit>(context).writeTechSupport(
+                      subject: subject,
+                      message: message,
+                      category: categoryValue,
+                      contactEmail: contactEmail,
+                    );
                     setState(() {});
                   },
                   style: CustomButtonStyles.mainButtonStyle(context),
-                  // style: ElevatedButton.styleFrom(
-                  //   elevation: 0,
-                  //   backgroundColor: AppColors.mainColor,
-                  //   foregroundColor: Colors.white,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(16),
-                  //   ),
-                  //   padding: const EdgeInsets.symmetric(vertical: 12),
-                  // ),
                   child: isLoading == true
                       ? const CircularProgressIndicator.adaptive()
                       : Text(

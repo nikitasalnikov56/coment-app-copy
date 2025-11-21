@@ -358,6 +358,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get select_a_photo => 'Фотосуретті таңдаңыз';
 
   @override
+  String get selectSupportCategory => 'Сұранысыңыздың санатын таңдаңыз';
+
+  @override
   String get send => 'Жіберу';
 
   @override
@@ -417,6 +420,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get words => 'сөз';
 
   @override
+  String get writeTheme => 'Өтінім тақырыбы';
+
+  @override
   String get write => 'Жазыңыз ...';
 
   @override
@@ -441,4 +447,43 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get enterYourBirthDate => 'Туған күніңізді енгізіңіз';
+
+  @override
+  String get technicalIssues => 'Tekhnık mäseleler';
+
+  @override
+  String get accountProblems => 'Akkauant mäseleleri';
+
+  @override
+  String get paymentsAndBilling => 'Tölemder jäne bıllıng';
+
+  @override
+  String get featureRequest => 'Jaña funksıya usynysy';
+
+  @override
+  String get reportBug => 'Qate turaly habar beru';
+
+  @override
+  String get otherCategory => 'Basqa';
+
+  @override
+  String get subjectIsRequired => 'Taqyryp mindetti';
+
+  @override
+  String get subjectTooLong => 'Taqyryp 200 belgiden aspauy kerek';
+
+  @override
+  String get messageIsRequired => 'Habar mindetti';
+
+  @override
+  String get messageTooLong => 'Habar 5000 belgiden aspauy kerek';
+
+  @override
+  String get categoryIsRequired => 'Sanatty tandanyz';
+
+  @override
+  String get emailIsRequired => 'Bailanys ushın email mindetti';
+
+  @override
+  String get invalidEmail => 'Dūrys emes email mekenjayı';
 }

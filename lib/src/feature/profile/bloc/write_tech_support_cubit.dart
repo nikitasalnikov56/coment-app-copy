@@ -12,13 +12,27 @@ class TechSupportCubit extends Cubit<TechSupportState> {
 
   final IProfileRepository _repository;
 
-  Future<void> writeTechSupport({required String text}) async {
+  Future<void> writeTechSupport({
+    required String subject,
+    required String message,
+    required String category,
+    required String contactEmail,
+  }) async {
     try {
       emit(const TechSupportState.loading());
 
-      await _repository.writeTechSupport(text: text);
-
-      emit(const TechSupportState.loaded());
+      final response = await _repository.writeTechSupport(
+        subject: subject,
+        message: message,
+        category: category,
+        contactEmail: contactEmail,
+      );
+      final messageResponse = response.message;
+      if (messageResponse == null) {
+        // Обработка случая, если message отсутствует (маловероятно, но безопасно)
+       emit( const TechSupportState.error (message: 'Ответ от сервера не содержит сообщения'));
+      }
+      emit(TechSupportState.loaded(message: messageResponse.toString()));
     } catch (e) {
       emit(
         TechSupportState.error(
@@ -33,6 +47,7 @@ class TechSupportCubit extends Cubit<TechSupportState> {
 class TechSupportState with _$TechSupportState {
   const factory TechSupportState.initial() = _InitialState;
   const factory TechSupportState.loading() = _LoadingState;
-  const factory TechSupportState.loaded() = _LoadedState;
+  const factory TechSupportState.loaded({required String message}) =
+      _LoadedState;
   const factory TechSupportState.error({required String message}) = _ErrorState;
 }

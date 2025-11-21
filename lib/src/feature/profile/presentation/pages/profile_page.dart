@@ -218,7 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               icon: AssetsConstants.icHelpdesk,
                               title: context.localized.helpDesk,
                               onTap: () {
-                                SupportServiceBottomSheet.show(context);
+                                SupportServiceBottomSheet.show(context, user: userDTO);
                               },
                             ),
                             const Gap(12),

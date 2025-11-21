@@ -17,7 +17,12 @@ abstract interface class IProfileRemoteDS {
   // 👇 Изменили сигнатуру: теперь принимаем refreshToken
   Future<BasicResponse> logOut({required String refreshToken});
 
-  Future<BasicResponse> writeTechSupport({required String text});
+  Future<BasicResponse> writeTechSupport({
+    required String subject,
+    required String message,
+    required String category,
+    required String contactEmail,
+  });
 
   Future<BasicResponse> editAccount({
     required String password,
@@ -113,6 +118,7 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       rethrow;
     }
   }
+
   @override
   // 👇 Реализация безопасного выхода
   Future<BasicResponse> logOut({required String refreshToken}) async {
@@ -131,10 +137,24 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
   }
 
   @override
-  Future<BasicResponse> writeTechSupport({required String text}) async {
+  Future<BasicResponse> writeTechSupport({
+    required String subject,
+    required String message,
+    required String category,
+    required String contactEmail,
+  }) async {
     try {
-      final Map<String, dynamic> response =
-          await restClient.post('/support/create', body: {'text': text});
+      final body = {
+          'subject': subject,
+          'message': message,
+          'category': category,
+          'contactEmail': contactEmail,
+          'priority': 'medium',
+        };
+      final Map<String, dynamic> response = await restClient.post(
+        '/support/create',
+        body: body,
+      );
 
       return BasicResponse.fromJson(response);
     } catch (e, st) {

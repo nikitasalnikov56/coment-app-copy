@@ -774,6 +774,12 @@ abstract class AppLocalizations {
   /// **'Select a photo'**
   String get select_a_photo;
 
+  /// No description provided for @selectSupportCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the category of your request'**
+  String get selectSupportCategory;
+
   /// No description provided for @send.
   ///
   /// In en, this message translates to:
@@ -882,6 +888,12 @@ abstract class AppLocalizations {
   /// **'words'**
   String get words;
 
+  /// No description provided for @writeTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject of the appeal'**
+  String get writeTheme;
+
   /// No description provided for @write.
   ///
   /// In en, this message translates to:
@@ -929,6 +941,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your date of birth'**
   String get enterYourBirthDate;
+
+  /// No description provided for @technicalIssues.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical issues'**
+  String get technicalIssues;
+
+  /// No description provided for @accountProblems.
+  ///
+  /// In en, this message translates to:
+  /// **'Account problems'**
+  String get accountProblems;
+
+  /// No description provided for @paymentsAndBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments and billing'**
+  String get paymentsAndBilling;
+
+  /// No description provided for @featureRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature request'**
+  String get featureRequest;
+
+  /// No description provided for @reportBug.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a bug'**
+  String get reportBug;
+
+  /// No description provided for @otherCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get otherCategory;
+
+  /// No description provided for @subjectIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject is required'**
+  String get subjectIsRequired;
+
+  /// No description provided for @subjectTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject must not exceed 200 characters'**
+  String get subjectTooLong;
+
+  /// No description provided for @messageIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Message is required'**
+  String get messageIsRequired;
+
+  /// No description provided for @messageTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Message must not exceed 5000 characters'**
+  String get messageTooLong;
+
+  /// No description provided for @categoryIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category'**
+  String get categoryIsRequired;
+
+  /// No description provided for @emailIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact email is required'**
+  String get emailIsRequired;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email address'**
+  String get invalidEmail;
 }
 
 class _AppLocalizationsDelegate

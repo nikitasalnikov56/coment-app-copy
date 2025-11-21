@@ -357,6 +357,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get select_a_photo => 'Выберите фото';
 
   @override
+  String get selectSupportCategory => 'Выберите категорию обращения';
+
+  @override
   String get send => 'Отправить';
 
   @override
@@ -415,6 +418,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get words => 'слов';
 
   @override
+  String get writeTheme => 'Тема обращения';
+
+  @override
   String get write => ' Напишите ...';
 
   @override
@@ -439,4 +445,43 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get enterYourBirthDate => 'Введите вашу дату рождения';
+
+  @override
+  String get technicalIssues => 'Технические проблемы';
+
+  @override
+  String get accountProblems => 'Проблемы с аккаунтом';
+
+  @override
+  String get paymentsAndBilling => 'Платежи и биллинг';
+
+  @override
+  String get featureRequest => 'Предложение новой функции';
+
+  @override
+  String get reportBug => 'Сообщить об ошибке';
+
+  @override
+  String get otherCategory => 'Другое';
+
+  @override
+  String get subjectIsRequired => 'Тема обращения обязательна';
+
+  @override
+  String get subjectTooLong => 'Тема не должна превышать 200 символов';
+
+  @override
+  String get messageIsRequired => 'Сообщение обязательно';
+
+  @override
+  String get messageTooLong => 'Сообщение не должно превышать 5000 символов';
+
+  @override
+  String get categoryIsRequired => 'Выберите категорию обращения';
+
+  @override
+  String get emailIsRequired => 'Email для связи обязателен';
+
+  @override
+  String get invalidEmail => 'Некорректный email адрес';
 }

@@ -357,6 +357,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get select_a_photo => 'Select a photo';
 
   @override
+  String get selectSupportCategory => 'Select the category of your request';
+
+  @override
   String get send => 'Send';
 
   @override
@@ -415,6 +418,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get words => 'words';
 
   @override
+  String get writeTheme => 'Subject of the appeal';
+
+  @override
   String get write => 'Write ...';
 
   @override
@@ -439,4 +445,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterYourBirthDate => 'Enter your date of birth';
+
+  @override
+  String get technicalIssues => 'Technical issues';
+
+  @override
+  String get accountProblems => 'Account problems';
+
+  @override
+  String get paymentsAndBilling => 'Payments and billing';
+
+  @override
+  String get featureRequest => 'Feature request';
+
+  @override
+  String get reportBug => 'Report a bug';
+
+  @override
+  String get otherCategory => 'Other';
+
+  @override
+  String get subjectIsRequired => 'Subject is required';
+
+  @override
+  String get subjectTooLong => 'Subject must not exceed 200 characters';
+
+  @override
+  String get messageIsRequired => 'Message is required';
+
+  @override
+  String get messageTooLong => 'Message must not exceed 5000 characters';
+
+  @override
+  String get categoryIsRequired => 'Please select a category';
+
+  @override
+  String get emailIsRequired => 'Contact email is required';
+
+  @override
+  String get invalidEmail => 'Invalid email address';
 }

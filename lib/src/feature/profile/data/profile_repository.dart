@@ -17,7 +17,12 @@ abstract interface class IProfileRepository {
 
   Future<BasicResponse> logout();
 
-  Future<BasicResponse> writeTechSupport({required String text});
+  Future<BasicResponse> writeTechSupport({
+    required String subject,
+    required String message,
+    required String category,
+    required String contactEmail,
+  });
 
   Future<List<FeedbackDTO>> myFeedbacks();
 
@@ -120,11 +125,20 @@ class ProfileRepositoryImpl implements IProfileRepository {
     }
   }
 
- 
   @override
-  Future<BasicResponse> writeTechSupport({required String text}) async {
+  Future<BasicResponse> writeTechSupport({
+    required String subject,
+    required String message,
+    required String category,
+    required String contactEmail,
+  }) async {
     try {
-      return await _remoteDS.writeTechSupport(text: text);
+      return await _remoteDS.writeTechSupport(
+        subject: subject,
+        message: message,
+        category: category,
+        contactEmail: contactEmail,
+      );
     } catch (e) {
       rethrow;
     }

@@ -44,7 +44,6 @@ dependencies:
   intercepted_client: ^0.0.1
   intl: ^0.20.2
   json_annotation: ^4.9.0
-  json_serializable: ^6.8.0
   loader_overlay: ^4.0.2+1
   lottie: ^3.1.2
   mask_text_input_formatter: ^2.9.0
@@ -83,6 +82,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
+  json_serializable: ^6.8.0
   auto_route_generator: ^9.0.0
   build_runner: ^2.4.12
   drift_dev: ^2.20.1

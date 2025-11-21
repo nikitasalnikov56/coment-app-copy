@@ -358,6 +358,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get select_a_photo => 'Fotosuratni tanlang';
 
   @override
+  String get selectSupportCategory => 'So\'rovingiz toifasini tanlang';
+
+  @override
   String get send => 'Yuborish';
 
   @override
@@ -417,6 +420,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get words => 'so\'z';
 
   @override
+  String get writeTheme => 'Murojaat mavzusi';
+
+  @override
   String get write => 'Yozing ...';
 
   @override
@@ -441,4 +447,43 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get enterYourBirthDate => 'Tug\'ilgan sanangizni kiriting';
+
+  @override
+  String get technicalIssues => 'Texnik muammolar';
+
+  @override
+  String get accountProblems => 'Hisob bilan bogʻliq muammolar';
+
+  @override
+  String get paymentsAndBilling => 'Toʻlovlar va billing';
+
+  @override
+  String get featureRequest => 'Yangi funksiyani taklif qilish';
+
+  @override
+  String get reportBug => 'Xatolik haqida xabar berish';
+
+  @override
+  String get otherCategory => 'Boshqa';
+
+  @override
+  String get subjectIsRequired => 'Mavzu majburiy';
+
+  @override
+  String get subjectTooLong => 'Mavzu 200 ta belgidan oshmasligi kerak';
+
+  @override
+  String get messageIsRequired => 'Xabar majburiy';
+
+  @override
+  String get messageTooLong => 'Xabar 5000 ta belgidan oshmasligi kerak';
+
+  @override
+  String get categoryIsRequired => 'Ariza turini tanlang';
+
+  @override
+  String get emailIsRequired => 'Aloqa uchun email majburiy';
+
+  @override
+  String get invalidEmail => 'Noto‘g‘ri email manzili';
 }
