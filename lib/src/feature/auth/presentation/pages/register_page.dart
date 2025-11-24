@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gcaptcha_v3/web_view.dart';
@@ -112,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
           errorLabel: 'Неверный логин',
         ) ==
         null;
-    final isPasswordValid = passwordController.text.length >= 6;
+    final isPasswordValid = passwordController.text.length >= 9;
     String phoneUnmasked =
         phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
     bool isPhoneValid = phoneUnmasked.length == selectedCountry!.digitLength;
@@ -122,21 +123,106 @@ class _RegisterPageState extends State<RegisterPage> {
         isPhoneValid;
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+
+  void showBirthdayPicker(
+    BuildContext context, {
+    required DateTime initialDate,
+  }) {
+    DateTime tempDate = initialDate;
+
+    showCupertinoModalPopup(
       context: context,
-      initialDate: DateTime.now().subtract(
-          const Duration(days: 18 * 365)), // по умолчанию 18 лет назад
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      builder: (_) => Material(
+        color: Colors.transparent,
+        child: Container(
+          height: 360,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            children: [
+              // --- Верхняя панель (Отменить / Заголовок / Подтвердить)
+              SizedBox(
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+              
+                   const Padding(
+                      padding:  EdgeInsets.only(left: 18.0),
+                      child:  Text(
+                        "Дата рождения",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    CupertinoButton(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child:  Text(
+                        "Отменить",
+                        style: AppTextStyles.fs16w400.copyWith(color: AppColors.greyTextColor),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 0),
+              // --- Пикер
+              Expanded(
+                flex: 3,
+                child: CupertinoTheme(
+                  data: const CupertinoThemeData(
+                    textTheme: CupertinoTextThemeData(
+                      dateTimePickerTextStyle: TextStyle(
+                        fontSize: 22,
+                        color: CupertinoColors.black,
+                      ),
+                    ),
+                  ),
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: initialDate,
+                    maximumDate: DateTime.now(),
+                    minimumYear: 1900,
+                    maximumYear: DateTime.now().year,
+                    onDateTimeChanged: (DateTime value) {
+                      tempDate = value;
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  color: Colors.transparent,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 15),
+                  child: CupertinoButton(
+                    color: AppColors.mainColor,
+                    minimumSize: Size(MediaQuery.of(context).size.width, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child:  Text(
+                      "Подтвердить",
+                      style: AppTextStyles.fs16w400.copyWith(color: AppColors.kF5F6F7),
+                    ),
+                    onPressed: () {
+                      if (tempDate != null) {
+                        birthDateController.text =
+                            tempDate.toIso8601String().split('T')[0];
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
-    if (picked != null) {
-      setState(() {
-        birthDateController.text =
-            picked.toIso8601String().split('T')[0]; // YYYY-MM-DD
-      });
-    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +345,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: birthDateController,
                           valueListenable: birthDateError,
                           hintText: context.localized.enterYourBirthDate,
-                          onTap: () => _selectDate(context),
+                          onTap: () => showBirthdayPicker(
+                            context,
+                            initialDate: DateTime.now().subtract(
+                              const Duration(days: 18 * 365),
+                            ),
+                          ),
                         ),
                         const Gap(16),
                         Text(
@@ -340,7 +431,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const Gap(16),
                         Text(
-                          context.localized.enterThePassword,
+                          '${context.localized.enterThePassword} (${context.localized.helperText})',
                           style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                         ),
                         const Gap(6),
@@ -382,8 +473,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 selectedCountry!.code + nationalNumber;
                             fullPhoneNumber = fullPhoneNumber
                                 .trim(); // ← убираем пробелы в начале/конце
-                            print('FINAL PHONE: "${fullPhoneNumber.runtimeType}"');
-                            
+                            print(
+                                'FINAL PHONE: "${fullPhoneNumber.runtimeType}"');
+
                             BlocProvider.of<RegisterCubit>(context).register(
                               email: emailController.text,
                               name: surnameNameController.text,

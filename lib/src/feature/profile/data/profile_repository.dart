@@ -13,7 +13,8 @@ import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
 abstract interface class IProfileRepository {
   Future<UserDTO> profileData();
 
-  Future<BasicResponse> deleteAccount();
+  Future<BasicResponse> deleteAccount({required String password});
+
 
   Future<BasicResponse> logout();
 
@@ -69,9 +70,9 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
-  Future<BasicResponse> deleteAccount() async {
+  Future<BasicResponse> deleteAccount({required String password}) async {
     try {
-      final result = await _remoteDS.deleteAccount();
+      final result = await _remoteDS.deleteAccount(password: password);
       // ✅ При удалении аккаунта тоже чистим локальные данные
       await _authDao.user.remove();
       await _secureStorage.delete(key: 'refresh_token');
@@ -102,6 +103,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
         cityId: cityId,
         languageId: languageId,
         avatar: avatar,
+        birthDate: birthDate,
       );
     } on CustomBackendException catch (e) {
       if (e.statusCode == 401) {

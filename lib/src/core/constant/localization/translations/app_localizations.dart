@@ -1019,6 +1019,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid email address'**
   String get invalidEmail;
+
+  /// No description provided for @helperText.
+  ///
+  /// In en, this message translates to:
+  /// **'minimum 9 characters'**
+  String get helperText;
 }
 
 class _AppLocalizationsDelegate

@@ -484,4 +484,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get invalidEmail => 'Некорректный email адрес';
+
+  @override
+  String get helperText => 'минимум 9 символов';
 }

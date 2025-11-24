@@ -151,5 +151,6 @@
   "messageTooLong": "Сообщение не должно превышать 5000 символов",
   "categoryIsRequired": "Выберите категорию обращения",
   "emailIsRequired": "Email для связи обязателен",
-  "invalidEmail": "Некорректный email адрес"
+  "invalidEmail": "Некорректный email адрес",
+  "helperText":"минимум 9 символов"
 }

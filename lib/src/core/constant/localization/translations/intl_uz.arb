@@ -150,5 +150,6 @@
   "messageTooLong": "Xabar 5000 ta belgidan oshmasligi kerak",
   "categoryIsRequired": "Ariza turini tanlang",
   "emailIsRequired": "Aloqa uchun email majburiy",
-  "invalidEmail": "Noto‘g‘ri email manzili"
+  "invalidEmail": "Noto‘g‘ri email manzili",
+  "helperText":"kamida 9 ta belgi"
 }

@@ -12,7 +12,7 @@ import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 abstract interface class IProfileRemoteDS {
   Future<UserDTO> profileData();
 
-  Future<BasicResponse> deleteAccount();
+  Future<BasicResponse> deleteAccount({required String password});
 
   // 👇 Изменили сигнатуру: теперь принимаем refreshToken
   Future<BasicResponse> logOut({required String refreshToken});
@@ -28,6 +28,7 @@ abstract interface class IProfileRemoteDS {
     required String password,
     required String name,
     required String email,
+     String? birthDate,
     required String phone,
     required int cityId,
     required int languageId,
@@ -59,10 +60,12 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
   }
 
   @override
-  Future<BasicResponse> deleteAccount() async {
+  Future<BasicResponse> deleteAccount({required String password}) async {
     try {
+      final body = {'password': password};
       final Map<String, dynamic> response = await restClient.delete(
         'auth/delete',
+        body: body,
       );
 
       return BasicResponse.fromJson(response);
@@ -81,6 +84,7 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
     required int cityId,
     required int languageId,
     XFile? avatar,
+     String? birthDate,
   }) async {
     try {
       final Map<String, dynamic> data = {};
@@ -91,6 +95,7 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       if (cityId > 0) data['city_id'] = cityId.toString();
       if (password.isNotEmpty) data['password'] = password;
       if (languageId > 0) data['language_id'] = languageId.toString();
+      if (birthDate != null && birthDate.isNotEmpty) data['birthDate'] = birthDate;
 
       final FormData formData = FormData.fromMap(data);
       if (avatar != null) {

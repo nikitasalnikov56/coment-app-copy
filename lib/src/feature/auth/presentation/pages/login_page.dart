@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const Gap(16),
                           Text(
-                            context.localized.enterThePassword,
+                             '${context.localized.enterThePassword} (${context.localized.helperText})',
                             style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                           ),
                           const Gap(8),

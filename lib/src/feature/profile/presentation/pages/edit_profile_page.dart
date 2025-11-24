@@ -62,12 +62,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+
   final ValueNotifier<String?> _surnameError = ValueNotifier(null);
   final ValueNotifier<String?> _phoneError = ValueNotifier(null);
   final ValueNotifier<String?> _passwordError = ValueNotifier(null);
   final ValueNotifier<String?> _emailError = ValueNotifier(null);
   final ValueNotifier<bool> _allowTapButton = ValueNotifier(false);
   final ValueNotifier<bool> _obscureText = ValueNotifier(true);
+  final ValueNotifier<String?> birthDateError = ValueNotifier(null);
 
   String imageNetwork = '';
   XFile? image;
@@ -91,16 +94,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _passwordError.dispose();
     _allowTapButton.dispose();
     passwordFocus.dispose();
+    birthDateController.dispose();
+    birthDateError.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-   
+
     final phone = widget.user?.phone;
     if (phone != null) {
-     parsePhoneNumber(phone);
+      parsePhoneNumber(phone);
     } else {
       selectedCountry = countries.first;
       phoneController.text = '';
@@ -115,7 +120,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void parsePhoneNumber(String phoneNumber) {
     if (phoneNumber.startsWith("+7")) {
       selectedCountry = countries.firstWhere((c) => c.code == "+7");
-         
+
       phoneController.text = phoneNumber
           .substring(2)
           .replaceAll(RegExp(r'[^0-9]'), ''); // Убираем "+7"
@@ -125,8 +130,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .substring(4)
           .replaceAll(RegExp(r'[^0-9]'), ''); // Убираем "+998"
     } else {
-      selectedCountry = countries.first; 
-      phoneController.text = phoneNumber.replaceAll(RegExp(r'[^0-9]'), ''); // Записываем весь номер
+      selectedCountry = countries.first;
+      phoneController.text = phoneNumber.replaceAll(
+          RegExp(r'[^0-9]'), ''); // Записываем весь номер
     }
   }
 
@@ -146,6 +152,110 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEmailValid &&
         isPhoneValid &&
         isPasswordValid;
+  }
+
+  void showBirthdayPicker(
+    BuildContext context, {
+    required DateTime initialDate,
+  }) {
+    DateTime tempDate = initialDate;
+
+    showCupertinoModalPopup(
+      context: context,
+      builder: (_) => Material(
+        color: Colors.transparent,
+        child: Container(
+          height: 360,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            children: [
+              // --- Верхняя панель (Отменить / Заголовок / Подтвердить)
+              SizedBox(
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 18.0),
+                      child: Text(
+                        "Дата рождения",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    CupertinoButton(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        "Отменить",
+                        style: AppTextStyles.fs16w400
+                            .copyWith(color: AppColors.greyTextColor),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 0),
+              // --- Пикер
+              Expanded(
+                flex: 3,
+                child: CupertinoTheme(
+                  data: const CupertinoThemeData(
+                    textTheme: CupertinoTextThemeData(
+                      dateTimePickerTextStyle: TextStyle(
+                        fontSize: 22,
+                        color: CupertinoColors.black,
+                      ),
+                    ),
+                  ),
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: initialDate,
+                    maximumDate: DateTime.now(),
+                    minimumYear: 1900,
+                    maximumYear: DateTime.now().year,
+                    onDateTimeChanged: (DateTime value) {
+                      tempDate = value;
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  color: Colors.transparent,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 15),
+                  child: CupertinoButton(
+                    color: AppColors.mainColor,
+                    minimumSize: Size(MediaQuery.of(context).size.width, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      "Подтвердить",
+                      style: AppTextStyles.fs16w400
+                          .copyWith(color: AppColors.kF5F6F7),
+                    ),
+                    onPressed: () {
+                      if (tempDate != null) {
+                        birthDateController.text =
+                            tempDate.toIso8601String().split('T')[0];
+                      }
+                      if (context.mounted) {
+                        setState(() {});
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -395,6 +505,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ),
                             const Gap(16),
                             Text(
+                              context.localized.enterYourBirthDate,
+                              style:
+                                  AppTextStyles.fs14w500.copyWith(height: 1.3),
+                            ),
+                            const Gap(8),
+                            CustomValidatorTextfield(
+                              controller: birthDateController,
+                              valueListenable: birthDateError,
+                              hintText: context.localized.enterYourBirthDate,
+                              onTap: () => showBirthdayPicker(
+                                context,
+                                initialDate: DateTime.now().subtract(
+                                  const Duration(days: 18 * 365),
+                                ),
+                              ),
+                            ),
+                            const Gap(16),
+                            Text(
                               context.localized.enterYourPhoneNumber,
                               style: AppTextStyles.fs14w400,
                             ),
@@ -403,7 +531,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               children: [
                                 Expanded(
                                   child: CustomTextField(
-                                    key: Key(selectedCountry?.code ?? 'default'),
+                                    key:
+                                        Key(selectedCountry?.code ?? 'default'),
                                     height: 44,
                                     obscureText: false,
                                     focusedBorder: OutlineInputBorder(
@@ -478,7 +607,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             const Gap(16),
 
                             Text(
-                              context.localized.enterThePassword,
+                              '${context.localized.enterThePassword} (${context.localized.helperText})',
                               style: AppTextStyles.fs14w400
                                   .copyWith(color: AppColors.text),
                             ),
@@ -535,6 +664,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               child: CustomButton(
                                 allowTapButton: _allowTapButton,
                                 onPressed: () {
+                                  print(birthDateController.text);
                                   if (_formKey.currentState!.validate()) {
                                     log('$image', name: 'image');
                                     log(surnameController.text, name: 'name');
@@ -552,7 +682,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       avatar: image,
                                       phone:
                                           "${selectedCountry?.code ?? ''}${phoneController.text}",
-                                          birthDate: 'Дата не выбрана', /// зменить на реальный выбор даты
+                                      birthDate: birthDateController.text,
+
+                                      /// зменить на реальный выбор даты
                                       cityId: -1,
                                       languageId: -1,
                                     );
@@ -585,7 +717,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   exited: (message) {
                                     context.loaderOverlay.hide();
                                     Toaster.showTopShortToast(context,
-                                        message: 'Успешно');
+                                        message: message);
                                     context.router.popUntil((route) =>
                                         route.settings.name ==
                                         LauncherRoute.name);
@@ -596,16 +728,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               },
                               child: GestureDetector(
                                 onTap: () {
+                                  if (passwordController.text.trim().isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          context.localized.enterThePassword,
+                                          style: AppTextStyles.fs14w400,
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
                                   LogoutBottomSheet.show(
                                     context,
                                     isDeleteAccount: true,
                                     onPressed: () {
-                                      BlocProvider.of<ProfileBLoC>(context).add(
-                                          const ProfileEvent.deleteAccount());
+                                      BlocProvider.of<ProfileBLoC>(context)
+                                          .add(ProfileEvent.deleteAccount(
+                                        password:
+                                            passwordController.text.trim(),
+                                      ));
                                       Navigator.pop(context);
                                     },
                                   ).whenComplete(() {
                                     FocusScope.of(context).unfocus();
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   const SnackBar(
+                                    //     content: Text(
+                                    //       'Ваш аккаунт успешно удалён. У вас есть 30 дней для восстановления.',
+                                    //     ),
+                                    //   ),
+                                    // );
                                   });
                                 },
                                 child: Center(

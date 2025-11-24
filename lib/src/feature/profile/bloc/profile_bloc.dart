@@ -23,7 +23,7 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
       (event, emit) async => event.map(
         getProfile: (event) async => _getProfile(emit),
         logOut: (event) async => _logOut(emit),
-        deleteAccount: (event) async => _deleteAccount(emit),
+        deleteAccount: (event) async => _deleteAccount(emit, event.password),
         // updateAvatar: (event) async => _updateAvatar(event, emit),
         // deleteAvatar: (event) async => _deleteAvatar(emit),
         // updateProfile: (event) async => _updateProfile(event, emit),
@@ -32,6 +32,7 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
   }
   final IAuthRepository _authRepository;
   final IProfileRepository _profileRepository;
+  
 
   bool get isAuthenticated => _authRepository.isAuthenticated;
 
@@ -76,16 +77,19 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> _deleteAccount(
     Emitter<ProfileState> emit,
+    String password,
   ) async {
     try {
       emit(const ProfileState.loading());
 
-      final result = await _profileRepository.deleteAccount();
+      final result = await _profileRepository.deleteAccount(password: password);
 
       emit(ProfileState.exited(message: result.message ?? ''));
     } on RestClientException catch (e) {
+       print('DELETE ERROR: ${e.message}');
       emit(ProfileState.error(message: e.message));
     } catch (e) {
+         print('DELETE UNKNOWN ERROR: $e');
       emit(ProfileState.error(message: e.toString()));
     }
   }
@@ -97,7 +101,7 @@ class ProfileEvent with _$ProfileEvent {
 
   const factory ProfileEvent.logOut() = _LogOut;
 
-  const factory ProfileEvent.deleteAccount() = _DeleteAccount;
+  const factory ProfileEvent.deleteAccount({required String password}) = _DeleteAccount;
 }
 
 @freezed

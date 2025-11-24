@@ -12,12 +12,15 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit({
     required IProfileRepository repository,
     required AppBloc appBloc,
+    required String password
   })  : _repository = repository,
         _appBloc = appBloc,
+        _password=password,
         super(const ProfileState.initial());
 
   final IProfileRepository _repository;
   final AppBloc _appBloc;
+  final String _password;
 
   Future<void> getProfile() async {
     try {
@@ -46,7 +49,7 @@ class ProfileCubit extends Cubit<ProfileState> {
    Future<void> deleteProfile() async {
     emit(const ProfileState.loading());
 
-    final result = await _repository.deleteAccount();
+    final result = await _repository.deleteAccount(password: _password);
 
     result.when(
       success: (user) {

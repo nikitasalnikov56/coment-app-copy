@@ -484,4 +484,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidEmail => 'Invalid email address';
+
+  @override
+  String get helperText => 'minimum 9 characters';
 }

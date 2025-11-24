@@ -486,4 +486,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get invalidEmail => 'Dūrys emes email mekenjayı';
+
+  @override
+  String get helperText => 'кемінде 9 таңба';
 }

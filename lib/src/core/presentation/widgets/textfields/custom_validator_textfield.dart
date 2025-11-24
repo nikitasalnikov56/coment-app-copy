@@ -21,6 +21,7 @@ class CustomValidatorTextfield extends StatelessWidget {
     this.keyboardType,
     this.focusNode,
     this.style = AppTextStyles.fs16w400h1_6,
+    this.helperText,
   });
 
   final TextEditingController? controller;
@@ -37,6 +38,7 @@ class CustomValidatorTextfield extends StatelessWidget {
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
   final TextStyle? style;
+  final String? helperText;
 
   @override
   Widget build(BuildContext context) {
@@ -66,16 +68,19 @@ class CustomValidatorTextfield extends StatelessWidget {
                   cursorHeight: 18,
                   validator: validator,
                   decoration: InputDecoration(
+                    helperText: helperText,
                     focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(12)),
                     errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(width: 1, color: AppColors.red2),
+                        borderSide:
+                            const BorderSide(width: 1, color: AppColors.red2),
                         borderRadius: BorderRadius.circular(12)),
                     enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                        borderSide: const BorderSide(
+                            width: 1, color: AppColors.borderTextField),
                         borderRadius: BorderRadius.circular(12)),
                     fillColor: v == null ? null : AppColors.muteRed,
                     suffixIcon: obscureText != null
@@ -85,7 +90,8 @@ class CustomValidatorTextfield extends StatelessWidget {
                           )
                         : suffixIcon,
                     hintText: hintText,
-                    hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400, height: 1.55),
+                    hintStyle: AppTextStyles.fs14w500
+                        .copyWith(color: AppColors.base400, height: 1.55),
                     errorStyle: const TextStyle(
                       height: 0,
                       fontSize: 0,

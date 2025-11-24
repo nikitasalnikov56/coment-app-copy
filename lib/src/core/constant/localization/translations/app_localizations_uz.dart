@@ -486,4 +486,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get invalidEmail => 'Noto‘g‘ri email manzili';
+
+  @override
+  String get helperText => 'kamida 9 ta belgi';
 }
