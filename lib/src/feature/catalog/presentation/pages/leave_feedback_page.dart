@@ -22,7 +22,9 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 @RoutePage()
 class LeaveFeedbackPage extends StatefulWidget implements AutoRouteWrapper {
-  const LeaveFeedbackPage({Key? key, required this.productID, required this.selectedRating}) : super(key: key);
+  const LeaveFeedbackPage(
+      {Key? key, required this.productID, required this.selectedRating})
+      : super(key: key);
 
   final int productID;
   final int selectedRating;
@@ -95,7 +97,7 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                 ///
                 const Gap(6),
                 Image.asset(
-                 AssetsConstants.feedbackImg,
+                  AssetsConstants.feedbackImg,
                   height: 160,
                   width: 160,
                 ),
@@ -104,7 +106,8 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                 ///
                 /// Rating stars
                 ///
-                Text(context.localized.rateThisPlace, style: AppTextStyles.fs20w600.copyWith(height: 1.6)),
+                Text(context.localized.rateThisPlace,
+                    style: AppTextStyles.fs20w600.copyWith(height: 1.6)),
                 const Gap(10),
                 _buildStarRating(),
                 const SizedBox(height: 26),
@@ -123,7 +126,8 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                       hintText: context.localized.writeReview,
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.black, width: 1),
+                        borderSide:
+                            const BorderSide(color: Colors.black, width: 1),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -144,12 +148,15 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                       if (visibleError)
                         Text(
                           context.localized.minFiveWords,
-                          style: AppTextStyles.fs12w600.copyWith(color: AppColors.red2),
+                          style: AppTextStyles.fs12w600
+                              .copyWith(color: AppColors.red2),
                         )
                       else
                         Container(),
-                      Text("${countWords(_controller.text)}/15 ${context.localized.words}",
-                          style: AppTextStyles.fs12w600.copyWith(color: AppColors.base400)),
+                      Text(
+                          "${countWords(_controller.text)}/15 ${context.localized.words}",
+                          style: AppTextStyles.fs12w600
+                              .copyWith(color: AppColors.base400)),
                     ],
                   ),
                 ),
@@ -194,7 +201,8 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                               //   }
                               // }
                             },
-                            style: CustomButtonStyles.primaryButtonStyle(context),
+                            style:
+                                CustomButtonStyles.primaryButtonStyle(context),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -226,11 +234,14 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                                   itemCount: imageFileList.length,
                                   scrollDirection: Axis.horizontal,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     return Padding(
-                                      padding: EdgeInsets.only(left: index == 0 ? 0 : 10.0),
+                                      padding: EdgeInsets.only(
+                                          left: index == 0 ? 0 : 10.0),
                                       child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(12)),
                                         child: Stack(
                                           children: [
                                             Image.file(
@@ -245,12 +256,15 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                                               child: InkWell(
                                                 onTap: () {
                                                   setState(() {
-                                                    imageFileList.removeAt(index);
+                                                    imageFileList
+                                                        .removeAt(index);
                                                   });
                                                 },
                                                 child: Container(
                                                   decoration: const BoxDecoration(
-                                                      color: AppColors.backgroundInput, shape: BoxShape.circle),
+                                                      color: AppColors
+                                                          .backgroundInput,
+                                                      shape: BoxShape.circle),
                                                   child: SvgPicture.asset(
                                                     AssetsConstants.close,
                                                     height: 20,
@@ -305,12 +319,16 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          border: Border.all(color: AppColors.mainColor, width: 1),
-                                          borderRadius: BorderRadius.circular(12)),
+                                          border: Border.all(
+                                              color: AppColors.mainColor,
+                                              width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 23.75),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 28, horizontal: 23.75),
                                         child: SvgPicture.asset(
-                                         AssetsConstants.addPurple,
+                                          AssetsConstants.addPurple,
                                           height: 24,
                                           width: 24,
                                           // color: AppColors.darkGrey2Color,
@@ -343,7 +361,8 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                       loaded: () async {
                         context.loaderOverlay.hide();
                         context.router.popUntil(
-                          (route) => route.settings.name == ProductDetailRoute.name,
+                          (route) =>
+                              route.settings.name == ProductDetailRoute.name,
                         );
                         await Future.delayed(const Duration(seconds: 1));
                         if (context.mounted) ThankYouBs.show(context);
@@ -361,21 +380,32 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                         log('${imageFileList.length}', name: 'images');
                         log('$selectedRating', name: 'rating');
                         log('${widget.productID}', name: 'product id');
-                        if (countWords(_controller.text) >= 15) {
-                          final FeedbackPayload feedbackPayload = FeedbackPayload(
-                              productId: widget.productID, comment: _controller.text, rating: selectedRating);
-                          await BlocProvider.of<LeaveFeedbackCubit>(context).createFeedback(
-                            feedbackPayload: feedbackPayload,
-                            image: imageFileList,
-                          );
+                        // if (countWords(_controller.text) >= 15) {
+                        final comment = _controller.text.trim();
+                        if (comment.isEmpty || countWords(comment) < 15) {
+                          return;
                         }
+                        final FeedbackPayload feedbackPayload = FeedbackPayload(
+                          productId: widget.productID,
+                          comment: comment,
+                          rating: selectedRating,
+                        );
+                        print('DEBUG: Sending comment = $comment');
+                        await BlocProvider.of<LeaveFeedbackCubit>(context)
+                            .createFeedback(
+                          feedbackPayload: feedbackPayload,
+                          image: imageFileList,
+                        );
+                        // }
                       },
-                      style: countWords(_controller.text) >= 15 && imageFileList.isNotEmpty
+                      style: countWords(_controller.text) >= 15 &&
+                              imageFileList.isNotEmpty
                           ? CustomButtonStyles.mainButtonStyle(context)
                           : CustomButtonStyles.greyButtonStyle(context),
                       child: Text(context.localized.leaveFeedback,
                           style: AppTextStyles.fs16w600.copyWith(
-                              color: countWords(_controller.text) >= 15 && imageFileList.isNotEmpty
+                              color: countWords(_controller.text) >= 15 &&
+                                      imageFileList.isNotEmpty
                                   ? AppColors.white
                                   : Colors.black)),
                     ),
@@ -407,8 +437,10 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             child: SvgPicture.asset(AssetsConstants.notActiveStar32,
-                colorFilter:
-                    index < selectedRating ? const ColorFilter.mode(AppColors.starColorYellow, BlendMode.srcIn) : null),
+                colorFilter: index < selectedRating
+                    ? const ColorFilter.mode(
+                        AppColors.starColorYellow, BlendMode.srcIn)
+                    : null),
           ),
         );
       }),

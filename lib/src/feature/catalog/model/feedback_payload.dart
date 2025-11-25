@@ -10,7 +10,7 @@ class FeedbackPayload with _$FeedbackPayload {
   const factory FeedbackPayload({
     @JsonKey(name: 'product_id', includeIfNull: false) int? productId,
     @JsonKey(includeIfNull: false) int? rating,
-    @JsonKey(includeIfNull: false) String? comment,
+    @JsonKey(name:'text', includeIfNull: false) String? comment,
   }) = _FeedbackPayload;
 
   factory FeedbackPayload.fromJson(Map<String, dynamic> json) => _$FeedbackPayloadFromJson(json);

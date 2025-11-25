@@ -133,7 +133,7 @@ class AssetsConstants {
   static const String views = 'assets/icons/views.svg';
   static const String visibility = 'assets/icons/visibility.svg';
   static const String visibilityOff = 'assets/icons/visibility_off.svg';
-  static const String notActiveStar32 = 'assets/icons/not-active-star-32.svg';
+  static const String notActiveStar32 = 'assets/icons/ic-star-enactive.svg';
   static const String closeSvgrepo = 'assets/icons/close_svgrepo.svg';
 
   // PNG

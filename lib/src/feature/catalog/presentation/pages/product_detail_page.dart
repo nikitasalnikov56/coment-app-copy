@@ -136,6 +136,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       /// <--`put rating widget`-->
                       ///
                       _putRating(data.id ?? 0),
+                      
                       const Gap(26),
 
                       ///
@@ -177,8 +178,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: getFeedbackItemCount(false, feedback),
       itemBuilder: (context, index) {
+        print(feedback[index].comment);
         return BlocListener<LikeCommentCubit, LikeCommentState>(
           listener: (context, state) {
+            
             state.maybeWhen(
               orElse: () {
                 isLikeLoading[index] = false;
@@ -310,6 +313,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 ),
                               ),
                             ),
+                          
                           const Gap(10),
                           InkWell(
                             onTap: () {
@@ -453,86 +457,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ],
                 ),
               ),
-              // ReviewWidgetItem(
-              //   feedbackDTO: feedback[index],
-              //   isLikeLoading: isLikeLoading[index],
-              //   isDislikeLoading: isDislikeLoading[index],
-              //   onTapDislike: context.appBloc.isAuthenticated
-              //       ? () {
-              //           if (!isDislike[index] && !isLike[index]) {
-              //             ComplainedBs.show(
-              //               context,
-              //               feedID: feedback[index].id,
-              //               isDislike: true,
-              //               isComplainedDislike: (isComplained) {
-              //                 BlocProvider.of<LikeCommentCubit>(context)
-              //                     .likeComment(feedbackId: feedback[index].id ?? 0, type: 'dislike');
-              //                 pressedDislike[index] = true;
-              //                 setState(() {});
-              //               },
-              //             );
-              //           } else if (isDislike[index] && !isLike[index]) {
-              //             BlocProvider.of<LikeCommentCubit>(context)
-              //                 .dislikeComment(feedbackId: feedback[index].id ?? 0);
-              //             pressedDislike[index] = true;
-              //             setState(() {});
-              //           } else if (!isDislike[index] && isLike[index]) {
-              //             ComplainedBs.show(
-              //               context,
-              //               feedID: feedback[index].id,
-              //               isDislike: true,
-              //               isComplainedDislike: (isComplained) {
-              //                 BlocProvider.of<LikeCommentCubit>(context)
-              //                     .dislikeComment(feedbackId: feedback[index].id ?? 0);
-              //                 pressedDislike[index] = true;
-              //                 setState(() {});
-              //               },
-              //             );
-              //           }
-              //         }
-              //       : () {
-              //           context.router.push(const RegisterRoute());
-              //         },
-              //   onTapLike: context.appBloc.isAuthenticated
-              //       ? () {
-              //           if (!isLike[index] && !isDislike[index]) {
-              //             BlocProvider.of<LikeCommentCubit>(context)
-              //                 .likeComment(feedbackId: feedback[index].id ?? 0, type: 'like');
-              //             pressedDislike[index] = false;
-              //             isLikeLoading[index] = true;
-              //             setState(() {});
-              //           } else if (isLike[index] && !isDislike[index]) {
-              //             BlocProvider.of<LikeCommentCubit>(context)
-              //                 .dislikeComment(feedbackId: feedback[index].id ?? 0);
-              //             pressedDislike[index] = false;
-              //             isLikeLoading[index] = true;
-              //             setState(() {});
-              //           } else if (!isLike[index] && isDislike[index]) {
-              //             BlocProvider.of<LikeCommentCubit>(context)
-              //                 .dislikeComment(feedbackId: feedback[index].id ?? 0);
-              //             pressedDislike[index] = false;
-              //             isLikeLoading[index] = true;
-              //             setState(() {});
-              //           }
-              //         }
-              //       : () {
-              //           context.router.push(const RegisterRoute());
-              //         },
-              //   onTapFeedbackDetail: () {
-              //     context.router
-              //         .push(FeedbackDetailRoute(
-              //       id: feedback[index].id ?? 0,
-              //     ))
-              //         .whenComplete(() {
-              //       BlocProvider.of<ProductInfoCubit>(context)
-              //           .getProductInfo(id: widget.productId, hasDelay: false, hasLoading: false);
-              //     });
-              //   },
-              //   activeDislike: isDislike[index],
-              //   activeLike: isLike[index],
-              //   likesCount: feedback[index].likes,
-              // ),
-
               const Gap(14),
               if (index == 0)
                 const Divider(
@@ -576,6 +500,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: [
           Text(context.localized.rate_this_place, style: AppTextStyles.fs16w600.copyWith(height: 1.7)),
           const SizedBox(height: 16),
+          
           BuildStarRaitingWidget(
             selectedRating: _selectedRating,
             onRatingSelected: (rating) {

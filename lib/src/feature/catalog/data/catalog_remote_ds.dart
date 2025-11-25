@@ -35,11 +35,13 @@ abstract interface class ICatalogRemoteDS {
       List<File>? imageFeedback,
       String? nameSubCatalog});
 
-  Future<ComplainDTO> complain({required String text, required int feedId, required String type});
+  Future<ComplainDTO> complain(
+      {required String text, required int feedId, required String type});
 
   Future<List<ProductDTO>> searchProductList({required String search});
 
-  Future replyFeedback({required int feedbackId, required String comment, int? parentId});
+  Future replyFeedback(
+      {required int feedbackId, required String comment, int? parentId});
 
   Future<BasicResponse> like({required int feedbackId, required String type});
 
@@ -67,7 +69,8 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   }
 
   @override
-  Future<ComplainDTO> complain({required String text, required int feedId, required String type}) async {
+  Future<ComplainDTO> complain(
+      {required String text, required int feedId, required String type}) async {
     try {
       final Map<String, dynamic> response = await restClient.post(
         queryParams: {},
@@ -82,7 +85,8 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   }
 
   @override
-  Future<FeedbackDTO> userFeedback({required int id, required String isView}) async {
+  Future<FeedbackDTO> userFeedback(
+      {required int id, required String isView}) async {
     try {
       final Map<String, dynamic> queryParams = {};
 
@@ -153,7 +157,15 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       // );
 
       // return BasicResponse.fromJson(response);
-      final FormData formData = FormData.fromMap(feedbackPayload.toJson());
+
+      // final FormData formData = FormData.fromMap(feedbackPayload.toJson());
+      final Map<String, dynamic> data = {
+        'text': feedbackPayload.comment,
+        'rating': feedbackPayload.rating,
+      };
+
+      final FormData formData = FormData.fromMap(data);
+
       if (image != null && image.isNotEmpty) {
         for (int i = 0; i < image.length; i++) {
           formData.files.add(
@@ -166,7 +178,8 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       }
 
       final Map<String, dynamic> response = await restClient.post(
-        'feedback/create/${feedbackPayload.productId}',
+        // 'feedback/${feedbackPayload.productId}/create',
+        'companies/${feedbackPayload.productId}/reviews',
         body: formData,
       );
 
@@ -176,6 +189,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       rethrow;
     }
   }
+
 
   @override
   Future<BasicResponse> createNewProduct({
@@ -200,13 +214,15 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       if (countryId != 0) data['country_id'] = countryId;
       if (name.isNotEmpty) data['name'] = name;
       if (address.isNotEmpty) data['address'] = address;
-      if (organisationPhone.isNotEmpty) data['organisation_phone'] = organisationPhone;
+      if (organisationPhone.isNotEmpty)
+        data['organisation_phone'] = organisationPhone;
       if (websiteUrl.isNotEmpty) data['website_url'] = websiteUrl;
       if (catalogId != 0) data['catalog_id'] = catalogId;
       if (subCatalogId != 0) data['sub_catalog_id'] = subCatalogId;
       if (comment.isNotEmpty) data['comment'] = comment;
       if (rating != 0) data['rating'] = rating;
-      if ((nameSubCatalog ?? '').isNotEmpty) data['name_sub_catalog'] = nameSubCatalog;
+      if ((nameSubCatalog ?? '').isNotEmpty)
+        data['name_sub_catalog'] = nameSubCatalog;
 
       final FormData formData = FormData.fromMap(data);
 
@@ -239,10 +255,12 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   }
 
   @override
-  Future replyFeedback({required int feedbackId, required String comment, int? parentId}) async {
+  Future replyFeedback(
+      {required int feedbackId, required String comment, int? parentId}) async {
     try {
-      final Map<String, dynamic> response =
-          await restClient.post('/feedback/reply/$feedbackId', body: {'comment': comment, 'parent_id': parentId});
+      final Map<String, dynamic> response = await restClient.post(
+          '/feedback/reply/$feedbackId',
+          body: {'comment': comment, 'parent_id': parentId});
 
       return response;
     } catch (e, st) {
@@ -252,9 +270,11 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   }
 
   @override
-  Future<BasicResponse> like({required int feedbackId, required String type}) async {
+  Future<BasicResponse> like(
+      {required int feedbackId, required String type}) async {
     try {
-      final Map<String, dynamic> response = await restClient.post('/feedback/like/$feedbackId', body: {'type': type});
+      final Map<String, dynamic> response = await restClient
+          .post('/feedback/like/$feedbackId', body: {'type': type});
 
       return BasicResponse.fromJson(response);
     } catch (e, st) {
@@ -266,7 +286,8 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   @override
   Future<BasicResponse> dislike({required int feedbackId}) async {
     try {
-      final Map<String, dynamic> response = await restClient.delete('/feedback/like/$feedbackId', body: {});
+      final Map<String, dynamic> response =
+          await restClient.delete('/feedback/like/$feedbackId', body: {});
 
       return BasicResponse.fromJson(response);
     } catch (e, st) {

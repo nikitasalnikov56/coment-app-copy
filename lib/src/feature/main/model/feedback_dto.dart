@@ -31,7 +31,7 @@ class FeedbackDTO with _$FeedbackDTO {
     required int? id,
     required UserDTO? user,
     required FeedbackItemDTO? item,
-    @JsonKey(name: 'text')
+    @JsonKey(name: 'comment')
     required String? comment,
     required int? rating,
     String? image,
@@ -40,7 +40,7 @@ class FeedbackDTO with _$FeedbackDTO {
     int? dislikes,
     int? views,
     @JsonKey(
-      name: 'createdAt',
+      name: 'created_at',
       fromJson: _fromJsonDateTime,
       toJson: _toJsonDateTime,
     )
