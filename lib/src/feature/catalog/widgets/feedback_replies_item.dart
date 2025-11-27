@@ -88,20 +88,20 @@ class _FeedbackRepliesItemState extends State<FeedbackRepliesItem> {
                   ),
                   const Gap(4),
 
-                  ///
-                  /// <--`answer button`-->
-                  ///
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: widget.onReplyPressed,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 4, bottom: 4, right: 4),
-                      child: Text(context.localized.answer,
-                          style: AppTextStyles.fs12w500.copyWith(color: AppColors.greyTextColor3)),
-                    ),
-                  ),
-                  const Gap(10),
+                  // ///
+                  // /// <--`answer button`-->
+                  // ///
+                  // InkWell(
+                  //   splashColor: Colors.transparent,
+                  //   highlightColor: Colors.transparent,
+                  //   onTap: widget.onReplyPressed,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(top: 4, bottom: 4, right: 4),
+                  //     child: Text(context.localized.answer,
+                  //         style: AppTextStyles.fs12w500.copyWith(color: AppColors.greyTextColor3)),
+                  //   ),
+                  // ),
+                  // const Gap(10),
 
                   ///
                   /// <--`replies`-->

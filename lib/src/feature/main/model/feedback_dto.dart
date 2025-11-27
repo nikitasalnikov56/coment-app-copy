@@ -36,7 +36,9 @@ class FeedbackDTO with _$FeedbackDTO {
     required int? rating,
     String? image,
     List<ImageDTO>? images,
+    @JsonKey(name: 'likes')
     int? likes,
+    @JsonKey(name: 'dislikes')
     int? dislikes,
     int? views,
     @JsonKey(
@@ -48,6 +50,7 @@ class FeedbackDTO with _$FeedbackDTO {
     @JsonKey(name: 'is_like') int? isLike,
     @JsonKey(name: 'is_dislike') int? isDislike,
     @JsonKey(name: 'replies_count') int? repliesCount,
+     @JsonKey(name: 'replies')  // удостовериться в правильности ключа
     List<RepliesDTO>? replies,
   }) = _FeedbackDTO;
 
@@ -122,6 +125,7 @@ class ReplyDTO with _$ReplyDTO {
     DateTime? createdAt,
     @JsonKey(name: 'text') required String? comment,
     List<ReplyTwoDTO>? reply,
+     @JsonKey(name: 'helpfulCount') int? helpfulCount,
   }) = _ReplyDTO;
 
   factory ReplyDTO.fromJson(Map<String, dynamic> json) =>

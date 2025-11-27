@@ -11,16 +11,29 @@ class LikeCommentCubit extends Cubit<LikeCommentState> {
   })  : _repository = repository,
         super(const LikeCommentState.initial());
 
-  Future<void> likeComment({required int feedbackId, required String type}) async {
-    try {
-      emit(const LikeCommentState.loading());
+  // Future<void> likeComment({required int feedbackId, required String type}) async {
+  //   try {
+  //     emit(const LikeCommentState.loading());
 
-      await _repository.like(feedbackId: feedbackId, type: type);
+  //     await _repository.like(feedbackId: feedbackId, type: type);
+  //     emit(const LikeCommentState.loadedLike());
+  //   } catch (e) {
+  //     emit(LikeCommentState.error(message: e.toString()));
+  //   }
+  // }
+  Future<void> likeComment({required int feedbackId, required String type}) async {
+  try {
+    emit(const LikeCommentState.loading());
+     await _repository.like(feedbackId: feedbackId, type: type);
+   if (type == 'like') {
       emit(const LikeCommentState.loadedLike());
-    } catch (e) {
-      emit(LikeCommentState.error(message: e.toString()));
+    } else {
+      emit(const LikeCommentState.loadedDislike());
     }
+  } catch (e) {
+    emit(LikeCommentState.error(message: e.toString()));
   }
+}
 
   Future<void> dislikeComment({required int feedbackId}) async {
     try {

@@ -98,12 +98,16 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
       (event) {
         if (!mounted) return;
         log('init refresh notificaion');
-        BlocProvider.of<UserFeedbackCubit>(context).userFeedback(id: widget.id, isView: '');
+        BlocProvider.of<UserFeedbackCubit>(context)
+            .userFeedback(id: widget.id, isView: '');
       },
     );
     log('${context.repository.authRepository.user?.id} ===== ${widget.userId}');
-    BlocProvider.of<UserFeedbackCubit>(context)
-        .userFeedback(id: widget.id, isView: context.repository.authRepository.user?.id == widget.userId ? '' : 'true');
+    BlocProvider.of<UserFeedbackCubit>(context).userFeedback(
+        id: widget.id,
+        isView: context.repository.authRepository.user?.id == widget.userId
+            ? ''
+            : 'true');
     super.initState();
 
     //_likesCount = widget.likes;
@@ -120,7 +124,8 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
     return LoaderOverlay(
       overlayColor: AppColors.barrierColor,
       overlayWidgetBuilder: (progress) => const CustomLoadingOverlayWidget(),
-      child: BlocConsumer<UserFeedbackCubit, UserFeedbackState>(listener: (context, state) {
+      child: BlocConsumer<UserFeedbackCubit, UserFeedbackState>(
+          listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
           loading: () {},
@@ -152,7 +157,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
               ),
             );
           },
-                  loaded: (feedbackDTO) {
+          loaded: (feedbackDTO) {
             return Scaffold(
               appBar: CustomAppBar(
                 title: context.localized.feedback,
@@ -185,14 +190,17 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                       if (widget.needPageCard)
                         GestureDetector(
                           onTap: () {
-                            context.router.push(ProductDetailRoute(productId: feedbackDTO.item?.id ?? 0));
+                            context.router.push(ProductDetailRoute(
+                                productId: feedbackDTO.item?.id ?? 0));
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 8, left: 56),
                             child: Text(
                               context.localized.goToCard,
-                              style: AppTextStyles.fs12w500
-                                  .copyWith(color: AppColors.mainColor, height: 1.3, letterSpacing: -0.5),
+                              style: AppTextStyles.fs12w500.copyWith(
+                                  color: AppColors.mainColor,
+                                  height: 1.3,
+                                  letterSpacing: -0.5),
                             ),
                           ),
                         ),
@@ -212,12 +220,21 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: feedbackDTO.replies?.length,
                           itemBuilder: (context, index) {
+                            final reply = feedbackDTO.replies?[index];
+                            // ⚠️ ПРОПУСКАЕМ, ЕСЛИ ЭТО ЛАЙК (оценка без текста)
+                            if (reply?.comment == null ||
+                                reply!.comment!.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
                             return Column(
                               children: [
                                 FeedbackRepliesItem(
                                   onReplyPressed: () {
-                                    feedbackUserName = feedbackDTO.replies?[index].user?.name ?? '';
-                                    parentId = feedbackDTO.replies?[index].id ?? 0;
+                                    feedbackUserName = feedbackDTO
+                                            .replies?[index].user?.name ??
+                                        '';
+                                    parentId =
+                                        feedbackDTO.replies?[index].id ?? 0;
                                     isAnswerBottomSheet = true;
                                     log('first ${feedbackDTO.replies?[index].user?.name}, ${feedbackDTO.replies?[index].id}, $isAnswerBottomSheet');
                                     setState(() {});
@@ -228,13 +245,23 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                                     // isAnswerBottomSheet = true;
                                     // setState(() {});
                                   },
-                                  imageAva: feedbackDTO.replies?[index].user?.avatar ?? NOT_FOUND_IMAGE,
-                                  name: feedbackDTO.replies?[index].user?.name ?? '',
-                                  date: feedbackDTO.replies?[index].createdAt ?? DateTime.now(),
-                                  coment: feedbackDTO.replies?[index].comment ?? '',
-                                  rating: feedbackDTO.replies?[index].user?.rating ?? 1,
-                                  replies: feedbackDTO.replies?[index].reply ?? [],
-                                  selectedFeedback: (name, parentI, isAnswerBottomShee) {
+                                  imageAva: feedbackDTO
+                                          .replies?[index].user?.avatar ??
+                                      NOT_FOUND_IMAGE,
+                                  name:
+                                      feedbackDTO.replies?[index].user?.name ??
+                                          '',
+                                  date: feedbackDTO.replies?[index].createdAt ??
+                                      DateTime.now(),
+                                  coment:
+                                      feedbackDTO.replies?[index].comment ?? '',
+                                  rating: feedbackDTO
+                                          .replies?[index].user?.rating ??
+                                      1,
+                                  replies:
+                                      feedbackDTO.replies?[index].reply ?? [],
+                                  selectedFeedback:
+                                      (name, parentI, isAnswerBottomShee) {
                                     feedbackUserName = name;
                                     parentId = parentI;
                                     isAnswerBottomSheet = isAnswerBottomShee;
@@ -242,6 +269,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                                     setState(() {});
                                   },
                                 ),
+
                                 // const Gap(15),
                                 // const Divider(
                                 //   thickness: 0.4,
@@ -253,7 +281,10 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                           },
                         ),
 
-                      if (isAnswerBottomSheet == true) const Gap(100) else const Gap(20)
+                      if (isAnswerBottomSheet == true)
+                        const Gap(100)
+                      else
+                        const Gap(20)
                     ],
                   ),
                 ),
@@ -275,7 +306,8 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                           loaded: () {
                             isLoading = false;
                             // context.loaderOverlay.hide();
-                            BlocProvider.of<UserFeedbackCubit>(context).userFeedback(id: widget.id, isView: '');
+                            BlocProvider.of<UserFeedbackCubit>(context)
+                                .userFeedback(id: widget.id, isView: '');
                             isAnswerBottomSheet = false;
                             _replyController.clear();
                             setState(() {});
@@ -312,13 +344,16 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(feedbackDTO.user?.name ?? '',
-                          style: AppTextStyles.fs14w600.copyWith(color: const Color(0xff605b5b), height: 1.3)),
+                          style: AppTextStyles.fs14w600.copyWith(
+                              color: const Color(0xff605b5b), height: 1.3)),
                       const SizedBox(height: 4),
-                      Text(feedbackDTO.createdAt != null
-                                      ? formatDate(feedbackDTO.createdAt!,
-                                          context.currentLocale.toString())
-                                      : '—',
-                          style: AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
+                      Text(
+                          feedbackDTO.createdAt != null
+                              ? formatDate(feedbackDTO.createdAt!,
+                                  context.currentLocale.toString())
+                              : '—',
+                          style: AppTextStyles.fs12w500.copyWith(
+                              color: const Color(0xFFA7A7A7), height: 1.3)),
                     ],
                   ),
                   Row(
@@ -329,14 +364,16 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                             child: SvgPicture.asset(AssetsConstants.icStar,
                                 height: 10,
                                 width: 10,
-                                colorFilter: getStarColorFilter(feedbackDTO.rating ?? 0, index)))),
+                                colorFilter: getStarColorFilter(
+                                    feedbackDTO.rating ?? 0, index)))),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
                 feedbackDTO.comment ?? '',
-                style: AppTextStyles.fs14w400.copyWith(color: AppColors.text, height: 1.3, letterSpacing: -0.5),
+                style: AppTextStyles.fs14w400.copyWith(
+                    color: AppColors.text, height: 1.3, letterSpacing: -0.5),
               ),
 
               ///
@@ -353,7 +390,8 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            context.router.push(DetailImageRoute(images: feedbackDTO.images));
+                            context.router.push(
+                                DetailImageRoute(images: feedbackDTO.images));
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(right: 8.0),
@@ -363,9 +401,11 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: CachedNetworkImage(
-                                  imageUrl: feedbackDTO.images?[index].image ?? '',
+                                  imageUrl:
+                                      feedbackDTO.images?[index].image ?? '',
                                   fit: BoxFit.cover,
-                                  progressIndicatorBuilder: ImageUtil.cachedLoadingBuilder,
+                                  progressIndicatorBuilder:
+                                      ImageUtil.cachedLoadingBuilder,
                                 ),
                               ),
                             ),
@@ -380,95 +420,277 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
               ///
               /// <--`like, dislike, answer button`-->
               ///
+              // BlocConsumer<LikeCommentCubit, LikeCommentState>(
+              //   listener: (context, state) {
+              //     state.maybeWhen(
+              //       orElse: () {
+              //         isLikeLoading = false;
+              //         if (pressedDislike == true) isDislikeLoading = false;
+              //         setState(() {});
+              //       },
+              //       loading: () {
+              //         // isLikeLoading = true;
+              //         // if (pressedDislike == true) isDislikeLoading = true;
+              //         setState(() {});
+              //       },
+              //       error: (message) {
+              //         // isLikeLoading = false;
+              //         // if (pressedDislike == true) isDislikeLoading = false;
+              //         setState(() {});
+              //         Toaster.showErrorTopShortToast(context, message);
+              //       },
+              //       loadedLike: () {
+              //         // isLikeLoading = false;
+              //         // if (pressedDislike == true) isDislikeLoading = false;
+              //         BlocProvider.of<UserFeedbackCubit>(context)
+              //             .userFeedback(id: widget.id, isView: '');
+              //         setState(() {});
+              //       },
+              //       loadedDislike: () async {
+              //         // isLikeLoading = false;
+              //         // if (pressedDislike == true) isDislikeLoading = false;
+              //         if (!isLike && isDislike && pressedDislike == false) {
+              //           BlocProvider.of<LikeCommentCubit>(context).likeComment(
+              //               feedbackId: feedbackDTO.id ?? 0, type: 'like');
+              //         }
+              //         if (pressedDislike == true && !isDislike) {
+              //           BlocProvider.of<LikeCommentCubit>(context).likeComment(
+              //               feedbackId: feedbackDTO.id ?? 0, type: 'dislike');
+              //         }
+
+              //         BlocProvider.of<UserFeedbackCubit>(context)
+              //             .userFeedback(id: widget.id, isView: '');
+              //         setState(() {});
+              //       },
+              //     );
+              //   },
+              //   builder: (context, state) {
+              //     return Row(
+              //       children: [
+              //         if (isLikeLoading)
+              //           const Padding(
+              //             padding: EdgeInsets.all(3.0),
+              //             child: CircularProgressIndicator.adaptive(
+              //               backgroundColor: AppColors.mainColor,
+              //             ),
+              //           )
+              //         else
+              //           GestureDetector(
+              //             onTap: context.appBloc.isAuthenticated
+              //                 ? () async {
+              //                     if (!isLike && !isDislike) {
+              //                       BlocProvider.of<LikeCommentCubit>(context)
+              //                           .likeComment(
+              //                               feedbackId: feedbackDTO.id ?? 0,
+              //                               type: 'like');
+              //                       pressedDislike = false;
+              //                       isLikeLoading = true;
+              //                       setState(() {});
+              //                     } else if (isLike && !isDislike) {
+              //                       BlocProvider.of<LikeCommentCubit>(context)
+              //                           .dislikeComment(
+              //                               feedbackId: feedbackDTO.id ?? 0);
+              //                       pressedDislike = false;
+              //                       isLikeLoading = true;
+              //                       setState(() {});
+              //                     } else if (!isLike && isDislike) {
+              //                       BlocProvider.of<LikeCommentCubit>(context)
+              //                           .dislikeComment(
+              //                               feedbackId: feedbackDTO.id ?? 0);
+              //                       pressedDislike = false;
+              //                       isLikeLoading = true;
+              //                       setState(() {});
+              //                     }
+              //                   }
+              //                 : () {
+              //                     context.router.push(const RegisterRoute());
+              //                   },
+              //             child: Padding(
+              //               padding: const EdgeInsets.all(4.0),
+              //               child: SvgPicture.asset(AssetsConstants.icLike,
+              //                   colorFilter: isLike
+              //                       ? const ColorFilter.mode(
+              //                           AppColors.mainColor, BlendMode.srcIn)
+              //                       : null),
+              //             ),
+              //           ),
+              //         // const SizedBox(width: 4),
+              //         Text(
+              //             feedbackDTO.likes == null
+              //                 ? '0'
+              //                 : feedbackDTO.likes.toString(),
+              //             style: AppTextStyles.fs12w500
+              //                 .copyWith(color: AppColors.greyTextColor3)),
+              //         const SizedBox(width: 4),
+              //         if (isDislikeLoading)
+              //           const Padding(
+              //             padding: EdgeInsets.all(3.0),
+              //             child: CircularProgressIndicator.adaptive(
+              //               backgroundColor: AppColors.mainColor,
+              //             ),
+              //           )
+              //         else
+              //           GestureDetector(
+              //             onTap: context.appBloc.isAuthenticated
+              //                 ? () {
+              //                     if (!isDislike && !isLike) {
+              //                       ComplainedBs.show(
+              //                         context,
+              //                         feedID: widget.id,
+              //                         isDislike: true,
+              //                         isComplainedDislike: (isComplained) {
+              //                           BlocProvider.of<LikeCommentCubit>(
+              //                                   context)
+              //                               .likeComment(
+              //                                   feedbackId: feedbackDTO.id ?? 0,
+              //                                   type: 'dislike');
+              //                           pressedDislike = true;
+              //                           setState(() {});
+              //                         },
+              //                       );
+              //                     } else if (isDislike && !isLike) {
+              //                       BlocProvider.of<LikeCommentCubit>(context)
+              //                           .dislikeComment(
+              //                               feedbackId: feedbackDTO.id ?? 0);
+              //                       pressedDislike = true;
+              //                       setState(() {});
+              //                     } else if (!isDislike && isLike) {
+              //                       ComplainedBs.show(
+              //                         context,
+              //                         feedID: widget.id,
+              //                         isDislike: true,
+              //                         isComplainedDislike: (isComplained) {
+              //                           BlocProvider.of<LikeCommentCubit>(
+              //                                   context)
+              //                               .dislikeComment(
+              //                                   feedbackId:
+              //                                       feedbackDTO.id ?? 0);
+              //                           pressedDislike = true;
+              //                           setState(() {});
+              //                         },
+              //                       );
+              //                     }
+              //                   }
+              //                 : () {
+              //                     context.router.push(const RegisterRoute());
+              //                   },
+              //             child: Padding(
+              //               padding: const EdgeInsets.all(4.0),
+              //               child: SvgPicture.asset(AssetsConstants.icDislike,
+              //                   colorFilter: isDislike
+              //                       ? const ColorFilter.mode(
+              //                           AppColors.mainColor, BlendMode.srcIn)
+              //                       : const ColorFilter.mode(
+              //                           Color(0xffc1c0c0), BlendMode.srcIn)),
+              //             ),
+              //           ),
+              //         const SizedBox(width: 6),
+              //         GestureDetector(
+              //           onTap: context.appBloc.isAuthenticated
+              //               ? () {
+              //                   feedbackUserName = feedbackDTO.user?.name ?? '';
+              //                   parentId = 0;
+              //                   isAnswerBottomSheet = true;
+              //                   setState(() {});
+              //                 }
+              //               : () {
+              //                   context.router.push(const RegisterRoute());
+              //                 },
+              //           child: Text(
+              //             context.localized.answer,
+              //             style: const TextStyle(
+              //                 fontSize: 14,
+              //                 fontWeight: FontWeight.w500,
+              //                 color: AppColors.greyText),
+              //           ),
+              //         ),
+              //       ],
+              //     );
+
+              //   },
+              // ),
               BlocConsumer<LikeCommentCubit, LikeCommentState>(
                 listener: (context, state) {
                   state.maybeWhen(
                     orElse: () {
+                      // Только для безопасности — скрыть спиннеры при неожиданном состоянии
                       isLikeLoading = false;
-                      if (pressedDislike == true) isDislikeLoading = false;
+                      isDislikeLoading = false;
                       setState(() {});
                     },
                     loading: () {
-                      isLikeLoading = true;
-                      if (pressedDislike == true) isDislikeLoading = true;
-                      setState(() {});
+                      // Уже управляется в onTap — можно оставить пустым или логировать
                     },
                     error: (message) {
                       isLikeLoading = false;
-                      if (pressedDislike == true) isDislikeLoading = false;
+                      isDislikeLoading = false;
                       setState(() {});
                       Toaster.showErrorTopShortToast(context, message);
                     },
                     loadedLike: () {
                       isLikeLoading = false;
-                      if (pressedDislike == true) isDislikeLoading = false;
-                      BlocProvider.of<UserFeedbackCubit>(context).userFeedback(id: widget.id, isView: '');
+                      isDislikeLoading = false;
                       setState(() {});
+                      // Просто перезагружаем данные отзыва
+                      BlocProvider.of<UserFeedbackCubit>(context)
+                          .userFeedback(id: widget.id, isView: '');
                     },
-                    loadedDislike: () async {
+                    loadedDislike: () {
                       isLikeLoading = false;
-                      if (pressedDislike == true) isDislikeLoading = false;
-                      if (!isLike && isDislike && pressedDislike == false) {
-                        BlocProvider.of<LikeCommentCubit>(context)
-                            .likeComment(feedbackId: feedbackDTO.id ?? 0, type: 'like');
-                      }
-                      if (pressedDislike == true && !isDislike) {
-                        BlocProvider.of<LikeCommentCubit>(context)
-                            .likeComment(feedbackId: feedbackDTO.id ?? 0, type: 'dislike');
-                      }
-
-                      BlocProvider.of<UserFeedbackCubit>(context).userFeedback(id: widget.id, isView: '');
+                      isDislikeLoading = false;
                       setState(() {});
+                      // Просто перезагружаем данные отзыва
+                      BlocProvider.of<UserFeedbackCubit>(context)
+                          .userFeedback(id: widget.id, isView: '');
                     },
                   );
                 },
                 builder: (context, state) {
                   return Row(
                     children: [
-                      if (isLikeLoading)
-                        const Padding(
-                          padding: EdgeInsets.all(3.0),
-                          child: CircularProgressIndicator.adaptive(
-                            backgroundColor: AppColors.mainColor,
-                          ),
-                        )
-                      else
+                      // if (isLikeLoading)
+                      //   const Padding(
+                      //     padding: EdgeInsets.all(3.0),
+                      //     child: CircularProgressIndicator.adaptive(
+                      //       backgroundColor: AppColors.mainColor,
+                      //     ),
+                      //   )
+                      // else
                         GestureDetector(
                           onTap: context.appBloc.isAuthenticated
-                              ? () async {
-                                  if (!isLike && !isDislike) {
-                                    BlocProvider.of<LikeCommentCubit>(context)
-                                        .likeComment(feedbackId: feedbackDTO.id ?? 0, type: 'like');
-                                    pressedDislike = false;
-                                    isLikeLoading = true;
-                                    setState(() {});
-                                  } else if (isLike && !isDislike) {
-                                    BlocProvider.of<LikeCommentCubit>(context)
-                                        .dislikeComment(feedbackId: feedbackDTO.id ?? 0);
-                                    pressedDislike = false;
-                                    isLikeLoading = true;
-                                    setState(() {});
-                                  } else if (!isLike && isDislike) {
-                                    BlocProvider.of<LikeCommentCubit>(context)
-                                        .dislikeComment(feedbackId: feedbackDTO.id ?? 0);
-                                    pressedDislike = false;
-                                    isLikeLoading = true;
-                                    setState(() {});
+                              ? () {
+                                  if (isLike) return;
+                                  if (isDislike) {
+                                    return;
                                   }
+                                  isLikeLoading = true;
+                                  setState(() {});
+                                  BlocProvider.of<LikeCommentCubit>(context)
+                                      .likeComment(
+                                    feedbackId: feedbackDTO.id ?? 0,
+                                    type: 'like',
+                                  );
+                                  pressedDislike = false;
                                 }
                               : () {
                                   context.router.push(const RegisterRoute());
                                 },
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: SvgPicture.asset(AssetsConstants.icLike,
-                                colorFilter:
-                                    isLike ? const ColorFilter.mode(AppColors.mainColor, BlendMode.srcIn) : null),
+                            child: SvgPicture.asset(
+                              AssetsConstants.icLike,
+                              colorFilter: !pressedDislike
+                                  ? const ColorFilter.mode(
+                                      AppColors.mainColor, BlendMode.srcIn)
+                                  : null,
+                            ),
                           ),
                         ),
-                      // const SizedBox(width: 4),
-                      Text(feedbackDTO.likes == null ? '0' : feedbackDTO.likes.toString(),
-                          style: AppTextStyles.fs12w500.copyWith(color: AppColors.greyTextColor3)),
+                      Text(
+                        (feedbackDTO.likes ?? 0).toString(),
+                        style: AppTextStyles.fs12w500
+                            .copyWith(color: AppColors.greyTextColor3),
+                      ),
                       const SizedBox(width: 4),
                       if (isDislikeLoading)
                         const Padding(
@@ -481,48 +703,39 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                         GestureDetector(
                           onTap: context.appBloc.isAuthenticated
                               ? () {
-                                  if (!isDislike && !isLike) {
-                                    ComplainedBs.show(
-                                      context,
-                                      feedID: widget.id,
-                                      isDislike: true,
-                                      isComplainedDislike: (isComplained) {
-                                        BlocProvider.of<LikeCommentCubit>(context)
-                                            .likeComment(feedbackId: feedbackDTO.id ?? 0, type: 'dislike');
-                                        pressedDislike = true;
-                                        setState(() {});
-                                      },
-                                    );
-                                  } else if (isDislike && !isLike) {
-                                    BlocProvider.of<LikeCommentCubit>(context)
-                                        .dislikeComment(feedbackId: feedbackDTO.id ?? 0);
-                                    pressedDislike = true;
-                                    setState(() {});
-                                  } else if (!isDislike && isLike) {
-                                    ComplainedBs.show(
-                                      context,
-                                      feedID: widget.id,
-                                      isDislike: true,
-                                      isComplainedDislike: (isComplained) {
-                                        BlocProvider.of<LikeCommentCubit>(context)
-                                            .dislikeComment(feedbackId: feedbackDTO.id ?? 0);
-                                        pressedDislike = true;
-                                        setState(() {});
-                                      },
-                                    );
+                                  if (isDislike) {
+                                    return;
                                   }
+                                  if (isLike) {
+                                    return;
+                                  }
+                                  BlocProvider.of<LikeCommentCubit>(context)
+                                      .likeComment(
+                                    feedbackId: feedbackDTO.id ?? 0,
+                                    type: 'dislike',
+                                  );
+                                  pressedDislike = true;
                                 }
                               : () {
                                   context.router.push(const RegisterRoute());
                                 },
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: SvgPicture.asset(AssetsConstants.icDislike,
-                                colorFilter: isDislike
-                                    ? const ColorFilter.mode(AppColors.mainColor, BlendMode.srcIn)
-                                    : const ColorFilter.mode(Color(0xffc1c0c0), BlendMode.srcIn)),
+                            child: SvgPicture.asset(
+                              AssetsConstants.icDislike,
+                              colorFilter: pressedDislike
+                                  ? const ColorFilter.mode(
+                                      AppColors.mainColor, BlendMode.srcIn)
+                                  : const ColorFilter.mode(
+                                      Color(0xffc1c0c0), BlendMode.srcIn),
+                            ),
                           ),
                         ),
+                      Text(
+                        (feedbackDTO.dislikes ?? 0).toString(),
+                        style: AppTextStyles.fs12w500
+                            .copyWith(color: AppColors.greyTextColor3),
+                      ),
                       const SizedBox(width: 6),
                       GestureDetector(
                         onTap: context.appBloc.isAuthenticated
@@ -537,7 +750,11 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                               },
                         child: Text(
                           context.localized.answer,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.greyText),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.greyText,
+                          ),
                         ),
                       ),
                     ],
@@ -566,7 +783,8 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -647,10 +865,11 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                             AssetsConstants.icSend,
                           ),
                           onPressed: () {
-                            BlocProvider.of<ReplyCommentCubit>(context).writeReplyComment(
-                                feedbackId: widget.id,
-                                comment: _replyController.text,
-                                parentId: parentId != 0 ? parentId : null);
+                            BlocProvider.of<ReplyCommentCubit>(context)
+                                .writeReplyComment(
+                                    feedbackId: widget.id,
+                                    comment: _replyController.text,
+                                    parentId: parentId != 0 ? parentId : null);
                             log('${widget.id}');
                             log(_replyController.text);
                           },
@@ -688,7 +907,10 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
               children: [
                 Text(
                   '${context.localized.view} ${feedbackDTO.replies?.length} ${context.localized.answers}', // view  // answers
-                  style: AppTextStyles.fs12w500.copyWith(color: AppColors.base400, height: 1.3, letterSpacing: -0.5),
+                  style: AppTextStyles.fs12w500.copyWith(
+                      color: AppColors.base400,
+                      height: 1.3,
+                      letterSpacing: -0.5),
                 ),
                 const Gap(10),
                 AnimatedRotation(
@@ -730,7 +952,8 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                   onPressed: context.appBloc.isAuthenticated
                       ? () {
                           Navigator.of(context).pop();
-                          ComplainedBs.show(context, feedID: widget.id, isDislike: false);
+                          ComplainedBs.show(context,
+                              feedID: widget.id, isDislike: false);
                         }
                       : () {
                           context.router.push(const RegisterRoute());
@@ -778,19 +1001,30 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
     return rating == 5
         ? null
         : rating == 4
-            ? (index == 4 ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn) : null)
+            ? (index == 4
+                ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                : null)
             : rating == 3
-                ? (index == 3 || index == 4 ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn) : null)
+                ? (index == 3 || index == 4
+                    ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                    : null)
                 : rating == 2
                     ? (index == 2 || index == 3 || index == 4
-                        ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                        ? const ColorFilter.mode(
+                            AppColors.base400, BlendMode.srcIn)
                         : null)
                     : rating == 1
                         ? (index == 1 || index == 2 || index == 3 || index == 4
-                            ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                            ? const ColorFilter.mode(
+                                AppColors.base400, BlendMode.srcIn)
                             : null)
-                        : (index == 0 || index == 1 || index == 2 || index == 3 || index == 4
-                            ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                        : (index == 0 ||
+                                index == 1 ||
+                                index == 2 ||
+                                index == 3 ||
+                                index == 4
+                            ? const ColorFilter.mode(
+                                AppColors.base400, BlendMode.srcIn)
                             : null);
   }
 }

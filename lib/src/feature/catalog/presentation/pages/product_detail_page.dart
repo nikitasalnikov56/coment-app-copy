@@ -41,7 +41,9 @@ class ProductDetailPage extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (context) => ProductInfoCubit(repository: context.repository.catalogRepository)),
+      BlocProvider(
+          create: (context) => ProductInfoCubit(
+              repository: context.repository.catalogRepository)),
       BlocProvider(
         create: (context) => LikeCommentCubit(
           repository: context.repository.catalogRepository,
@@ -69,14 +71,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   void initState() {
-    BlocProvider.of<ProductInfoCubit>(context).getProductInfo(id: widget.productId);
+    BlocProvider.of<ProductInfoCubit>(context)
+        .getProductInfo(id: widget.productId);
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProductInfoCubit, ProductInfoState>(listener: (context, state) {
+    return BlocConsumer<ProductInfoCubit, ProductInfoState>(
+        listener: (context, state) {
       state.maybeWhen(
         orElse: () {},
         loaded: (data) {
@@ -92,8 +96,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           totalRatingVotes += data.ratingCounts?.one ?? 0;
 
           for (int i = 0; i < (data.feedback ?? []).length; i++) {
-            data.feedback?[i].isLike == 1 ? isLike.add(true) : isLike.add(false);
-            data.feedback?[i].isDislike == 1 ? isDislike.add(true) : isDislike.add(false);
+            data.feedback?[i].isLike == 1
+                ? isLike.add(true)
+                : isLike.add(false);
+            data.feedback?[i].isDislike == 1
+                ? isDislike.add(true)
+                : isDislike.add(false);
             pressedDislike.add(false);
             isDislikeLoading.add(false);
             isLikeLoading.add(false);
@@ -136,7 +144,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       /// <--`put rating widget`-->
                       ///
                       _putRating(data.id ?? 0),
-                      
+
                       const Gap(26),
 
                       ///
@@ -178,42 +186,54 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: getFeedbackItemCount(false, feedback),
       itemBuilder: (context, index) {
-        print(feedback[index].comment);
         return BlocListener<LikeCommentCubit, LikeCommentState>(
           listener: (context, state) {
-            
             state.maybeWhen(
               orElse: () {
                 isLikeLoading[index] = false;
-                if (pressedDislike[index] == true) isDislikeLoading[index] = false;
+                if (pressedDislike[index] == true) {
+                  isDislikeLoading[index] = false;
+                }
                 setState(() {});
               },
               error: (message) {
                 isLikeLoading[index] = false;
-                if (pressedDislike[index] == true) isDislikeLoading[index] = false;
+                if (pressedDislike[index] == true) {
+                  isDislikeLoading[index] = false;
+                }
                 setState(() {});
-                Toaster.showErrorTopShortToast(context, message);
+                if (message.contains('You cannot rate your own review')) {
+                  Toaster.showErrorTopShortToast(context, 'Нельзя оценить свой отзыв');
+                } else {
+                  Toaster.showErrorTopShortToast(context, message);
+                }
               },
               loadedLike: () {
                 isLikeLoading[index] = false;
-                if (pressedDislike[index] == true) isDislikeLoading[index] = false;
-                BlocProvider.of<ProductInfoCubit>(context)
-                    .getProductInfo(id: widget.productId, hasDelay: false, hasLoading: false);
+                if (pressedDislike[index] == true) {
+                  isDislikeLoading[index] = false;
+                }
+                BlocProvider.of<ProductInfoCubit>(context).getProductInfo(
+                    id: widget.productId, hasDelay: false, hasLoading: false);
                 setState(() {});
               },
               loadedDislike: () async {
                 isLikeLoading[index] = false;
-                if (pressedDislike[index] == true) isDislikeLoading[index] = false;
-                if (!isLike[index] && isDislike[index] && pressedDislike[index] == false) {
-                  BlocProvider.of<LikeCommentCubit>(context)
-                      .likeComment(feedbackId: feedback[index].id ?? 0, type: 'like');
+                if (pressedDislike[index] == true) {
+                  isDislikeLoading[index] = false;
+                }
+                if (!isLike[index] &&
+                    isDislike[index] &&
+                    pressedDislike[index] == false) {
+                  BlocProvider.of<LikeCommentCubit>(context).likeComment(
+                      feedbackId: feedback[index].id ?? 0, type: 'like');
                 }
                 if (pressedDislike[index] == true && !isDislike[index]) {
-                  BlocProvider.of<LikeCommentCubit>(context)
-                      .likeComment(feedbackId: feedback[index].id ?? 0, type: 'dislike');
+                  BlocProvider.of<LikeCommentCubit>(context).likeComment(
+                      feedbackId: feedback[index].id ?? 0, type: 'dislike');
                 }
-                BlocProvider.of<ProductInfoCubit>(context)
-                    .getProductInfo(id: widget.productId, hasDelay: false, hasLoading: false);
+                BlocProvider.of<ProductInfoCubit>(context).getProductInfo(
+                    id: widget.productId, hasDelay: false, hasLoading: false);
                 setState(() {});
               },
             );
@@ -243,28 +263,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(feedback[index].user?.name ?? '',
-                                      style:
-                                          AppTextStyles.fs14w600.copyWith(color: const Color(0xff605b5b), height: 1.3)),
+                                      style: AppTextStyles.fs14w600.copyWith(
+                                          color: const Color(0xff605b5b),
+                                          height: 1.3)),
                                   const SizedBox(height: 4),
                                   Text(
-                                    feedback[index].createdAt != null
-                                      ? formatDate(feedback[index].createdAt!,
-                                          context.currentLocale.toString())
-                                      : '—',
-                                      style:
-                                          AppTextStyles.fs12w500.copyWith(color: const Color(0xFFA7A7A7), height: 1.3)),
+                                      feedback[index].createdAt != null
+                                          ? formatDate(
+                                              feedback[index].createdAt!,
+                                              context.currentLocale.toString())
+                                          : '—',
+                                      style: AppTextStyles.fs12w500.copyWith(
+                                          color: const Color(0xFFA7A7A7),
+                                          height: 1.3)),
                                 ],
                               ),
                               Row(
                                 children: List.generate(
                                     5,
                                     (indexx) => Padding(
-                                          padding: const EdgeInsets.only(right: 4),
+                                          padding:
+                                              const EdgeInsets.only(right: 4),
                                           child: SvgPicture.asset(
                                             AssetsConstants.icStar,
                                             height: 10,
                                             width: 10,
-                                            colorFilter: getStarColorFilter(feedback[index].rating ?? 0, indexx),
+                                            colorFilter: getStarColorFilter(
+                                                feedback[index].rating ?? 0,
+                                                indexx),
                                           ),
                                         )),
                               ),
@@ -273,8 +299,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           const SizedBox(height: 8),
                           Text(
                             feedback[index].comment ?? '',
-                            style: AppTextStyles.fs14w400
-                                .copyWith(color: AppColors.text, height: 1.3, letterSpacing: -0.5),
+                            style: AppTextStyles.fs14w400.copyWith(
+                                color: AppColors.text,
+                                height: 1.3,
+                                letterSpacing: -0.5),
                           ),
                           if ((feedback[index].images ?? []).isNotEmpty)
                             Padding(
@@ -294,16 +322,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                         );
                                       },
                                       child: Padding(
-                                        padding: const EdgeInsets.only(right: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(right: 8.0),
                                         child: SizedBox(
                                           height: 80,
                                           width: 80,
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             child: Image.network(
-                                              feedback[index].images?[index].image ?? '',
+                                              feedback[index]
+                                                      .images?[index]
+                                                      .image ??
+                                                  '',
                                               fit: BoxFit.cover,
-                                              loadingBuilder: ImageUtil.loadingBuilder,
+                                              loadingBuilder:
+                                                  ImageUtil.loadingBuilder,
                                             ),
                                           ),
                                         ),
@@ -313,7 +347,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 ),
                               ),
                             ),
-                          
+
                           const Gap(10),
                           InkWell(
                             onTap: () {
@@ -324,12 +358,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       userId: feedback[index].user?.id ?? 0))
                                   .whenComplete(() {
                                 BlocProvider.of<ProductInfoCubit>(context)
-                                    .getProductInfo(id: widget.productId, hasDelay: false, hasLoading: false);
+                                    .getProductInfo(
+                                        id: widget.productId,
+                                        hasDelay: false,
+                                        hasLoading: false);
                               });
                             },
                             child: Text(
                               context.localized.read_the_entire_review,
-                              style: AppTextStyles.fs12w500.copyWith(color: AppColors.mainColor, height: 1.3),
+                              style: AppTextStyles.fs12w500.copyWith(
+                                  color: AppColors.mainColor, height: 1.3),
                             ),
                           ),
                           const Gap(4),
@@ -351,41 +389,65 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 GestureDetector(
                                   onTap: context.appBloc.isAuthenticated
                                       ? () {
-                                          if (!isLike[index] && !isDislike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(context)
-                                                .likeComment(feedbackId: feedback[index].id ?? 0, type: 'like');
+                                          if (!isLike[index] &&
+                                              !isDislike[index]) {
+                                            BlocProvider.of<LikeCommentCubit>(
+                                                    context)
+                                                .likeComment(
+                                                    feedbackId:
+                                                        feedback[index].id ?? 0,
+                                                    type: 'like');
                                             pressedDislike[index] = false;
                                             isLikeLoading[index] = true;
                                             setState(() {});
-                                          } else if (isLike[index] && !isDislike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(context)
-                                                .dislikeComment(feedbackId: feedback[index].id ?? 0);
+                                          } else if (isLike[index] &&
+                                              !isDislike[index]) {
+                                            BlocProvider.of<LikeCommentCubit>(
+                                                    context)
+                                                .dislikeComment(
+                                                    feedbackId:
+                                                        feedback[index].id ??
+                                                            0);
                                             pressedDislike[index] = false;
                                             isLikeLoading[index] = true;
                                             setState(() {});
-                                          } else if (!isLike[index] && isDislike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(context)
-                                                .dislikeComment(feedbackId: feedback[index].id ?? 0);
+                                          } else if (!isLike[index] &&
+                                              isDislike[index]) {
+                                            BlocProvider.of<LikeCommentCubit>(
+                                                    context)
+                                                .dislikeComment(
+                                                    feedbackId:
+                                                        feedback[index].id ??
+                                                            0);
                                             pressedDislike[index] = false;
                                             isLikeLoading[index] = true;
                                             setState(() {});
                                           }
                                         }
                                       : () {
-                                          context.router.push(const RegisterRoute());
+                                          context.router
+                                              .push(const RegisterRoute());
                                         },
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: SvgPicture.asset(
                                       AssetsConstants.icLike,
                                       colorFilter: isLike[index] == true
-                                          ? const ColorFilter.mode(AppColors.mainColor, BlendMode.srcIn)
-                                          : const ColorFilter.mode(Color(0xffc1c0c0), BlendMode.srcIn),
+                                          ? const ColorFilter.mode(
+                                              AppColors.mainColor,
+                                              BlendMode.srcIn)
+                                          : const ColorFilter.mode(
+                                              Color(0xffc1c0c0),
+                                              BlendMode.srcIn),
                                     ),
                                   ),
                                 ),
-                              Text(feedback[index].likes == null ? '0' : '${feedback[index].likes}',
-                                  style: AppTextStyles.fs12w500.copyWith(color: AppColors.greyTextColor3)),
+                              Text(
+                                  feedback[index].likes == null
+                                      ? '0'
+                                      : '${feedback[index].likes}',
+                                  style: AppTextStyles.fs12w500.copyWith(
+                                      color: AppColors.greyTextColor3)),
                               const SizedBox(width: 4),
                               if (isDislikeLoading[index] == true)
                                 const Padding(
@@ -398,31 +460,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 GestureDetector(
                                   onTap: context.appBloc.isAuthenticated
                                       ? () {
-                                          if (!isDislike[index] && !isLike[index]) {
+                                          if (!isDislike[index] &&
+                                              !isLike[index]) {
                                             ComplainedBs.show(
                                               context,
                                               feedID: feedback[index].id,
                                               isDislike: true,
-                                              isComplainedDislike: (isComplained) {
-                                                BlocProvider.of<LikeCommentCubit>(context)
-                                                    .likeComment(feedbackId: feedback[index].id ?? 0, type: 'dislike');
+                                              isComplainedDislike:
+                                                  (isComplained) {
+                                                BlocProvider.of<
+                                                            LikeCommentCubit>(
+                                                        context)
+                                                    .likeComment(
+                                                        feedbackId:
+                                                            feedback[index]
+                                                                    .id ??
+                                                                0,
+                                                        type: 'dislike');
                                                 pressedDislike[index] = true;
                                                 setState(() {});
                                               },
                                             );
-                                          } else if (isDislike[index] && !isLike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(context)
-                                                .dislikeComment(feedbackId: feedback[index].id ?? 0);
+                                          } else if (isDislike[index] &&
+                                              !isLike[index]) {
+                                            BlocProvider.of<LikeCommentCubit>(
+                                                    context)
+                                                .dislikeComment(
+                                                    feedbackId:
+                                                        feedback[index].id ??
+                                                            0);
                                             pressedDislike[index] = true;
                                             setState(() {});
-                                          } else if (!isDislike[index] && isLike[index]) {
+                                          } else if (!isDislike[index] &&
+                                              isLike[index]) {
                                             ComplainedBs.show(
                                               context,
                                               feedID: feedback[index].id,
                                               isDislike: true,
-                                              isComplainedDislike: (isComplained) {
-                                                BlocProvider.of<LikeCommentCubit>(context)
-                                                    .dislikeComment(feedbackId: feedback[index].id ?? 0);
+                                              isComplainedDislike:
+                                                  (isComplained) {
+                                                BlocProvider.of<
+                                                            LikeCommentCubit>(
+                                                        context)
+                                                    .dislikeComment(
+                                                        feedbackId:
+                                                            feedback[index]
+                                                                    .id ??
+                                                                0);
                                                 pressedDislike[index] = true;
                                                 setState(() {});
                                               },
@@ -430,15 +514,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                           }
                                         }
                                       : () {
-                                          context.router.push(const RegisterRoute());
+                                          context.router
+                                              .push(const RegisterRoute());
                                         },
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: SvgPicture.asset(
                                       AssetsConstants.icDislike,
                                       colorFilter: isDislike[index] == true
-                                          ? const ColorFilter.mode(AppColors.mainColor, BlendMode.srcIn)
-                                          : const ColorFilter.mode(Color(0xffc1c0c0), BlendMode.srcIn),
+                                          ? const ColorFilter.mode(
+                                              AppColors.mainColor,
+                                              BlendMode.srcIn)
+                                          : const ColorFilter.mode(
+                                              Color(0xffc1c0c0),
+                                              BlendMode.srcIn),
                                     ),
                                   ),
                                 ),
@@ -447,7 +536,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               const SizedBox(width: 4),
                               Text(
                                 feedback[index].repliesCount.toString(),
-                                style: AppTextStyles.fs12w500.copyWith(color: AppColors.greyTextColor3),
+                                style: AppTextStyles.fs12w500
+                                    .copyWith(color: AppColors.greyTextColor3),
                               ),
                             ],
                           ),
@@ -475,32 +565,45 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return rating == 5
         ? null
         : rating == 4
-            ? (index == 4 ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn) : null)
+            ? (index == 4
+                ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                : null)
             : rating == 3
-                ? (index == 3 || index == 4 ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn) : null)
+                ? (index == 3 || index == 4
+                    ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                    : null)
                 : rating == 2
                     ? (index == 2 || index == 3 || index == 4
-                        ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                        ? const ColorFilter.mode(
+                            AppColors.base400, BlendMode.srcIn)
                         : null)
                     : rating == 1
                         ? (index == 1 || index == 2 || index == 3 || index == 4
-                            ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
+                            ? const ColorFilter.mode(
+                                AppColors.base400, BlendMode.srcIn)
                             : null)
-                        : (index == 0 || index == 1 || index == 2 || index == 3 || index == 4
-                            ? const ColorFilter.mode(AppColors.base400, BlendMode.srcIn)
-                            : const ColorFilter.mode(AppColors.base400, BlendMode.srcIn));
+                        : (index == 0 ||
+                                index == 1 ||
+                                index == 2 ||
+                                index == 3 ||
+                                index == 4
+                            ? const ColorFilter.mode(
+                                AppColors.base400, BlendMode.srcIn)
+                            : const ColorFilter.mode(
+                                AppColors.base400, BlendMode.srcIn));
   }
 
   Widget _putRating(int productId) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(color: AppColors.grey2, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          color: AppColors.grey2, borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.localized.rate_this_place, style: AppTextStyles.fs16w600.copyWith(height: 1.7)),
+          Text(context.localized.rate_this_place,
+              style: AppTextStyles.fs16w600.copyWith(height: 1.7)),
           const SizedBox(height: 16),
-          
           BuildStarRaitingWidget(
             selectedRating: _selectedRating,
             onRatingSelected: (rating) {
@@ -521,16 +624,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 context.router.push(const RegisterRoute());
               } else {
                 context.router
-                    .push(LeaveFeedbackRoute(productID: productId, selectedRating: _selectedRating))
+                    .push(LeaveFeedbackRoute(
+                        productID: productId, selectedRating: _selectedRating))
                     .whenComplete(() {
-                  BlocProvider.of<ProductInfoCubit>(context).getProductInfo(id: productId);
+                  BlocProvider.of<ProductInfoCubit>(context)
+                      .getProductInfo(id: productId);
 
                   setState(() {});
                 });
               }
             },
             style: null,
-            child: Text(context.localized.leave_a_review, style: AppTextStyles.fs16w500.copyWith(height: 0.9)),
+            child: Text(context.localized.leave_a_review,
+                style: AppTextStyles.fs16w500.copyWith(height: 0.9)),
           )
         ],
       ),
@@ -556,14 +662,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         SizedBox(
           height: 80,
           child: Row(
-            mainAxisAlignment:
-                (data.feedbackImages ?? []).length >= 4 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
+            mainAxisAlignment: (data.feedbackImages ?? []).length >= 4
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.start,
             children: List.generate(
-              (data.feedbackImages ?? []).length > 4 ? 4 : (data.feedbackImages ?? []).length,
+              (data.feedbackImages ?? []).length > 4
+                  ? 4
+                  : (data.feedbackImages ?? []).length,
               (index) => Container(
                 height: 80,
                 width: 80,
-                margin: (data.feedbackImages ?? []).length >= 4 ? EdgeInsets.zero : const EdgeInsets.only(right: 8),
+                margin: (data.feedbackImages ?? []).length >= 4
+                    ? EdgeInsets.zero
+                    : const EdgeInsets.only(right: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
@@ -589,7 +700,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 fit: BoxFit.cover,
                                 height: 80,
                                 width: 80,
-                                progressIndicatorBuilder: ImageUtil.cachedLoadingBuilder,
+                                progressIndicatorBuilder:
+                                    ImageUtil.cachedLoadingBuilder,
                               ),
                               Container(
                                 height: 100,
@@ -601,7 +713,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 child: Center(
                                   child: Text(
                                     'ЕЩЕ ${(data.feedbackImages ?? []).length - 3} +',
-                                    style: AppTextStyles.fs12w600.copyWith(color: Colors.white),
+                                    style: AppTextStyles.fs12w600
+                                        .copyWith(color: Colors.white),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -613,7 +726,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             fit: BoxFit.cover,
                             height: 80,
                             width: 80,
-                            progressIndicatorBuilder: ImageUtil.cachedLoadingBuilder,
+                            progressIndicatorBuilder:
+                                ImageUtil.cachedLoadingBuilder,
                           ),
                   ),
                 ),
@@ -654,11 +768,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           averageRating: data.rating ?? 0.0,
           totalReviews: data.feedbackCount ?? 0,
           ratingDistribution: {
-            5: calculateRatingPercentage(5, data.ratingCounts?.five ?? 0, totalRatingVotes),
-            4: calculateRatingPercentage(4, data.ratingCounts?.four ?? 0, totalRatingVotes),
-            3: calculateRatingPercentage(3, data.ratingCounts?.three ?? 0, totalRatingVotes),
-            2: calculateRatingPercentage(2, data.ratingCounts?.two ?? 0, totalRatingVotes),
-            1: calculateRatingPercentage(1, data.ratingCounts?.one ?? 0, totalRatingVotes),
+            5: calculateRatingPercentage(
+                5, data.ratingCounts?.five ?? 0, totalRatingVotes),
+            4: calculateRatingPercentage(
+                4, data.ratingCounts?.four ?? 0, totalRatingVotes),
+            3: calculateRatingPercentage(
+                3, data.ratingCounts?.three ?? 0, totalRatingVotes),
+            2: calculateRatingPercentage(
+                2, data.ratingCounts?.two ?? 0, totalRatingVotes),
+            1: calculateRatingPercentage(
+                1, data.ratingCounts?.one ?? 0, totalRatingVotes),
           },
         ),
         const Gap(20),
@@ -678,7 +797,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         const Gap(5),
         GestureDetector(
           onTap: () {
-            context.router.push(DetailAvatarRoute(image: data.image ?? NOT_FOUND_IMAGE));
+            context.router
+                .push(DetailAvatarRoute(image: data.image ?? NOT_FOUND_IMAGE));
           },
           child: Container(
             width: double.infinity,
@@ -751,7 +871,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   SvgPicture.asset(AssetsConstants.link),
                   const Gap(6),
                   Text(
-                    context.localized.linkTotheWebsite, 
+                    context.localized.linkTotheWebsite,
                     style: AppTextStyles.fs14w500.copyWith(
                       decoration: TextDecoration.underline,
                     ),
@@ -776,7 +896,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ? '(${data.feedbackCount} ${context.localized.feedbackLittle})'
                         : '(${data.feedbackCount} ${context.localized.reviewsLittle})'
                     : '(0 ${context.localized.feedbackLittle})',
-                style: AppTextStyles.fs14w500.copyWith(color: AppColors.greyTextColor2, height: 1.45)),
+                style: AppTextStyles.fs14w500
+                    .copyWith(color: AppColors.greyTextColor2, height: 1.45)),
           ],
         ),
         const Gap(18),

@@ -274,6 +274,7 @@ class _ReadAllPageState extends State<ReadAllPage> {
                 activeDislike: isDislike[index],
                 activeLike: isLike[index],
                 likesCount: feedback[index].likes ?? 0,
+                dislikesCount: feedback[index].dislikes ?? 0,
               ),
               const Gap(14),
               if (index == 0)
@@ -306,7 +307,7 @@ class _ReadAllPageState extends State<ReadAllPage> {
         /// photos
         ///
         SizedBox(
-          height: 80,
+          // height: 80,
           child: Row(
             mainAxisAlignment:
                 (data.feedbackImages ?? []).length >= 4 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,

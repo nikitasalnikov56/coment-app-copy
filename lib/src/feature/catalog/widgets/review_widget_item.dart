@@ -21,6 +21,7 @@ class ReviewWidgetItem extends StatelessWidget {
   final bool? activeLike;
   final bool? activeDislike;
   final int? likesCount;
+  final int? dislikesCount;
   final bool? isLikeLoading;
   final bool? isDislikeLoading;
 
@@ -32,6 +33,7 @@ class ReviewWidgetItem extends StatelessWidget {
     this.activeLike,
     this.activeDislike,
     this.likesCount,
+    this.dislikesCount,
     this.onTapFeedbackDetail,
     this.isLikeLoading,
     this.isDislikeLoading,
@@ -185,6 +187,8 @@ class ReviewWidgetItem extends StatelessWidget {
                           ),
                         ),
                       ),
+                       Text(dislikesCount.toString(),
+                        style: AppTextStyles.fs12w500.copyWith(color: AppColors.greyTextColor3)),
                     const SizedBox(width: 6),
                     SvgPicture.asset(AssetsConstants.icComment),
                     const SizedBox(width: 4),
