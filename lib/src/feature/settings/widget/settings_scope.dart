@@ -90,6 +90,7 @@ class _SettingsScopeState extends State<SettingsScope> {
             BlocProvider(
               create: (context) => RegisterCubit(
                 repository: context.repository.authRepository,
+                authDao: context.repository.authDao,
               ),
             ),
             ChangeNotifierProvider(

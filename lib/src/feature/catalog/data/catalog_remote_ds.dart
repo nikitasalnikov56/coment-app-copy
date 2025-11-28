@@ -135,30 +135,6 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
     List<File>? image,
   }) async {
     try {
-      // final formData = FormData.fromMap({
-      //   'comment': comment,
-      //   'rating': rating,
-      // });
-
-      // if (image != null && image.isNotEmpty) {
-      //   for (final xFile in image) {
-      //     formData.files.add(
-      //       MapEntry(
-      //         'image[]',
-      //         await MultipartFile.fromFile(xFile.path),
-      //       ),
-      //     );
-      //   }
-      // }
-
-      // final Map<String, dynamic> response = await restClient.post(
-      //   'feedback/create/$productId',
-      //   body: formData,
-      // );
-
-      // return BasicResponse.fromJson(response);
-
-      // final FormData formData = FormData.fromMap(feedbackPayload.toJson());
       final Map<String, dynamic> data = {
         'text': feedbackPayload.comment,
         'rating': feedbackPayload.rating,

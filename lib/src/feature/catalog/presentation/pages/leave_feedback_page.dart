@@ -367,6 +367,32 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                         await Future.delayed(const Duration(seconds: 1));
                         if (context.mounted) ThankYouBs.show(context);
                       },
+                      // toxicWarning: () {
+                      //   context.loaderOverlay.hide();
+                      //   Toaster.showTopShortToast(
+                      //     context,
+                      //     message:
+                      //         'Ваш комментарий содержал недопустимые выражения и был автоматически исправлен. Пожалуйста, соблюдайте правила сообщества.',
+                      //   );
+                      //   context.router.popUntil(
+                      //     (route) =>
+                      //         route.settings.name == ProductDetailRoute.name,
+                      //   );
+                      //   ThankYouBs.show(context);
+                      // },
+                      // toxicWithAdminReview: () {
+                      //   context.loaderOverlay.hide();
+                      //   Toaster.showTopShortToast(
+                      //     context,
+                      //     message:
+                      //         'Ваш комментарий отправлен на рассмотрение администратору!',
+                      //   );
+                      //   context.router.popUntil(
+                      //     (route) =>
+                      //         route.settings.name == ProductDetailRoute.name,
+                      //   );
+                      //   ThankYouBs.show(context);
+                      // },
                       orElse: () {
                         context.loaderOverlay.hide();
                       },

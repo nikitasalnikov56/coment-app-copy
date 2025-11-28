@@ -1,3 +1,6 @@
+import 'package:coment_app/src/feature/app/logic/notification_service.dart';
+import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -10,10 +13,12 @@ part 'register_cubit.freezed.dart';
 class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit({
     required IAuthRepository repository,
+    required IAuthDao authDao,
   })  : _repository = repository,
+        _authDao = authDao,
         super(const RegisterState.initial());
   final IAuthRepository _repository;
-
+  final IAuthDao _authDao;
 // Future<String?> _getRecaptchaToken() async {
 //     try {
 //       final token = await RecaptchaHandler.executeV3(action: 'register');
@@ -58,7 +63,14 @@ class RegisterCubit extends Cubit<RegisterState> {
       );
 
       if (isClosed) return;
-
+      if (!kIsWeb) {
+        final notificationService = NotificationService();
+        await notificationService.getDeviceToken(authDao: _authDao);
+        final deviceToken = _authDao.deviceToken.value;
+        if (deviceToken != null) {
+          await _repository.sendDeviceToken();
+        }
+      }
       emit(RegisterState.loaded(user: data));
     } catch (e) {
       emit(

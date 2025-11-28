@@ -36,8 +36,10 @@ class RegisterPage extends StatefulWidget implements AutoRouteWrapper {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              RegisterCubit(repository: context.repository.authRepository),
+          create: (context) => RegisterCubit(
+            repository: context.repository.authRepository,
+            authDao: context.repository.authDao,
+          ),
           child: this,
         ),
       ],
@@ -123,7 +125,6 @@ class _RegisterPageState extends State<RegisterPage> {
         isPhoneValid;
   }
 
-
   void showBirthdayPicker(
     BuildContext context, {
     required DateTime initialDate,
@@ -148,19 +149,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-              
-                   const Padding(
-                      padding:  EdgeInsets.only(left: 18.0),
-                      child:  Text(
+                    const Padding(
+                      padding: EdgeInsets.only(left: 18.0),
+                      child: Text(
                         "Дата рождения",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
                     CupertinoButton(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child:  Text(
+                      child: Text(
                         "Отменить",
-                        style: AppTextStyles.fs16w400.copyWith(color: AppColors.greyTextColor),
+                        style: AppTextStyles.fs16w400
+                            .copyWith(color: AppColors.greyTextColor),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -202,9 +204,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: AppColors.mainColor,
                     minimumSize: Size(MediaQuery.of(context).size.width, 40),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child:  Text(
+                    child: Text(
                       "Подтвердить",
-                      style: AppTextStyles.fs16w400.copyWith(color: AppColors.kF5F6F7),
+                      style: AppTextStyles.fs16w400
+                          .copyWith(color: AppColors.kF5F6F7),
                     ),
                     onPressed: () {
                       if (tempDate != null) {
@@ -222,7 +225,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -52,6 +52,8 @@ class FeedbackDTO with _$FeedbackDTO {
     @JsonKey(name: 'replies_count') int? repliesCount,
      @JsonKey(name: 'replies')  // удостовериться в правильности ключа
     List<RepliesDTO>? replies,
+     // 👇 ДОБАВИЛИ ЭТО
+    // @JsonKey(name: 'wasToxic') bool? wasToxic,
   }) = _FeedbackDTO;
 
   factory FeedbackDTO.fromJson(Map<String, dynamic> json) =>

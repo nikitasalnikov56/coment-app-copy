@@ -28,7 +28,7 @@ class LoginPage extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(repository: context.repository.authRepository),
+      create: (context) => LoginCubit(repository: context.repository.authRepository, authDao: context.repository.authDao),
       child: this,
     );
   }

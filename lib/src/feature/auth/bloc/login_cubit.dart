@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:coment_app/src/feature/app/logic/notification_service.dart';
+import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
@@ -12,9 +15,12 @@ part 'login_cubit.freezed.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     required IAuthRepository repository,
+    required IAuthDao authDao,
   })  : _repository = repository,
+        _authDao = authDao,
         super(const LoginState.initial());
   final IAuthRepository _repository;
+  final IAuthDao _authDao;
 
   Future<void> login({
     required String email,
@@ -26,7 +32,6 @@ class LoginCubit extends Cubit<LoginState> {
       // 🔥 ОЧИЩАЕМ КЭШ перед логином
       await _repository.clearUser();
 
-      // final deviceToken = await _repository.getDeviceToken();
       const recaptchaToken = 'dev_token_for_local';
       final user = await _repository.login(
         email: email,
@@ -36,6 +41,14 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       if (isClosed) return;
+      if (!kIsWeb) {
+        final notificationService = NotificationService();
+        await notificationService.getDeviceToken(authDao: _authDao);
+        final deviceToken = _authDao.deviceToken.value;
+        if (deviceToken != null) {
+          await _repository.sendDeviceToken();
+        }
+      }
 
       emit(LoginState.loaded(user: user));
     } on RestClientException catch (e) {

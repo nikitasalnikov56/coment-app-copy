@@ -101,23 +101,33 @@ class _LauncherState extends State<Launcher> with WidgetsBindingObserver {
         state.whenOrNull(
           inApp: () {
             log('---', name: 'launcher in app');
-            BlocProvider.of<AppBloc>(context).add(const AppEvent.sendDeviceToken());
-            BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+            BlocProvider.of<AppBloc>(context)
+                .add(const AppEvent.sendDeviceToken());
+            BlocProvider.of<ProfileBLoC>(context)
+                .add(const ProfileEvent.getProfile());
 
             if (context.repository.authRepository.user?.language?.id != null &&
                 context.repository.authRepository.user?.language?.id != 0) {
               SettingsScope.of(context).add(
                 AppSettingsEvent.updateAppSettings(
                   appSettings: SettingsScope.settingsOf(context).copyWith(
-                    locale: Locale(context.repository.authRepository.user?.language?.id == 2
-                        ? 'kk'
-                        : context.repository.authRepository.user?.language?.id == 1
-                            ? 'ru'
-                            : context.repository.authRepository.user?.language?.id == 4
-                                ? 'uz'
-                                : context.repository.authRepository.user?.language?.id == 3
-                                    ? 'en'
-                                    : 'ru'),
+                    locale: Locale(
+                        context.repository.authRepository.user?.language?.id ==
+                                2
+                            ? 'kk'
+                            : context.repository.authRepository.user?.language
+                                        ?.id ==
+                                    1
+                                ? 'ru'
+                                : context.repository.authRepository.user
+                                            ?.language?.id ==
+                                        4
+                                    ? 'uz'
+                                    : context.repository.authRepository.user
+                                                ?.language?.id ==
+                                            3
+                                        ? 'en'
+                                        : 'ru'),
                   ),
                 ),
               );
@@ -143,7 +153,10 @@ class _LauncherState extends State<Launcher> with WidgetsBindingObserver {
         ),
         inApp: () => const BaseStudent(),
         notAuthorized: () => BlocProvider(
-          create: (context) => RegisterCubit(repository: context.repository.authRepository),
+          create: (context) => RegisterCubit(
+            repository: context.repository.authRepository,
+            authDao: context.repository.authDao,
+          ),
           child: const BaseStudent(),
         ),
         loading: () => const _Scaffold(

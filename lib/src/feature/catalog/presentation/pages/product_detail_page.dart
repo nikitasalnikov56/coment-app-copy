@@ -16,6 +16,7 @@ import 'package:coment_app/src/feature/app/router/app_router.dart';
 import 'package:coment_app/src/feature/catalog/bloc/complain_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/like_comment_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/product_info_cubit.dart';
+import 'package:coment_app/src/feature/catalog/bloc/user_feedback_cubit.dart';
 import 'package:coment_app/src/feature/catalog/widgets/build_star_raiting_widget.dart';
 import 'package:coment_app/src/feature/catalog/widgets/complained_bs.dart';
 import 'package:coment_app/src/feature/catalog/widgets/raiting_detail.dart';
@@ -31,7 +32,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class ProductDetailPage extends StatefulWidget implements AutoRouteWrapper {
-  const ProductDetailPage({super.key, required this.productId});
+  const ProductDetailPage({
+    super.key,
+    required this.productId,
+
+  });
 
   final int productId;
 
@@ -61,7 +66,7 @@ class ProductDetailPage extends StatefulWidget implements AutoRouteWrapper {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   int totalRatingVotes = 0;
   int _selectedRating = 0;
-
+ 
   // like / dislike
   List<bool> isLike = [];
   List<bool> isDislike = [];
@@ -69,6 +74,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   List<bool> isLikeLoading = [];
   List<bool> isDislikeLoading = [];
 
+ 
   @override
   void initState() {
     BlocProvider.of<ProductInfoCubit>(context)
@@ -203,7 +209,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 }
                 setState(() {});
                 if (message.contains('You cannot rate your own review')) {
-                  Toaster.showErrorTopShortToast(context, 'Нельзя оценить свой отзыв');
+                  Toaster.showErrorTopShortToast(
+                      context, 'Нельзя оценить свой отзыв');
                 } else {
                   Toaster.showErrorTopShortToast(context, message);
                 }
@@ -376,171 +383,172 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ///Like unlike Buttons
                           ///
 
-                          Row(
-                            children: [
-                              if (isLikeLoading[index] == true)
-                                const Padding(
-                                  padding: EdgeInsets.all(3.0),
-                                  child: CircularProgressIndicator.adaptive(
-                                    backgroundColor: AppColors.mainColor,
-                                  ),
-                                )
-                              else
-                                GestureDetector(
-                                  onTap: context.appBloc.isAuthenticated
-                                      ? () {
-                                          if (!isLike[index] &&
-                                              !isDislike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(
-                                                    context)
-                                                .likeComment(
-                                                    feedbackId:
-                                                        feedback[index].id ?? 0,
-                                                    type: 'like');
-                                            pressedDislike[index] = false;
-                                            isLikeLoading[index] = true;
-                                            setState(() {});
-                                          } else if (isLike[index] &&
-                                              !isDislike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(
-                                                    context)
-                                                .dislikeComment(
-                                                    feedbackId:
-                                                        feedback[index].id ??
-                                                            0);
-                                            pressedDislike[index] = false;
-                                            isLikeLoading[index] = true;
-                                            setState(() {});
-                                          } else if (!isLike[index] &&
-                                              isDislike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(
-                                                    context)
-                                                .dislikeComment(
-                                                    feedbackId:
-                                                        feedback[index].id ??
-                                                            0);
-                                            pressedDislike[index] = false;
-                                            isLikeLoading[index] = true;
-                                            setState(() {});
-                                          }
-                                        }
-                                      : () {
-                                          context.router
-                                              .push(const RegisterRoute());
-                                        },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: SvgPicture.asset(
-                                      AssetsConstants.icLike,
-                                      colorFilter: isLike[index] == true
-                                          ? const ColorFilter.mode(
-                                              AppColors.mainColor,
-                                              BlendMode.srcIn)
-                                          : const ColorFilter.mode(
-                                              Color(0xffc1c0c0),
-                                              BlendMode.srcIn),
-                                    ),
-                                  ),
-                                ),
-                              Text(
-                                  feedback[index].likes == null
-                                      ? '0'
-                                      : '${feedback[index].likes}',
-                                  style: AppTextStyles.fs12w500.copyWith(
-                                      color: AppColors.greyTextColor3)),
-                              const SizedBox(width: 4),
-                              if (isDislikeLoading[index] == true)
-                                const Padding(
-                                  padding: EdgeInsets.all(3.0),
-                                  child: CircularProgressIndicator.adaptive(
-                                    backgroundColor: AppColors.mainColor,
-                                  ),
-                                )
-                              else
-                                GestureDetector(
-                                  onTap: context.appBloc.isAuthenticated
-                                      ? () {
-                                          if (!isDislike[index] &&
-                                              !isLike[index]) {
-                                            ComplainedBs.show(
-                                              context,
-                                              feedID: feedback[index].id,
-                                              isDislike: true,
-                                              isComplainedDislike:
-                                                  (isComplained) {
-                                                BlocProvider.of<
-                                                            LikeCommentCubit>(
-                                                        context)
-                                                    .likeComment(
-                                                        feedbackId:
-                                                            feedback[index]
-                                                                    .id ??
-                                                                0,
-                                                        type: 'dislike');
-                                                pressedDislike[index] = true;
-                                                setState(() {});
-                                              },
-                                            );
-                                          } else if (isDislike[index] &&
-                                              !isLike[index]) {
-                                            BlocProvider.of<LikeCommentCubit>(
-                                                    context)
-                                                .dislikeComment(
-                                                    feedbackId:
-                                                        feedback[index].id ??
-                                                            0);
-                                            pressedDislike[index] = true;
-                                            setState(() {});
-                                          } else if (!isDislike[index] &&
-                                              isLike[index]) {
-                                            ComplainedBs.show(
-                                              context,
-                                              feedID: feedback[index].id,
-                                              isDislike: true,
-                                              isComplainedDislike:
-                                                  (isComplained) {
-                                                BlocProvider.of<
-                                                            LikeCommentCubit>(
-                                                        context)
-                                                    .dislikeComment(
-                                                        feedbackId:
-                                                            feedback[index]
-                                                                    .id ??
-                                                                0);
-                                                pressedDislike[index] = true;
-                                                setState(() {});
-                                              },
-                                            );
-                                          }
-                                        }
-                                      : () {
-                                          context.router
-                                              .push(const RegisterRoute());
-                                        },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: SvgPicture.asset(
-                                      AssetsConstants.icDislike,
-                                      colorFilter: isDislike[index] == true
-                                          ? const ColorFilter.mode(
-                                              AppColors.mainColor,
-                                              BlendMode.srcIn)
-                                          : const ColorFilter.mode(
-                                              Color(0xffc1c0c0),
-                                              BlendMode.srcIn),
-                                    ),
-                                  ),
-                                ),
-                              const SizedBox(width: 6),
-                              SvgPicture.asset(AssetsConstants.icComment),
-                              const SizedBox(width: 4),
-                              Text(
-                                feedback[index].repliesCount.toString(),
-                                style: AppTextStyles.fs12w500
-                                    .copyWith(color: AppColors.greyTextColor3),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     if (isLikeLoading[index] == true)
+                          //       const Padding(
+                          //         padding: EdgeInsets.all(3.0),
+                          //         child: CircularProgressIndicator.adaptive(
+                          //           backgroundColor: AppColors.mainColor,
+                          //         ),
+                          //       )
+                          //     else
+                          //       GestureDetector(
+                          //         onTap: context.appBloc.isAuthenticated
+                          //             ? () {
+                          //                 if (!isLike[index] &&
+                          //                     !isDislike[index]) {
+                          //                   BlocProvider.of<LikeCommentCubit>(
+                          //                           context)
+                          //                       .likeComment(
+                          //                           feedbackId:
+                          //                               feedback[index].id ?? 0,
+                          //                           type: 'like');
+                          //                   pressedDislike[index] = false;
+                          //                   isLikeLoading[index] = true;
+                          //                   setState(() {});
+                          //                 } else if (isLike[index] &&
+                          //                     !isDislike[index]) {
+                          //                   BlocProvider.of<LikeCommentCubit>(
+                          //                           context)
+                          //                       .dislikeComment(
+                          //                           feedbackId:
+                          //                               feedback[index].id ??
+                          //                                   0);
+                          //                   pressedDislike[index] = false;
+                          //                   isLikeLoading[index] = true;
+                          //                   setState(() {});
+                          //                 } else if (!isLike[index] &&
+                          //                     isDislike[index]) {
+                          //                   BlocProvider.of<LikeCommentCubit>(
+                          //                           context)
+                          //                       .dislikeComment(
+                          //                           feedbackId:
+                          //                               feedback[index].id ??
+                          //                                   0);
+                          //                   pressedDislike[index] = false;
+                          //                   isLikeLoading[index] = true;
+                          //                   setState(() {});
+                          //                 }
+                          //               }
+                          //             : () {
+                          //                 context.router
+                          //                     .push(const RegisterRoute());
+                          //               },
+                          //         child: Padding(
+                          //           padding: const EdgeInsets.all(4.0),
+                          //           child: SvgPicture.asset(
+                          //             AssetsConstants.icLike,
+                          //             colorFilter: isLike[index] == true
+                          //                 ? const ColorFilter.mode(
+                          //                     AppColors.mainColor,
+                          //                     BlendMode.srcIn)
+                          //                 : const ColorFilter.mode(
+                          //                     Color(0xffc1c0c0),
+                          //                     BlendMode.srcIn),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     Text(
+                          //         feedback[index].likes == null
+                          //             ? '0'
+                          //             : '${feedback[index].likes}',
+                          //         style: AppTextStyles.fs12w500.copyWith(
+                          //             color: AppColors.greyTextColor3)),
+                          //     const SizedBox(width: 4),
+                          //     if (isDislikeLoading[index] == true)
+                          //       const Padding(
+                          //         padding: EdgeInsets.all(3.0),
+                          //         child: CircularProgressIndicator.adaptive(
+                          //           backgroundColor: AppColors.mainColor,
+                          //         ),
+                          //       )
+                          //     else
+                          //       GestureDetector(
+                          //         onTap: context.appBloc.isAuthenticated
+                          //             ? () {
+                          //                 if (!isDislike[index] &&
+                          //                     !isLike[index]) {
+                          //                   ComplainedBs.show(
+                          //                     context,
+                          //                     feedID: feedback[index].id,
+                          //                     isDislike: true,
+                          //                     isComplainedDislike:
+                          //                         (isComplained) {
+                          //                       BlocProvider.of<
+                          //                                   LikeCommentCubit>(
+                          //                               context)
+                          //                           .likeComment(
+                          //                               feedbackId:
+                          //                                   feedback[index]
+                          //                                           .id ??
+                          //                                       0,
+                          //                               type: 'dislike');
+                          //                       pressedDislike[index] = true;
+                          //                       setState(() {});
+                          //                     },
+                          //                   );
+                          //                 } else if (isDislike[index] &&
+                          //                     !isLike[index]) {
+                          //                   BlocProvider.of<LikeCommentCubit>(
+                          //                           context)
+                          //                       .dislikeComment(
+                          //                           feedbackId:
+                          //                               feedback[index].id ??
+                          //                                   0);
+                          //                   pressedDislike[index] = true;
+                          //                   setState(() {});
+                          //                 } else if (!isDislike[index] &&
+                          //                     isLike[index]) {
+                          //                   ComplainedBs.show(
+                          //                     context,
+                          //                     feedID: feedback[index].id,
+                          //                     isDislike: true,
+                          //                     isComplainedDislike:
+                          //                         (isComplained) {
+                          //                       BlocProvider.of<
+                          //                                   LikeCommentCubit>(
+                          //                               context)
+                          //                           .dislikeComment(
+                          //                               feedbackId:
+                          //                                   feedback[index]
+                          //                                           .id ??
+                          //                                       0);
+                          //                       pressedDislike[index] = true;
+                          //                       setState(() {});
+                          //                     },
+                          //                   );
+                          //                 }
+                          //               }
+                          //             : () {
+                          //                 context.router
+                          //                     .push(const RegisterRoute());
+                          //               },
+                          //         child: Padding(
+                          //           padding: const EdgeInsets.all(4.0),
+                          //           child: SvgPicture.asset(
+                          //             AssetsConstants.icDislike,
+                          //             colorFilter: isDislike[index] == true
+                          //                 ? const ColorFilter.mode(
+                          //                     AppColors.mainColor,
+                          //                     BlendMode.srcIn)
+                          //                 : const ColorFilter.mode(
+                          //                     Color(0xffc1c0c0),
+                          //                     BlendMode.srcIn),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     const SizedBox(width: 6),
+                          //     SvgPicture.asset(AssetsConstants.icComment),
+                          //     const SizedBox(width: 4),
+                          //     Text(
+                          //       feedback[index].repliesCount.toString(),
+                          //       style: AppTextStyles.fs12w500
+                          //           .copyWith(color: AppColors.greyTextColor3),
+                          //     ),
+                          //   ],
+                          // ),
+                         
                         ],
                       ),
                     ),

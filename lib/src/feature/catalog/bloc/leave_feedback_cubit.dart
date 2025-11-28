@@ -21,7 +21,8 @@ class LeaveFeedbackCubit extends Cubit<LeaveFeedbackState> {
     try {
       emit(const LeaveFeedbackState.loading());
 
-      await _repository.createFeedback(feedbackPayload: feedbackPayload, image: image);
+      await _repository.createFeedback(
+          feedbackPayload: feedbackPayload, image: image);
       emit(const LeaveFeedbackState.loaded());
     } catch (e) {
       emit(LeaveFeedbackState.error(message: e.toString()));
@@ -34,5 +35,9 @@ class LeaveFeedbackState with _$LeaveFeedbackState {
   const factory LeaveFeedbackState.initial() = _InitialState;
   const factory LeaveFeedbackState.loading() = _LoadingState;
   const factory LeaveFeedbackState.loaded() = _LoadedState;
-  const factory LeaveFeedbackState.error({required String message}) = _ErrorState;
+  const factory LeaveFeedbackState.toxicWarning() = _ToxicWarning;
+  const factory LeaveFeedbackState.toxicWithAdminReview() =
+      _ToxicWithAdminReview;
+  const factory LeaveFeedbackState.error({required String message}) =
+      _ErrorState;
 }
