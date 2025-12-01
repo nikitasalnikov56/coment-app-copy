@@ -487,4 +487,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get helperText => 'минимум 9 символов';
+
+  @override
+  String get translateComment => 'Перевод';
 }

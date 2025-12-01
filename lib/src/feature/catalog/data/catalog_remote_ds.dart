@@ -1,5 +1,6 @@
 import 'dart:io';
 
+
 import 'package:coment_app/src/core/rest_client/models/basic_response.dart';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
 import 'package:coment_app/src/core/utils/talker_logger_util.dart';
@@ -15,7 +16,7 @@ abstract interface class ICatalogRemoteDS {
 
   Future<FeedbackDTO> userFeedback({required int id, required String isView});
 
-  Future<BasicResponse> createFeedback({
+  Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
     List<File>? image,
   });
@@ -40,7 +41,7 @@ abstract interface class ICatalogRemoteDS {
 
   Future<List<ProductDTO>> searchProductList({required String search});
 
-  Future replyFeedback(
+  Future<Map<String, dynamic>> replyFeedback(
       {required int feedbackId, required String comment, int? parentId});
 
   Future<BasicResponse> like({required int feedbackId, required String type});
@@ -130,7 +131,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   }
 
   @override
-  Future<BasicResponse> createFeedback({
+  Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
     List<File>? image,
   }) async {
@@ -139,8 +140,10 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         'text': feedbackPayload.comment,
         'rating': feedbackPayload.rating,
       };
+      print('Data is next: $data');
 
       final FormData formData = FormData.fromMap(data);
+      print('FormData is next: $formData');
 
       if (image != null && image.isNotEmpty) {
         for (int i = 0; i < image.length; i++) {
@@ -158,14 +161,14 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         'companies/${feedbackPayload.productId}/reviews',
         body: formData,
       );
+      print('Response data = $response');
 
-      return BasicResponse.fromJson(response);
+      return response;
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#catalog page crate - $e', e, st);
       rethrow;
     }
   }
-
 
   @override
   Future<BasicResponse> createNewProduct({
@@ -231,13 +234,13 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   }
 
   @override
-  Future replyFeedback(
+  Future<Map<String, dynamic>> replyFeedback(
       {required int feedbackId, required String comment, int? parentId}) async {
     try {
       final Map<String, dynamic> response = await restClient.post(
           '/reviews/$feedbackId/reply',
-          body: {'replyText': comment, 'parent_id': parentId});
-          // body: {'replyText': comment,});
+          body: {'replyText': comment, if(parentId != null) 'parent_id': parentId});
+      // body: {'replyText': comment,});
 
       return response;
     } catch (e, st) {

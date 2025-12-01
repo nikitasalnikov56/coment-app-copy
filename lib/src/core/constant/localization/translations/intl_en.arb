@@ -152,5 +152,6 @@
   "categoryIsRequired": "Please select a category",
   "emailIsRequired": "Contact email is required",
   "invalidEmail": "Invalid email address",
-  "helperText":"minimum 9 characters"
+  "helperText":"minimum 9 characters",
+  "translateComment":"Translation"
 }

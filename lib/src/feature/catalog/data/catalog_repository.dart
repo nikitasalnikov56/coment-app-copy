@@ -14,7 +14,7 @@ abstract interface class ICatalogRepository {
 
   Future<ComplainDTO> complain({required String text, required int feedId, required String type});
 
-  Future<BasicResponse> createFeedback({
+  Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
     List<File>? image,
   });
@@ -36,7 +36,7 @@ abstract interface class ICatalogRepository {
 
   Future<List<ProductDTO>> searchProductList({required String search});
 
-  Future replyFeedback({required int feedbackId, required String comment, int? parentId});
+  Future<Map<String, dynamic>> replyFeedback({required int feedbackId, required String comment, int? parentId});
 
   Future<BasicResponse> like({required int feedbackId, required String type});
 
@@ -79,7 +79,7 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future<BasicResponse> createFeedback({required FeedbackPayload feedbackPayload, List<File>? image}) async {
+  Future<Map<String, dynamic>> createFeedback({required FeedbackPayload feedbackPayload, List<File>? image}) async {
     try {
       return await _remoteDS.createFeedback(feedbackPayload: feedbackPayload, image: image);
     } catch (e) {
@@ -134,7 +134,7 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future replyFeedback({required int feedbackId, required String comment, int? parentId}) async {
+  Future<Map<String, dynamic>> replyFeedback({required int feedbackId, required String comment, int? parentId}) async {
     try {
       final response = await _remoteDS.replyFeedback(feedbackId: feedbackId, comment: comment, parentId: parentId);
       return response;

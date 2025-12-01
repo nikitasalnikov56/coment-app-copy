@@ -1025,6 +1025,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'minimum 9 characters'**
   String get helperText;
+
+  /// No description provided for @translateComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get translateComment;
 }
 
 class _AppLocalizationsDelegate

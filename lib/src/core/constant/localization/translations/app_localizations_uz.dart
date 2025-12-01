@@ -489,4 +489,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get helperText => 'kamida 9 ta belgi';
+
+  @override
+  String get translateComment => 'Tarjima';
 }

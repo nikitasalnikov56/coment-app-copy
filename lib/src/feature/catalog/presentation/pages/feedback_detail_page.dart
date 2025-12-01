@@ -16,6 +16,7 @@ import 'package:coment_app/src/feature/catalog/bloc/complain_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/like_comment_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/reply_comment_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/user_feedback_cubit.dart';
+import 'package:coment_app/src/feature/catalog/presentation/widgets/translate_feedpack_widget.dart';
 import 'package:coment_app/src/feature/catalog/widgets/complained_bs.dart';
 import 'package:coment_app/src/feature/catalog/widgets/review_avatar.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
@@ -294,23 +295,39 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                       listener: (context, state) {
                         state.maybeWhen(
                           orElse: () {
-                            isLoading = false;
-                            setState(() {});
-                            // context.loaderOverlay.hide();
+                            // isLoading = false;
+                            // setState(() {});
+                            context.loaderOverlay.hide();
                           },
                           loading: () {
-                            // context.loaderOverlay.show();
-                            isLoading = true;
-                            setState(() {});
+                            context.loaderOverlay.show();
+                            // isLoading = true;
+                            // setState(() {});
                           },
-                          loaded: () {
-                            isLoading = false;
-                            // context.loaderOverlay.hide();
+                          loaded: (wasToxic, warningCount) {
+                            // isLoading = false;
+                            context.loaderOverlay.hide();
+                            if (wasToxic) {
+                              if (warningCount >= 4) {
+                                _showToxicDialog(context, true);
+                              } else {
+                                _showToxicDialog(context, false);
+                              }
+                            }
+                            // // Возвращаемся на ProductDetail
+                            // context.router.popUntil((r) =>
+                            //     r.settings.name == ProductDetailRoute.name);
                             BlocProvider.of<UserFeedbackCubit>(context)
                                 .userFeedback(id: widget.id, isView: '');
                             isAnswerBottomSheet = false;
                             _replyController.clear();
                             setState(() {});
+                          },
+                          hidden: () {
+                            context.loaderOverlay.hide();
+                            _showHiddenReplyDialog(context);
+                            // context.router.popUntil((r) =>
+                            //     r.settings.name == ProductDetailRoute.name);
                           },
                         );
                       },
@@ -320,6 +337,45 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
           },
         );
       }),
+    );
+  }
+
+  void _showToxicDialog(BuildContext context, bool isModeration) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Внимание'),
+        content: Text(
+          isModeration
+              ? 'Вы нарушили правила. Ответ отправлен на модерацию.'
+              : 'Ваш ответ содержал недопустимые выражения и был исправлен.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showHiddenReplyDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Ответ не опубликован'),
+        content: const Text(
+            'Ответ содержит запрещённый контент и не может быть опубликован.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -417,198 +473,6 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                 ),
               const Gap(4),
 
-              ///
-              /// <--`like, dislike, answer button`-->
-              ///
-              // BlocConsumer<LikeCommentCubit, LikeCommentState>(
-              //   listener: (context, state) {
-              //     state.maybeWhen(
-              //       orElse: () {
-              //         isLikeLoading = false;
-              //         if (pressedDislike == true) isDislikeLoading = false;
-              //         setState(() {});
-              //       },
-              //       loading: () {
-              //         // isLikeLoading = true;
-              //         // if (pressedDislike == true) isDislikeLoading = true;
-              //         setState(() {});
-              //       },
-              //       error: (message) {
-              //         // isLikeLoading = false;
-              //         // if (pressedDislike == true) isDislikeLoading = false;
-              //         setState(() {});
-              //         Toaster.showErrorTopShortToast(context, message);
-              //       },
-              //       loadedLike: () {
-              //         // isLikeLoading = false;
-              //         // if (pressedDislike == true) isDislikeLoading = false;
-              //         BlocProvider.of<UserFeedbackCubit>(context)
-              //             .userFeedback(id: widget.id, isView: '');
-              //         setState(() {});
-              //       },
-              //       loadedDislike: () async {
-              //         // isLikeLoading = false;
-              //         // if (pressedDislike == true) isDislikeLoading = false;
-              //         if (!isLike && isDislike && pressedDislike == false) {
-              //           BlocProvider.of<LikeCommentCubit>(context).likeComment(
-              //               feedbackId: feedbackDTO.id ?? 0, type: 'like');
-              //         }
-              //         if (pressedDislike == true && !isDislike) {
-              //           BlocProvider.of<LikeCommentCubit>(context).likeComment(
-              //               feedbackId: feedbackDTO.id ?? 0, type: 'dislike');
-              //         }
-
-              //         BlocProvider.of<UserFeedbackCubit>(context)
-              //             .userFeedback(id: widget.id, isView: '');
-              //         setState(() {});
-              //       },
-              //     );
-              //   },
-              //   builder: (context, state) {
-              //     return Row(
-              //       children: [
-              //         if (isLikeLoading)
-              //           const Padding(
-              //             padding: EdgeInsets.all(3.0),
-              //             child: CircularProgressIndicator.adaptive(
-              //               backgroundColor: AppColors.mainColor,
-              //             ),
-              //           )
-              //         else
-              //           GestureDetector(
-              //             onTap: context.appBloc.isAuthenticated
-              //                 ? () async {
-              //                     if (!isLike && !isDislike) {
-              //                       BlocProvider.of<LikeCommentCubit>(context)
-              //                           .likeComment(
-              //                               feedbackId: feedbackDTO.id ?? 0,
-              //                               type: 'like');
-              //                       pressedDislike = false;
-              //                       isLikeLoading = true;
-              //                       setState(() {});
-              //                     } else if (isLike && !isDislike) {
-              //                       BlocProvider.of<LikeCommentCubit>(context)
-              //                           .dislikeComment(
-              //                               feedbackId: feedbackDTO.id ?? 0);
-              //                       pressedDislike = false;
-              //                       isLikeLoading = true;
-              //                       setState(() {});
-              //                     } else if (!isLike && isDislike) {
-              //                       BlocProvider.of<LikeCommentCubit>(context)
-              //                           .dislikeComment(
-              //                               feedbackId: feedbackDTO.id ?? 0);
-              //                       pressedDislike = false;
-              //                       isLikeLoading = true;
-              //                       setState(() {});
-              //                     }
-              //                   }
-              //                 : () {
-              //                     context.router.push(const RegisterRoute());
-              //                   },
-              //             child: Padding(
-              //               padding: const EdgeInsets.all(4.0),
-              //               child: SvgPicture.asset(AssetsConstants.icLike,
-              //                   colorFilter: isLike
-              //                       ? const ColorFilter.mode(
-              //                           AppColors.mainColor, BlendMode.srcIn)
-              //                       : null),
-              //             ),
-              //           ),
-              //         // const SizedBox(width: 4),
-              //         Text(
-              //             feedbackDTO.likes == null
-              //                 ? '0'
-              //                 : feedbackDTO.likes.toString(),
-              //             style: AppTextStyles.fs12w500
-              //                 .copyWith(color: AppColors.greyTextColor3)),
-              //         const SizedBox(width: 4),
-              //         if (isDislikeLoading)
-              //           const Padding(
-              //             padding: EdgeInsets.all(3.0),
-              //             child: CircularProgressIndicator.adaptive(
-              //               backgroundColor: AppColors.mainColor,
-              //             ),
-              //           )
-              //         else
-              //           GestureDetector(
-              //             onTap: context.appBloc.isAuthenticated
-              //                 ? () {
-              //                     if (!isDislike && !isLike) {
-              //                       ComplainedBs.show(
-              //                         context,
-              //                         feedID: widget.id,
-              //                         isDislike: true,
-              //                         isComplainedDislike: (isComplained) {
-              //                           BlocProvider.of<LikeCommentCubit>(
-              //                                   context)
-              //                               .likeComment(
-              //                                   feedbackId: feedbackDTO.id ?? 0,
-              //                                   type: 'dislike');
-              //                           pressedDislike = true;
-              //                           setState(() {});
-              //                         },
-              //                       );
-              //                     } else if (isDislike && !isLike) {
-              //                       BlocProvider.of<LikeCommentCubit>(context)
-              //                           .dislikeComment(
-              //                               feedbackId: feedbackDTO.id ?? 0);
-              //                       pressedDislike = true;
-              //                       setState(() {});
-              //                     } else if (!isDislike && isLike) {
-              //                       ComplainedBs.show(
-              //                         context,
-              //                         feedID: widget.id,
-              //                         isDislike: true,
-              //                         isComplainedDislike: (isComplained) {
-              //                           BlocProvider.of<LikeCommentCubit>(
-              //                                   context)
-              //                               .dislikeComment(
-              //                                   feedbackId:
-              //                                       feedbackDTO.id ?? 0);
-              //                           pressedDislike = true;
-              //                           setState(() {});
-              //                         },
-              //                       );
-              //                     }
-              //                   }
-              //                 : () {
-              //                     context.router.push(const RegisterRoute());
-              //                   },
-              //             child: Padding(
-              //               padding: const EdgeInsets.all(4.0),
-              //               child: SvgPicture.asset(AssetsConstants.icDislike,
-              //                   colorFilter: isDislike
-              //                       ? const ColorFilter.mode(
-              //                           AppColors.mainColor, BlendMode.srcIn)
-              //                       : const ColorFilter.mode(
-              //                           Color(0xffc1c0c0), BlendMode.srcIn)),
-              //             ),
-              //           ),
-              //         const SizedBox(width: 6),
-              //         GestureDetector(
-              //           onTap: context.appBloc.isAuthenticated
-              //               ? () {
-              //                   feedbackUserName = feedbackDTO.user?.name ?? '';
-              //                   parentId = 0;
-              //                   isAnswerBottomSheet = true;
-              //                   setState(() {});
-              //                 }
-              //               : () {
-              //                   context.router.push(const RegisterRoute());
-              //                 },
-              //           child: Text(
-              //             context.localized.answer,
-              //             style: const TextStyle(
-              //                 fontSize: 14,
-              //                 fontWeight: FontWeight.w500,
-              //                 color: AppColors.greyText),
-              //           ),
-              //         ),
-              //       ],
-              //     );
-
-              //   },
-              // ),
               BlocConsumer<LikeCommentCubit, LikeCommentState>(
                 listener: (context, state) {
                   state.maybeWhen(
@@ -647,121 +511,120 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                 },
                 builder: (context, state) {
                   return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // if (isLikeLoading)
-                      //   const Padding(
-                      //     padding: EdgeInsets.all(3.0),
-                      //     child: CircularProgressIndicator.adaptive(
-                      //       backgroundColor: AppColors.mainColor,
-                      //     ),
-                      //   )
-                      // else
-                        GestureDetector(
-                          onTap: context.appBloc.isAuthenticated
-                              ? () {
-                                  if (isLike) return;
-                                  if (isDislike) {
-                                    return;
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: context.appBloc.isAuthenticated
+                                ? () {
+                                    if (isLike) return;
+                                    if (isDislike) {
+                                      return;
+                                    }
+                                    isLikeLoading = true;
+                                    setState(() {});
+                                    BlocProvider.of<LikeCommentCubit>(context)
+                                        .likeComment(
+                                      feedbackId: feedbackDTO.id ?? 0,
+                                      type: 'like',
+                                    );
+                                    pressedDislike = false;
                                   }
-                                  isLikeLoading = true;
-                                  setState(() {});
-                                  BlocProvider.of<LikeCommentCubit>(context)
-                                      .likeComment(
-                                    feedbackId: feedbackDTO.id ?? 0,
-                                    type: 'like',
-                                  );
-                                  pressedDislike = false;
-                                }
-                              : () {
-                                  context.router.push(const RegisterRoute());
-                                },
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: SvgPicture.asset(
-                              AssetsConstants.icLike,
-                              colorFilter: !pressedDislike
-                                  ? const ColorFilter.mode(
-                                      AppColors.mainColor, BlendMode.srcIn)
-                                  : null,
+                                : () {
+                                    context.router.push(const RegisterRoute());
+                                  },
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: SvgPicture.asset(
+                                AssetsConstants.icLike,
+                                colorFilter: !pressedDislike
+                                    ? const ColorFilter.mode(
+                                        AppColors.mainColor, BlendMode.srcIn)
+                                    : null,
+                              ),
                             ),
                           ),
-                        ),
-                      Text(
-                        (feedbackDTO.likes ?? 0).toString(),
-                        style: AppTextStyles.fs12w500
-                            .copyWith(color: AppColors.greyTextColor3),
-                      ),
-                      const SizedBox(width: 4),
-                      if (isDislikeLoading)
-                        const Padding(
-                          padding: EdgeInsets.all(3.0),
-                          child: CircularProgressIndicator.adaptive(
-                            backgroundColor: AppColors.mainColor,
+                          Text(
+                            (feedbackDTO.likes ?? 0).toString(),
+                            style: AppTextStyles.fs12w500
+                                .copyWith(color: AppColors.greyTextColor3),
                           ),
-                        )
-                      else
-                        GestureDetector(
-                          onTap: context.appBloc.isAuthenticated
-                              ? () {
-                                  if (isDislike) {
-                                    return;
+                          const SizedBox(width: 4),
+                          if (isDislikeLoading)
+                            const Padding(
+                              padding: EdgeInsets.all(3.0),
+                              child: CircularProgressIndicator.adaptive(
+                                backgroundColor: AppColors.mainColor,
+                              ),
+                            )
+                          else
+                            GestureDetector(
+                              onTap: context.appBloc.isAuthenticated
+                                  ? () {
+                                      if (isDislike) {
+                                        return;
+                                      }
+                                      if (isLike) {
+                                        return;
+                                      }
+                                      BlocProvider.of<LikeCommentCubit>(context)
+                                          .likeComment(
+                                        feedbackId: feedbackDTO.id ?? 0,
+                                        type: 'dislike',
+                                      );
+                                      pressedDislike = true;
+                                    }
+                                  : () {
+                                      context.router
+                                          .push(const RegisterRoute());
+                                    },
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: SvgPicture.asset(
+                                  AssetsConstants.icDislike,
+                                  colorFilter: pressedDislike
+                                      ? const ColorFilter.mode(
+                                          AppColors.mainColor, BlendMode.srcIn)
+                                      : const ColorFilter.mode(
+                                          Color(0xffc1c0c0), BlendMode.srcIn),
+                                ),
+                              ),
+                            ),
+                          Text(
+                            (feedbackDTO.dislikes ?? 0).toString(),
+                            style: AppTextStyles.fs12w500
+                                .copyWith(color: AppColors.greyTextColor3),
+                          ),
+                          const SizedBox(width: 6),
+                          GestureDetector(
+                            onTap: context.appBloc.isAuthenticated
+                                ? () {
+                                    feedbackUserName =
+                                        feedbackDTO.user?.name ?? '';
+                                    parentId = 0;
+                                    isAnswerBottomSheet = true;
+                                    setState(() {});
                                   }
-                                  if (isLike) {
-                                    return;
-                                  }
-                                  BlocProvider.of<LikeCommentCubit>(context)
-                                      .likeComment(
-                                    feedbackId: feedbackDTO.id ?? 0,
-                                    type: 'dislike',
-                                  );
-                                  pressedDislike = true;
-                                }
-                              : () {
-                                  context.router.push(const RegisterRoute());
-                                },
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: SvgPicture.asset(
-                              AssetsConstants.icDislike,
-                              colorFilter: pressedDislike
-                                  ? const ColorFilter.mode(
-                                      AppColors.mainColor, BlendMode.srcIn)
-                                  : const ColorFilter.mode(
-                                      Color(0xffc1c0c0), BlendMode.srcIn),
+                                : () {
+                                    context.router.push(const RegisterRoute());
+                                  },
+                            child: Text(
+                              context.localized.answer,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.greyText,
+                              ),
                             ),
                           ),
-                        ),
-                      Text(
-                        (feedbackDTO.dislikes ?? 0).toString(),
-                        style: AppTextStyles.fs12w500
-                            .copyWith(color: AppColors.greyTextColor3),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      GestureDetector(
-                        onTap: context.appBloc.isAuthenticated
-                            ? () {
-                                feedbackUserName = feedbackDTO.user?.name ?? '';
-                                parentId = 0;
-                                isAnswerBottomSheet = true;
-                                setState(() {});
-                              }
-                            : () {
-                                context.router.push(const RegisterRoute());
-                              },
-                        child: Text(
-                          context.localized.answer,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.greyText,
-                          ),
-                        ),
-                      ),
+                      TranslateFeedpackWidget(feedbackComment: feedbackDTO.comment,),
                     ],
                   );
                 },
               ),
-            
             ],
           ),
         ),

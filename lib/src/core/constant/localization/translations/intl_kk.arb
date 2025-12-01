@@ -152,5 +152,6 @@
   "categoryIsRequired": "Sanatty tandanyz",
   "emailIsRequired": "Bailanys ushın email mindetti",
   "invalidEmail": "Dūrys emes email mekenjayı",
-  "helperText":"кемінде 9 таңба"
+  "helperText":"кемінде 9 таңба",
+  "translateComment":"Аударма"
 }

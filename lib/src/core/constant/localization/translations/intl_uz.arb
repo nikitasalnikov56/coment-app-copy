@@ -151,5 +151,6 @@
   "categoryIsRequired": "Ariza turini tanlang",
   "emailIsRequired": "Aloqa uchun email majburiy",
   "invalidEmail": "Noto‘g‘ri email manzili",
-  "helperText":"kamida 9 ta belgi"
+  "helperText":"kamida 9 ta belgi",
+  "translateComment":"Tarjima"
 }

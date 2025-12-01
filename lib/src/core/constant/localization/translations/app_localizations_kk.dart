@@ -489,4 +489,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get helperText => 'кемінде 9 таңба';
+
+  @override
+  String get translateComment => 'Аударма';
 }

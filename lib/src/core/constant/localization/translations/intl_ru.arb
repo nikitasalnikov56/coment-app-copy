@@ -152,5 +152,6 @@
   "categoryIsRequired": "Выберите категорию обращения",
   "emailIsRequired": "Email для связи обязателен",
   "invalidEmail": "Некорректный email адрес",
-  "helperText":"минимум 9 символов"
+  "helperText":"минимум 9 символов",
+  "translateComment":"Перевод"
 }

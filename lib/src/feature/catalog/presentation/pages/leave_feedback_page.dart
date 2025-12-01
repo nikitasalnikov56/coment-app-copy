@@ -12,7 +12,6 @@ import 'package:coment_app/src/feature/app/router/app_router.dart';
 import 'package:coment_app/src/feature/catalog/bloc/leave_feedback_cubit.dart';
 import 'package:coment_app/src/feature/catalog/model/feedback_payload.dart';
 import 'package:coment_app/src/feature/catalog/presentation/widgets/choose_image_bs.dart';
-import 'package:coment_app/src/feature/catalog/widgets/thank_you_bs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -182,24 +181,6 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                                   setState(() {});
                                 },
                               );
-                              // final limit = 5 - imageFileList!.length;
-
-                              // final minLimit = math.max(0, limit);
-                              // if (minLimit == 1) {
-                              //   final selectedImage = await imagePicker.pickImage(source: ImageSource.gallery);
-                              //   if (selectedImage != null) {
-                              //     setState(() {
-                              //       imageFileList!.add(selectedImage);
-                              //     });
-                              //   }
-                              // } else if (minLimit > 1) {
-                              //   final List<XFile> selectedImages = await imagePicker.pickMultiImage(limit: minLimit);
-                              //   if (selectedImages.isNotEmpty) {
-                              //     setState(() {
-                              //       imageFileList!.addAll(selectedImages);
-                              //     });
-                              //   }
-                              // }
                             },
                             style:
                                 CustomButtonStyles.primaryButtonStyle(context),
@@ -297,25 +278,6 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                                           setState(() {});
                                         },
                                       );
-                                      // final limit = 5 - imageFileList!.length;
-
-                                      // final minLimit = math.max(0, limit);
-                                      // if (minLimit == 1) {
-                                      //   final selectedImage = await imagePicker.pickImage(source: ImageSource.gallery);
-                                      //   if (selectedImage != null) {
-                                      //     setState(() {
-                                      //       imageFileList!.add(selectedImage);
-                                      //     });
-                                      //   }
-                                      // } else if (minLimit > 1) {
-                                      //   final List<XFile> selectedImages =
-                                      //       await imagePicker.pickMultiImage(limit: minLimit);
-                                      //   if (selectedImages.isNotEmpty) {
-                                      //     setState(() {
-                                      //       imageFileList!.addAll(selectedImages);
-                                      //     });
-                                      //   }
-                                      // }
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -350,6 +312,7 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
 
                 BlocListener<LeaveFeedbackCubit, LeaveFeedbackState>(
                   listener: (context, state) {
+                    // print();
                     state.maybeWhen(
                       error: (message) {
                         context.loaderOverlay.hide();
@@ -358,41 +321,88 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                       loading: () {
                         context.loaderOverlay.show();
                       },
-                      loaded: () async {
+                      loaded: (wasToxic, warningCount) async {
                         context.loaderOverlay.hide();
-                        context.router.popUntil(
-                          (route) =>
-                              route.settings.name == ProductDetailRoute.name,
-                        );
-                        await Future.delayed(const Duration(seconds: 1));
-                        if (context.mounted) ThankYouBs.show(context);
+                        if (wasToxic) {
+                          if (warningCount >= 4) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Внимание'),
+                                content: const Text(
+                                    '''Вы нарушили правила сообщества. Ваш комментарий содержал недопустимые выражения и был отправлен на модерацию. 
+                                    Пожалуйста, соблюдайте правила сообщества.'''),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // закрыть диалог
+                                      context.router.popUntil((route) =>
+                                          route.settings.name ==
+                                          ProductDetailRoute.name);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Внимание'),
+                                content: Text(
+                                    '''Ваш комментарий содержал недопустимые выражения и был автоматически исправлен.
+                                     Пожалуйста, соблюдайте правила сообщества.'''
+                                        .trim()),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // закрыть диалог
+                                      context.router.popUntil((route) =>
+                                          route.settings.name ==
+                                          ProductDetailRoute.name);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } else {
+                          context.router.popUntil((route) =>
+                              route.settings.name == ProductDetailRoute.name);
+                        }
                       },
-                      // toxicWarning: () {
-                      //   context.loaderOverlay.hide();
-                      //   Toaster.showTopShortToast(
-                      //     context,
-                      //     message:
-                      //         'Ваш комментарий содержал недопустимые выражения и был автоматически исправлен. Пожалуйста, соблюдайте правила сообщества.',
-                      //   );
-                      //   context.router.popUntil(
-                      //     (route) =>
-                      //         route.settings.name == ProductDetailRoute.name,
-                      //   );
-                      //   ThankYouBs.show(context);
-                      // },
-                      // toxicWithAdminReview: () {
-                      //   context.loaderOverlay.hide();
-                      //   Toaster.showTopShortToast(
-                      //     context,
-                      //     message:
-                      //         'Ваш комментарий отправлен на рассмотрение администратору!',
-                      //   );
-                      //   context.router.popUntil(
-                      //     (route) =>
-                      //         route.settings.name == ProductDetailRoute.name,
-                      //   );
-                      //   ThankYouBs.show(context);
-                      // },
+                      hidden: () {
+                        context.loaderOverlay.hide();
+                        // Показать диалог: "комментарий не опубликован"
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Внимание'),
+                            content: Text(
+                                '''Ваш комментарий содержал недопустимые выражения и не был опубликован.
+                                     Пожалуйста, соблюдайте правила сообщества.'''
+                                    .trim()),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // закрыть диалог
+                                  context.router.popUntil((route) =>
+                                      route.settings.name ==
+                                      ProductDetailRoute.name);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                       orElse: () {
                         context.loaderOverlay.hide();
                       },
@@ -424,19 +434,20 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                         );
                         // }
                       },
-                      style: countWords(_controller.text) >= 15 &&
-                              imageFileList.isNotEmpty
+                      style: countWords(_controller.text) >= 15 && selectedRating > 0 ||
+                              imageFileList.isNotEmpty 
                           ? CustomButtonStyles.mainButtonStyle(context)
                           : CustomButtonStyles.greyButtonStyle(context),
                       child: Text(context.localized.leaveFeedback,
                           style: AppTextStyles.fs16w600.copyWith(
-                              color: countWords(_controller.text) >= 15 &&
-                                      imageFileList.isNotEmpty
+                              color: countWords(_controller.text) >= 15 && selectedRating > 0 ||
+                                      imageFileList.isNotEmpty 
                                   ? AppColors.white
                                   : Colors.black)),
                     ),
                   ),
                 ),
+              
               ],
             ),
           ),

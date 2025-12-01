@@ -487,4 +487,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helperText => 'minimum 9 characters';
+
+  @override
+  String get translateComment => 'Translation';
 }
