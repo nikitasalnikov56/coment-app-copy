@@ -15,8 +15,9 @@ import 'package:coment_app/src/feature/app/router/app_router.dart';
 import 'package:coment_app/src/feature/catalog/bloc/complain_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/like_comment_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/reply_comment_cubit.dart';
+import 'package:coment_app/src/feature/catalog/bloc/translate_comment_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/user_feedback_cubit.dart';
-import 'package:coment_app/src/feature/catalog/presentation/widgets/translate_feedpack_widget.dart';
+import 'package:coment_app/src/feature/catalog/presentation/widgets/translate_comment_widget.dart';
 import 'package:coment_app/src/feature/catalog/widgets/complained_bs.dart';
 import 'package:coment_app/src/feature/catalog/widgets/review_avatar.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
@@ -68,13 +69,17 @@ class FeedbackDetailPage extends StatefulWidget implements AutoRouteWrapper {
           repository: context.repository.catalogRepository,
         ),
       ),
+      BlocProvider(
+        create: (context) =>
+            TranslateCommentCubit(context.repository.catalogRepository),
+      ),
     ], child: this);
   }
 }
 
 class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
   bool isAnswerBottomSheet = false;
-
+  String? _translatedComment;
   String feedbackUserName = '';
   int parentId = 0;
 
@@ -132,7 +137,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
           loading: () {},
           loaded: (feedbackDTO) {
             userId = feedbackDTO.user?.id;
-
+            _translatedComment = feedbackDTO.comment; // правильно ли
             feedbackDTO.isLike == 1 ? isLike = true : isLike = false;
             feedbackDTO.isDislike == 1 ? isDislike = true : isDislike = false;
           },
@@ -234,6 +239,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                                     feedbackUserName = feedbackDTO
                                             .replies?[index].user?.name ??
                                         '';
+
                                     parentId =
                                         feedbackDTO.replies?[index].id ?? 0;
                                     isAnswerBottomSheet = true;
@@ -249,6 +255,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                                   imageAva: feedbackDTO
                                           .replies?[index].user?.avatar ??
                                       NOT_FOUND_IMAGE,
+                                  replyId: feedbackDTO.replies?[index].id ?? 0,
                                   name:
                                       feedbackDTO.replies?[index].user?.name ??
                                           '',
@@ -266,6 +273,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                                     feedbackUserName = name;
                                     parentId = parentI;
                                     isAnswerBottomSheet = isAnswerBottomShee;
+
                                     log('$name, $parentId, $isAnswerBottomShee');
                                     setState(() {});
                                   },
@@ -427,7 +435,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                feedbackDTO.comment ?? '',
+               _translatedComment?? feedbackDTO.comment ?? '',
                 style: AppTextStyles.fs14w400.copyWith(
                     color: AppColors.text, height: 1.3, letterSpacing: -0.5),
               ),
@@ -620,7 +628,28 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                           ),
                         ],
                       ),
-                      TranslateFeedpackWidget(feedbackComment: feedbackDTO.comment,),
+                      BlocListener<TranslateCommentCubit,
+                          TranslateCommentState>(
+                        listener: (context, state) {
+                          state.maybeWhen(
+                            orElse: () {},
+                            loading: () {
+                              context.loaderOverlay.show();
+                            },
+                          loaded: (translatedText) {
+                            context.loaderOverlay.hide();
+                            setState(() {
+                              _translatedComment = translatedText;
+                            });
+                          },
+                          );
+                        },
+                        child: TranslateCommentWidget(
+                          text: feedbackDTO.comment,
+                          type: TranslateType.feedback,
+                          id: feedbackDTO.id ?? 0,
+                        ),
+                      ),
                     ],
                   );
                 },

@@ -41,6 +41,12 @@ abstract interface class ICatalogRepository {
   Future<BasicResponse> like({required int feedbackId, required String type});
 
   Future<BasicResponse> dislike({required int feedbackId});
+
+    Future<Map<String, dynamic>> translateReview(
+      {required int reviewId, required String targetLang});
+      
+  Future<Map<String, dynamic>> translateReply(
+      {required int replyId, required String targetLang});
 }
 
 class CatalogRepositoryImpl implements ICatalogRepository {
@@ -162,4 +168,27 @@ class CatalogRepositoryImpl implements ICatalogRepository {
       rethrow;
     }
   }
+
+@override
+ Future<Map<String, dynamic>> translateReview(
+      {required int reviewId, required String targetLang}) async{
+        try {
+          final response = await _remoteDS.translateReview(reviewId: reviewId, targetLang: targetLang);
+          return response;
+        } catch (e) {
+          rethrow;
+        }
+      }
+
+@override
+Future<Map<String, dynamic>> translateReply(
+      {required int replyId, required String targetLang}) async{
+        try {
+           final response = await _remoteDS.translateReply(replyId: replyId, targetLang: targetLang);
+           return response;
+        } catch (e) {
+          rethrow;
+        }
+      }
+
 }

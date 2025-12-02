@@ -1,14 +1,18 @@
 import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:coment_app/src/core/constant/constants.dart';
+import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
-import 'package:coment_app/src/feature/catalog/presentation/widgets/translate_reply_widget.dart';
+import 'package:coment_app/src/feature/catalog/bloc/translate_comment_cubit.dart';
+import 'package:coment_app/src/feature/catalog/presentation/widgets/translate_comment_widget.dart';
 import 'package:coment_app/src/feature/catalog/widgets/review_avatar.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/presentation/widgets/popular_feedback_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class FeedbackRepliesItem extends StatefulWidget {
   final String imageAva;
@@ -17,6 +21,7 @@ class FeedbackRepliesItem extends StatefulWidget {
   final String coment;
   final int rating;
   final List<ReplyDTO> replies;
+  final int replyId;
   final VoidCallback onReplyPressed;
   final VoidCallback onReplyReplyPressed;
   final void Function(String name, int parentId, bool isAnswerBottomSheet)
@@ -33,6 +38,7 @@ class FeedbackRepliesItem extends StatefulWidget {
     required this.replies,
     required this.onReplyReplyPressed,
     required this.selectedFeedback,
+    required this.replyId,
   });
 
   @override
@@ -42,7 +48,7 @@ class FeedbackRepliesItem extends StatefulWidget {
 class _FeedbackRepliesItemState extends State<FeedbackRepliesItem> {
   bool showReplyInput = false;
   final TextEditingController _replyController = TextEditingController();
-
+  String? _translatedComment;
   @override
   void dispose() {
     _replyController.dispose();
@@ -82,7 +88,7 @@ class _FeedbackRepliesItemState extends State<FeedbackRepliesItem> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    widget.coment,
+                    _translatedComment ?? widget.coment,
                     style: AppTextStyles.fs14w400.copyWith(
                         color: AppColors.text,
                         height: 1.3,
@@ -105,12 +111,40 @@ class _FeedbackRepliesItemState extends State<FeedbackRepliesItem> {
                   // ),
                   // const Gap(10),
 
-              /// 
-              ///  <--`translate button`-->
-              /// 
-                   TranslateReplyWidget(replyComment:widget.coment),
+                  ///
+                  ///  <--`translate button`-->
+                  ///
+                  BlocProvider(
+                    create: (context) => TranslateCommentCubit(
+                        context.repository.catalogRepository),
+                    child: BlocListener<TranslateCommentCubit,
+                        TranslateCommentState>(
+                      listener: (context, state) {
+                        state.maybeWhen(
+                          orElse: () {},
+                          loading: () {
+                            context.loaderOverlay.show();
+                          },
+                          loaded: (translatedText) {
+                            context.loaderOverlay.hide();
+                            setState(() {
+                              _translatedComment = translatedText;
+                            });
+                          },
+                          error: (message) {
+                            Toaster.showErrorTopShortToast(context, 'Не удалось перевести');
+                          },
+                        );
+                      },
+                      child: TranslateCommentWidget(
+                        text: widget.coment,
+                        type: TranslateType.reply,
+                        id: widget.replyId,
+                      ),
+                    ),
+                  ),
                   const Gap(10),
-                  
+
                   ///
                   /// <--`replies`-->
                   ///

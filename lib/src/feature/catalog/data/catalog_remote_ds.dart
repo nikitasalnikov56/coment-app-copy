@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:coment_app/src/core/rest_client/models/basic_response.dart';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
 import 'package:coment_app/src/core/utils/talker_logger_util.dart';
@@ -47,6 +46,12 @@ abstract interface class ICatalogRemoteDS {
   Future<BasicResponse> like({required int feedbackId, required String type});
 
   Future<BasicResponse> dislike({required int feedbackId});
+
+  Future<Map<String, dynamic>> translateReview(
+      {required int reviewId, required String targetLang});
+      
+  Future<Map<String, dynamic>> translateReply(
+      {required int replyId, required String targetLang});
 }
 
 class CatalogRemoteDsImpl implements ICatalogRemoteDS {
@@ -140,10 +145,8 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         'text': feedbackPayload.comment,
         'rating': feedbackPayload.rating,
       };
-      print('Data is next: $data');
 
       final FormData formData = FormData.fromMap(data);
-      print('FormData is next: $formData');
 
       if (image != null && image.isNotEmpty) {
         for (int i = 0; i < image.length; i++) {
@@ -237,10 +240,11 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   Future<Map<String, dynamic>> replyFeedback(
       {required int feedbackId, required String comment, int? parentId}) async {
     try {
-      final Map<String, dynamic> response = await restClient.post(
-          '/reviews/$feedbackId/reply',
-          body: {'replyText': comment, if(parentId != null) 'parent_id': parentId});
-      // body: {'replyText': comment,});
+      final Map<String, dynamic> response = await restClient
+          .post('/reviews/$feedbackId/reply', body: {
+        'replyText': comment,
+        if (parentId != null) 'parent_id': parentId
+      });
 
       return response;
     } catch (e, st) {
@@ -277,5 +281,31 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       TalkerLoggerUtil.talker.error('#dislike comment - $e', e, st);
       rethrow;
     }
+  }
+
+// Перевод комментария
+  @override
+  Future<Map<String, dynamic>> translateReview({
+    required int reviewId,
+    required String targetLang,
+  }) async {
+    final response = await restClient.post(
+      'reviews/$reviewId/translate',
+      body: {'targetLang': targetLang},
+    );
+    return response;
+  }
+
+// Перевод ответа
+  @override
+  Future<Map<String, dynamic>> translateReply({
+    required int replyId,
+    required String targetLang,
+  }) async {
+    final response = await restClient.post(
+      'replies/$replyId/translate',
+      body: {'targetLang': targetLang},
+    );
+    return response;
   }
 }
