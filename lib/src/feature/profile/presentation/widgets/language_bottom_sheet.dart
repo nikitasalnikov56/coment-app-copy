@@ -78,13 +78,13 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     AssetsConstants.icRus,
     AssetsConstants.icUz,
     AssetsConstants.icUsa,
+    AssetsConstants.icCn,
   ];
 
   @override
   void initState() {
     BlocProvider.of<DictionaryCubit>(context).getDictionary();
     selectedId = widget.languageId;
-    log('${widget.languageId} dlskfjdsl;kf');
     super.initState();
   }
 
@@ -125,7 +125,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                                   context.router.maybePop();
                                 },
                                 icon: SvgPicture.asset(
-                                  'assets/icons/close.svg',
+                                  AssetsConstants.close,
                                   height: 26,
                                 ),
                               ),
@@ -205,12 +205,8 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                                 onPressed: () {
                                   context.router.maybePop();
                                 },
-                                icon:
-
-                                    SvgPicture.asset(
-                                        AssetsConstants.close,
-                                        height: 26,
-                                        placeholderBuilder: (context) {
+                                icon: SvgPicture.asset(AssetsConstants.close,
+                                    height: 26, placeholderBuilder: (context) {
                                   log('Ошибка: ${AssetsConstants.closeSvgrepo}');
                                   return const Text(
                                       'Ошибка: ${AssetsConstants.closeSvgrepo}');
@@ -229,11 +225,43 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                           child: ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 4,
+                            itemCount: languageFlag.length,
                             separatorBuilder: (context, index) => const Gap(12),
                             padding: EdgeInsets.zero,
                             itemBuilder: (context, index) {
+                              final lang = mainDTO.language?[index];
+                              if (lang == null) {
+                                return const SizedBox();
+                              }
+                              final int id = lang.id;
+
+                              final flagByLangId = {
+                                1: AssetsConstants.icRus, // ru
+                                2: AssetsConstants.icKaz, // kk
+                                3: AssetsConstants.icUsa, // en
+                                4: AssetsConstants.icUz, // uz
+                                5: AssetsConstants.icCn, // zh
+                              };
+                              final actualFlag =
+                                  flagByLangId[id] ?? AssetsConstants.icRus;
+                              final String? langName = context
+                                          .currentLocale.languageCode ==
+                                      'kk'
+                                  ? lang.nameKk
+                                  : context.currentLocale.languageCode == 'en'
+                                      ? lang.nameEn
+                                      : context.currentLocale.languageCode ==
+                                              'uz'
+                                          ? lang.nameUz
+                                          : context.currentLocale
+                                                      .languageCode ==
+                                                  'zh'
+                                              ? lang.nameZh ??
+                                                  lang.name // ← если nameZh нет — fallback на name
+                                              : lang.name;
+
                               return Container(
+                                width: double.infinity,
                                 decoration: BoxDecoration(
                                   color: AppColors.muteGrey,
                                   borderRadius: BorderRadius.circular(12),
@@ -244,17 +272,8 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        selectedId =
-                                            mainDTO.language?[index].id;
-                                        selectedFlag = selectedId == 1
-                                            ? languageFlag[1]
-                                            : selectedId == 2
-                                                ? languageFlag[0]
-                                                : selectedId == 3
-                                                    ? languageFlag[3]
-                                                    : selectedId == 4
-                                                        ? languageFlag[2]
-                                                        : null;
+                                        selectedId = id;
+                                        selectedFlag = actualFlag;
                                       });
                                     },
                                     borderRadius: BorderRadius.circular(12),
@@ -265,53 +284,32 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(mainDTO
-                                                          .language?[index]
-                                                          .id ==
-                                                      1
-                                                  ? languageFlag[1]
-                                                  : mainDTO.language?[index]
-                                                              .id ==
-                                                          2
-                                                      ? languageFlag[0]
-                                                      : mainDTO.language?[index]
-                                                                  .id ==
-                                                              3
-                                                          ? languageFlag[3]
-                                                          : mainDTO
-                                                                      .language?[
-                                                                          index]
-                                                                      .id ==
-                                                                  4
-                                                              ? languageFlag[2]
-                                                              : ''),
-                                              const Gap(10),
-                                              Text(
-                                                (context.currentLocale
-                                                            .toString() ==
-                                                        'kk'
-                                                    ? '${mainDTO.language?[index].nameKk}'
-                                                    : context.currentLocale
-                                                                .toString() ==
-                                                            'en'
-                                                        ? '${mainDTO.language?[index].nameEn}'
-                                                        : context.currentLocale
-                                                                    .toString() ==
-                                                                'uz'
-                                                            ? '${mainDTO.language?[index].nameUz}'
-                                                            : '${mainDTO.language?[index].name}'),
-                                                // languageTitle[index],
-                                                style: AppTextStyles.fs14w400
-                                                    .copyWith(
-                                                        color: AppColors.text),
-                                              ),
-                                            ],
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  actualFlag,
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                                const Gap(10),
+                                                Expanded(
+                                                  child: Text(
+                                                    langName ?? 'Русский',
+                                                    style: AppTextStyles
+                                                        .fs14w400
+                                                        .copyWith(
+                                                      color: AppColors.text,
+                                                    ),
+                                                     overflow: TextOverflow.ellipsis,
+                                                     maxLines: 1,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                           SvgPicture.asset(
-                                            selectedId ==
-                                                    mainDTO.language?[index].id
+                                            selectedId == id
                                                 ? AssetsConstants
                                                     .icRadioBtnActive
                                                 : AssetsConstants.icRadioBtn,
@@ -348,15 +346,19 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                                     appSettings:
                                         SettingsScope.settingsOf(context)
                                             .copyWith(
-                                      locale: Locale(selectedId == 2
-                                          ? 'kk'
+                                      locale: selectedId == 2
+                                          ? const Locale('kk')
                                           : selectedId == 1
-                                              ? 'ru'
+                                              ? const Locale('ru')
                                               : selectedId == 4
-                                                  ? 'uz'
+                                                  ? const Locale('uz')
                                                   : selectedId == 3
-                                                      ? 'en'
-                                                      : 'ru'),
+                                                      ? const Locale('en')
+                                                      : selectedId == 5
+                                                          ? const Locale(
+                                                              'zh',
+                                                            )
+                                                          : const Locale('ru'),
                                     ),
                                   ),
                                 );
@@ -401,7 +403,9 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                                                     ? 'uz'
                                                     : selectedId == 3
                                                         ? 'en'
-                                                        : 'ru'),
+                                                        : selectedId == 5
+                                                            ? 'zh'
+                                                            : 'ru'),
                                       ),
                                     ),
                                   );

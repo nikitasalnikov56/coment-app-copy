@@ -29,7 +29,8 @@ class CatalogListItem extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: isCatalog ? 0 : 12),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 16, vertical: isCatalog ? 0 : 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -52,7 +53,8 @@ class CatalogListItem extends StatelessWidget {
                             ),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(50),
-                                child: Image.network(catalog?.image ?? NOT_FOUND_IMAGE)),
+                                child: Image.network(
+                                    catalog?.image ?? NOT_FOUND_IMAGE)),
                           ),
                         const Gap(10),
                         Expanded(
@@ -62,16 +64,26 @@ class CatalogListItem extends StatelessWidget {
                                     ? '${catalog?.nameKk}'
                                     : context.currentLocale.toString() == 'en'
                                         ? '${catalog?.nameEn}'
-                                        : context.currentLocale.toString() == 'uz'
+                                        : context.currentLocale.toString() ==
+                                                'uz'
                                             ? '${catalog?.nameUz}'
-                                            : '${catalog?.name}'
+                                            : context.currentLocale
+                                                        .toString() ==
+                                                    'zh'
+                                                ? '${catalog?.nameZh}'
+                                                : '${catalog?.name}'
                                 : context.currentLocale.toString() == 'kk'
                                     ? '${subCatalog?.nameKk}'
                                     : context.currentLocale.toString() == 'en'
                                         ? '${subCatalog?.nameEn}'
-                                        : context.currentLocale.toString() == 'uz'
+                                        : context.currentLocale.toString() ==
+                                                'uz'
                                             ? '${subCatalog?.nameUz}'
-                                            : '${subCatalog?.name}',
+                                            : context.currentLocale
+                                                        .toString() ==
+                                                    'zh'
+                                                ? '${subCatalog?.nameZh}'
+                                                : '${subCatalog?.name}',
                             // isCatalog ? '${catalog?.name}' : '${subCatalog?.name}',
                             style: AppTextStyles.fs14w500.copyWith(height: 1.2),
                           ),

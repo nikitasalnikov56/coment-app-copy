@@ -492,4 +492,10 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get translateComment => 'Tarjima';
+
+  @override
+  String get routeToCompany => 'Kompaniyaga marshrut';
+
+  @override
+  String get showOnMap => 'Xaritada ko\'rsatish';
 }

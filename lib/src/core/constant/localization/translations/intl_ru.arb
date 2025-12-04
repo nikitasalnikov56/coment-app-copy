@@ -153,5 +153,8 @@
   "emailIsRequired": "Email для связи обязателен",
   "invalidEmail": "Некорректный email адрес",
   "helperText":"минимум 9 символов",
-  "translateComment":"Перевод"
+  "translateComment":"Перевод",
+  "routeToCompany":"Маршрут до компании",
+  "showOnMap":"Показать на карте"
+
 }

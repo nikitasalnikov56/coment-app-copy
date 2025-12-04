@@ -9,7 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class SubcatalogPage extends StatefulWidget implements AutoRouteWrapper {
-  const SubcatalogPage({super.key, required this.title, required this.catalogId});
+  const SubcatalogPage(
+      {super.key, required this.title, required this.catalogId});
 
   final String title;
   final int catalogId;
@@ -32,7 +33,8 @@ class SubcatalogPage extends StatefulWidget implements AutoRouteWrapper {
 class _SubcatalogPageState extends State<SubcatalogPage> {
   @override
   void initState() {
-    BlocProvider.of<SubcatalogCubit>(context).getSubcatalogList(catalogId: widget.catalogId);
+    BlocProvider.of<SubcatalogCubit>(context)
+        .getSubcatalogList(catalogId: widget.catalogId);
     super.initState();
   }
 
@@ -77,16 +79,53 @@ class _SubcatalogPageState extends State<SubcatalogPage> {
                                 isCatalog: false,
                                 subCatalog: response[index],
                                 onTap: () {
-                                  context.router.push(ProductListRoute(
+                                  context.router.push(
+                                    ProductListRoute(
                                       subcatalogId: response[index].id,
                                       // subCatalogTitle: response[index].name,
-                                      subCatalogTitle: context.currentLocale.toString() == 'kk'
-                                          ? '${response[index].nameKk}'
-                                          : context.currentLocale.toString() == 'en'
-                                              ? '${response[index].nameEn}'
-                                              : context.currentLocale.toString() == 'uz'
-                                                  ? '${response[index].nameUz}'
-                                                  : response[index].name));
+                                      subCatalogTitle:
+                                          // context.currentLocale
+                                          //             .toString() ==
+                                          //         'kk'
+                                          //     ? '${response[index].nameKk}'
+                                          //     : context.currentLocale.toString() ==
+                                          //             'en'
+                                          //         ? '${response[index].nameEn}'
+                                          //         : context.currentLocale
+                                          //                     .toString() ==
+                                          //                 'uz'
+                                          //             ? '${response[index].nameUz}'
+                                          //             : context.currentLocale
+                                          //                         .toString() ==
+                                          //                     'zh'
+                                          //                 ? '${response[index].nameZh}'
+                                          //                 : response[index].name,
+                                          context.currentLocale.languageCode ==
+                                                  'kk'
+                                              ? response[index].nameKk ??
+                                                  response[index].name
+                                              : context.currentLocale
+                                                          .languageCode ==
+                                                      'en'
+                                                  ? response[index].nameEn ??
+                                                      response[index].name
+                                                  : context.currentLocale
+                                                              .languageCode ==
+                                                          'uz'
+                                                      ? response[index]
+                                                              .nameUz ??
+                                                          response[index].name
+                                                      : context.currentLocale
+                                                                  .languageCode ==
+                                                              'zh'
+                                                          ? response[index]
+                                                                  .nameZh ??
+                                                              response[index]
+                                                                  .name
+                                                          : response[index]
+                                                              .name,
+                                    ),
+                                  );
                                 },
                               );
                             },

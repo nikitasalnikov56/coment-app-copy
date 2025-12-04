@@ -490,4 +490,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translateComment => 'Translation';
+
+  @override
+  String get routeToCompany => 'Route to company';
+
+  @override
+  String get showOnMap => 'Show on map';
 }

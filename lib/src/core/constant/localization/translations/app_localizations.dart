@@ -9,6 +9,7 @@ import 'app_localizations_en.dart';
 import 'app_localizations_kk.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_uz.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -99,7 +100,8 @@ abstract class AppLocalizations {
     Locale('en'),
     Locale('kk'),
     Locale('ru'),
-    Locale('uz')
+    Locale('uz'),
+    Locale('zh')
   ];
 
   /// No description provided for @accountRegister.
@@ -1031,6 +1033,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translation'**
   String get translateComment;
+
+  /// No description provided for @routeToCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Route to company'**
+  String get routeToCompany;
+
+  /// No description provided for @showOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on map'**
+  String get showOnMap;
 }
 
 class _AppLocalizationsDelegate
@@ -1044,7 +1058,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'kk', 'ru', 'uz'].contains(locale.languageCode);
+      <String>['en', 'kk', 'ru', 'uz', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1061,6 +1075,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsRu();
     case 'uz':
       return AppLocalizationsUz();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

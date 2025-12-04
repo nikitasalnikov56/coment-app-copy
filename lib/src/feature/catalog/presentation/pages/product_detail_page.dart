@@ -22,10 +22,13 @@ import 'package:coment_app/src/feature/catalog/widgets/review_avatar.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
 import 'package:coment_app/src/feature/main/presentation/widgets/popular_feedback_item.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
@@ -33,7 +36,6 @@ class ProductDetailPage extends StatefulWidget implements AutoRouteWrapper {
   const ProductDetailPage({
     super.key,
     required this.productId,
-
   });
 
   final int productId;
@@ -64,7 +66,7 @@ class ProductDetailPage extends StatefulWidget implements AutoRouteWrapper {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   int totalRatingVotes = 0;
   int _selectedRating = 0;
- 
+
   // like / dislike
   List<bool> isLike = [];
   List<bool> isDislike = [];
@@ -72,7 +74,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   List<bool> isLikeLoading = [];
   List<bool> isDislikeLoading = [];
 
- 
+  //geocoding & map
+  late Future<LatLng?> _geocodedPosition;
+
   @override
   void initState() {
     BlocProvider.of<ProductInfoCubit>(context)
@@ -80,6 +84,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     super.initState();
   }
+
+
+Future<LatLng?> _geocodeAddress(String country, String city, String address) async {
+  final query = Uri.encodeComponent('$country, $city, $address');
+  final url = 'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1';
+
+  try {
+    final response = await Dio().get(url, options: Options(headers: {
+      'User-Agent': 'ComentApp/1.0 (contact@coment.app)'
+    }));
+    if (response.data is List && response.data.isNotEmpty) {
+      final lat = double.parse(response.data[0]['lat']);
+      final lon = double.parse(response.data[0]['lon']);
+      return LatLng(lat, lon);
+    }
+  } catch (e) {
+    // ignore
+  }
+  return null;
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +139,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             log('==$isDislikeLoading');
             log('===$isDislikeLoading');
           }
+
+          // 🔹 ЗАПУСК ГЕОКОДИНГА
+          final address = data.address ?? '';
+          final city = data.city?.name ?? '';
+          final country = data.country?.name ?? '';
+
+          if (address.isNotEmpty) {
+            _geocodedPosition = _geocodeAddress(country, city, address);
+          } else {
+            _geocodedPosition = Future.value(null);
+          }
+
         },
       );
     }, builder: (context, state) {
@@ -546,7 +583,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           //     ),
                           //   ],
                           // ),
-                         
                         ],
                       ),
                     ),
@@ -887,6 +923,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ),
         const Gap(10),
+        _mapWidget(data),
+        const Gap(10),
         Row(
           children: [
             SvgPicture.asset(AssetsConstants.icStar),
@@ -910,4 +948,102 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ],
     );
   }
+
+  // Widget _mapWidget(ProductDTO data) {
+  //   final address = data.address ?? '';
+  //   final cityName = data.city?.name ?? '';
+  //   final countryName = data.country?.name ?? '';
+
+
+  //   return GestureDetector(
+  //     onTap: () {
+  //       context.router.push(
+  //         MapRoute(
+  //           country: countryName,
+  //           city: cityName,
+  //           address: address,
+  //         ),
+  //       );
+  //     },
+  //     child: Container(
+  //       height: 120,
+  //       decoration: BoxDecoration(
+  //         color: AppColors.grey2,
+  //         borderRadius: BorderRadius.circular(12),
+  //       ),
+  //       child: Center(
+  //         child: 
+  //         Text(
+  //           context.localized.showOnMap,
+  //           style: AppTextStyles.fs14w500.copyWith(
+  //             color: AppColors.mainColor,
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+Widget _mapWidget(ProductDTO data) {
+  return GestureDetector(
+    onTap: () {
+     
+      context.router.push(
+        MapRoute(
+          country: data.country?.name ?? '',
+          city: data.city?.name ?? '',
+          address: data.address ?? '',
+        ),
+      );
+    },
+    child: Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: AppColors.grey2,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: FutureBuilder<LatLng?>(
+        future: _geocodedPosition,
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            final center = snapshot.data!;
+            return IgnorePointer(
+              child: FlutterMap(
+                options: MapOptions(
+                  initialCenter: center,
+                  initialZoom: 15,
+                  interactionOptions: const InteractionOptions(flags: InteractiveFlag.none),
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.coment.app',
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: center,
+                        width: 24,
+                        height: 24,
+                        child: const Icon(Icons.location_on, color: Colors.red, size: 20),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          } else {
+            // fallback — текст, если геокодинг не удался
+            return Center(
+              child: Text(
+                context.localized.showOnMap,
+                style: AppTextStyles.fs14w500.copyWith(color: AppColors.mainColor),
+              ),
+            );
+          }
+        },
+      ),
+    ),
+  );
+}
+
 }

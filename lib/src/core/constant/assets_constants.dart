@@ -97,6 +97,7 @@ class AssetsConstants {
   static const String icEditProfile = 'assets/icons/ic-edit-profile.svg';
   static const String icHelpdesk = 'assets/icons/ic-helpdesk.svg';
   static const String icKaz = 'assets/icons/ic-kaz.svg';
+  static const String icCn = 'assets/icons/ic-cn.svg';
   static const String icLanguage = 'assets/icons/ic-language.svg';
   static const String icLike = 'assets/icons/ic-like.svg';
   static const String icLocation = 'assets/icons/ic-location.svg';

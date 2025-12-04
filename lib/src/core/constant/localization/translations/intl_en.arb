@@ -153,5 +153,7 @@
   "emailIsRequired": "Contact email is required",
   "invalidEmail": "Invalid email address",
   "helperText":"minimum 9 characters",
-  "translateComment":"Translation"
+  "translateComment":"Translation",
+  "routeToCompany":"Route to company",
+  "showOnMap":"Show on map"
 }

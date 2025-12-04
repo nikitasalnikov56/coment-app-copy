@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> {
   List<String> languageFlag = [
     AssetsConstants.icKaz,
     AssetsConstants.icRus,
-   AssetsConstants.icUz,
+    AssetsConstants.icUz,
     AssetsConstants.icUsa,
   ];
 
@@ -84,7 +84,8 @@ class _MainPageState extends State<MainPage> {
     BlocProvider.of<ProductListCubit>(context).getPopularProductList();
     BlocProvider.of<PopularFeedbacksCubit>(context).getPopularFeedbacks();
     if (context.appBloc.isAuthenticated) {
-      BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+      BlocProvider.of<ProfileBLoC>(context)
+          .add(const ProfileEvent.getProfile());
     } else {
       selectedLanguage = languageFlag[1];
     }
@@ -106,12 +107,13 @@ class _MainPageState extends State<MainPage> {
         onRefresh: () {
           log('${context.repository.authRepository.user?.city?.name}');
           BlocProvider.of<DictionaryCubit>(context).getDictionary();
-          BlocProvider.of<ProductListCubit>(context)
-              .getPopularProductList(cityId: context.repository.authRepository.cityId);
-          BlocProvider.of<PopularFeedbacksCubit>(context)
-              .getPopularFeedbacks(cityId: context.repository.authRepository.cityId);
+          BlocProvider.of<ProductListCubit>(context).getPopularProductList(
+              cityId: context.repository.authRepository.cityId);
+          BlocProvider.of<PopularFeedbacksCubit>(context).getPopularFeedbacks(
+              cityId: context.repository.authRepository.cityId);
           if (context.appBloc.isAuthenticated) {
-            BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+            BlocProvider.of<ProfileBLoC>(context)
+                .add(const ProfileEvent.getProfile());
           }
           _refreshController.refreshCompleted();
         },
@@ -154,7 +156,8 @@ class _MainPageState extends State<MainPage> {
                           decoration: BoxDecoration(
                               color: AppColors.backgroundColor,
                               border: Border.all(color: AppColors.borderColor),
-                              borderRadius: const BorderRadius.all(Radius.circular(16))),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(16))),
                           child: Material(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(16),
@@ -172,10 +175,17 @@ class _MainPageState extends State<MainPage> {
                                 );
                               },
                               child: Padding(
-                                padding: selectedLanguage == AssetsConstants.frame
-                                    ? const EdgeInsets.symmetric(vertical: 12, horizontal: 12)
-                                    : const EdgeInsets.symmetric(vertical: 14, horizontal: 11),
-                                child: SvgPicture.asset(selectedLanguage ?? 'assets/icons/Frame.svg'),
+                                padding:
+                                    selectedLanguage == AssetsConstants.frame
+                                        ? const EdgeInsets.symmetric(
+                                            vertical: 12, horizontal: 12)
+                                        : const EdgeInsets.symmetric(
+                                            vertical: 14, horizontal: 11),
+                                child: SvgPicture.asset(
+                                  selectedLanguage ?? 'assets/icons/Frame.svg',
+                                  width: 19,
+                                  height: 19,
+                                ),
                               ),
                             ),
                           ),
@@ -189,13 +199,15 @@ class _MainPageState extends State<MainPage> {
                                       color: AppColors.borderColor,
                                     )),
                                 readOnly: true,
-                                onTap: () => context.router.push(const AddFeedbackSearchingRoute()))),
+                                onTap: () => context.router
+                                    .push(const AddFeedbackSearchingRoute()))),
                         const Gap(4),
                         DecoratedBox(
                           decoration: BoxDecoration(
                               color: AppColors.backgroundColor,
                               border: Border.all(color: AppColors.borderColor),
-                              borderRadius: const BorderRadius.all(Radius.circular(16))),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(16))),
                           child: Material(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(16),
@@ -207,13 +219,19 @@ class _MainPageState extends State<MainPage> {
                                   list: data,
                                   cityId: context.appBloc.isAuthenticated
                                       ? cityId
-                                      : context.repository.authRepository.cityId,
+                                      : context
+                                          .repository.authRepository.cityId,
                                   countryId: countryId,
                                   isGuest: (p0) {
                                     BlocProvider.of<ProductListCubit>(context)
-                                        .getPopularProductList(cityId: context.repository.authRepository.cityId);
-                                    BlocProvider.of<PopularFeedbacksCubit>(context)
-                                        .getPopularFeedbacks(cityId: context.repository.authRepository.cityId);
+                                        .getPopularProductList(
+                                            cityId: context.repository
+                                                .authRepository.cityId);
+                                    BlocProvider.of<PopularFeedbacksCubit>(
+                                            context)
+                                        .getPopularFeedbacks(
+                                            cityId: context.repository
+                                                .authRepository.cityId);
                                   },
                                 );
                               },
@@ -255,7 +273,8 @@ class _MainPageState extends State<MainPage> {
                               shrinkWrap: true,
                               padding: const EdgeInsets.only(left: 16, top: 2),
                               scrollDirection: Axis.horizontal,
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 childAspectRatio: 1,
                                 crossAxisSpacing: 8,
@@ -265,25 +284,43 @@ class _MainPageState extends State<MainPage> {
                               // itemCount: catalogTitle.length,
                               itemBuilder: (context, index) {
                                 return CatalogGridItem(
-                                  title: context.currentLocale.toString() == 'kk'
+                                  title: context.currentLocale.toString() ==
+                                          'kk'
                                       ? '${mainDTO.catalog?[index].nameKk}'
                                       : context.currentLocale.toString() == 'en'
                                           ? '${mainDTO.catalog?[index].nameEn}'
-                                          : context.currentLocale.toString() == 'uz'
+                                          : context.currentLocale.toString() ==
+                                                  'uz'
                                               ? '${mainDTO.catalog?[index].nameUz}'
-                                              : '${mainDTO.catalog?[index].name}',
-                                  image: mainDTO.catalog?[index].image ?? NOT_FOUND_IMAGE,
+                                              : context.currentLocale
+                                                          .toString() ==
+                                                      'zh'
+                                                  ? '${mainDTO.catalog?[index].nameZh}'
+                                                  : '${mainDTO.catalog?[index].name}',
+                                  image: mainDTO.catalog?[index].image ??
+                                      NOT_FOUND_IMAGE,
                                   index: index,
                                   onTap: () {
                                     context.router.push(SubcatalogRoute(
-                                        title: context.currentLocale.toString() == 'kk'
+                                        title: context.currentLocale
+                                                    .toString() ==
+                                                'kk'
                                             ? '${mainDTO.catalog?[index].nameKk}'
-                                            : context.currentLocale.toString() == 'en'
+                                            : context.currentLocale
+                                                        .toString() ==
+                                                    'en'
                                                 ? '${mainDTO.catalog?[index].nameEn}'
-                                                : context.currentLocale.toString() == 'uz'
+                                                : context.currentLocale
+                                                            .toString() ==
+                                                        'uz'
                                                     ? '${mainDTO.catalog?[index].nameUz}'
-                                                    : '${mainDTO.catalog?[index].name}',
-                                        catalogId: mainDTO.catalog?[index].id ?? 0));
+                                                    : context.currentLocale
+                                                                .toString() ==
+                                                            'zh'
+                                                        ? '${mainDTO.catalog?[index].nameZh}'
+                                                        : '${mainDTO.catalog?[index].name}',
+                                        catalogId:
+                                            mainDTO.catalog?[index].id ?? 0));
                                   },
                                 );
                               },
@@ -306,9 +343,11 @@ class _MainPageState extends State<MainPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 18, bottom: 12, left: 16, right: 16),
+                                  padding: const EdgeInsets.only(
+                                      top: 18, bottom: 12, left: 16, right: 16),
                                   child: Text(
-                                    context.localized.they_are_discussing_it_now,
+                                    context
+                                        .localized.they_are_discussing_it_now,
                                     style: AppTextStyles.fs16w600,
                                   ),
                                 ),
@@ -316,11 +355,13 @@ class _MainPageState extends State<MainPage> {
                                   height: 240,
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                                    padding: const EdgeInsets.only(top: 3, left: 19, right: 3),
+                                    padding: const EdgeInsets.only(
+                                        top: 3, left: 19, right: 3),
                                     scrollDirection: Axis.horizontal,
                                     itemCount: data.length,
                                     itemBuilder: (context, index) {
-                                      return PopularProductItem(data: data[index]);
+                                      return PopularProductItem(
+                                          data: data[index]);
                                     },
                                   ),
                                 ),
@@ -344,7 +385,8 @@ class _MainPageState extends State<MainPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10, bottom: 12, left: 16),
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 12, left: 16),
                                   child: Text(
                                     context.localized.popular_reviews,
                                     style: AppTextStyles.fs16w600,
@@ -353,17 +395,21 @@ class _MainPageState extends State<MainPage> {
                                 SizedBox(
                                   height: 130,
                                   child: ListView.builder(
-                                    padding: const EdgeInsets.only(top: 3, left: 19, right: 3),
+                                    padding: const EdgeInsets.only(
+                                        top: 3, left: 19, right: 3),
                                     scrollDirection: Axis.horizontal,
                                     itemCount: data.length,
                                     itemBuilder: (context, index) {
                                       return PopularFeedbackItem(
                                         data: data[index],
                                         onTap: () {
-                                          context.router.push(FeedbackDetailRoute(
-                                              needPageCard: true,
-                                              id: data[index].id ?? 0,
-                                              userId: data[index].user?.id ?? 0));
+                                          context.router.push(
+                                              FeedbackDetailRoute(
+                                                  needPageCard: true,
+                                                  id: data[index].id ?? 0,
+                                                  userId:
+                                                      data[index].user?.id ??
+                                                          0));
                                         },
                                       );
                                     },
@@ -374,8 +420,7 @@ class _MainPageState extends State<MainPage> {
                           : Container());
                 },
               ),
-             
-             
+
               const Gap(30),
             ],
           ),
@@ -418,7 +463,8 @@ class _MainPageState extends State<MainPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 18, bottom: 12, left: 16, right: 16),
+            padding:
+                const EdgeInsets.only(top: 18, bottom: 12, left: 16, right: 16),
             child: Text(
               context.localized.they_are_discussing_it_now,
               style: AppTextStyles.fs16w600,

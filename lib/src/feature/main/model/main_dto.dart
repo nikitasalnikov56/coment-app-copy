@@ -26,6 +26,7 @@ class CityDTO with _$CityDTO {
     @JsonKey(name: 'name_kk') String? nameKk,
     @JsonKey(name: 'name_en') String? nameEn,
     @JsonKey(name: 'name_uz') String? nameUz,
+    @JsonKey(name: 'name_zh') String? nameZh,
     CountryDTO? country,
   }) = _CityDTO;
 
@@ -40,6 +41,7 @@ class LanguageDTO with _$LanguageDTO {
     @JsonKey(name: 'name_kk') String? nameKk,
     @JsonKey(name: 'name_en') String? nameEn,
     @JsonKey(name: 'name_uz') String? nameUz,
+    @JsonKey(name: 'name_zh') String? nameZh,
     CountryDTO? country,
   }) = _LanguageDTO;
 
@@ -54,6 +56,7 @@ class CountryDTO with _$CountryDTO {
     @JsonKey(name: 'name_kk') String? nameKk,
     @JsonKey(name: 'name_en') String? nameEn,
     @JsonKey(name: 'name_uz') String? nameUz,
+    @JsonKey(name: 'name_zh') String? nameZh,
   }) = _CountryDTO;
 
   factory CountryDTO.fromJson(Map<String, dynamic> json) => _$CountryDTOFromJson(json);
@@ -68,6 +71,7 @@ class CatalogDTO with _$CatalogDTO {
     @JsonKey(name: 'name_kk') String? nameKk,
     @JsonKey(name: 'name_en') String? nameEn,
     @JsonKey(name: 'name_uz') String? nameUz,
+    @JsonKey(name: 'name_zh') String? nameZh,
     String? image,
   }) = _CatalogDTO;
 
@@ -82,6 +86,7 @@ class SubCatalogDTO with _$SubCatalogDTO {
     @JsonKey(name: 'name_kk') String? nameKk,
     @JsonKey(name: 'name_en') String? nameEn,
     @JsonKey(name: 'name_uz') String? nameUz,
+    @JsonKey(name: 'name_zh') String? nameZh,
     CatalogDTO? catalog,
     @JsonKey(name: 'created_at') String? createdAt,
   }) = _SubCatalogDTO;

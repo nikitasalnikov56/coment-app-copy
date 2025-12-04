@@ -490,4 +490,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translateComment => 'Перевод';
+
+  @override
+  String get routeToCompany => 'Маршрут до компании';
+
+  @override
+  String get showOnMap => 'Показать на карте';
 }

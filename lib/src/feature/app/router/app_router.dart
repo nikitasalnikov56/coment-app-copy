@@ -8,6 +8,7 @@ import 'package:coment_app/src/feature/catalog/presentation/pages/add_feedback_s
 import 'package:coment_app/src/feature/catalog/presentation/pages/filter_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/leave_feedback_detail_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/leave_feedback_page.dart';
+import 'package:coment_app/src/feature/catalog/presentation/pages/map_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/product_list_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/read_all_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/select_categories_page.dart';
@@ -32,7 +33,8 @@ part 'app_router.gr.dart';
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
   @override
-  RouteType get defaultRouteType => const RouteType.material(); //.cupertino, .adaptive ..etc
+  RouteType get defaultRouteType =>
+      const RouteType.material(); //.cupertino, .adaptive ..etc
 
   @override
   List<AutoRoute> get routes => [
@@ -113,6 +115,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: AddFeedbackSearchingRoute.page),
         AutoRoute(page: SelectCategoriesRoute.page),
         AutoRoute(page: LeaveFeedbackDetailRoute.page),
+        AutoRoute(page: MapRoute.page),
       ];
 }
 
@@ -130,3 +133,5 @@ class BaseCatalogPage extends AutoRouter {
 class BaseProfilePage extends AutoRouter {
   const BaseProfilePage({super.key});
 }
+
+

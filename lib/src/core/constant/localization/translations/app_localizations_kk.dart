@@ -492,4 +492,10 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get translateComment => 'Аударма';
+
+  @override
+  String get routeToCompany => 'Компанияға дейінгі маршрут';
+
+  @override
+  String get showOnMap => 'Картада көрсету';
 }
