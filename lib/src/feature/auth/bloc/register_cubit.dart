@@ -2,7 +2,7 @@ import 'package:coment_app/src/feature/app/logic/notification_service.dart';
 import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
+// import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:coment_app/src/feature/auth/data/auth_repository.dart';

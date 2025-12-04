@@ -6,7 +6,7 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gcaptcha_v3/web_view.dart';
+// import 'package:flutter_gcaptcha_v3/web_view.dart';
 import 'package:gap/gap.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:coment_app/src/core/presentation/widgets/buttons/custom_button.dart';
@@ -210,10 +210,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           .copyWith(color: AppColors.kF5F6F7),
                     ),
                     onPressed: () {
-                      if (tempDate != null) {
-                        birthDateController.text =
-                            tempDate.toIso8601String().split('T')[0];
-                      }
+                      birthDateController.text =
+                          tempDate.toIso8601String().split('T')[0];
                       Navigator.pop(context);
                     },
                   ),
@@ -330,11 +328,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                           validator: (String? value) {
                             return null;
-
-                            // return _emailError.value = ValidatorUtil.emailValidator(
-                            //   emailController.text,
-                            //   errorLabel: 'Неверный логин',
-                            // );
                           },
                         ),
                         const Gap(16),
@@ -450,16 +443,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                               validator: (String? value) {
                                 return null;
-
-                                // if (value == null || value.isEmpty) {
-                                //   return _passwordError.value = 'Обязательно к заполнению';
-                                // }
-
-                                // if (value.length < 6) {
-                                //   return _passwordError.value = 'Минимальная длина пароля - 6';
-                                // }
-
-                                // return _passwordError.value = null;
                               },
                             );
                           },
@@ -474,10 +457,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             String fullPhoneNumber =
                                 selectedCountry!.code + nationalNumber;
                             fullPhoneNumber = fullPhoneNumber
-                                .trim(); // ← убираем пробелы в начале/конце
-                            print(
-                                'FINAL PHONE: "${fullPhoneNumber.runtimeType}"');
-
+                                .trim();
                             BlocProvider.of<RegisterCubit>(context).register(
                               email: emailController.text,
                               name: surnameNameController.text,

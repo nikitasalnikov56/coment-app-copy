@@ -239,11 +239,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           .copyWith(color: AppColors.kF5F6F7),
                     ),
                     onPressed: () {
-                      if (tempDate != null) {
-                        birthDateController.text =
-                            tempDate.toIso8601String().split('T')[0];
-                      }
-                      if (context.mounted) {
+                      birthDateController.text =
+                          tempDate.toIso8601String().split('T')[0];
+                                          if (context.mounted) {
                         setState(() {});
                       }
                       Navigator.pop(context);
@@ -664,7 +662,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               child: CustomButton(
                                 allowTapButton: _allowTapButton,
                                 onPressed: () {
-                                  print(birthDateController.text);
                                   if (_formKey.currentState!.validate()) {
                                     log('$image', name: 'image');
                                     log(surnameController.text, name: 'name');
