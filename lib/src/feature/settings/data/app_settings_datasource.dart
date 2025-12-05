@@ -99,13 +99,15 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
       );
     }
 
-    Locale? appLocale;
+   Locale? appLocale;
 
-    if (languageCode != null) {
+    if (languageCode != null && countryCode != null) {
       appLocale = Locale(
         languageCode,
         countryCode,
       );
+    } else{
+      appLocale = const Locale('ru', 'RU');
     }
 
     return AppSettings(

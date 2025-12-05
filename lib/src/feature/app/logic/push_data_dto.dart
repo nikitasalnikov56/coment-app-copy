@@ -11,6 +11,7 @@ class PushDataDTO with _$PushDataDTO {
     String? body,
     String? type,
     String? title,
+    @JsonKey(name: 'feedbackId')
     String? feedbackId,
   }) = _PushDataDTO;
 
