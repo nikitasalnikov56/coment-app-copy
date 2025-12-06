@@ -430,7 +430,8 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                         await BlocProvider.of<LeaveFeedbackCubit>(context)
                             .createFeedback(
                           feedbackPayload: feedbackPayload,
-                          image: imageFileList,
+                          imageFeedback: imageFileList,
+
                         );
                         // }
                       },

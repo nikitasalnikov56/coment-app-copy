@@ -16,7 +16,7 @@ abstract interface class ICatalogRepository {
 
   Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
-    List<File>? image,
+    List<File>? imageFeedback,
   });
 
   Future<BasicResponse> createNewProduct(
@@ -85,9 +85,9 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> createFeedback({required FeedbackPayload feedbackPayload, List<File>? image}) async {
+  Future<Map<String, dynamic>> createFeedback({required FeedbackPayload feedbackPayload, List<File>? imageFeedback}) async {
     try {
-      return await _remoteDS.createFeedback(feedbackPayload: feedbackPayload, image: image);
+      return await _remoteDS.createFeedback(feedbackPayload: feedbackPayload, imageFeedback: imageFeedback);
     } catch (e) {
       rethrow;
     }

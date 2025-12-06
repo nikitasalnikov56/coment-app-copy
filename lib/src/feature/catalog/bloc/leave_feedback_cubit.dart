@@ -17,13 +17,13 @@ class LeaveFeedbackCubit extends Cubit<LeaveFeedbackState> {
 
   Future<void> createFeedback({
     required FeedbackPayload feedbackPayload,
-    List<File>? image,
+    List<File>? imageFeedback,
   }) async {
     try {
       emit(const LeaveFeedbackState.loading());
 
       final response = await _repository.createFeedback(
-          feedbackPayload: feedbackPayload, image: image);
+          feedbackPayload: feedbackPayload, imageFeedback: imageFeedback);
 
 
       final wasToxic = response['wasToxic'] == true;

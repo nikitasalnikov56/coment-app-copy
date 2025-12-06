@@ -17,7 +17,7 @@ abstract interface class ICatalogRemoteDS {
 
   Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
-    List<File>? image,
+    List<File>? imageFeedback,
   });
 
   Future<BasicResponse> createNewProduct(
@@ -138,7 +138,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   @override
   Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
-    List<File>? image,
+    List<File>? imageFeedback, 
   }) async {
     try {
       final Map<String, dynamic> data = {
@@ -148,16 +148,17 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
 
       final FormData formData = FormData.fromMap(data);
 
-      if (image != null && image.isNotEmpty) {
-        for (int i = 0; i < image.length; i++) {
+      if (imageFeedback != null && imageFeedback.isNotEmpty) {
+        for (int i = 0; i < imageFeedback.length; i++) {
           formData.files.add(
             MapEntry(
-              'image[]',
-              await MultipartFile.fromFile(image[i].path),
+              'image_feedback[]',
+              await MultipartFile.fromFile(imageFeedback[i].path),
             ),
           );
         }
       }
+       
 
       final Map<String, dynamic> response = await restClient.post(
         // 'feedback/${feedbackPayload.productId}/create',
@@ -172,6 +173,8 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       rethrow;
     }
   }
+
+
 
   @override
   Future<BasicResponse> createNewProduct({
@@ -196,15 +199,17 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       if (countryId != 0) data['country_id'] = countryId;
       if (name.isNotEmpty) data['name'] = name;
       if (address.isNotEmpty) data['address'] = address;
-      if (organisationPhone.isNotEmpty)
+      if (organisationPhone.isNotEmpty) {
         data['organisation_phone'] = organisationPhone;
+      }
       if (websiteUrl.isNotEmpty) data['website_url'] = websiteUrl;
       if (catalogId != 0) data['catalog_id'] = catalogId;
       if (subCatalogId != 0) data['sub_catalog_id'] = subCatalogId;
       if (comment.isNotEmpty) data['comment'] = comment;
       if (rating != 0) data['rating'] = rating;
-      if ((nameSubCatalog ?? '').isNotEmpty)
+      if ((nameSubCatalog ?? '').isNotEmpty) {
         data['name_sub_catalog'] = nameSubCatalog;
+      }
 
       final FormData formData = FormData.fromMap(data);
 
