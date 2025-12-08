@@ -19,16 +19,20 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 @RoutePage()
-class AddFeedbackSearchingPage extends StatefulWidget implements AutoRouteWrapper {
+class AddFeedbackSearchingPage extends StatefulWidget
+    implements AutoRouteWrapper {
   const AddFeedbackSearchingPage({super.key});
 
   @override
-  State<AddFeedbackSearchingPage> createState() => _AddFeedbackSearchingPageState();
+  State<AddFeedbackSearchingPage> createState() =>
+      _AddFeedbackSearchingPageState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (context) => SearchProductListCubit(repository: context.repository.catalogRepository))
+      BlocProvider(
+          create: (context) => SearchProductListCubit(
+              repository: context.repository.catalogRepository))
     ], child: this);
   }
 }
@@ -78,7 +82,8 @@ class _AddFeedbackSearchingPageState extends State<AddFeedbackSearchingPage> {
                           orElse: () => Container(),
                           loading: () => Container(
                                 padding: const EdgeInsets.only(top: 300),
-                                child: const CircularProgressIndicator.adaptive(),
+                                child:
+                                    const CircularProgressIndicator.adaptive(),
                               ),
                           loaded: (data) => data.isNotEmpty
                               ? Expanded(
@@ -86,21 +91,32 @@ class _AddFeedbackSearchingPageState extends State<AddFeedbackSearchingPage> {
                                     header: const RefreshClassicHeader(),
                                     controller: _refreshController,
                                     onRefresh: () {
-                                      BlocProvider.of<SearchProductListCubit>(context).getSearchProductList(
-                                          search: searchController.text, hasDelay: true, hasLoading: true);
+                                      BlocProvider.of<SearchProductListCubit>(
+                                              context)
+                                          .getSearchProductList(
+                                              search: searchController.text,
+                                              hasDelay: true,
+                                              hasLoading: true);
                                       _refreshController.refreshCompleted();
                                     },
                                     child: ListView.separated(
                                       shrinkWrap: true,
-                                      padding: const EdgeInsets.only(top: 22, left: 16, right: 16),
+                                      padding: const EdgeInsets.only(
+                                          top: 22, left: 16, right: 16),
                                       itemCount: data.length,
-                                      separatorBuilder: (context, index) => const Gap(16),
+                                      separatorBuilder: (context, index) =>
+                                          const Gap(16),
                                       itemBuilder: (context, index) {
                                         return ProductItem(
                                           product: data[index],
                                           onTap: () {
-                                            if (data[index].branches == null || (data[index].branches ?? []).isEmpty) {
-                                              context.router.push(ProductDetailRoute(productId: data[index].id ?? 0));
+                                            if (data[index].branches == null ||
+                                                (data[index].branches ?? [])
+                                                    .isEmpty) {
+                                              context.router.push(
+                                                  ProductDetailRoute(
+                                                      productId:
+                                                          data[index].id ?? 0));
                                             } else {
                                               BranchesBottomSheet.show(
                                                 context,
@@ -205,7 +221,11 @@ class _AddFeedbackSearchingPageState extends State<AddFeedbackSearchingPage> {
             ),
             onChanged: (p0) {
               initialBackground = false;
-              BlocProvider.of<SearchProductListCubit>(context).getSearchProductList(search: searchController.text);
+              BlocProvider.of<SearchProductListCubit>(context)
+                  .getSearchProductList(
+                search: searchController.text,
+                // hasLoading: true,
+              );
               setState(() {});
             },
             // readOnly: true,

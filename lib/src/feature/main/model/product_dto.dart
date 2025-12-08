@@ -22,7 +22,7 @@ class ProductDTO with _$ProductDTO {
     CountryDTO? country,
     CityDTO? city,
     double? rating,
-    @JsonKey(name: 'feedback_count') int? feedbackCount,
+    @JsonKey(name: 'feedback_count')  int? feedbackCount,
     @JsonKey(name: 'rating_counts') RatingDTO? ratingCounts,
     @JsonKey(name: 'feedback_images') List<String>? feedbackImages,
     List<BranchesDTO>? branches,

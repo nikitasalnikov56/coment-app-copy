@@ -5029,11 +5029,11 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         baseUrl: 'http://10.0.2.2:3001/api/v1/',
-      //  baseUrl: 'https://fc181fc5540d.ngrok-free.app/api/v1/',
+      //  baseUrl: 'https://3090098a8aaf.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           baseUrl: 'http://10.0.2.2:3001/api/v1/',
-          // baseUrl: 'https://fc181fc5540d.ngrok-free.app/api/v1/',
+          // baseUrl: 'https://3090098a8aaf.ngrok-free.app/api/v1/',
           // baseUrl: 'http://192.168.0.100:3001/api/v1/',
           interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,
@@ -5560,8 +5560,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 class $AppDatabaseManager {
-  final _$AppDatabase db;
-  $AppDatabaseManager(this.db);
+  final _$AppDatabase _db;
+  $AppDatabaseManager(this._db);
 }
 
 
@@ -10828,13 +10828,13 @@ BasicResponse _$BasicResponseFromJson(Map<String, dynamic> json) =>
       ok: json['ok'] as bool?,
     );
 
-// Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
-//     <String, dynamic>{
-//       'statusCode': instance.statusCode,
-//       'message': instance.message,
-//       'data': instance.data,
-//       'ok': instance.ok,
-//     };
+Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
+    <String, dynamic>{
+      'statusCode': instance.statusCode,
+      'message': instance.message,
+      'data': instance.data,
+      'ok': instance.ok,
+    };
 
 
 
@@ -38449,10 +38449,10 @@ mixin _$ComplainDTO {
   int? get id => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
   String? get type =>
-      throw _privateConstructorUsedError; 
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: 'created_at')
   String? get createdAt =>
-      throw _privateConstructorUsedError; 
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: 'updated_at')
   String? get updatedAt => throw _privateConstructorUsedError;
 
@@ -38605,11 +38605,11 @@ class _$ComplainDTOImpl implements _ComplainDTO {
   final String? text;
   @override
   final String? type;
-
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
-
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'updated_at')
   final String? updatedAt;
@@ -38671,10 +38671,10 @@ abstract class _ComplainDTO implements ComplainDTO {
   @override
   String? get text;
   @override
-  String? get type; 
+  String? get type; // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'created_at')
-  String? get createdAt; 
+  String? get createdAt; // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'updated_at')
   String? get updatedAt;
@@ -39167,16 +39167,20 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 @RoutePage()
-class AddFeedbackSearchingPage extends StatefulWidget implements AutoRouteWrapper {
+class AddFeedbackSearchingPage extends StatefulWidget
+    implements AutoRouteWrapper {
   const AddFeedbackSearchingPage({super.key});
 
   @override
-  State<AddFeedbackSearchingPage> createState() => _AddFeedbackSearchingPageState();
+  State<AddFeedbackSearchingPage> createState() =>
+      _AddFeedbackSearchingPageState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (context) => SearchProductListCubit(repository: context.repository.catalogRepository))
+      BlocProvider(
+          create: (context) => SearchProductListCubit(
+              repository: context.repository.catalogRepository))
     ], child: this);
   }
 }
@@ -39226,7 +39230,8 @@ class _AddFeedbackSearchingPageState extends State<AddFeedbackSearchingPage> {
                           orElse: () => Container(),
                           loading: () => Container(
                                 padding: const EdgeInsets.only(top: 300),
-                                child: const CircularProgressIndicator.adaptive(),
+                                child:
+                                    const CircularProgressIndicator.adaptive(),
                               ),
                           loaded: (data) => data.isNotEmpty
                               ? Expanded(
@@ -39234,21 +39239,32 @@ class _AddFeedbackSearchingPageState extends State<AddFeedbackSearchingPage> {
                                     header: const RefreshClassicHeader(),
                                     controller: _refreshController,
                                     onRefresh: () {
-                                      BlocProvider.of<SearchProductListCubit>(context).getSearchProductList(
-                                          search: searchController.text, hasDelay: true, hasLoading: true);
+                                      BlocProvider.of<SearchProductListCubit>(
+                                              context)
+                                          .getSearchProductList(
+                                              search: searchController.text,
+                                              hasDelay: true,
+                                              hasLoading: true);
                                       _refreshController.refreshCompleted();
                                     },
                                     child: ListView.separated(
                                       shrinkWrap: true,
-                                      padding: const EdgeInsets.only(top: 22, left: 16, right: 16),
+                                      padding: const EdgeInsets.only(
+                                          top: 22, left: 16, right: 16),
                                       itemCount: data.length,
-                                      separatorBuilder: (context, index) => const Gap(16),
+                                      separatorBuilder: (context, index) =>
+                                          const Gap(16),
                                       itemBuilder: (context, index) {
                                         return ProductItem(
                                           product: data[index],
                                           onTap: () {
-                                            if (data[index].branches == null || (data[index].branches ?? []).isEmpty) {
-                                              context.router.push(ProductDetailRoute(productId: data[index].id ?? 0));
+                                            if (data[index].branches == null ||
+                                                (data[index].branches ?? [])
+                                                    .isEmpty) {
+                                              context.router.push(
+                                                  ProductDetailRoute(
+                                                      productId:
+                                                          data[index].id ?? 0));
                                             } else {
                                               BranchesBottomSheet.show(
                                                 context,
@@ -39353,7 +39369,11 @@ class _AddFeedbackSearchingPageState extends State<AddFeedbackSearchingPage> {
             ),
             onChanged: (p0) {
               initialBackground = false;
-              BlocProvider.of<SearchProductListCubit>(context).getSearchProductList(search: searchController.text);
+              BlocProvider.of<SearchProductListCubit>(context)
+                  .getSearchProductList(
+                search: searchController.text,
+                // hasLoading: true,
+              );
               setState(() {});
             },
             // readOnly: true,
@@ -43267,176 +43287,6 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
                             ),
                           ),
                           const Gap(4),
-
-                          ///
-                          ///Like unlike Buttons
-                          ///
-
-                          // Row(
-                          //   children: [
-                          //     if (isLikeLoading[index] == true)
-                          //       const Padding(
-                          //         padding: EdgeInsets.all(3.0),
-                          //         child: CircularProgressIndicator.adaptive(
-                          //           backgroundColor: AppColors.mainColor,
-                          //         ),
-                          //       )
-                          //     else
-                          //       GestureDetector(
-                          //         onTap: context.appBloc.isAuthenticated
-                          //             ? () {
-                          //                 if (!isLike[index] &&
-                          //                     !isDislike[index]) {
-                          //                   BlocProvider.of<LikeCommentCubit>(
-                          //                           context)
-                          //                       .likeComment(
-                          //                           feedbackId:
-                          //                               feedback[index].id ?? 0,
-                          //                           type: 'like');
-                          //                   pressedDislike[index] = false;
-                          //                   isLikeLoading[index] = true;
-                          //                   setState(() {});
-                          //                 } else if (isLike[index] &&
-                          //                     !isDislike[index]) {
-                          //                   BlocProvider.of<LikeCommentCubit>(
-                          //                           context)
-                          //                       .dislikeComment(
-                          //                           feedbackId:
-                          //                               feedback[index].id ??
-                          //                                   0);
-                          //                   pressedDislike[index] = false;
-                          //                   isLikeLoading[index] = true;
-                          //                   setState(() {});
-                          //                 } else if (!isLike[index] &&
-                          //                     isDislike[index]) {
-                          //                   BlocProvider.of<LikeCommentCubit>(
-                          //                           context)
-                          //                       .dislikeComment(
-                          //                           feedbackId:
-                          //                               feedback[index].id ??
-                          //                                   0);
-                          //                   pressedDislike[index] = false;
-                          //                   isLikeLoading[index] = true;
-                          //                   setState(() {});
-                          //                 }
-                          //               }
-                          //             : () {
-                          //                 context.router
-                          //                     .push(const RegisterRoute());
-                          //               },
-                          //         child: Padding(
-                          //           padding: const EdgeInsets.all(4.0),
-                          //           child: SvgPicture.asset(
-                          //             AssetsConstants.icLike,
-                          //             colorFilter: isLike[index] == true
-                          //                 ? const ColorFilter.mode(
-                          //                     AppColors.mainColor,
-                          //                     BlendMode.srcIn)
-                          //                 : const ColorFilter.mode(
-                          //                     Color(0xffc1c0c0),
-                          //                     BlendMode.srcIn),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     Text(
-                          //         feedback[index].likes == null
-                          //             ? '0'
-                          //             : '${feedback[index].likes}',
-                          //         style: AppTextStyles.fs12w500.copyWith(
-                          //             color: AppColors.greyTextColor3)),
-                          //     const SizedBox(width: 4),
-                          //     if (isDislikeLoading[index] == true)
-                          //       const Padding(
-                          //         padding: EdgeInsets.all(3.0),
-                          //         child: CircularProgressIndicator.adaptive(
-                          //           backgroundColor: AppColors.mainColor,
-                          //         ),
-                          //       )
-                          //     else
-                          //       GestureDetector(
-                          //         onTap: context.appBloc.isAuthenticated
-                          //             ? () {
-                          //                 if (!isDislike[index] &&
-                          //                     !isLike[index]) {
-                          //                   ComplainedBs.show(
-                          //                     context,
-                          //                     feedID: feedback[index].id,
-                          //                     isDislike: true,
-                          //                     isComplainedDislike:
-                          //                         (isComplained) {
-                          //                       BlocProvider.of<
-                          //                                   LikeCommentCubit>(
-                          //                               context)
-                          //                           .likeComment(
-                          //                               feedbackId:
-                          //                                   feedback[index]
-                          //                                           .id ??
-                          //                                       0,
-                          //                               type: 'dislike');
-                          //                       pressedDislike[index] = true;
-                          //                       setState(() {});
-                          //                     },
-                          //                   );
-                          //                 } else if (isDislike[index] &&
-                          //                     !isLike[index]) {
-                          //                   BlocProvider.of<LikeCommentCubit>(
-                          //                           context)
-                          //                       .dislikeComment(
-                          //                           feedbackId:
-                          //                               feedback[index].id ??
-                          //                                   0);
-                          //                   pressedDislike[index] = true;
-                          //                   setState(() {});
-                          //                 } else if (!isDislike[index] &&
-                          //                     isLike[index]) {
-                          //                   ComplainedBs.show(
-                          //                     context,
-                          //                     feedID: feedback[index].id,
-                          //                     isDislike: true,
-                          //                     isComplainedDislike:
-                          //                         (isComplained) {
-                          //                       BlocProvider.of<
-                          //                                   LikeCommentCubit>(
-                          //                               context)
-                          //                           .dislikeComment(
-                          //                               feedbackId:
-                          //                                   feedback[index]
-                          //                                           .id ??
-                          //                                       0);
-                          //                       pressedDislike[index] = true;
-                          //                       setState(() {});
-                          //                     },
-                          //                   );
-                          //                 }
-                          //               }
-                          //             : () {
-                          //                 context.router
-                          //                     .push(const RegisterRoute());
-                          //               },
-                          //         child: Padding(
-                          //           padding: const EdgeInsets.all(4.0),
-                          //           child: SvgPicture.asset(
-                          //             AssetsConstants.icDislike,
-                          //             colorFilter: isDislike[index] == true
-                          //                 ? const ColorFilter.mode(
-                          //                     AppColors.mainColor,
-                          //                     BlendMode.srcIn)
-                          //                 : const ColorFilter.mode(
-                          //                     Color(0xffc1c0c0),
-                          //                     BlendMode.srcIn),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     const SizedBox(width: 6),
-                          //     SvgPicture.asset(AssetsConstants.icComment),
-                          //     const SizedBox(width: 4),
-                          //     Text(
-                          //       feedback[index].repliesCount.toString(),
-                          //       style: AppTextStyles.fs12w500
-                          //           .copyWith(color: AppColors.greyTextColor3),
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),
@@ -46394,32 +46244,43 @@ class ProductItem extends StatelessWidget {
                       SvgPicture.asset(AssetsConstants.icStar),
                       const Gap(6),
                       Text(
-                        product.rating != null ? product.rating.toString() : '0',
+                        product.rating != null
+                            ? product.rating.toString()
+                            : '0',
                         style: AppTextStyles.fs14w500.copyWith(height: 1.2),
                       ),
                       const Gap(10),
                       Text(
-                        product.feedbackCount == 1
-                            ? '(${product.feedbackCount}  ${context.localized.feedbackLittle})'
-                            : '(${product.feedbackCount}  ${context.localized.reviewsLittle})',
-                        style: AppTextStyles.fs14w500.copyWith(height: 1.2, color: AppColors.greyTextColor2),
+                        '(${(product.feedbackCount ?? 0) == 1
+                            // Если количество отзывов равно 1, используем 'отзыв' (feedbackLittle)
+                            ? '${product.feedbackCount} ${context.localized.feedbackLittle}'
+                            // В противном случае используем 'отзывов' (reviewsLittle).
+                            : '${product.feedbackCount ?? 0} ${context.localized.reviewsLittle}'})',
+                        // product.feedbackCount == 1
+                        //     ? '(${product.feedbackCount}  ${context.localized.feedbackLittle})'
+                        //     : '(${product.feedbackCount}  ${context.localized.reviewsLittle})',
+                        style: AppTextStyles.fs14w500.copyWith(
+                            height: 1.2, color: AppColors.greyTextColor2),
                       ),
                     ],
                   ),
                   const Gap(12),
-                  if (product.branches != null && (product.branches ?? []).isNotEmpty)
+                  if (product.branches != null &&
+                      (product.branches ?? []).isNotEmpty)
                     GestureDetector(
                       onTap: onTapBranch,
                       child: Row(
                         children: [
                           Text(
                             'Выбрать филиал',
-                            style: AppTextStyles.fs14w500.copyWith(height: 1.2, color: AppColors.mainColor),
+                            style: AppTextStyles.fs14w500.copyWith(
+                                height: 1.2, color: AppColors.mainColor),
                           ),
                           const Gap(10),
                           SvgPicture.asset(
-                           AssetsConstants.shevronDown,
-                            colorFilter: const ColorFilter.mode(AppColors.mainColor, BlendMode.srcIn),
+                            AssetsConstants.shevronDown,
+                            colorFilter: const ColorFilter.mode(
+                                AppColors.mainColor, BlendMode.srcIn),
                           ),
                         ],
                       ),
@@ -58232,7 +58093,7 @@ class ProductDTO with _$ProductDTO {
     CountryDTO? country,
     CityDTO? city,
     double? rating,
-    @JsonKey(name: 'feedback_count') int? feedbackCount,
+    @JsonKey(name: 'feedback_count')  int? feedbackCount,
     @JsonKey(name: 'rating_counts') RatingDTO? ratingCounts,
     @JsonKey(name: 'feedback_images') List<String>? feedbackImages,
     List<BranchesDTO>? branches,

@@ -71,32 +71,43 @@ class ProductItem extends StatelessWidget {
                       SvgPicture.asset(AssetsConstants.icStar),
                       const Gap(6),
                       Text(
-                        product.rating != null ? product.rating.toString() : '0',
+                        product.rating != null
+                            ? product.rating.toString()
+                            : '0',
                         style: AppTextStyles.fs14w500.copyWith(height: 1.2),
                       ),
                       const Gap(10),
                       Text(
+                        // '(${(product.feedbackCount ?? 0) == 1
+                        //     // Если количество отзывов равно 1, используем 'отзыв' (feedbackLittle)
+                        //     ? '${product.feedbackCount} ${context.localized.feedbackLittle}'
+                        //     // В противном случае используем 'отзывов' (reviewsLittle).
+                        //     : '${product.feedbackCount ?? 0} ${context.localized.reviewsLittle}'})',
                         product.feedbackCount == 1
                             ? '(${product.feedbackCount}  ${context.localized.feedbackLittle})'
                             : '(${product.feedbackCount}  ${context.localized.reviewsLittle})',
-                        style: AppTextStyles.fs14w500.copyWith(height: 1.2, color: AppColors.greyTextColor2),
+                        style: AppTextStyles.fs14w500.copyWith(
+                            height: 1.2, color: AppColors.greyTextColor2),
                       ),
                     ],
                   ),
                   const Gap(12),
-                  if (product.branches != null && (product.branches ?? []).isNotEmpty)
+                  if (product.branches != null &&
+                      (product.branches ?? []).isNotEmpty)
                     GestureDetector(
                       onTap: onTapBranch,
                       child: Row(
                         children: [
                           Text(
                             'Выбрать филиал',
-                            style: AppTextStyles.fs14w500.copyWith(height: 1.2, color: AppColors.mainColor),
+                            style: AppTextStyles.fs14w500.copyWith(
+                                height: 1.2, color: AppColors.mainColor),
                           ),
                           const Gap(10),
                           SvgPicture.asset(
-                           AssetsConstants.shevronDown,
-                            colorFilter: const ColorFilter.mode(AppColors.mainColor, BlendMode.srcIn),
+                            AssetsConstants.shevronDown,
+                            colorFilter: const ColorFilter.mode(
+                                AppColors.mainColor, BlendMode.srcIn),
                           ),
                         ],
                       ),
