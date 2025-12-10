@@ -49,7 +49,7 @@ abstract interface class ICatalogRemoteDS {
 
   Future<Map<String, dynamic>> translateReview(
       {required int reviewId, required String targetLang});
-      
+
   Future<Map<String, dynamic>> translateReply(
       {required int replyId, required String targetLang});
 }
@@ -138,7 +138,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   @override
   Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
-    List<File>? imageFeedback, 
+    List<File>? imageFeedback,
   }) async {
     try {
       final Map<String, dynamic> data = {
@@ -158,7 +158,6 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
           );
         }
       }
-       
 
       final Map<String, dynamic> response = await restClient.post(
         // 'feedback/${feedbackPayload.productId}/create',
@@ -173,8 +172,6 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       rethrow;
     }
   }
-
-
 
   @override
   Future<BasicResponse> createNewProduct({
@@ -202,9 +199,15 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       if (organisationPhone.isNotEmpty) {
         data['organisation_phone'] = organisationPhone;
       }
-      if (websiteUrl.isNotEmpty) data['website_url'] = websiteUrl;
+      if (websiteUrl.isNotEmpty) {
+        String url = websiteUrl.trim();
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          url = 'https://$url';
+        }
+        data['website_url'] = url;
+        }
       if (catalogId != 0) data['catalog_id'] = catalogId;
-      if (subCatalogId != 0) data['sub_catalog_id'] = subCatalogId;
+      if (subCatalogId != null && subCatalogId > 0) data['sub_catalog_id'] = subCatalogId;
       if (comment.isNotEmpty) data['comment'] = comment;
       if (rating != 0) data['rating'] = rating;
       if ((nameSubCatalog ?? '').isNotEmpty) {
@@ -229,8 +232,12 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         }
       }
 
+      // final Map<String, dynamic> response = await restClient.post(
+      //   'feedback/create-item',
+      //   body: formData,
+      // );
       final Map<String, dynamic> response = await restClient.post(
-        'feedback/create-item',
+        'catalog/create-item',
         body: formData,
       );
 
