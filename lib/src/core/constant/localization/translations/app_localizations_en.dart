@@ -496,4 +496,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showOnMap => 'Show on map';
+
+  @override
+  String get userRole => 'Select a role';
+
+  @override
+  String get user => 'User';
+
+  @override
+  String get owner => 'Company owner';
+
+  @override
+  String get loadDocuments => 'Upload documents';
 }

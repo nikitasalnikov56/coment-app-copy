@@ -1045,6 +1045,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show on map'**
   String get showOnMap;
+
+  /// No description provided for @userRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a role'**
+  String get userRole;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
+
+  /// No description provided for @owner.
+  ///
+  /// In en, this message translates to:
+  /// **'Company owner'**
+  String get owner;
+
+  /// No description provided for @loadDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload documents'**
+  String get loadDocuments;
 }
 
 class _AppLocalizationsDelegate

@@ -155,6 +155,10 @@
   "helperText":"минимум 9 символов",
   "translateComment":"Перевод",
   "routeToCompany":"Маршрут до компании",
-  "showOnMap":"Показать на карте"
+  "showOnMap":"Показать на карте",
+  "userRole":"Выберите роль",
+  "user": "Пользователь",
+  "owner": "Владелец компании",
+  "loadDocuments":"Загрузить документы"
 
 }

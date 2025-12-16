@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/auth/models/user_role.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,6 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final String _prefix = "+";
   final FocusNode _focusNode = FocusNode();
   Country? selectedCountry;
+ UserRole selectedRole = UserRole.user;
 
   @override
   void initState() {
@@ -447,6 +450,51 @@ class _RegisterPageState extends State<RegisterPage> {
                             );
                           },
                         ),
+                        const Gap(16),
+                        Text(
+                          context.localized.userRole,
+                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                        ),
+                        const Gap(6),
+                        SizedBox(
+                          width: double.infinity,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.borderTextField,
+                                ),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: DropdownButton<UserRole>(
+                              alignment: Alignment.center,
+                              isExpanded: true,
+                              padding: const EdgeInsets.only(right: 12, left: 16),
+                              underline: const SizedBox(),
+                              menuWidth: MediaQuery.of(context).size.width / 0.8,
+                              items: [
+                                 DropdownMenuItem(
+                                  value: UserRole.user,
+                                  child: Text(context.localized.user,
+                                      style: AppTextStyles.fs14w500
+                                          .copyWith(height: 1.3)),
+                                ),
+                                DropdownMenuItem(
+                                  value: UserRole.owner,
+                                  child: Text(context.localized.owner,
+                                      style: AppTextStyles.fs14w500
+                                          .copyWith(height: 1.3)),
+                                ),
+                               
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedRole = value ?? UserRole.user;
+                                });
+                              },
+                              value: selectedRole,
+                            ),
+                          ),
+                        ),
+
                         const Gap(34),
                         CustomButton(
                           allowTapButton: _allowTapButton,
@@ -456,8 +504,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 .replaceAll(RegExp(r'[^0-9]'), '');
                             String fullPhoneNumber =
                                 selectedCountry!.code + nationalNumber;
-                            fullPhoneNumber = fullPhoneNumber
-                                .trim();
+                            fullPhoneNumber = fullPhoneNumber.trim();
                             BlocProvider.of<RegisterCubit>(context).register(
                               email: emailController.text,
                               name: surnameNameController.text,
@@ -466,6 +513,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               deviceType:
                                   Platform.isAndroid ? 'Android' : 'IOS',
                               birthDate: birthDateController.text,
+                              role: selectedRole.name,
                             );
                           },
                           style: CustomButtonStyles.mainButtonStyle(context),
@@ -551,5 +599,17 @@ List<Country> countries = [
     name: '🇺🇿',
     mask: '(##) ###-##-##',
     digitLength: 9,
+  ),
+  Country(
+    code: '+7',
+    name: '🇷🇺',
+    mask: '(###) ###-##-##',
+    digitLength: 10,
+  ),
+  Country(
+    code: '+86',
+    name: '🇨🇳',
+    mask: '### #### ####',
+    digitLength: 11,
   ),
 ];

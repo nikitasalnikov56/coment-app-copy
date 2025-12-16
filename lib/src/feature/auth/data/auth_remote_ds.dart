@@ -20,6 +20,7 @@ abstract interface class IAuthRemoteDS {
     String? deviceType,
     required String birthDate,
      String? recaptchaToken,
+     required String role,
   });
 
   Future<String> forgotPassword({
@@ -89,6 +90,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   }) async {
     try {
       final Map<String, dynamic> response = await restClient.post(
@@ -103,6 +105,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
           if (deviceType != null) 'device_type': deviceType,
           'birthDate': birthDate,
           'recaptchaToken': recaptchaToken,
+          'role': role,
         },
       );
 

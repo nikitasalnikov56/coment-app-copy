@@ -375,6 +375,7 @@ abstract interface class IAuthRepository {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   });
 
   Future<String> forgotPassword({
@@ -582,6 +583,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   }) async {
     final String? dv = _authDao.deviceToken.value;
     try {
@@ -594,6 +596,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         phone: phone,
         birthDate: birthDate,
         recaptchaToken: recaptchaToken,
+        role: role,
       );
       
       await _secureStorage.write(key: 'refresh_token', value: user.refreshToken);

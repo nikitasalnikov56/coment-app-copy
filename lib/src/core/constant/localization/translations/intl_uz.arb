@@ -154,5 +154,9 @@
   "helperText":"kamida 9 ta belgi",
   "translateComment":"Tarjima",
   "routeToCompany":"Kompaniyaga marshrut",
-  "showOnMap":"Xaritada ko'rsatish"
+  "showOnMap":"Xaritada ko'rsatish",
+  "userRole":"Rolni tanlang",
+  "user": "Foydalanuvchi",
+  "owner": "Kompaniya egasi",
+  "loadDocuments":"Hujjatlarni yuklang"
 }

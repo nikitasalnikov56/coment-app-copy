@@ -155,5 +155,9 @@
   "helperText":"minimum 9 characters",
   "translateComment":"Translation",
   "routeToCompany":"Route to company",
-  "showOnMap":"Show on map"
+  "showOnMap":"Show on map",
+  "userRole":"Select a role",
+  "user": "User",
+  "owner": "Company owner",
+  "loadDocuments":"Upload documents"
 }

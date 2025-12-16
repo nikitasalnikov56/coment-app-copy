@@ -481,4 +481,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get showOnMap => '在地图上显示';
+
+  @override
+  String get userRole => '选择角色';
+
+  @override
+  String get user => '用户';
+
+  @override
+  String get owner => '公司所有者';
+
+  @override
+  String get loadDocuments => '上传文件';
 }

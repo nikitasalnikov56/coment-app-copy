@@ -18,6 +18,7 @@ import 'package:coment_app/src/feature/catalog/presentation/pages/feedback_detai
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/main_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:coment_app/src/feature/profile/presentation/pages/load_documents_page.dart';
 import 'package:flutter/material.dart';
 import 'package:coment_app/src/feature/app/presentation/pages/launcher.dart';
 import 'package:coment_app/src/feature/app/presentation/pages/temp_page.dart';
@@ -100,7 +101,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: EditProfileRoute.page),
         AutoRoute(page: ReviewHistoryRoute.page),
         AutoRoute(page: RaitingRoute.page),
-
+        AutoRoute(page: LoadDocumentsRoute.page),
         //Catalog
         AutoRoute(page: SubcatalogRoute.page),
         AutoRoute(page: ProductListRoute.page),
@@ -133,5 +134,3 @@ class BaseCatalogPage extends AutoRouter {
 class BaseProfilePage extends AutoRouter {
   const BaseProfilePage({super.key});
 }
-
-

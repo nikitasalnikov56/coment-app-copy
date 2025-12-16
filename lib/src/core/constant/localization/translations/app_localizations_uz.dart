@@ -498,4 +498,16 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get showOnMap => 'Xaritada ko\'rsatish';
+
+  @override
+  String get userRole => 'Rolni tanlang';
+
+  @override
+  String get user => 'Foydalanuvchi';
+
+  @override
+  String get owner => 'Kompaniya egasi';
+
+  @override
+  String get loadDocuments => 'Hujjatlarni yuklang';
 }

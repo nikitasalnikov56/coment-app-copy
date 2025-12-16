@@ -215,6 +215,7 @@ class _ChooseImageBottomSheetState extends State<ChooseImageBottomSheet> {
                 ],
               ),
             ),
+            
             const Gap(50),
           ],
         );

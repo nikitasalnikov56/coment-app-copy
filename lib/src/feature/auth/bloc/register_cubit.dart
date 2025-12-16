@@ -37,6 +37,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   }) async {
     try {
       emit(const RegisterState.loading());
@@ -60,6 +61,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         // phone: phone,
         birthDate: birthDate,
         recaptchaToken: recaptchaToken,
+        role: role,
       );
 
       if (isClosed) return;

@@ -1504,6 +1504,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show on map'**
   String get showOnMap;
+
+  /// No description provided for @userRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a role'**
+  String get userRole;
 }
 
 class _AppLocalizationsDelegate
@@ -2047,6 +2053,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showOnMap => 'Show on map';
+
+  @override
+  String get userRole => 'Select a role';
 }
 
 
@@ -2553,6 +2562,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get showOnMap => 'Картада көрсету';
+
+  @override
+  String get userRole => 'Рөлді таңдаңыз';
 }
 
 
@@ -3057,6 +3069,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get showOnMap => 'Показать на карте';
+
+  @override
+  String get userRole => 'Выберите роль';
 }
 
 
@@ -3563,6 +3578,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get showOnMap => 'Xaritada ko\'rsatish';
+
+  @override
+  String get userRole => 'Rolni tanlang';
 }
 
 
@@ -4052,6 +4070,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get showOnMap => '在地图上显示';
+
+  @override
+  String get userRole => '选择角色';
 }
 
 
@@ -4215,7 +4236,8 @@ lib\src\core\constant\localization\translations\intl_en.arb
   "helperText":"minimum 9 characters",
   "translateComment":"Translation",
   "routeToCompany":"Route to company",
-  "showOnMap":"Show on map"
+  "showOnMap":"Show on map",
+  "userRole":"Select a role"
 }
 
 
@@ -4378,7 +4400,8 @@ lib\src\core\constant\localization\translations\intl_kk.arb
   "helperText":"кемінде 9 таңба",
   "translateComment":"Аударма",
   "routeToCompany":"Компанияға дейінгі маршрут",
-  "showOnMap":"Картада көрсету"
+  "showOnMap":"Картада көрсету",
+  "userRole":"Рөлді таңдаңыз"
 }
 
 
@@ -4541,7 +4564,8 @@ lib\src\core\constant\localization\translations\intl_ru.arb
   "helperText":"минимум 9 символов",
   "translateComment":"Перевод",
   "routeToCompany":"Маршрут до компании",
-  "showOnMap":"Показать на карте"
+  "showOnMap":"Показать на карте",
+  "userRole":"Выберите роль"
 
 }
 
@@ -4704,7 +4728,8 @@ lib\src\core\constant\localization\translations\intl_uz.arb
   "helperText":"kamida 9 ta belgi",
   "translateComment":"Tarjima",
   "routeToCompany":"Kompaniyaga marshrut",
-  "showOnMap":"Xaritada ko'rsatish"
+  "showOnMap":"Xaritada ko'rsatish",
+  "userRole":"Rolni tanlang"
 }
 
 
@@ -4867,7 +4892,8 @@ lib\src\core\constant\localization\translations\intl_zh.arb
   "helperText": "至少 9 个字符",
   "translateComment": "翻译",
   "routeToCompany": "导航至公司",
-  "showOnMap": "在地图上显示"
+  "showOnMap": "在地图上显示",
+  "userRole":"选择角色"
 }
 
 
@@ -5029,11 +5055,11 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         baseUrl: 'http://10.0.2.2:3001/api/v1/',
-      //  baseUrl: 'https://3090098a8aaf.ngrok-free.app/api/v1/',
+      //  baseUrl: 'https://d67a6d2d62b2.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           baseUrl: 'http://10.0.2.2:3001/api/v1/',
-          // baseUrl: 'https://3090098a8aaf.ngrok-free.app/api/v1/',
+          // baseUrl: 'https://d67a6d2d62b2.ngrok-free.app/api/v1/',
           // baseUrl: 'http://192.168.0.100:3001/api/v1/',
           interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,
@@ -5560,8 +5586,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 class $AppDatabaseManager {
-  final _$AppDatabase _db;
-  $AppDatabaseManager(this._db);
+  final _$AppDatabase db;
+  $AppDatabaseManager(this.db);
 }
 
 
@@ -10828,13 +10854,13 @@ BasicResponse _$BasicResponseFromJson(Map<String, dynamic> json) =>
       ok: json['ok'] as bool?,
     );
 
-Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
-    <String, dynamic>{
-      'statusCode': instance.statusCode,
-      'message': instance.message,
-      'data': instance.data,
-      'ok': instance.ok,
-    };
+// Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
+//     <String, dynamic>{
+//       'statusCode': instance.statusCode,
+//       'message': instance.message,
+//       'data': instance.data,
+//       'ok': instance.ok,
+//     };
 
 
 
@@ -27755,6 +27781,8 @@ class UserDTO with _$UserDTO {
 }
 
 
+enum User{owner, user}
+
 
 lib\src\feature\auth\models\user_dto.freezed.dart
 -------------------------------------------------
@@ -30382,6 +30410,7 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30447,6 +30476,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final String _prefix = "+";
   final FocusNode _focusNode = FocusNode();
   Country? selectedCountry;
+  User? userEnum;
 
   @override
   void initState() {
@@ -30469,6 +30499,7 @@ class _RegisterPageState extends State<RegisterPage> {
     });
     super.initState();
     selectedCountry = countries.first;
+    userEnum = User.user;
   }
 
   @override
@@ -30826,6 +30857,50 @@ class _RegisterPageState extends State<RegisterPage> {
                             );
                           },
                         ),
+                        const Gap(16),
+                        Text(
+                          context.localized.userRole,
+                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                        ),
+                        const Gap(6),
+                        SizedBox(
+                          width: double.infinity,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.borderTextField,
+                                ),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: DropdownButton<User>(
+                              alignment: Alignment.center,
+                              isExpanded: true,
+                              padding: const EdgeInsets.only(right: 12, left: 16),
+                              underline: const SizedBox(),
+                              menuWidth: MediaQuery.of(context).size.width / 0.8,
+                              items: [
+                                DropdownMenuItem<User>(
+                                  value: User.owner,
+                                  child: Text('Владелец компании',
+                                      style: AppTextStyles.fs14w500
+                                          .copyWith(height: 1.3)),
+                                ),
+                                DropdownMenuItem<User>(
+                                  value: User.user,
+                                  child: Text('Пользователь',
+                                      style: AppTextStyles.fs14w500
+                                          .copyWith(height: 1.3)),
+                                ),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  userEnum = value;
+                                });
+                              },
+                              value: userEnum,
+                            ),
+                          ),
+                        ),
+
                         const Gap(34),
                         CustomButton(
                           allowTapButton: _allowTapButton,
@@ -30835,8 +30910,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 .replaceAll(RegExp(r'[^0-9]'), '');
                             String fullPhoneNumber =
                                 selectedCountry!.code + nationalNumber;
-                            fullPhoneNumber = fullPhoneNumber
-                                .trim();
+                            fullPhoneNumber = fullPhoneNumber.trim();
                             BlocProvider.of<RegisterCubit>(context).register(
                               email: emailController.text,
                               name: surnameNameController.text,
@@ -30930,6 +31004,18 @@ List<Country> countries = [
     name: '🇺🇿',
     mask: '(##) ###-##-##',
     digitLength: 9,
+  ),
+  Country(
+    code: '+7',
+    name: '🇷🇺',
+    mask: '(###) ###-##-##',
+    digitLength: 10,
+  ),
+  Country(
+    code: '+86',
+    name: '🇨🇳',
+    mask: '### #### ####',
+    digitLength: 11,
   ),
 ];
 
@@ -37821,7 +37907,7 @@ abstract interface class ICatalogRemoteDS {
 
   Future<Map<String, dynamic>> translateReview(
       {required int reviewId, required String targetLang});
-      
+
   Future<Map<String, dynamic>> translateReply(
       {required int replyId, required String targetLang});
 }
@@ -37910,7 +37996,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
   @override
   Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
-    List<File>? imageFeedback, 
+    List<File>? imageFeedback,
   }) async {
     try {
       final Map<String, dynamic> data = {
@@ -37930,7 +38016,6 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
           );
         }
       }
-       
 
       final Map<String, dynamic> response = await restClient.post(
         // 'feedback/${feedbackPayload.productId}/create',
@@ -37945,8 +38030,6 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       rethrow;
     }
   }
-
-
 
   @override
   Future<BasicResponse> createNewProduct({
@@ -37974,9 +38057,15 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       if (organisationPhone.isNotEmpty) {
         data['organisation_phone'] = organisationPhone;
       }
-      if (websiteUrl.isNotEmpty) data['website_url'] = websiteUrl;
+      if (websiteUrl.isNotEmpty) {
+        String url = websiteUrl.trim();
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          url = 'https://$url';
+        }
+        data['website_url'] = url;
+        }
       if (catalogId != 0) data['catalog_id'] = catalogId;
-      if (subCatalogId != 0) data['sub_catalog_id'] = subCatalogId;
+      if (subCatalogId != null && subCatalogId > 0) data['sub_catalog_id'] = subCatalogId;
       if (comment.isNotEmpty) data['comment'] = comment;
       if (rating != 0) data['rating'] = rating;
       if ((nameSubCatalog ?? '').isNotEmpty) {
@@ -38001,8 +38090,12 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         }
       }
 
+      // final Map<String, dynamic> response = await restClient.post(
+      //   'feedback/create-item',
+      //   body: formData,
+      // );
       final Map<String, dynamic> response = await restClient.post(
-        'feedback/create-item',
+        'catalog/create-item',
         body: formData,
       );
 
@@ -38449,10 +38542,10 @@ mixin _$ComplainDTO {
   int? get id => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
   String? get type =>
-      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
+      throw _privateConstructorUsedError; 
   @JsonKey(name: 'created_at')
   String? get createdAt =>
-      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
+      throw _privateConstructorUsedError; 
   @JsonKey(name: 'updated_at')
   String? get updatedAt => throw _privateConstructorUsedError;
 
@@ -38605,11 +38698,11 @@ class _$ComplainDTOImpl implements _ComplainDTO {
   final String? text;
   @override
   final String? type;
-// ignore: invalid_annotation_target
+
   @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
-// ignore: invalid_annotation_target
+
   @override
   @JsonKey(name: 'updated_at')
   final String? updatedAt;
@@ -38671,10 +38764,10 @@ abstract class _ComplainDTO implements ComplainDTO {
   @override
   String? get text;
   @override
-  String? get type; // ignore: invalid_annotation_target
+  String? get type; 
   @override
   @JsonKey(name: 'created_at')
-  String? get createdAt; // ignore: invalid_annotation_target
+  String? get createdAt; 
   @override
   @JsonKey(name: 'updated_at')
   String? get updatedAt;
@@ -46251,14 +46344,14 @@ class ProductItem extends StatelessWidget {
                       ),
                       const Gap(10),
                       Text(
-                        '(${(product.feedbackCount ?? 0) == 1
-                            // Если количество отзывов равно 1, используем 'отзыв' (feedbackLittle)
-                            ? '${product.feedbackCount} ${context.localized.feedbackLittle}'
-                            // В противном случае используем 'отзывов' (reviewsLittle).
-                            : '${product.feedbackCount ?? 0} ${context.localized.reviewsLittle}'})',
-                        // product.feedbackCount == 1
-                        //     ? '(${product.feedbackCount}  ${context.localized.feedbackLittle})'
-                        //     : '(${product.feedbackCount}  ${context.localized.reviewsLittle})',
+                        // '(${(product.feedbackCount ?? 0) == 1
+                        //     // Если количество отзывов равно 1, используем 'отзыв' (feedbackLittle)
+                        //     ? '${product.feedbackCount} ${context.localized.feedbackLittle}'
+                        //     // В противном случае используем 'отзывов' (reviewsLittle).
+                        //     : '${product.feedbackCount ?? 0} ${context.localized.reviewsLittle}'})',
+                        product.feedbackCount == 1
+                            ? '(${product.feedbackCount}  ${context.localized.feedbackLittle})'
+                            : '(${product.feedbackCount}  ${context.localized.reviewsLittle})',
                         style: AppTextStyles.fs14w500.copyWith(
                             height: 1.2, color: AppColors.greyTextColor2),
                       ),

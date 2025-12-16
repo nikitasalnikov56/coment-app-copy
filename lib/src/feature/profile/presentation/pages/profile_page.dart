@@ -112,7 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   header: const RefreshClassicHeader(),
                   controller: _refreshController,
                   onRefresh: () async {
-                    BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+                    BlocProvider.of<ProfileBLoC>(context)
+                        .add(const ProfileEvent.getProfile());
                     _refreshController.refreshCompleted();
                   },
                   child: CustomScrollView(
@@ -128,23 +129,28 @@ class _ProfilePageState extends State<ProfilePage> {
                             ///
                             ///
                             Container(
-                              decoration:
-                                  BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(16)),
+                              decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(16)),
                               alignment: Alignment.center,
                               child: Row(
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      context.router.push(DetailAvatarRoute(image: userDTO.avatar ?? NOT_FOUND_IMAGE));
+                                      context.router.push(DetailAvatarRoute(
+                                          image: userDTO.avatar ??
+                                              NOT_FOUND_IMAGE));
                                     },
                                     child: ProfileAvatarWithRating(
-                                      imageAva: userDTO.avatar ?? NOT_FOUND_IMAGE,
+                                      imageAva:
+                                          userDTO.avatar ?? NOT_FOUND_IMAGE,
                                       rating: userDTO.rating ?? 1,
                                     ),
                                   ),
                                   const Gap(12),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         userDTO.name ?? '',
@@ -218,7 +224,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               icon: AssetsConstants.icHelpdesk,
                               title: context.localized.helpDesk,
                               onTap: () {
-                                SupportServiceBottomSheet.show(context, user: userDTO);
+                                SupportServiceBottomSheet.show(context,
+                                    user: userDTO);
                               },
                             ),
                             const Gap(12),
@@ -227,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             /// language
                             ///
                             ProfileRowButton(
-                              icon:AssetsConstants.icLanguage,
+                              icon: AssetsConstants.icLanguage,
                               title: context.localized.language,
                               onTap: () {
                                 LanguageBottomSheet.show(
@@ -253,33 +260,51 @@ class _ProfilePageState extends State<ProfilePage> {
                                           width: double.infinity,
                                         ),
                                     loaded: (mainDTO) => ProfileRowButton(
-                                          icon:AssetsConstants.icCity,
-                                          title: (userDTO.city?.country?.name != null && userDTO.city?.name != null)
-                                              ? context.currentLocale.toString() == 'kk'
+                                          icon: AssetsConstants.icCity,
+                                          title: (userDTO.city?.country?.name !=
+                                                      null &&
+                                                  userDTO.city?.name != null)
+                                              ? context.currentLocale
+                                                          .toString() ==
+                                                      'kk'
                                                   ? '${userDTO.city?.country?.nameKk}'
-                                                  : context.currentLocale.toString() == 'en'
+                                                  : context.currentLocale
+                                                              .toString() ==
+                                                          'en'
                                                       ? '${userDTO.city?.country?.nameEn}'
-                                                      : context.currentLocale.toString() == 'uz'
+                                                      : context.currentLocale
+                                                                  .toString() ==
+                                                              'uz'
                                                           ? '${userDTO.city?.country?.nameUz}'
                                                           : '${userDTO.city?.country?.name}'
-                                              : context.localized.countryAndCity,
-                                          titleSecond:
-                                              (userDTO.city?.country?.name != null && userDTO.city?.name != null)
-                                                  ? context.currentLocale.toString() == 'kk'
-                                                      ? '${userDTO.city?.nameKk}'
-                                                      : context.currentLocale.toString() == 'en'
-                                                          ? '${userDTO.city?.nameEn}'
-                                                          : context.currentLocale.toString() == 'uz'
-                                                              ? '${userDTO.city?.nameUz}'
-                                                              : '${userDTO.city?.name}'
-                                                  // ? '${userDTO.city?.name}'
-                                                  : '',
+                                              : context
+                                                  .localized.countryAndCity,
+                                          titleSecond: (userDTO.city?.country
+                                                          ?.name !=
+                                                      null &&
+                                                  userDTO.city?.name != null)
+                                              ? context.currentLocale
+                                                          .toString() ==
+                                                      'kk'
+                                                  ? '${userDTO.city?.nameKk}'
+                                                  : context.currentLocale
+                                                              .toString() ==
+                                                          'en'
+                                                      ? '${userDTO.city?.nameEn}'
+                                                      : context.currentLocale
+                                                                  .toString() ==
+                                                              'uz'
+                                                          ? '${userDTO.city?.nameUz}'
+                                                          : '${userDTO.city?.name}'
+                                              // ? '${userDTO.city?.name}'
+                                              : '',
                                           onTap: () {
                                             CityMainBottomSheet.show(
                                               context,
                                               list: mainDTO,
                                               cityId: userDTO.city?.id,
-                                              countryId: userDTO.city?.country?.id,
+                                              countryId:
+                                                  userDTO.city?.country?.id,
                                               isGuest: (p0) {},
                                             );
                                           },
@@ -287,19 +312,32 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                             ),
                             const Gap(12),
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.documentsAdd,
+                                    title: context.localized.loadDocuments,
+                                    onTap: () {
+                                      context.router.push(
+                                        const LoadDocumentsRoute(),
+                                      );
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
 
                             ///
                             /// <-- `Logout` -->
                             ///
                             ProfileRowButton(
-                              icon:AssetsConstants.icLogOut,
+                              icon: AssetsConstants.icLogOut,
                               title: context.localized.logoutOfAccount,
                               onTap: () {
                                 LogoutBottomSheet.show(
                                   context,
                                   isDeleteAccount: false,
                                   onPressed: () {
-                                    BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.logOut());
+                                    BlocProvider.of<ProfileBLoC>(context)
+                                        .add(const ProfileEvent.logOut());
                                     context.router.maybePop();
                                   },
                                 );

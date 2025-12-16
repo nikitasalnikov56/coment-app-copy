@@ -498,4 +498,16 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get showOnMap => 'Картада көрсету';
+
+  @override
+  String get userRole => 'Рөлді таңдаңыз';
+
+  @override
+  String get user => 'Пайдаланушы';
+
+  @override
+  String get owner => 'Компания иесі';
+
+  @override
+  String get loadDocuments => 'Құжаттарды жүктеп салу';
 }

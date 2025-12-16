@@ -26,8 +26,11 @@ class UserDTO with _$UserDTO {
     @JsonKey(name: 'device_token') String? deviceToken,
     @JsonKey(name: 'device_type') String? deviceType,
     @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'role') String? role,
      // 👇 ДОБАВИЛ
     // @JsonKey(name: 'warningCount') int? warningCount,
   }) = _UserDTO;
   factory UserDTO.fromJson(Map<String, dynamic> json) => _$UserDTOFromJson(json);
 }
+
+

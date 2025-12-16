@@ -155,5 +155,9 @@
   "helperText":"кемінде 9 таңба",
   "translateComment":"Аударма",
   "routeToCompany":"Компанияға дейінгі маршрут",
-  "showOnMap":"Картада көрсету"
+  "showOnMap":"Картада көрсету",
+  "userRole":"Рөлді таңдаңыз",
+  "user": "Пайдаланушы",
+  "owner": "Компания иесі",
+  "loadDocuments":"Құжаттарды жүктеп салу"
 }

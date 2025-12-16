@@ -496,4 +496,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get showOnMap => 'Показать на карте';
+
+  @override
+  String get userRole => 'Выберите роль';
+
+  @override
+  String get user => 'Пользователь';
+
+  @override
+  String get owner => 'Владелец компании';
+
+  @override
+  String get loadDocuments => 'Загрузить документы';
 }
