@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:dio/dio.dart';
@@ -28,7 +29,7 @@ abstract interface class IProfileRemoteDS {
     required String password,
     required String name,
     required String email,
-     String? birthDate,
+    String? birthDate,
     required String phone,
     required int cityId,
     required int languageId,
@@ -36,6 +37,8 @@ abstract interface class IProfileRemoteDS {
   });
 
   Future<List<FeedbackDTO>> myFeedbacks();
+
+  Future<List<String>> uploadDocuments(List<File> files);
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -84,7 +87,7 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
     required int cityId,
     required int languageId,
     XFile? avatar,
-     String? birthDate,
+    String? birthDate,
   }) async {
     try {
       final Map<String, dynamic> data = {};
@@ -95,7 +98,8 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       if (cityId > 0) data['city_id'] = cityId.toString();
       if (password.isNotEmpty) data['password'] = password;
       if (languageId > 0) data['language_id'] = languageId.toString();
-      if (birthDate != null && birthDate.isNotEmpty) data['birthDate'] = birthDate;
+      if (birthDate != null && birthDate.isNotEmpty)
+        data['birthDate'] = birthDate;
 
       final FormData formData = FormData.fromMap(data);
       if (avatar != null) {
@@ -150,12 +154,12 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
   }) async {
     try {
       final body = {
-          'subject': subject,
-          'message': message,
-          'category': category,
-          'contactEmail': contactEmail,
-          'priority': 'medium',
-        };
+        'subject': subject,
+        'message': message,
+        'category': category,
+        'contactEmail': contactEmail,
+        'priority': 'medium',
+      };
       final Map<String, dynamic> response = await restClient.post(
         '/support/create',
         body: body,
@@ -192,5 +196,30 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       TalkerLoggerUtil.talker.error('#getMyFeedbacks - $e', e, st);
       rethrow;
     }
+  }
+
+  @override
+  Future<List<String>> uploadDocuments(List<File> files) async {
+    final formData = FormData();
+    for (final file in files) {
+      formData.files.add(
+        MapEntry(
+          'files',
+          await MultipartFile.fromFile(
+            file.path,
+            filename: file.path.split('/').last,
+          ),
+        ),
+      );
+    }
+
+    final response = await restClient.post(
+      'uploads/documents',
+      body: formData,
+      // headers: {'Content-Type': 'multipart/form-data'},
+    );
+
+    final urls = response['urls'] as List?;
+    return urls?.map((e) => e as String).toList() ?? [];
   }
 }

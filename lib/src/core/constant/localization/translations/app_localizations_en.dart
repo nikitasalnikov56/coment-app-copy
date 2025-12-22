@@ -508,4 +508,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadDocuments => 'Upload documents';
+
+  @override
+  String get documentsSentForReview =>
+      'Your documents have been sent for review.';
+
+  @override
+  String get sent => 'Sent';
 }

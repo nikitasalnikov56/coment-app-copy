@@ -159,5 +159,7 @@
   "userRole":"Select a role",
   "user": "User",
   "owner": "Company owner",
-  "loadDocuments":"Upload documents"
+  "loadDocuments":"Upload documents",
+  "documentsSentForReview": "Your documents have been sent for review.",
+  "sent": "Sent"
 }

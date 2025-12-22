@@ -508,4 +508,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get loadDocuments => 'Загрузить документы';
+
+  @override
+  String get documentsSentForReview =>
+      'Ваши документы отправлены на рассмотрение';
+
+  @override
+  String get sent => 'Отправлено';
 }

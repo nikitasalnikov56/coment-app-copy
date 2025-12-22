@@ -510,4 +510,11 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get loadDocuments => 'Hujjatlarni yuklang';
+
+  @override
+  String get documentsSentForReview =>
+      'Hujjatlaringiz ko\'rib chiqish uchun yuborildi.';
+
+  @override
+  String get sent => 'Yuborildi';
 }

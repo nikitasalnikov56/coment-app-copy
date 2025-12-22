@@ -159,5 +159,7 @@
   "userRole":"选择角色",
   "user": "用户",
   "owner": "公司所有者",
-  "loadDocuments":"上传文件"
+  "loadDocuments":"上传文件",
+  "documentsSentForReview": "您的文件已送审。",
+  "sent": "发送"
 }

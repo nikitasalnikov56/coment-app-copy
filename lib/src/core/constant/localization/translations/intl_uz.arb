@@ -158,5 +158,7 @@
   "userRole":"Rolni tanlang",
   "user": "Foydalanuvchi",
   "owner": "Kompaniya egasi",
-  "loadDocuments":"Hujjatlarni yuklang"
+  "loadDocuments":"Hujjatlarni yuklang",
+  "documentsSentForReview": "Hujjatlaringiz ko'rib chiqish uchun yuborildi.",
+  "sent": "Yuborildi"
 }

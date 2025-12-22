@@ -510,4 +510,10 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get loadDocuments => 'Құжаттарды жүктеп салу';
+
+  @override
+  String get documentsSentForReview => 'Құжаттарыңыз қарауға жіберілді.';
+
+  @override
+  String get sent => 'Жіберілді';
 }

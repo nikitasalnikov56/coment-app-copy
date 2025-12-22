@@ -84,11 +84,11 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         baseUrl: 'http://10.0.2.2:3001/api/v1/',
-      //  baseUrl: 'https://d67a6d2d62b2.ngrok-free.app/api/v1/',
+      //  baseUrl: 'https://d181bb8692cd.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           baseUrl: 'http://10.0.2.2:3001/api/v1/',
-          // baseUrl: 'https://d67a6d2d62b2.ngrok-free.app/api/v1/',
+          // baseUrl: 'https://d181bb8692cd.ngrok-free.app/api/v1/',
           // baseUrl: 'http://192.168.0.100:3001/api/v1/',
           interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,

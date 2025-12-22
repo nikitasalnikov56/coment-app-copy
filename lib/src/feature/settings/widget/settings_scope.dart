@@ -1,7 +1,9 @@
 import 'package:coment_app/src/feature/auth/bloc/register_cubit.dart';
 import 'package:coment_app/src/feature/catalog/model/create_product_model.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
+import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -69,7 +71,8 @@ class _SettingsScopeState extends State<SettingsScope> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<AppSettingsBloc, AppSettingsState>(
+  Widget build(BuildContext context) =>
+      BlocBuilder<AppSettingsBloc, AppSettingsState>(
         bloc: _appSettingsBloc,
         builder: (context, state) => MultiBlocProvider(
           providers: [
@@ -91,6 +94,12 @@ class _SettingsScopeState extends State<SettingsScope> {
               create: (context) => RegisterCubit(
                 repository: context.repository.authRepository,
                 authDao: context.repository.authDao,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => LoadDocumentsCubit(
+                
+                context.read<IProfileRemoteDS>(),
               ),
             ),
             ChangeNotifierProvider(
@@ -122,5 +131,6 @@ class _InheritedSettings extends InheritedWidget {
   final AppSettings? settings;
 
   @override
-  bool updateShouldNotify(covariant _InheritedSettings oldWidget) => settings != oldWidget.settings;
+  bool updateShouldNotify(covariant _InheritedSettings oldWidget) =>
+      settings != oldWidget.settings;
 }

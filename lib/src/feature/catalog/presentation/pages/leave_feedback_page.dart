@@ -426,7 +426,7 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                           comment: comment,
                           rating: selectedRating,
                         );
-                        print('DEBUG: Sending comment = $comment');
+               
                         await BlocProvider.of<LeaveFeedbackCubit>(context)
                             .createFeedback(
                           feedbackPayload: feedbackPayload,

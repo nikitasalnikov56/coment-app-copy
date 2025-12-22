@@ -1069,6 +1069,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload documents'**
   String get loadDocuments;
+
+  /// No description provided for @documentsSentForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your documents have been sent for review.'**
+  String get documentsSentForReview;
+
+  /// No description provided for @sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sent;
 }
 
 class _AppLocalizationsDelegate

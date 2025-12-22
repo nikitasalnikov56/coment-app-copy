@@ -493,4 +493,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get loadDocuments => '上传文件';
+
+  @override
+  String get documentsSentForReview => '您的文件已送审。';
+
+  @override
+  String get sent => '发送';
 }

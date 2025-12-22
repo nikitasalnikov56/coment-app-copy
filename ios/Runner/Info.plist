@@ -62,5 +62,13 @@
 		<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Приложению нужен доступ к вашей медиатеке, чтобы выбирать файлы.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Приложению нужен доступ к камере, чтобы делать фото.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Приложению нужен доступ к микрофону, если вы захотите записать аудио.</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>
