@@ -5,7 +5,6 @@ import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/catalog/presentation/widgets/choose_image_bs.dart';
-import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
