@@ -515,4 +515,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sent => 'Отправлено';
+
+  @override
+  String get companyAdd => 'Добавить компанию';
+
+  @override
+  String get payment => 'Оплата';
+
+  @override
+  String get message => 'Чат';
 }

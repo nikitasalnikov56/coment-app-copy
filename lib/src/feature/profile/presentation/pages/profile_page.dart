@@ -325,6 +325,41 @@ class _ProfilePageState extends State<ProfilePage> {
                                 : const SizedBox(),
                             const Gap(12),
 
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.companyAdd,
+                                    title: context.localized.companyAdd,
+                                    onTap: () {
+                                      context.router
+                                          .push(const SelectCategoriesRoute());
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.payment,
+                                    title: context.localized.payment,
+                                    onTap: () {
+                                      context.router
+                                          .push(const PaymentRoute());
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
+
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.message,
+                                    title: context.localized.message,
+                                    onTap: () {
+                                      context.router
+                                          .push(const MessageRoute());
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
+
                             ///
                             /// <-- `Logout` -->
                             ///

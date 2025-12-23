@@ -137,6 +137,9 @@ class AssetsConstants {
   static const String notActiveStar32 = 'assets/icons/ic-star-enactive.svg';
   static const String closeSvgrepo = 'assets/icons/close_svgrepo.svg';
   static const String documentsAdd = 'assets/icons/documents_add.svg';
+  static const String companyAdd = 'assets/icons/add_company.svg';
+  static const String payment = 'assets/icons/payment.svg';
+  static const String message = 'assets/icons/message.svg';
 
   // PNG
   static const String image = 'assets/images/image.png';

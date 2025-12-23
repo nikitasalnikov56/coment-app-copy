@@ -515,4 +515,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sent => 'Sent';
+
+  @override
+  String get companyAdd => 'Add a company';
+
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get message => 'Chat';
 }

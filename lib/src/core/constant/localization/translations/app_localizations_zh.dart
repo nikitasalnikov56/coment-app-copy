@@ -499,4 +499,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sent => '发送';
+
+  @override
+  String get companyAdd => '添加一家公司';
+
+  @override
+  String get payment => '支付';
+
+  @override
+  String get message => '聊天';
 }

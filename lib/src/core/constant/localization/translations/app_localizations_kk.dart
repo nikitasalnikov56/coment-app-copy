@@ -516,4 +516,13 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get sent => 'Жіберілді';
+
+  @override
+  String get companyAdd => 'Компания қосу';
+
+  @override
+  String get payment => 'Төлем';
+
+  @override
+  String get message => 'Чат';
 }

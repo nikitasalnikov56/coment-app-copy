@@ -1081,6 +1081,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sent'**
   String get sent;
+
+  /// No description provided for @companyAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a company'**
+  String get companyAdd;
+
+  /// No description provided for @payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get message;
 }
 
 class _AppLocalizationsDelegate

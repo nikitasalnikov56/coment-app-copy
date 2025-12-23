@@ -161,5 +161,8 @@
   "owner": "公司所有者",
   "loadDocuments":"上传文件",
   "documentsSentForReview": "您的文件已送审。",
-  "sent": "发送"
+  "sent": "发送",
+  "companyAdd": "添加一家公司",
+  "payment": "支付",
+  "message": "聊天"
 }

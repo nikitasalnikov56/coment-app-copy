@@ -517,4 +517,13 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get sent => 'Yuborildi';
+
+  @override
+  String get companyAdd => 'Kompaniya qo\'shish';
+
+  @override
+  String get payment => 'To\'lov';
+
+  @override
+  String get message => 'Chat';
 }

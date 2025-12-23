@@ -161,5 +161,8 @@
   "owner": "Company owner",
   "loadDocuments":"Upload documents",
   "documentsSentForReview": "Your documents have been sent for review.",
-  "sent": "Sent"
+  "sent": "Sent",
+  "companyAdd": "Add a company",
+  "payment": "Payment",
+  "message": "Chat"
 }

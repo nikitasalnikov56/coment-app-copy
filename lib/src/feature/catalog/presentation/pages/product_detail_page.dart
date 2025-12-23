@@ -354,7 +354,7 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: feedback[index].images?.length,
-                                  itemBuilder: (context, index) {
+                                  itemBuilder: (context, imgIndex) {
                                     return InkWell(
                                       onTap: () {
                                         context.router.push(
@@ -374,7 +374,7 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
                                                 BorderRadius.circular(12),
                                             child: Image.network(
                                               feedback[index]
-                                                      .images?[index]
+                                                      .images?[imgIndex]
                                                       .image ??
                                                   '',
                                               fit: BoxFit.cover,

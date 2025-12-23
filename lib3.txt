@@ -263,6 +263,10 @@ class AssetsConstants {
   static const String visibilityOff = 'assets/icons/visibility_off.svg';
   static const String notActiveStar32 = 'assets/icons/ic-star-enactive.svg';
   static const String closeSvgrepo = 'assets/icons/close_svgrepo.svg';
+  static const String documentsAdd = 'assets/icons/documents_add.svg';
+  static const String companyAdd = 'assets/icons/add_company.svg';
+  static const String payment = 'assets/icons/payment.svg';
+  static const String message = 'assets/icons/message.svg';
 
   // PNG
   static const String image = 'assets/images/image.png';
@@ -1510,6 +1514,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a role'**
   String get userRole;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
+
+  /// No description provided for @owner.
+  ///
+  /// In en, this message translates to:
+  /// **'Company owner'**
+  String get owner;
+
+  /// No description provided for @loadDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload documents'**
+  String get loadDocuments;
+
+  /// No description provided for @documentsSentForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your documents have been sent for review.'**
+  String get documentsSentForReview;
+
+  /// No description provided for @sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sent;
+
+  /// No description provided for @companyAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a company'**
+  String get companyAdd;
+
+  /// No description provided for @payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get message;
 }
 
 class _AppLocalizationsDelegate
@@ -2056,6 +2108,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get userRole => 'Select a role';
+
+  @override
+  String get user => 'User';
+
+  @override
+  String get owner => 'Company owner';
+
+  @override
+  String get loadDocuments => 'Upload documents';
+
+  @override
+  String get documentsSentForReview =>
+      'Your documents have been sent for review.';
+
+  @override
+  String get sent => 'Sent';
+
+  @override
+  String get companyAdd => 'Add a company';
+
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get message => 'Chat';
 }
 
 
@@ -2565,6 +2642,30 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get userRole => 'Рөлді таңдаңыз';
+
+  @override
+  String get user => 'Пайдаланушы';
+
+  @override
+  String get owner => 'Компания иесі';
+
+  @override
+  String get loadDocuments => 'Құжаттарды жүктеп салу';
+
+  @override
+  String get documentsSentForReview => 'Құжаттарыңыз қарауға жіберілді.';
+
+  @override
+  String get sent => 'Жіберілді';
+
+  @override
+  String get companyAdd => 'Компания қосу';
+
+  @override
+  String get payment => 'Төлем';
+
+  @override
+  String get message => 'Чат';
 }
 
 
@@ -3072,6 +3173,31 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get userRole => 'Выберите роль';
+
+  @override
+  String get user => 'Пользователь';
+
+  @override
+  String get owner => 'Владелец компании';
+
+  @override
+  String get loadDocuments => 'Загрузить документы';
+
+  @override
+  String get documentsSentForReview =>
+      'Ваши документы отправлены на рассмотрение';
+
+  @override
+  String get sent => 'Отправлено';
+
+  @override
+  String get companyAdd => 'Добавить компанию';
+
+  @override
+  String get payment => 'Оплата';
+
+  @override
+  String get message => 'Чат';
 }
 
 
@@ -3581,6 +3707,31 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get userRole => 'Rolni tanlang';
+
+  @override
+  String get user => 'Foydalanuvchi';
+
+  @override
+  String get owner => 'Kompaniya egasi';
+
+  @override
+  String get loadDocuments => 'Hujjatlarni yuklang';
+
+  @override
+  String get documentsSentForReview =>
+      'Hujjatlaringiz ko\'rib chiqish uchun yuborildi.';
+
+  @override
+  String get sent => 'Yuborildi';
+
+  @override
+  String get companyAdd => 'Kompaniya qo\'shish';
+
+  @override
+  String get payment => 'To\'lov';
+
+  @override
+  String get message => 'Chat';
 }
 
 
@@ -4073,6 +4224,30 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get userRole => '选择角色';
+
+  @override
+  String get user => '用户';
+
+  @override
+  String get owner => '公司所有者';
+
+  @override
+  String get loadDocuments => '上传文件';
+
+  @override
+  String get documentsSentForReview => '您的文件已送审。';
+
+  @override
+  String get sent => '发送';
+
+  @override
+  String get companyAdd => '添加一家公司';
+
+  @override
+  String get payment => '支付';
+
+  @override
+  String get message => '聊天';
 }
 
 
@@ -4237,7 +4412,15 @@ lib\src\core\constant\localization\translations\intl_en.arb
   "translateComment":"Translation",
   "routeToCompany":"Route to company",
   "showOnMap":"Show on map",
-  "userRole":"Select a role"
+  "userRole":"Select a role",
+  "user": "User",
+  "owner": "Company owner",
+  "loadDocuments":"Upload documents",
+  "documentsSentForReview": "Your documents have been sent for review.",
+  "sent": "Sent",
+  "companyAdd": "Add a company",
+  "payment": "Payment",
+  "message": "Chat"
 }
 
 
@@ -4401,7 +4584,15 @@ lib\src\core\constant\localization\translations\intl_kk.arb
   "translateComment":"Аударма",
   "routeToCompany":"Компанияға дейінгі маршрут",
   "showOnMap":"Картада көрсету",
-  "userRole":"Рөлді таңдаңыз"
+  "userRole":"Рөлді таңдаңыз",
+  "user": "Пайдаланушы",
+  "owner": "Компания иесі",
+  "loadDocuments":"Құжаттарды жүктеп салу",
+  "documentsSentForReview": "Құжаттарыңыз қарауға жіберілді.",
+  "sent": "Жіберілді",
+  "companyAdd": "Компания қосу",
+  "payment": "Төлем",
+  "message": "Чат"
 }
 
 
@@ -4565,7 +4756,15 @@ lib\src\core\constant\localization\translations\intl_ru.arb
   "translateComment":"Перевод",
   "routeToCompany":"Маршрут до компании",
   "showOnMap":"Показать на карте",
-  "userRole":"Выберите роль"
+  "userRole":"Выберите роль",
+  "user": "Пользователь",
+  "owner": "Владелец компании",
+  "loadDocuments":"Загрузить документы",
+  "documentsSentForReview": "Ваши документы отправлены на рассмотрение",
+  "sent": "Отправлено",
+  "companyAdd": "Добавить компанию",
+  "payment": "Оплата",
+  "message": "Чат"
 
 }
 
@@ -4729,7 +4928,15 @@ lib\src\core\constant\localization\translations\intl_uz.arb
   "translateComment":"Tarjima",
   "routeToCompany":"Kompaniyaga marshrut",
   "showOnMap":"Xaritada ko'rsatish",
-  "userRole":"Rolni tanlang"
+  "userRole":"Rolni tanlang",
+  "user": "Foydalanuvchi",
+  "owner": "Kompaniya egasi",
+  "loadDocuments":"Hujjatlarni yuklang",
+  "documentsSentForReview": "Hujjatlaringiz ko'rib chiqish uchun yuborildi.",
+  "sent": "Yuborildi",
+  "companyAdd": "Kompaniya qo'shish",
+  "payment": "To'lov",
+  "message": "Chat"
 }
 
 
@@ -4893,7 +5100,15 @@ lib\src\core\constant\localization\translations\intl_zh.arb
   "translateComment": "翻译",
   "routeToCompany": "导航至公司",
   "showOnMap": "在地图上显示",
-  "userRole":"选择角色"
+  "userRole":"选择角色",
+  "user": "用户",
+  "owner": "公司所有者",
+  "loadDocuments":"上传文件",
+  "documentsSentForReview": "您的文件已送审。",
+  "sent": "发送",
+  "companyAdd": "添加一家公司",
+  "payment": "支付",
+  "message": "聊天"
 }
 
 
@@ -5054,12 +5269,12 @@ class RepositoryStorage implements IRepositoryStorage {
 
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
-        baseUrl: 'http://10.0.2.2:3001/api/v1/',
-      //  baseUrl: 'https://d67a6d2d62b2.ngrok-free.app/api/v1/',
+        // baseUrl: 'http://10.0.2.2:3001/api/v1/',
+       baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
-          baseUrl: 'http://10.0.2.2:3001/api/v1/',
-          // baseUrl: 'https://d67a6d2d62b2.ngrok-free.app/api/v1/',
+          // baseUrl: 'http://10.0.2.2:3001/api/v1/',
+          baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
           // baseUrl: 'http://192.168.0.100:3001/api/v1/',
           interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,
@@ -5682,6 +5897,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/add.svg
   SvgGenImage get add => const SvgGenImage('assets/icons/add.svg');
 
+  /// File path: assets/icons/add_company.svg
+  SvgGenImage get addCompany =>
+      const SvgGenImage('assets/icons/add_company.svg');
+
   /// File path: assets/icons/ava.svg
   SvgGenImage get ava => const SvgGenImage('assets/icons/ava.svg');
 
@@ -5709,6 +5928,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/close_svgrepo.svg
   SvgGenImage get closeSvgrepo =>
       const SvgGenImage('assets/icons/close_svgrepo.svg');
+
+  /// File path: assets/icons/documents_add.svg
+  SvgGenImage get documentsAdd =>
+      const SvgGenImage('assets/icons/documents_add.svg');
 
   /// File path: assets/icons/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');
@@ -5867,11 +6090,17 @@ class $AssetsIconsGen {
   SvgGenImage get listInactive =>
       const SvgGenImage('assets/icons/list_inactive.svg');
 
+  /// File path: assets/icons/message.svg
+  SvgGenImage get message => const SvgGenImage('assets/icons/message.svg');
+
   /// File path: assets/icons/next.svg
   SvgGenImage get next => const SvgGenImage('assets/icons/next.svg');
 
   /// File path: assets/icons/not_x.svg
   SvgGenImage get notX => const SvgGenImage('assets/icons/not_x.svg');
+
+  /// File path: assets/icons/payment.svg
+  SvgGenImage get payment => const SvgGenImage('assets/icons/payment.svg');
 
   /// File path: assets/icons/phone.svg
   SvgGenImage get phone => const SvgGenImage('assets/icons/phone.svg');
@@ -5906,6 +6135,7 @@ class $AssetsIconsGen {
         frame,
         addPurple,
         add,
+        addCompany,
         ava,
         backArrow,
         backButton,
@@ -5914,6 +6144,7 @@ class $AssetsIconsGen {
         close,
         closeSearched,
         closeSvgrepo,
+        documentsAdd,
         filter,
         gridActive,
         gridInactive,
@@ -5958,8 +6189,10 @@ class $AssetsIconsGen {
         link,
         listActive,
         listInactive,
+        message,
         next,
         notX,
+        payment,
         phone,
         search,
         shevron,
@@ -21154,6 +21387,9 @@ import 'package:coment_app/src/feature/catalog/presentation/pages/feedback_detai
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/main_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:coment_app/src/feature/profile/presentation/pages/load_documents_page.dart';
+import 'package:coment_app/src/feature/profile/presentation/pages/message_page.dart';
+import 'package:coment_app/src/feature/profile/presentation/pages/payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:coment_app/src/feature/app/presentation/pages/launcher.dart';
 import 'package:coment_app/src/feature/app/presentation/pages/temp_page.dart';
@@ -21236,7 +21472,9 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: EditProfileRoute.page),
         AutoRoute(page: ReviewHistoryRoute.page),
         AutoRoute(page: RaitingRoute.page),
-
+        AutoRoute(page: LoadDocumentsRoute.page),
+        AutoRoute(page: PaymentRoute.page),
+        AutoRoute(page: MessageRoute.page),
         //Catalog
         AutoRoute(page: SubcatalogRoute.page),
         AutoRoute(page: ProductListRoute.page),
@@ -21269,8 +21507,6 @@ class BaseCatalogPage extends AutoRouter {
 class BaseProfilePage extends AutoRouter {
   const BaseProfilePage({super.key});
 }
-
-
 
 
 
@@ -21864,6 +22100,22 @@ class LeaveFeedbackRouteArgs {
 }
 
 /// generated route for
+/// [LoadDocumentsPage]
+class LoadDocumentsRoute extends PageRouteInfo<void> {
+  const LoadDocumentsRoute({List<PageRouteInfo>? children})
+    : super(LoadDocumentsRoute.name, initialChildren: children);
+
+  static const String name = 'LoadDocumentsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LoadDocumentsPage();
+    },
+  );
+}
+
+/// generated route for
 /// [LoginPage]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
@@ -21954,6 +22206,22 @@ class MapRouteArgs {
 }
 
 /// generated route for
+/// [MessagePage]
+class MessageRoute extends PageRouteInfo<void> {
+  const MessageRoute({List<PageRouteInfo>? children})
+    : super(MessageRoute.name, initialChildren: children);
+
+  static const String name = 'MessageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MessagePage();
+    },
+  );
+}
+
+/// generated route for
 /// [NewPasswordPage]
 class NewPasswordRoute extends PageRouteInfo<NewPasswordRouteArgs> {
   NewPasswordRoute({
@@ -22020,6 +22288,22 @@ class PasswordRecoveryRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return WrappedRoute(child: const PasswordRecoveryPage());
+    },
+  );
+}
+
+/// generated route for
+/// [PaymentPage]
+class PaymentRoute extends PageRouteInfo<void> {
+  const PaymentRoute({List<PageRouteInfo>? children})
+    : super(PaymentRoute.name, initialChildren: children);
+
+  static const String name = 'PaymentRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PaymentPage();
     },
   );
 }
@@ -25353,6 +25637,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   }) async {
     try {
       emit(const RegisterState.loading());
@@ -25376,6 +25661,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         // phone: phone,
         birthDate: birthDate,
         recaptchaToken: recaptchaToken,
+        role: role,
       );
 
       if (isClosed) return;
@@ -26112,6 +26398,7 @@ abstract interface class IAuthRemoteDS {
     String? deviceType,
     required String birthDate,
      String? recaptchaToken,
+     required String role,
   });
 
   Future<String> forgotPassword({
@@ -26181,6 +26468,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   }) async {
     try {
       final Map<String, dynamic> response = await restClient.post(
@@ -26195,6 +26483,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
           if (deviceType != null) 'device_type': deviceType,
           'birthDate': birthDate,
           'recaptchaToken': recaptchaToken,
+          'role': role,
         },
       );
 
@@ -26682,6 +26971,7 @@ abstract interface class IAuthRepository {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   });
 
   Future<String> forgotPassword({
@@ -26889,6 +27179,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     String? deviceType,
     required String birthDate,
     String? recaptchaToken,
+    required String role,
   }) async {
     final String? dv = _authDao.deviceToken.value;
     try {
@@ -26901,6 +27192,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         phone: phone,
         birthDate: birthDate,
         recaptchaToken: recaptchaToken,
+        role: role,
       );
       
       await _secureStorage.write(key: 'refresh_token', value: user.refreshToken);
@@ -27774,6 +28066,7 @@ class UserDTO with _$UserDTO {
     @JsonKey(name: 'device_token') String? deviceToken,
     @JsonKey(name: 'device_type') String? deviceType,
     @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'role') String? role,
      // 👇 ДОБАВИЛ
     // @JsonKey(name: 'warningCount') int? warningCount,
   }) = _UserDTO;
@@ -27781,7 +28074,7 @@ class UserDTO with _$UserDTO {
 }
 
 
-enum User{owner, user}
+
 
 
 lib\src\feature\auth\models\user_dto.freezed.dart
@@ -27834,6 +28127,8 @@ mixin _$UserDTO {
   String? get deviceType => throw _privateConstructorUsedError;
   @JsonKey(name: 'refresh_token')
   String? get refreshToken => throw _privateConstructorUsedError;
+  @JsonKey(name: 'role')
+  String? get role => throw _privateConstructorUsedError;
 
   /// Serializes this UserDTO to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -27864,7 +28159,8 @@ abstract class $UserDTOCopyWith<$Res> {
       @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'device_token') String? deviceToken,
       @JsonKey(name: 'device_type') String? deviceType,
-      @JsonKey(name: 'refresh_token') String? refreshToken});
+      @JsonKey(name: 'refresh_token') String? refreshToken,
+      @JsonKey(name: 'role') String? role});
 
   $CityDTOCopyWith<$Res>? get city;
   $LanguageDTOCopyWith<$Res>? get language;
@@ -27900,6 +28196,7 @@ class _$UserDTOCopyWithImpl<$Res, $Val extends UserDTO>
     Object? deviceToken = freezed,
     Object? deviceType = freezed,
     Object? refreshToken = freezed,
+    Object? role = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -27962,6 +28259,10 @@ class _$UserDTOCopyWithImpl<$Res, $Val extends UserDTO>
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: freezed == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -28016,7 +28317,8 @@ abstract class _$$UserDTOImplCopyWith<$Res> implements $UserDTOCopyWith<$Res> {
       @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'device_token') String? deviceToken,
       @JsonKey(name: 'device_type') String? deviceType,
-      @JsonKey(name: 'refresh_token') String? refreshToken});
+      @JsonKey(name: 'refresh_token') String? refreshToken,
+      @JsonKey(name: 'role') String? role});
 
   @override
   $CityDTOCopyWith<$Res>? get city;
@@ -28052,6 +28354,7 @@ class __$$UserDTOImplCopyWithImpl<$Res>
     Object? deviceToken = freezed,
     Object? deviceType = freezed,
     Object? refreshToken = freezed,
+    Object? role = freezed,
   }) {
     return _then(_$UserDTOImpl(
       id: freezed == id
@@ -28114,6 +28417,10 @@ class __$$UserDTOImplCopyWithImpl<$Res>
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: freezed == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -28136,7 +28443,8 @@ class _$UserDTOImpl implements _UserDTO {
       @JsonKey(name: 'access_token') this.accessToken,
       @JsonKey(name: 'device_token') this.deviceToken,
       @JsonKey(name: 'device_type') this.deviceType,
-      @JsonKey(name: 'refresh_token') this.refreshToken});
+      @JsonKey(name: 'refresh_token') this.refreshToken,
+      @JsonKey(name: 'role') this.role});
 
   factory _$UserDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDTOImplFromJson(json);
@@ -28182,10 +28490,13 @@ class _$UserDTOImpl implements _UserDTO {
   @override
   @JsonKey(name: 'refresh_token')
   final String? refreshToken;
+  @override
+  @JsonKey(name: 'role')
+  final String? role;
 
   @override
   String toString() {
-    return 'UserDTO(id: $id, name: $name, email: $email, phone: $phone, avatar: $avatar, city: $city, language: $language, rating: $rating, cityName: $cityName, createdAt: $createdAt, updatedAt: $updatedAt, accessToken: $accessToken, deviceToken: $deviceToken, deviceType: $deviceType, refreshToken: $refreshToken)';
+    return 'UserDTO(id: $id, name: $name, email: $email, phone: $phone, avatar: $avatar, city: $city, language: $language, rating: $rating, cityName: $cityName, createdAt: $createdAt, updatedAt: $updatedAt, accessToken: $accessToken, deviceToken: $deviceToken, deviceType: $deviceType, refreshToken: $refreshToken, role: $role)';
   }
 
   @override
@@ -28215,7 +28526,8 @@ class _$UserDTOImpl implements _UserDTO {
             (identical(other.deviceType, deviceType) ||
                 other.deviceType == deviceType) &&
             (identical(other.refreshToken, refreshToken) ||
-                other.refreshToken == refreshToken));
+                other.refreshToken == refreshToken) &&
+            (identical(other.role, role) || other.role == role));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28236,7 +28548,8 @@ class _$UserDTOImpl implements _UserDTO {
       accessToken,
       deviceToken,
       deviceType,
-      refreshToken);
+      refreshToken,
+      role);
 
   /// Create a copy of UserDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -28256,22 +28569,22 @@ class _$UserDTOImpl implements _UserDTO {
 
 abstract class _UserDTO implements UserDTO {
   const factory _UserDTO(
-          {@JsonKey(defaultValue: -1) final int? id,
-          @JsonKey(name: 'name') final String? name,
-          final String? email,
-          @JsonKey(name: 'phoneNumber') final String? phone,
-          @JsonKey(name: 'avatar_url') final String? avatar,
-          final CityDTO? city,
-          final LanguageDTO? language,
-          final int? rating,
-          @JsonKey(name: 'city_name') final String? cityName,
-          @JsonKey(name: 'created_at') final DateTime? createdAt,
-          @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-          @JsonKey(name: 'access_token') final String? accessToken,
-          @JsonKey(name: 'device_token') final String? deviceToken,
-          @JsonKey(name: 'device_type') final String? deviceType,
-          @JsonKey(name: 'refresh_token') final String? refreshToken}) =
-      _$UserDTOImpl;
+      {@JsonKey(defaultValue: -1) final int? id,
+      @JsonKey(name: 'name') final String? name,
+      final String? email,
+      @JsonKey(name: 'phoneNumber') final String? phone,
+      @JsonKey(name: 'avatar_url') final String? avatar,
+      final CityDTO? city,
+      final LanguageDTO? language,
+      final int? rating,
+      @JsonKey(name: 'city_name') final String? cityName,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
+      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
+      @JsonKey(name: 'access_token') final String? accessToken,
+      @JsonKey(name: 'device_token') final String? deviceToken,
+      @JsonKey(name: 'device_type') final String? deviceType,
+      @JsonKey(name: 'refresh_token') final String? refreshToken,
+      @JsonKey(name: 'role') final String? role}) = _$UserDTOImpl;
 
   factory _UserDTO.fromJson(Map<String, dynamic> json) = _$UserDTOImpl.fromJson;
 
@@ -28316,6 +28629,9 @@ abstract class _UserDTO implements UserDTO {
   @override
   @JsonKey(name: 'refresh_token')
   String? get refreshToken;
+  @override
+  @JsonKey(name: 'role')
+  String? get role;
 
   /// Create a copy of UserDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -28362,6 +28678,7 @@ _$UserDTOImpl _$$UserDTOImplFromJson(Map<String, dynamic> json) =>
       deviceToken: json['device_token'] as String?,
       deviceType: json['device_type'] as String?,
       refreshToken: json['refresh_token'] as String?,
+      role: json['role'] as String?,
     );
 
 Map<String, dynamic> _$$UserDTOImplToJson(_$UserDTOImpl instance) =>
@@ -28381,6 +28698,7 @@ Map<String, dynamic> _$$UserDTOImplToJson(_$UserDTOImpl instance) =>
       'device_token': instance.deviceToken,
       'device_type': instance.deviceType,
       'refresh_token': instance.refreshToken,
+      'role': instance.role,
     };
 
 
@@ -28765,6 +29083,24 @@ Map<String, dynamic> _$$UserPayloadImplToJson(_$UserPayloadImpl instance) =>
       if (instance.deviceToken case final value?) 'device_token': value,
     };
 
+
+
+lib\src\feature\auth\models\user_role.dart
+------------------------------------------
+enum UserRole {
+  user,
+  owner,
+  admin;
+
+  String get name => toString().split('.').last;
+
+  static UserRole fromString(String value) {
+    return UserRole.values.firstWhere(
+      (e) => e.name == value,
+      orElse: () => UserRole.user,
+    );
+  }
+}
 
 
 lib\src\feature\auth\models\request\user_payload.dart
@@ -30410,11 +30746,10 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
-import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/auth/models/user_role.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_gcaptcha_v3/web_view.dart';
 import 'package:gap/gap.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:coment_app/src/core/presentation/widgets/buttons/custom_button.dart';
@@ -30476,7 +30811,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final String _prefix = "+";
   final FocusNode _focusNode = FocusNode();
   Country? selectedCountry;
-  User? userEnum;
+ UserRole selectedRole = UserRole.user;
 
   @override
   void initState() {
@@ -30499,7 +30834,6 @@ class _RegisterPageState extends State<RegisterPage> {
     });
     super.initState();
     selectedCountry = countries.first;
-    userEnum = User.user;
   }
 
   @override
@@ -30871,32 +31205,33 @@ class _RegisterPageState extends State<RegisterPage> {
                                   color: AppColors.borderTextField,
                                 ),
                                 borderRadius: BorderRadius.circular(12)),
-                            child: DropdownButton<User>(
+                            child: DropdownButton<UserRole>(
                               alignment: Alignment.center,
                               isExpanded: true,
                               padding: const EdgeInsets.only(right: 12, left: 16),
                               underline: const SizedBox(),
                               menuWidth: MediaQuery.of(context).size.width / 0.8,
                               items: [
-                                DropdownMenuItem<User>(
-                                  value: User.owner,
-                                  child: Text('Владелец компании',
+                                 DropdownMenuItem(
+                                  value: UserRole.user,
+                                  child: Text(context.localized.user,
                                       style: AppTextStyles.fs14w500
                                           .copyWith(height: 1.3)),
                                 ),
-                                DropdownMenuItem<User>(
-                                  value: User.user,
-                                  child: Text('Пользователь',
+                                DropdownMenuItem(
+                                  value: UserRole.owner,
+                                  child: Text(context.localized.owner,
                                       style: AppTextStyles.fs14w500
                                           .copyWith(height: 1.3)),
                                 ),
+                               
                               ],
                               onChanged: (value) {
                                 setState(() {
-                                  userEnum = value;
+                                  selectedRole = value ?? UserRole.user;
                                 });
                               },
-                              value: userEnum,
+                              value: selectedRole,
                             ),
                           ),
                         ),
@@ -30919,6 +31254,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               deviceType:
                                   Platform.isAndroid ? 'Android' : 'IOS',
                               birthDate: birthDateController.text,
+                              role: selectedRole.name,
                             );
                           },
                           style: CustomButtonStyles.mainButtonStyle(context),
@@ -41319,6 +41655,7 @@ import 'package:coment_app/src/feature/catalog/widgets/succsesful_added_bs.dart'
 import 'package:coment_app/src/feature/main/bloc/city_cubit.dart';
 import 'package:coment_app/src/feature/main/bloc/subcatalog_cubit.dart';
 import 'package:coment_app/src/feature/main/model/main_dto.dart';
+import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41333,7 +41670,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
-class LeaveFeedbackDetailPage extends StatefulWidget implements AutoRouteWrapper {
+class LeaveFeedbackDetailPage extends StatefulWidget
+    implements AutoRouteWrapper {
   final String categoryTitle;
   final List<CountryDTO> countryDTO;
   final int categoryId;
@@ -41346,7 +41684,8 @@ class LeaveFeedbackDetailPage extends StatefulWidget implements AutoRouteWrapper
       required this.countryDTO});
 
   @override
-  State<LeaveFeedbackDetailPage> createState() => _LeaveFeedbackDetailPageState();
+  State<LeaveFeedbackDetailPage> createState() =>
+      _LeaveFeedbackDetailPageState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
@@ -41451,7 +41790,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
   @override
   void initState() {
-    BlocProvider.of<SubcatalogCubit>(context).getSubcatalogList(catalogId: widget.categoryId);
+    BlocProvider.of<SubcatalogCubit>(context)
+        .getSubcatalogList(catalogId: widget.categoryId);
     categoryController.text = widget.categoryTitle;
     nameController.text = widget.value.productName ?? '';
     addressController.text = widget.value.address ?? '';
@@ -41476,7 +41816,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
     ).getMaskedText();
     countryController.text = widget.value.countryTitle ?? '';
     if (widget.value.countryId != null && widget.value.countryId != 0) {
-      BlocProvider.of<CityCubit>(context).getCityList(countryId: widget.value.countryId ?? 0);
+      BlocProvider.of<CityCubit>(context)
+          .getCityList(countryId: widget.value.countryId ?? 0);
       cityController.text = widget.value.cityTitle ?? '';
       cityId = widget.value.cityId ?? 0;
     }
@@ -41505,6 +41846,11 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final profileState = context.watch<ProfileBLoC>().state;
+    final isOwner = profileState.maybeWhen(
+      loaded: (userDTO) => userDTO.role == 'owner',
+      orElse: () => false,
+    );
     return Consumer<CreateProductModel>(
       builder: (context, value, child) => GestureDetector(
         onTap: () {
@@ -41512,7 +41858,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
         },
         child: LoaderOverlay(
           overlayColor: AppColors.barrierColor,
-          overlayWidgetBuilder: (progress) => const CustomLoadingOverlayWidget(),
+          overlayWidgetBuilder: (progress) =>
+              const CustomLoadingOverlayWidget(),
           child: Scaffold(
             // resizeToAvoidBottomInset: false,
             appBar: CustomAppBar(
@@ -41554,7 +41901,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                       ///
                       /// <--`add feedback`-->
                       ///
-                      _addFeedbackSection(value),
+                      if (!isOwner) _addFeedbackSection(value),
+                      // _addFeedbackSection(value),
                       const Gap(24),
                       BlocListener<NewProductCubit, NewProductState>(
                         listener: (context, state) {
@@ -41583,7 +41931,9 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                               value.feedbackImages = null;
                               value.rating = null;
                               value.feedbackText = null;
-                              context.router.popUntil((route) => route.settings.name == AddFeedbackSearchingRoute.name);
+                              context.router.popUntil((route) =>
+                                  route.settings.name ==
+                                  AddFeedbackSearchingRoute.name);
                               SuccsesfulAddedBs.show(context);
                             },
                           );
@@ -41665,8 +42015,10 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 )
               else
                 Container(),
-              Text("${countWords(feedbackController.text)}/15 ${context.localized.words}",
-                  style: AppTextStyles.fs12w600.copyWith(color: AppColors.base400)),
+              Text(
+                  "${countWords(feedbackController.text)}/15 ${context.localized.words}",
+                  style: AppTextStyles.fs12w600
+                      .copyWith(color: AppColors.base400)),
             ],
           ),
         ),
@@ -41722,9 +42074,11 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
-                              padding: EdgeInsets.only(left: index == 0 ? 0 : 10.0),
+                              padding:
+                                  EdgeInsets.only(left: index == 0 ? 0 : 10.0),
                               child: ClipRRect(
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(12)),
                                 child: Stack(
                                   children: [
                                     Image.file(
@@ -41739,14 +42093,17 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                                       child: InkWell(
                                         onTap: () {
                                           setState(() {
-                                            feedbackImageFileList.removeAt(index);
-                                            value.feedbackImages = feedbackImageFileList;
+                                            feedbackImageFileList
+                                                .removeAt(index);
+                                            value.feedbackImages =
+                                                feedbackImageFileList;
                                             checkAllowTapButton();
                                           });
                                         },
                                         child: Container(
                                           decoration: const BoxDecoration(
-                                              color: AppColors.backgroundInput, shape: BoxShape.circle),
+                                              color: AppColors.backgroundInput,
+                                              shape: BoxShape.circle),
                                           child: SvgPicture.asset(
                                             AssetsConstants.close,
                                             height: 20,
@@ -41774,7 +42131,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                                 image: (image) {
                                   if (image != null) {
                                     feedbackImageFileList.add(image);
-                                    value.feedbackImages = feedbackImageFileList;
+                                    value.feedbackImages =
+                                        feedbackImageFileList;
                                   }
                                   checkAllowTapButton();
 
@@ -41784,10 +42142,12 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.mainColor, width: 1),
+                                  border: Border.all(
+                                      color: AppColors.mainColor, width: 1),
                                   borderRadius: BorderRadius.circular(12)),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 32),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 28, horizontal: 32),
                                 child: SvgPicture.asset(
                                   AssetsConstants.addPurple,
                                   height: 24,
@@ -41870,9 +42230,11 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
-                              padding: EdgeInsets.only(left: index == 0 ? 0 : 10.0),
+                              padding:
+                                  EdgeInsets.only(left: index == 0 ? 0 : 10.0),
                               child: ClipRRect(
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(12)),
                                 child: Stack(
                                   children: [
                                     Image.file(
@@ -41894,7 +42256,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                                         },
                                         child: Container(
                                           decoration: const BoxDecoration(
-                                              color: AppColors.backgroundInput, shape: BoxShape.circle),
+                                              color: AppColors.backgroundInput,
+                                              shape: BoxShape.circle),
                                           child: SvgPicture.asset(
                                             AssetsConstants.close,
                                             height: 20,
@@ -41936,7 +42299,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 subCatalogId: value.subCategoryId ?? 0,
                 comment: value.feedbackText ?? '',
                 rating: value.rating ?? 0,
-                nameSubCatalog: value.subCategoryId == null ? value.subCategoryTitle : '',
+                nameSubCatalog:
+                    value.subCategoryId == null ? value.subCategoryTitle : '',
                 image: imageFileList.first,
                 imageFeedback: feedbackImageFileList);
             setState(() {});
@@ -41956,7 +42320,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
         },
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: allowTapButton ? AppColors.mainColor : AppColors.greyButton,
+          backgroundColor:
+              allowTapButton ? AppColors.mainColor : AppColors.greyButton,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -41965,7 +42330,9 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
         child: Text(
           'Добавить',
           style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w600, color: allowTapButton ? Colors.white : AppColors.text),
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: allowTapButton ? Colors.white : AppColors.text),
         ),
       ),
     );
@@ -41996,10 +42363,12 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
             hintText: context.localized.enterYourFullName,
             fillColor: AppColors.btnGrey,
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             suffixIcon: Padding(
               padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -42049,12 +42418,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               controller: subCategoryController,
               hintText: 'Выберите подкатегорию',
               fillColor: AppColors.btnGrey,
-              hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+              hintStyle:
+                  AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
               focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
               enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
               suffixIcon: Padding(
                 padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -42076,12 +42448,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 checkAllowTapButton();
               },
               fillColor: AppColors.btnGrey,
-              hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+              hintStyle:
+                  AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
               focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
               enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
             ),
           ),
@@ -42104,12 +42479,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               value.productName = text;
               checkAllowTapButton();
             },
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -42132,12 +42510,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               checkAllowTapButton();
             },
             hintText: '${context.localized.name} адреса',
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -42162,16 +42543,19 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
             keyboardType: TextInputType.number,
             hintText: 'Номер телефона',
             fillColor: AppColors.btnGrey,
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
-        
+
         const Gap(16),
 
         /// `link`
@@ -42191,12 +42575,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               checkAllowTapButton();
             },
             fillColor: AppColors.btnGrey,
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -42219,7 +42606,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 index: countryIndex,
                 countryDTO: widget.countryDTO,
                 selectedCountry: (id, title, index) {
-                  BlocProvider.of<CityCubit>(context).getCityList(countryId: id ?? 0);
+                  BlocProvider.of<CityCubit>(context)
+                      .getCityList(countryId: id ?? 0);
                   countryIndex = index;
                   countryController.text = title ?? '';
                   value.countryTitle = title;
@@ -42235,12 +42623,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
             controller: countryController,
             hintText: 'Название страны',
             fillColor: AppColors.btnGrey,
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             suffixIcon: Padding(
               padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -42305,12 +42696,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                           controller: cityController,
                           hintText: 'Название город',
                           fillColor: AppColors.btnGrey,
-                          hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+                          hintStyle: AppTextStyles.fs14w500
+                              .copyWith(color: AppColors.base400),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                              borderSide: const BorderSide(
+                                  width: 1, color: AppColors.borderTextField),
                               borderRadius: BorderRadius.circular(12)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                              borderSide: const BorderSide(
+                                  width: 1, color: AppColors.borderTextField),
                               borderRadius: BorderRadius.circular(12)),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -42761,7 +43155,7 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                           comment: comment,
                           rating: selectedRating,
                         );
-                        print('DEBUG: Sending comment = $comment');
+               
                         await BlocProvider.of<LeaveFeedbackCubit>(context)
                             .createFeedback(
                           feedbackPayload: feedbackPayload,
@@ -46206,6 +46600,7 @@ class _ChooseImageBottomSheetState extends State<ChooseImageBottomSheet> {
                 ],
               ),
             ),
+            
             const Gap(50),
           ],
         );
@@ -60908,6 +61303,683 @@ class PopularProductItem extends StatelessWidget {
 
 
 
+lib\src\feature\profile\bloc\load_documents_cubit.dart
+------------------------------------------------------
+// lib/src/feature/profile/bloc/load_documents_cubit.dart
+import 'dart:io';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
+
+part 'load_documents_cubit.freezed.dart';
+
+class LoadDocumentsCubit extends Cubit<LoadDocumentsState> {
+  final IProfileRemoteDS dataSource;
+
+  LoadDocumentsCubit(this.dataSource)
+      : super(const LoadDocumentsState.initial());
+
+  Future<void> uploadDocuments(List<File> files) async {
+    emit(const LoadDocumentsState.loading());
+    try {
+      final urls = await dataSource.uploadDocuments(files);
+      emit(LoadDocumentsState.success(urls));
+    } catch (e) {
+      print(e.toString());
+      emit(LoadDocumentsState.failure(e.toString()));
+    }
+  }
+}
+
+@freezed
+class LoadDocumentsState with _$LoadDocumentsState {
+  const factory LoadDocumentsState.initial() = _Initial;
+  const factory LoadDocumentsState.loading() = _Loading;
+  const factory LoadDocumentsState.success(List<String> urls) = _Success;
+  const factory LoadDocumentsState.failure(String error) = _Failure;
+}
+
+
+
+lib\src\feature\profile\bloc\load_documents_cubit.freezed.dart
+--------------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'load_documents_cubit.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$LoadDocumentsState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> urls) success,
+    required TResult Function(String error) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> urls)? success,
+    TResult? Function(String error)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> urls)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LoadDocumentsStateCopyWith<$Res> {
+  factory $LoadDocumentsStateCopyWith(
+          LoadDocumentsState value, $Res Function(LoadDocumentsState) then) =
+      _$LoadDocumentsStateCopyWithImpl<$Res, LoadDocumentsState>;
+}
+
+/// @nodoc
+class _$LoadDocumentsStateCopyWithImpl<$Res, $Val extends LoadDocumentsState>
+    implements $LoadDocumentsStateCopyWith<$Res> {
+  _$LoadDocumentsStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$LoadDocumentsStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
+
+  @override
+  String toString() {
+    return 'LoadDocumentsState.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> urls) success,
+    required TResult Function(String error) failure,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> urls)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> urls)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Initial implements LoadDocumentsState {
+  const factory _Initial() = _$InitialImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$LoadDocumentsStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
+
+  @override
+  String toString() {
+    return 'LoadDocumentsState.loading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> urls) success,
+    required TResult Function(String error) failure,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> urls)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> urls)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loading implements LoadDocumentsState {
+  const factory _Loading() = _$LoadingImpl;
+}
+
+/// @nodoc
+abstract class _$$SuccessImplCopyWith<$Res> {
+  factory _$$SuccessImplCopyWith(
+          _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
+      __$$SuccessImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<String> urls});
+}
+
+/// @nodoc
+class __$$SuccessImplCopyWithImpl<$Res>
+    extends _$LoadDocumentsStateCopyWithImpl<$Res, _$SuccessImpl>
+    implements _$$SuccessImplCopyWith<$Res> {
+  __$$SuccessImplCopyWithImpl(
+      _$SuccessImpl _value, $Res Function(_$SuccessImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? urls = null,
+  }) {
+    return _then(_$SuccessImpl(
+      null == urls
+          ? _value._urls
+          : urls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SuccessImpl implements _Success {
+  const _$SuccessImpl(final List<String> urls) : _urls = urls;
+
+  final List<String> _urls;
+  @override
+  List<String> get urls {
+    if (_urls is EqualUnmodifiableListView) return _urls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_urls);
+  }
+
+  @override
+  String toString() {
+    return 'LoadDocumentsState.success(urls: $urls)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SuccessImpl &&
+            const DeepCollectionEquality().equals(other._urls, _urls));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_urls));
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      __$$SuccessImplCopyWithImpl<_$SuccessImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> urls) success,
+    required TResult Function(String error) failure,
+  }) {
+    return success(urls);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> urls)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return success?.call(urls);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> urls)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(urls);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return success(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Success implements LoadDocumentsState {
+  const factory _Success(final List<String> urls) = _$SuccessImpl;
+
+  List<String> get urls;
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$FailureImplCopyWith<$Res> {
+  factory _$$FailureImplCopyWith(
+          _$FailureImpl value, $Res Function(_$FailureImpl) then) =
+      __$$FailureImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String error});
+}
+
+/// @nodoc
+class __$$FailureImplCopyWithImpl<$Res>
+    extends _$LoadDocumentsStateCopyWithImpl<$Res, _$FailureImpl>
+    implements _$$FailureImplCopyWith<$Res> {
+  __$$FailureImplCopyWithImpl(
+      _$FailureImpl _value, $Res Function(_$FailureImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? error = null,
+  }) {
+    return _then(_$FailureImpl(
+      null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$FailureImpl implements _Failure {
+  const _$FailureImpl(this.error);
+
+  @override
+  final String error;
+
+  @override
+  String toString() {
+    return 'LoadDocumentsState.failure(error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FailureImpl &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, error);
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FailureImplCopyWith<_$FailureImpl> get copyWith =>
+      __$$FailureImplCopyWithImpl<_$FailureImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> urls) success,
+    required TResult Function(String error) failure,
+  }) {
+    return failure(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> urls)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return failure?.call(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> urls)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return failure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return failure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Failure implements LoadDocumentsState {
+  const factory _Failure(final String error) = _$FailureImpl;
+
+  String get error;
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FailureImplCopyWith<_$FailureImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
 lib\src\feature\profile\bloc\my_feedbacks_cubit.dart
 ----------------------------------------------------
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
@@ -65279,6 +66351,7 @@ abstract class _ErrorState implements TechSupportState {
 lib\src\feature\profile\data\profile_remote_ds.dart
 ---------------------------------------------------
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:dio/dio.dart';
@@ -65308,7 +66381,7 @@ abstract interface class IProfileRemoteDS {
     required String password,
     required String name,
     required String email,
-     String? birthDate,
+    String? birthDate,
     required String phone,
     required int cityId,
     required int languageId,
@@ -65316,6 +66389,8 @@ abstract interface class IProfileRemoteDS {
   });
 
   Future<List<FeedbackDTO>> myFeedbacks();
+
+  Future<List<String>> uploadDocuments(List<File> files);
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -65364,7 +66439,7 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
     required int cityId,
     required int languageId,
     XFile? avatar,
-     String? birthDate,
+    String? birthDate,
   }) async {
     try {
       final Map<String, dynamic> data = {};
@@ -65375,7 +66450,8 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       if (cityId > 0) data['city_id'] = cityId.toString();
       if (password.isNotEmpty) data['password'] = password;
       if (languageId > 0) data['language_id'] = languageId.toString();
-      if (birthDate != null && birthDate.isNotEmpty) data['birthDate'] = birthDate;
+      if (birthDate != null && birthDate.isNotEmpty)
+        data['birthDate'] = birthDate;
 
       final FormData formData = FormData.fromMap(data);
       if (avatar != null) {
@@ -65430,12 +66506,12 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
   }) async {
     try {
       final body = {
-          'subject': subject,
-          'message': message,
-          'category': category,
-          'contactEmail': contactEmail,
-          'priority': 'medium',
-        };
+        'subject': subject,
+        'message': message,
+        'category': category,
+        'contactEmail': contactEmail,
+        'priority': 'medium',
+      };
       final Map<String, dynamic> response = await restClient.post(
         '/support/create',
         body: body,
@@ -65472,6 +66548,31 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       TalkerLoggerUtil.talker.error('#getMyFeedbacks - $e', e, st);
       rethrow;
     }
+  }
+
+  @override
+  Future<List<String>> uploadDocuments(List<File> files) async {
+    final formData = FormData();
+    for (final file in files) {
+      formData.files.add(
+        MapEntry(
+          'files',
+          await MultipartFile.fromFile(
+            file.path,
+            filename: file.path.split('/').last,
+          ),
+        ),
+      );
+    }
+
+    final response = await restClient.post(
+      'uploads/documents',
+      body: formData,
+      // headers: {'Content-Type': 'multipart/form-data'},
+    );
+
+    final urls = response['urls'] as List?;
+    return urls?.map((e) => e as String).toList() ?? [];
   }
 }
 
@@ -68245,6 +69346,379 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
 
 
+lib\src\feature\profile\presentation\pages\load_documents_page.dart
+-------------------------------------------------------------------
+import 'dart:io';
+import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/presentation/widgets/buttons/custom_button.dart';
+import 'package:coment_app/src/core/theme/resources.dart';
+import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
+import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:coment_app/src/feature/catalog/presentation/widgets/choose_image_bs.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
+
+@RoutePage()
+class LoadDocumentsPage extends StatelessWidget {
+  const LoadDocumentsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          LoadDocumentsCubit(context.repository.profileRemoteDS),
+      child: const LoadingDocumentWidget(),
+    );
+  }
+}
+
+class LoadingDocumentWidget extends StatefulWidget {
+  const LoadingDocumentWidget({super.key});
+
+  @override
+  State<LoadingDocumentWidget> createState() =>
+      _LoadingDocumentStateWidgetState();
+}
+
+class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
+  final List<File> _imageFiles = [];
+  final List<File> _documentFiles = [];
+  static const int _maxTotalFiles = 10;
+  final ImagePicker imagePicker = ImagePicker();
+  bool _isSubmitted = false;
+
+  bool get _canAddMore =>
+      _imageFiles.length + _documentFiles.length < _maxTotalFiles;
+
+  Future<void> _pickDocument() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx'],
+      );
+
+      if (result?.files.singleOrNull != null && _canAddMore) {
+        final path = result!.files.single.path;
+        if (path != null) {
+          setState(() {
+            _documentFiles.add(File(path));
+          });
+        }
+      }
+    } catch (e) {
+      // Логирование ошибки (опционально)
+      debugPrint('FilePicker error: $e');
+      if (context.mounted) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать файл: $e')),
+        );
+      }
+    }
+  }
+
+  void _removeImage(int index) {
+    setState(() => _imageFiles.removeAt(index));
+  }
+
+  void _removeDocument(int index) {
+    setState(() => _documentFiles.removeAt(index));
+  }
+
+  void _showAddOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo, color: AppColors.mainColor),
+              title: Text(context.localized.selectFromGallery),
+              onTap: () {
+                Navigator.pop(context);
+                ChooseImageBottomSheet.show(
+                  context,
+                  avatar: false,
+                  image: (File? file) {
+                    if (file != null && _canAddMore) {
+                      setState(() => _imageFiles.add(file));
+                    }
+                  },
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.document_scanner,
+                  color: AppColors.mainColor),
+              title: const Text('PDF, DOC, DOCX'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickDocument();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getDisplayName(String path) {
+    return p.basename(path);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<LoadDocumentsCubit, LoadDocumentsState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          success: (urls) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(context.localized.documentsSentForReview),
+                backgroundColor: Colors.green,
+              ),
+            );
+            // _imageFiles.clear();
+            // _documentFiles.clear();
+            // setState(() {});
+            setState(() {
+              _isSubmitted = true;
+            });
+          },
+          failure: (error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Ошибка: $error'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+          orElse: () {},
+        );
+      },
+      builder: (BuildContext context, LoadDocumentsState state) {
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: context.localized.loadDocuments,
+            shape: const Border(
+                bottom: BorderSide(color: AppColors.dividerColor, width: 0.5)),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Column(
+              children: [
+                // Изображения — GridView
+                if (_imageFiles.isNotEmpty)
+                  Expanded(
+                    flex: (_imageFiles.length > 3) ? 2 : 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 15,
+                        ),
+                        itemCount: _imageFiles.length,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.file(
+                                  _imageFiles[index],
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                ),
+                              ),
+                              
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: GestureDetector(
+                                    onTap: () => _removeImage(index),
+                                    child: Container(
+                                      width: 24,
+                                      height: 24,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.black54,
+                                      ),
+                                      child: const Icon(Icons.close,
+                                          color: Colors.white, size: 16),
+                                    ),
+                                  ),
+                                ),
+                              if (_isSubmitted)
+                               const  Align(
+                                  alignment: Alignment.bottomRight,
+                                  child:  Padding(
+                                    padding: EdgeInsets.only(right: 8.0, bottom: 8),
+                                    child: Icon(Icons.check_circle,
+                                        color: AppColors.green, size: 20),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                // Документы — ListView
+                if (_documentFiles.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: SizedBox(
+                      height: 100 * _documentFiles.length.toDouble(),
+                      child: ListView.builder(
+                        itemCount: _documentFiles.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.insert_drive_file),
+                                title: Text(_getDisplayName(
+                                    _documentFiles[index].path)),
+                                trailing:
+                                    SizedBox(
+                                      width: 80,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          if (_isSubmitted)
+                                           const Icon(Icons.check_circle,
+                                            color: AppColors.green, size: 20),
+                                          IconButton(
+                                              icon: const Icon(Icons.close),
+                                              onPressed: () => _removeDocument(index),
+                                            ),
+                                        ],
+                                      ),
+                                    )
+                                    ,
+                              ),
+                            
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                // Кнопка "+"
+                if (_canAddMore)
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: GestureDetector(
+                      onTap: _showAddOptions,
+                      child: Container(
+                        height: 56,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.mainColor),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.add,
+                              color: AppColors.mainColor, size: 32),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                const SizedBox(height: 16),
+
+                // Кнопка отправки
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: CustomButton(
+                    onPressed: (_imageFiles.isEmpty && _documentFiles.isEmpty)
+                        ? null
+                        : () {
+                            final allFiles = [
+                              ..._imageFiles,
+                              ..._documentFiles
+                            ];
+                            context
+                                .read<LoadDocumentsCubit>()
+                                .uploadDocuments(allFiles);
+                          },
+                    style: const ButtonStyle(),
+                    child: Text(context.localized.send),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+
+lib\src\feature\profile\presentation\pages\message_page.dart
+------------------------------------------------------------
+import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
+import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:flutter/material.dart';
+
+@RoutePage()
+class MessagePage extends StatelessWidget {
+  const MessagePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(
+        actions: [
+          SizedBox(
+            height: 50,
+            child: CustomTextField()),
+        ],
+      ),
+    );
+  }
+}
+
+
+lib\src\feature\profile\presentation\pages\payment_page.dart
+------------------------------------------------------------
+import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
+import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:flutter/material.dart';
+
+
+@RoutePage()
+class PaymentPage extends StatelessWidget {
+  const PaymentPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: context.localized.payment,
+      ),
+      body: const Center(
+        child: Text('Здесь можно добавить работу с настройкой карты и оплаты.'),
+      ),
+    );
+  }
+}
+
+
 lib\src\feature\profile\presentation\pages\profile_page.dart
 ------------------------------------------------------------
 import 'dart:developer';
@@ -68361,7 +69835,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   header: const RefreshClassicHeader(),
                   controller: _refreshController,
                   onRefresh: () async {
-                    BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+                    BlocProvider.of<ProfileBLoC>(context)
+                        .add(const ProfileEvent.getProfile());
                     _refreshController.refreshCompleted();
                   },
                   child: CustomScrollView(
@@ -68377,23 +69852,28 @@ class _ProfilePageState extends State<ProfilePage> {
                             ///
                             ///
                             Container(
-                              decoration:
-                                  BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(16)),
+                              decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(16)),
                               alignment: Alignment.center,
                               child: Row(
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      context.router.push(DetailAvatarRoute(image: userDTO.avatar ?? NOT_FOUND_IMAGE));
+                                      context.router.push(DetailAvatarRoute(
+                                          image: userDTO.avatar ??
+                                              NOT_FOUND_IMAGE));
                                     },
                                     child: ProfileAvatarWithRating(
-                                      imageAva: userDTO.avatar ?? NOT_FOUND_IMAGE,
+                                      imageAva:
+                                          userDTO.avatar ?? NOT_FOUND_IMAGE,
                                       rating: userDTO.rating ?? 1,
                                     ),
                                   ),
                                   const Gap(12),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         userDTO.name ?? '',
@@ -68467,7 +69947,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               icon: AssetsConstants.icHelpdesk,
                               title: context.localized.helpDesk,
                               onTap: () {
-                                SupportServiceBottomSheet.show(context, user: userDTO);
+                                SupportServiceBottomSheet.show(context,
+                                    user: userDTO);
                               },
                             ),
                             const Gap(12),
@@ -68476,7 +69957,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             /// language
                             ///
                             ProfileRowButton(
-                              icon:AssetsConstants.icLanguage,
+                              icon: AssetsConstants.icLanguage,
                               title: context.localized.language,
                               onTap: () {
                                 LanguageBottomSheet.show(
@@ -68502,33 +69983,51 @@ class _ProfilePageState extends State<ProfilePage> {
                                           width: double.infinity,
                                         ),
                                     loaded: (mainDTO) => ProfileRowButton(
-                                          icon:AssetsConstants.icCity,
-                                          title: (userDTO.city?.country?.name != null && userDTO.city?.name != null)
-                                              ? context.currentLocale.toString() == 'kk'
+                                          icon: AssetsConstants.icCity,
+                                          title: (userDTO.city?.country?.name !=
+                                                      null &&
+                                                  userDTO.city?.name != null)
+                                              ? context.currentLocale
+                                                          .toString() ==
+                                                      'kk'
                                                   ? '${userDTO.city?.country?.nameKk}'
-                                                  : context.currentLocale.toString() == 'en'
+                                                  : context.currentLocale
+                                                              .toString() ==
+                                                          'en'
                                                       ? '${userDTO.city?.country?.nameEn}'
-                                                      : context.currentLocale.toString() == 'uz'
+                                                      : context.currentLocale
+                                                                  .toString() ==
+                                                              'uz'
                                                           ? '${userDTO.city?.country?.nameUz}'
                                                           : '${userDTO.city?.country?.name}'
-                                              : context.localized.countryAndCity,
-                                          titleSecond:
-                                              (userDTO.city?.country?.name != null && userDTO.city?.name != null)
-                                                  ? context.currentLocale.toString() == 'kk'
-                                                      ? '${userDTO.city?.nameKk}'
-                                                      : context.currentLocale.toString() == 'en'
-                                                          ? '${userDTO.city?.nameEn}'
-                                                          : context.currentLocale.toString() == 'uz'
-                                                              ? '${userDTO.city?.nameUz}'
-                                                              : '${userDTO.city?.name}'
-                                                  // ? '${userDTO.city?.name}'
-                                                  : '',
+                                              : context
+                                                  .localized.countryAndCity,
+                                          titleSecond: (userDTO.city?.country
+                                                          ?.name !=
+                                                      null &&
+                                                  userDTO.city?.name != null)
+                                              ? context.currentLocale
+                                                          .toString() ==
+                                                      'kk'
+                                                  ? '${userDTO.city?.nameKk}'
+                                                  : context.currentLocale
+                                                              .toString() ==
+                                                          'en'
+                                                      ? '${userDTO.city?.nameEn}'
+                                                      : context.currentLocale
+                                                                  .toString() ==
+                                                              'uz'
+                                                          ? '${userDTO.city?.nameUz}'
+                                                          : '${userDTO.city?.name}'
+                                              // ? '${userDTO.city?.name}'
+                                              : '',
                                           onTap: () {
                                             CityMainBottomSheet.show(
                                               context,
                                               list: mainDTO,
                                               cityId: userDTO.city?.id,
-                                              countryId: userDTO.city?.country?.id,
+                                              countryId:
+                                                  userDTO.city?.country?.id,
                                               isGuest: (p0) {},
                                             );
                                           },
@@ -68536,19 +70035,67 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                             ),
                             const Gap(12),
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.documentsAdd,
+                                    title: context.localized.loadDocuments,
+                                    onTap: () {
+                                      context.router.push(
+                                        const LoadDocumentsRoute(),
+                                      );
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
+
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.companyAdd,
+                                    title: context.localized.companyAdd,
+                                    onTap: () {
+                                      context.router
+                                          .push(const SelectCategoriesRoute());
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.payment,
+                                    title: context.localized.payment,
+                                    onTap: () {
+                                      context.router
+                                          .push(const PaymentRoute());
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
+
+                            userDTO.role == 'owner'
+                                ? ProfileRowButton(
+                                    icon: AssetsConstants.message,
+                                    title: context.localized.message,
+                                    onTap: () {
+                                      context.router
+                                          .push(const MessageRoute());
+                                    },
+                                  )
+                                : const SizedBox(),
+                            const Gap(12),
 
                             ///
                             /// <-- `Logout` -->
                             ///
                             ProfileRowButton(
-                              icon:AssetsConstants.icLogOut,
+                              icon: AssetsConstants.icLogOut,
                               title: context.localized.logoutOfAccount,
                               onTap: () {
                                 LogoutBottomSheet.show(
                                   context,
                                   isDeleteAccount: false,
                                   onPressed: () {
-                                    BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.logOut());
+                                    BlocProvider.of<ProfileBLoC>(context)
+                                        .add(const ProfileEvent.logOut());
                                     context.router.maybePop();
                                   },
                                 );
@@ -70805,7 +72352,9 @@ lib\src\feature\settings\widget\settings_scope.dart
 import 'package:coment_app/src/feature/auth/bloc/register_cubit.dart';
 import 'package:coment_app/src/feature/catalog/model/create_product_model.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
+import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -70873,7 +72422,8 @@ class _SettingsScopeState extends State<SettingsScope> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<AppSettingsBloc, AppSettingsState>(
+  Widget build(BuildContext context) =>
+      BlocBuilder<AppSettingsBloc, AppSettingsState>(
         bloc: _appSettingsBloc,
         builder: (context, state) => MultiBlocProvider(
           providers: [
@@ -70895,6 +72445,12 @@ class _SettingsScopeState extends State<SettingsScope> {
               create: (context) => RegisterCubit(
                 repository: context.repository.authRepository,
                 authDao: context.repository.authDao,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => LoadDocumentsCubit(
+                
+                context.read<IProfileRemoteDS>(),
               ),
             ),
             ChangeNotifierProvider(
@@ -70926,7 +72482,8 @@ class _InheritedSettings extends InheritedWidget {
   final AppSettings? settings;
 
   @override
-  bool updateShouldNotify(covariant _InheritedSettings oldWidget) => settings != oldWidget.settings;
+  bool updateShouldNotify(covariant _InheritedSettings oldWidget) =>
+      settings != oldWidget.settings;
 }
 
 
@@ -72215,4 +73772,4 @@ class _SignInPage extends StatelessWidget {
 
 
 
-=== Всего файлов: 329 ===
+=== Всего файлов: 335 ===

@@ -160,5 +160,8 @@
   "owner": "Kompaniya egasi",
   "loadDocuments":"Hujjatlarni yuklang",
   "documentsSentForReview": "Hujjatlaringiz ko'rib chiqish uchun yuborildi.",
-  "sent": "Yuborildi"
+  "sent": "Yuborildi",
+  "companyAdd": "Kompaniya qo'shish",
+  "payment": "To'lov",
+  "message": "Chat"
 }

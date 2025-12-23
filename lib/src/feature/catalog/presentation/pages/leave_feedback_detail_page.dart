@@ -17,6 +17,7 @@ import 'package:coment_app/src/feature/catalog/widgets/succsesful_added_bs.dart'
 import 'package:coment_app/src/feature/main/bloc/city_cubit.dart';
 import 'package:coment_app/src/feature/main/bloc/subcatalog_cubit.dart';
 import 'package:coment_app/src/feature/main/model/main_dto.dart';
+import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -31,7 +32,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
-class LeaveFeedbackDetailPage extends StatefulWidget implements AutoRouteWrapper {
+class LeaveFeedbackDetailPage extends StatefulWidget
+    implements AutoRouteWrapper {
   final String categoryTitle;
   final List<CountryDTO> countryDTO;
   final int categoryId;
@@ -44,7 +46,8 @@ class LeaveFeedbackDetailPage extends StatefulWidget implements AutoRouteWrapper
       required this.countryDTO});
 
   @override
-  State<LeaveFeedbackDetailPage> createState() => _LeaveFeedbackDetailPageState();
+  State<LeaveFeedbackDetailPage> createState() =>
+      _LeaveFeedbackDetailPageState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
@@ -149,7 +152,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
   @override
   void initState() {
-    BlocProvider.of<SubcatalogCubit>(context).getSubcatalogList(catalogId: widget.categoryId);
+    BlocProvider.of<SubcatalogCubit>(context)
+        .getSubcatalogList(catalogId: widget.categoryId);
     categoryController.text = widget.categoryTitle;
     nameController.text = widget.value.productName ?? '';
     addressController.text = widget.value.address ?? '';
@@ -174,7 +178,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
     ).getMaskedText();
     countryController.text = widget.value.countryTitle ?? '';
     if (widget.value.countryId != null && widget.value.countryId != 0) {
-      BlocProvider.of<CityCubit>(context).getCityList(countryId: widget.value.countryId ?? 0);
+      BlocProvider.of<CityCubit>(context)
+          .getCityList(countryId: widget.value.countryId ?? 0);
       cityController.text = widget.value.cityTitle ?? '';
       cityId = widget.value.cityId ?? 0;
     }
@@ -203,6 +208,11 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final profileState = context.watch<ProfileBLoC>().state;
+    final isOwner = profileState.maybeWhen(
+      loaded: (userDTO) => userDTO.role == 'owner',
+      orElse: () => false,
+    );
     return Consumer<CreateProductModel>(
       builder: (context, value, child) => GestureDetector(
         onTap: () {
@@ -210,7 +220,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
         },
         child: LoaderOverlay(
           overlayColor: AppColors.barrierColor,
-          overlayWidgetBuilder: (progress) => const CustomLoadingOverlayWidget(),
+          overlayWidgetBuilder: (progress) =>
+              const CustomLoadingOverlayWidget(),
           child: Scaffold(
             // resizeToAvoidBottomInset: false,
             appBar: CustomAppBar(
@@ -252,7 +263,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                       ///
                       /// <--`add feedback`-->
                       ///
-                      _addFeedbackSection(value),
+                      if (!isOwner) _addFeedbackSection(value),
+                      // _addFeedbackSection(value),
                       const Gap(24),
                       BlocListener<NewProductCubit, NewProductState>(
                         listener: (context, state) {
@@ -281,7 +293,9 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                               value.feedbackImages = null;
                               value.rating = null;
                               value.feedbackText = null;
-                              context.router.popUntil((route) => route.settings.name == AddFeedbackSearchingRoute.name);
+                              context.router.popUntil((route) =>
+                                  route.settings.name ==
+                                  AddFeedbackSearchingRoute.name);
                               SuccsesfulAddedBs.show(context);
                             },
                           );
@@ -363,8 +377,10 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 )
               else
                 Container(),
-              Text("${countWords(feedbackController.text)}/15 ${context.localized.words}",
-                  style: AppTextStyles.fs12w600.copyWith(color: AppColors.base400)),
+              Text(
+                  "${countWords(feedbackController.text)}/15 ${context.localized.words}",
+                  style: AppTextStyles.fs12w600
+                      .copyWith(color: AppColors.base400)),
             ],
           ),
         ),
@@ -420,9 +436,11 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
-                              padding: EdgeInsets.only(left: index == 0 ? 0 : 10.0),
+                              padding:
+                                  EdgeInsets.only(left: index == 0 ? 0 : 10.0),
                               child: ClipRRect(
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(12)),
                                 child: Stack(
                                   children: [
                                     Image.file(
@@ -437,14 +455,17 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                                       child: InkWell(
                                         onTap: () {
                                           setState(() {
-                                            feedbackImageFileList.removeAt(index);
-                                            value.feedbackImages = feedbackImageFileList;
+                                            feedbackImageFileList
+                                                .removeAt(index);
+                                            value.feedbackImages =
+                                                feedbackImageFileList;
                                             checkAllowTapButton();
                                           });
                                         },
                                         child: Container(
                                           decoration: const BoxDecoration(
-                                              color: AppColors.backgroundInput, shape: BoxShape.circle),
+                                              color: AppColors.backgroundInput,
+                                              shape: BoxShape.circle),
                                           child: SvgPicture.asset(
                                             AssetsConstants.close,
                                             height: 20,
@@ -472,7 +493,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                                 image: (image) {
                                   if (image != null) {
                                     feedbackImageFileList.add(image);
-                                    value.feedbackImages = feedbackImageFileList;
+                                    value.feedbackImages =
+                                        feedbackImageFileList;
                                   }
                                   checkAllowTapButton();
 
@@ -482,10 +504,12 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.mainColor, width: 1),
+                                  border: Border.all(
+                                      color: AppColors.mainColor, width: 1),
                                   borderRadius: BorderRadius.circular(12)),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 32),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 28, horizontal: 32),
                                 child: SvgPicture.asset(
                                   AssetsConstants.addPurple,
                                   height: 24,
@@ -568,9 +592,11 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
-                              padding: EdgeInsets.only(left: index == 0 ? 0 : 10.0),
+                              padding:
+                                  EdgeInsets.only(left: index == 0 ? 0 : 10.0),
                               child: ClipRRect(
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(12)),
                                 child: Stack(
                                   children: [
                                     Image.file(
@@ -592,7 +618,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                                         },
                                         child: Container(
                                           decoration: const BoxDecoration(
-                                              color: AppColors.backgroundInput, shape: BoxShape.circle),
+                                              color: AppColors.backgroundInput,
+                                              shape: BoxShape.circle),
                                           child: SvgPicture.asset(
                                             AssetsConstants.close,
                                             height: 20,
@@ -634,7 +661,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 subCatalogId: value.subCategoryId ?? 0,
                 comment: value.feedbackText ?? '',
                 rating: value.rating ?? 0,
-                nameSubCatalog: value.subCategoryId == null ? value.subCategoryTitle : '',
+                nameSubCatalog:
+                    value.subCategoryId == null ? value.subCategoryTitle : '',
                 image: imageFileList.first,
                 imageFeedback: feedbackImageFileList);
             setState(() {});
@@ -654,7 +682,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
         },
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: allowTapButton ? AppColors.mainColor : AppColors.greyButton,
+          backgroundColor:
+              allowTapButton ? AppColors.mainColor : AppColors.greyButton,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -663,7 +692,9 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
         child: Text(
           'Добавить',
           style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w600, color: allowTapButton ? Colors.white : AppColors.text),
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: allowTapButton ? Colors.white : AppColors.text),
         ),
       ),
     );
@@ -694,10 +725,12 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
             hintText: context.localized.enterYourFullName,
             fillColor: AppColors.btnGrey,
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             suffixIcon: Padding(
               padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -747,12 +780,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               controller: subCategoryController,
               hintText: 'Выберите подкатегорию',
               fillColor: AppColors.btnGrey,
-              hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+              hintStyle:
+                  AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
               focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
               enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
               suffixIcon: Padding(
                 padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -774,12 +810,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 checkAllowTapButton();
               },
               fillColor: AppColors.btnGrey,
-              hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+              hintStyle:
+                  AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
               focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
               enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                  borderSide: const BorderSide(
+                      width: 1, color: AppColors.borderTextField),
                   borderRadius: BorderRadius.circular(12)),
             ),
           ),
@@ -802,12 +841,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               value.productName = text;
               checkAllowTapButton();
             },
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -830,12 +872,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               checkAllowTapButton();
             },
             hintText: '${context.localized.name} адреса',
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -860,16 +905,19 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
             keyboardType: TextInputType.number,
             hintText: 'Номер телефона',
             fillColor: AppColors.btnGrey,
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
-        
+
         const Gap(16),
 
         /// `link`
@@ -889,12 +937,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               checkAllowTapButton();
             },
             fillColor: AppColors.btnGrey,
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -917,7 +968,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 index: countryIndex,
                 countryDTO: widget.countryDTO,
                 selectedCountry: (id, title, index) {
-                  BlocProvider.of<CityCubit>(context).getCityList(countryId: id ?? 0);
+                  BlocProvider.of<CityCubit>(context)
+                      .getCityList(countryId: id ?? 0);
                   countryIndex = index;
                   countryController.text = title ?? '';
                   value.countryTitle = title;
@@ -933,12 +985,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
             controller: countryController,
             hintText: 'Название страны',
             fillColor: AppColors.btnGrey,
-            hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+            hintStyle:
+                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                borderSide: const BorderSide(
+                    width: 1, color: AppColors.borderTextField),
                 borderRadius: BorderRadius.circular(12)),
             suffixIcon: Padding(
               padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -1003,12 +1058,15 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                           controller: cityController,
                           hintText: 'Название город',
                           fillColor: AppColors.btnGrey,
-                          hintStyle: AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
+                          hintStyle: AppTextStyles.fs14w500
+                              .copyWith(color: AppColors.base400),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                              borderSide: const BorderSide(
+                                  width: 1, color: AppColors.borderTextField),
                               borderRadius: BorderRadius.circular(12)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1, color: AppColors.borderTextField),
+                              borderSide: const BorderSide(
+                                  width: 1, color: AppColors.borderTextField),
                               borderRadius: BorderRadius.circular(12)),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(top: 13, bottom: 13),
