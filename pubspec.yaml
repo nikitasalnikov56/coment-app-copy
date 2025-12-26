@@ -83,6 +83,8 @@ dependencies:
   flutter_map: ^8.2.2
   latlong2: ^0.9.1
   file_picker: ^10.3.7
+  flutter_slidable: ^4.0.3
+  
   # geolocator: ^14.0.2
 
 dev_dependencies:

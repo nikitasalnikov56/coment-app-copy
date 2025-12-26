@@ -39,6 +39,10 @@ abstract interface class IProfileRemoteDS {
   Future<List<FeedbackDTO>> myFeedbacks();
 
   Future<List<String>> uploadDocuments(List<File> files);
+
+  Future<List<String>> getMyDocuments();
+
+  Future<void> deleteDocument(String url);
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -221,5 +225,17 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
 
     final urls = response['urls'] as List?;
     return urls?.map((e) => e as String).toList() ?? [];
+  }
+
+  @override
+  Future<List<String>> getMyDocuments() async {
+    final response = await restClient.get('uploads/my-documents');
+    final urls = response['urls'] as List?;
+    return urls?.map((e) => e as String).toList() ?? [];
+  }
+
+  @override
+  Future<void> deleteDocument(String url) async {
+    await restClient.delete('uploads/document', body: {'url': url});
   }
 }

@@ -7,10 +7,13 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:coment_app/src/feature/catalog/presentation/widgets/choose_image_bs.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class LoadDocumentsPage extends StatelessWidget {
@@ -20,7 +23,8 @@ class LoadDocumentsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          LoadDocumentsCubit(context.repository.profileRemoteDS),
+          LoadDocumentsCubit(context.repository.profileRemoteDS)
+            ..fetchDocuments(),
       child: const LoadingDocumentWidget(),
     );
   }
@@ -37,6 +41,7 @@ class LoadingDocumentWidget extends StatefulWidget {
 class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
   final List<File> _imageFiles = [];
   final List<File> _documentFiles = [];
+  List<String> _existingDocuments = [];
   static const int _maxTotalFiles = 10;
   final ImagePicker imagePicker = ImagePicker();
   bool _isSubmitted = false;
@@ -130,14 +135,22 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(context.localized.documentsSentForReview),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.green,
               ),
             );
-            // _imageFiles.clear();
-            // _documentFiles.clear();
+            _imageFiles.clear();
+            _documentFiles.clear();
             // setState(() {});
             setState(() {
               _isSubmitted = true;
+            });
+            context.read<LoadDocumentsCubit>().fetchDocuments();
+          },
+          loaded: (urls) {
+            // _existingDocuments = urls;
+            setState(() {
+              _existingDocuments = urls;
+              _isSubmitted = false; // сброс флага отправки
             });
           },
           failure: (error) {
@@ -162,6 +175,81 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
             padding: const EdgeInsets.only(bottom: 12.0),
             child: Column(
               children: [
+                // === Секция: Ранее загруженные документы (только просмотр) ===
+                if (_existingDocuments.isNotEmpty)
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Ранее загруженные документы',
+                          style: AppTextStyles.fs14w600
+                              .copyWith(color: AppColors.grey2),
+                        ),
+                        const Gap(8),
+                        SizedBox(
+                          height: 150 * _existingDocuments.length.toDouble(),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            // physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _existingDocuments.length,
+                            itemBuilder: (context, index) {
+                              final url = _existingDocuments[index];
+                              final isImage = url.endsWith('.png') ||
+                                  url.endsWith('.jpg') ||
+                                  url.endsWith('.jpeg');
+                              final name = Uri.parse(url).pathSegments.last;
+
+                              return Slidable(
+                                endActionPane: ActionPane(
+                                  motion: const StretchMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(12),
+                                        bottomRight: Radius.circular(12),
+                                      ),
+                                      onPressed: (ctx) async {
+                                        final url = _existingDocuments[index];
+                                        await context
+                                            .read<LoadDocumentsCubit>()
+                                            .deleteDocument(url);
+                                      },
+                                      backgroundColor: AppColors.red700,
+                                      icon: Icons.delete,
+                                      label: 'Delete',
+                                    ),
+                                  ],
+                                ),
+                                child: ListTile(
+                                  leading: isImage
+                                      ? const Icon(Icons.image,
+                                          color: AppColors.mainColor)
+                                      : const Icon(Icons.insert_drive_file),
+                                  title: Text(name),
+                                  onTap: () async {
+                                    if (!await launchUrl(Uri.parse(url))) {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Не удалось открыть файл')),
+                                        );
+                                      }
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                 // Изображения — GridView
                 if (_imageFiles.isNotEmpty)
                   Expanded(
@@ -188,29 +276,29 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
                                   height: double.infinity,
                                 ),
                               ),
-                              
-                                Positioned(
-                                  top: 4,
-                                  right: 4,
-                                  child: GestureDetector(
-                                    onTap: () => _removeImage(index),
-                                    child: Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black54,
-                                      ),
-                                      child: const Icon(Icons.close,
-                                          color: Colors.white, size: 16),
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: GestureDetector(
+                                  onTap: () => _removeImage(index),
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black54,
                                     ),
+                                    child: const Icon(Icons.close,
+                                        color: Colors.white, size: 16),
                                   ),
                                 ),
+                              ),
                               if (_isSubmitted)
-                               const  Align(
+                                const Align(
                                   alignment: Alignment.bottomRight,
-                                  child:  Padding(
-                                    padding: EdgeInsets.only(right: 8.0, bottom: 8),
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 8.0, bottom: 8),
                                     child: Icon(Icons.check_circle,
                                         color: AppColors.green, size: 20),
                                   ),
@@ -237,25 +325,22 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
                                 leading: const Icon(Icons.insert_drive_file),
                                 title: Text(_getDisplayName(
                                     _documentFiles[index].path)),
-                                trailing:
-                                    SizedBox(
-                                      width: 80,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          if (_isSubmitted)
-                                           const Icon(Icons.check_circle,
+                                trailing: SizedBox(
+                                  width: 80,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      if (_isSubmitted)
+                                        const Icon(Icons.check_circle,
                                             color: AppColors.green, size: 20),
-                                          IconButton(
-                                              icon: const Icon(Icons.close),
-                                              onPressed: () => _removeDocument(index),
-                                            ),
-                                        ],
+                                      IconButton(
+                                        icon: const Icon(Icons.close),
+                                        onPressed: () => _removeDocument(index),
                                       ),
-                                    )
-                                    ,
+                                    ],
+                                  ),
+                                ),
                               ),
-                            
                             ],
                           );
                         },
