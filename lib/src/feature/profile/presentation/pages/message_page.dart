@@ -9,12 +9,16 @@ class MessagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       appBar: CustomAppBar(
         actions: [
-          SizedBox(
-            height: 50,
-            child: CustomTextField()),
+          Expanded(flex: 2, child: SizedBox()),
+          Expanded(
+            flex: 8,
+
+            child:  CustomTextField(),
+          ),
+          Expanded(flex: 1, child: SizedBox()),
         ],
       ),
     );

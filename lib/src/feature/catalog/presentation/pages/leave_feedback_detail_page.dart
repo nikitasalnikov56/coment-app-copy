@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:coment_app/src/core/presentation/widgets/buttons/custom_button.dart';
+import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
 import 'package:coment_app/src/core/presentation/widgets/other/custom_loading_overlay_widget.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
+import 'package:coment_app/src/feature/auth/presentation/auth.dart';
 import 'package:coment_app/src/feature/catalog/bloc/new_product_cubit.dart';
 import 'package:coment_app/src/feature/catalog/model/create_product_model.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/leave_feedback_page.dart';
@@ -92,10 +94,6 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
   // phone number
   final TextEditingController phoneController = TextEditingController();
-  MaskTextInputFormatter maskPhoneFormatter = MaskTextInputFormatter(
-    mask: '+7 ### ### ## ##',
-    filter: {"#": RegExp('[0-9]')},
-  );
 
   // country
   final TextEditingController countryController = TextEditingController();
@@ -118,35 +116,66 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
   // feedback text
   final TextEditingController feedbackController = TextEditingController();
   final ValueNotifier<String?> _feedbackError = ValueNotifier(null);
-
-  final ValueNotifier<bool> _allowTapButton = ValueNotifier(false);
+  final ValueNotifier<String?> _phoneError = ValueNotifier(null);
 
   bool allowTapButton = false;
-
+  bool _isOwner = false;
   bool visibleError = false;
+  Country? selectedCountry;
+  MaskTextInputFormatter? _phoneMaskFormatter;
 
+  // void checkAllowTapButton() {
+  //   final isSubCatValid = subCategoryController.text.isNotEmpty;
+  //   final isNameValid = nameController.text.isNotEmpty;
+  //   final isAddressValid = addressController.text.isNotEmpty;
+  //   final isPhoneValid = phoneController.text.length == 16;
+  //   final isCountryValid = countryController.text.isNotEmpty;
+  //   final isCityValid = cityController.text.isNotEmpty;
+  //   final isProductImagesValid = imageFileList.isNotEmpty;
+
+  //   final isFeedbackImagesValid = feedbackImageFileList.isNotEmpty;
+  //   final isRatingValid = _selectedRating != 0;
+  //   final isFeedbackTextValid = feedbackController.text.isNotEmpty;
+
+  //   allowTapButton = isSubCatValid &&
+  //       isNameValid &&
+  //       isAddressValid &&
+  //       isPhoneValid &&
+  //       isCountryValid &&
+  //       isProductImagesValid &&
+  //       isRatingValid &&
+  //       isFeedbackTextValid &&
+  //       isFeedbackImagesValid &&
+  //       isCityValid;
+  //   setState(() {});
+  // }
   void checkAllowTapButton() {
+    final phoneUnmasked =
+        phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final isPhoneValid = phoneUnmasked.length == selectedCountry!.digitLength;
+
     final isSubCatValid = subCategoryController.text.isNotEmpty;
     final isNameValid = nameController.text.isNotEmpty;
     final isAddressValid = addressController.text.isNotEmpty;
-    final isPhoneValid = phoneController.text.length == 16;
     final isCountryValid = countryController.text.isNotEmpty;
     final isCityValid = cityController.text.isNotEmpty;
     final isProductImagesValid = imageFileList.isNotEmpty;
-    final isFeedbackImagesValid = feedbackImageFileList.isNotEmpty;
-    final isRatingValid = _selectedRating != 0;
-    final isFeedbackTextValid = feedbackController.text.isNotEmpty;
+
+    final isFeedbackValid = _isOwner
+        ? true
+        : (_selectedRating != 0 &&
+            feedbackController.text.isNotEmpty &&
+            feedbackImageFileList.isNotEmpty);
 
     allowTapButton = isSubCatValid &&
         isNameValid &&
         isAddressValid &&
         isPhoneValid &&
         isCountryValid &&
+        isCityValid &&
         isProductImagesValid &&
-        isRatingValid &&
-        isFeedbackTextValid &&
-        isFeedbackImagesValid &&
-        isCityValid;
+        isFeedbackValid;
+
     setState(() {});
   }
 
@@ -165,24 +194,26 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
     // } else {
     //   selectedCountry = countries.first;
     // }
-    maskPhoneFormatter = MaskTextInputFormatter(
-      mask: '+7 ### ### ## ##',
-      filter: {"#": RegExp('[0-9]')},
-      initialText: widget.value.phoneNumber,
-    );
-    // _nameController.text = widget.user.name ?? '';
-    phoneController.text = MaskTextInputFormatter(
-      mask: '+7 ### ### ## ##',
-      filter: {"#": RegExp('[0-9]')},
-      initialText: widget.value.phoneNumber,
-    ).getMaskedText();
-    countryController.text = widget.value.countryTitle ?? '';
-    if (widget.value.countryId != null && widget.value.countryId != 0) {
-      BlocProvider.of<CityCubit>(context)
-          .getCityList(countryId: widget.value.countryId ?? 0);
-      cityController.text = widget.value.cityTitle ?? '';
-      cityId = widget.value.cityId ?? 0;
+    final phone = widget.value.phoneNumber;
+    if (phone != null && phone.isNotEmpty) {
+      if (phone.startsWith('+7')) {
+        _updateCountryAndFormat(
+          countries.firstWhere((c) => c.code == '+7'),
+          initialPhone: phone,
+        );
+      } else if (phone.startsWith('+998')) {
+        _updateCountryAndFormat(
+          countries.firstWhere((c) => c.code == '+998'),
+          initialPhone: phone,
+        );
+      } else {
+        // fallback
+        _updateCountryAndFormat(countries.first, initialPhone: phone);
+      }
+    } else {
+      _updateCountryAndFormat(countries.first);
     }
+
     imageFileList = widget.value.productImages ?? [];
     _selectedRating = widget.value.rating ?? 0;
     feedbackController.text = widget.value.feedbackText ?? '';
@@ -202,8 +233,47 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
     cityController.dispose();
     feedbackController.dispose();
     _feedbackError.dispose();
-    _allowTapButton.dispose();
+    _phoneError.dispose();
     super.dispose();
+  }
+
+  void parsePhoneNumber(String phoneNumber) {
+    if (phoneNumber.startsWith("+7")) {
+      selectedCountry = countries.firstWhere((c) => c.code == "+7");
+
+      phoneController.text = phoneNumber
+          .substring(2)
+          .replaceAll(RegExp(r'[^0-9]'), ''); // Убираем "+7"
+    } else if (phoneNumber.startsWith("+998")) {
+      selectedCountry = countries.firstWhere((c) => c.code == "+998");
+      phoneController.text = phoneNumber
+          .substring(4)
+          .replaceAll(RegExp(r'[^0-9]'), ''); // Убираем "+998"
+    } else {
+      selectedCountry = countries.first;
+      phoneController.text = phoneNumber.replaceAll(
+          RegExp(r'[^0-9]'), ''); // Записываем весь номер
+    }
+  }
+
+  void _updateCountryAndFormat(Country newCountry, {String? initialPhone}) {
+    setState(() {
+      selectedCountry = newCountry;
+      _phoneMaskFormatter = MaskTextInputFormatter(
+        mask: newCountry.mask,
+        filter: {"#": RegExp(r'[0-9]')},
+      );
+
+      if (initialPhone != null) {
+        // Убираем всё, кроме цифр
+        final digitsOnly = initialPhone.replaceAll(RegExp(r'[^0-9]'), '');
+        // Применяем маску
+        phoneController.text = _phoneMaskFormatter!.maskText(digitsOnly);
+        // format(digitsOnly);
+      } else {
+        phoneController.clear();
+      }
+    });
   }
 
   @override
@@ -213,6 +283,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
       loaded: (userDTO) => userDTO.role == 'owner',
       orElse: () => false,
     );
+    _isOwner = isOwner;
     return Consumer<CreateProductModel>(
       builder: (context, value, child) => GestureDetector(
         onTap: () {
@@ -295,8 +366,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                               value.feedbackText = null;
                               context.router.popUntil((route) =>
                                   route.settings.name ==
-                                  AddFeedbackSearchingRoute.name);
-                              SuccsesfulAddedBs.show(context);
+                                  LauncherRoute.name);
+                              !_isOwner ? SuccsesfulAddedBs.show(context) : null;
                             },
                           );
                         },
@@ -648,9 +719,22 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
     return SizedBox(
       width: double.infinity,
       child: CustomButton(
-        onPressed: () {
+        onPressed: () async {
           if (allowTapButton) {
-            BlocProvider.of<NewProductCubit>(context).createNewProduct(
+            // 👇 Для владельца — отправляем заглушки, чтобы пройти валидацию бэкенда
+            final String commentToSend = _isOwner
+                ? '-'
+                : (value.feedbackText?.isNotEmpty == true
+                    ? value.feedbackText!
+                    : '-');
+            final int ratingToSend = _isOwner
+                ? 1
+                : (value.rating != null && value.rating != 0
+                    ? value.rating!
+                    : 1);
+
+            try {
+              await BlocProvider.of<NewProductCubit>(context).createNewProduct(
                 cityId: value.cityId ?? 0,
                 countryId: value.countryId ?? 0,
                 name: value.productName ?? '',
@@ -659,12 +743,36 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 websiteUrl: value.link ?? '',
                 catalogId: value.categoryId ?? 0,
                 subCatalogId: value.subCategoryId ?? 0,
-                comment: value.feedbackText ?? '',
-                rating: value.rating ?? 0,
-                nameSubCatalog:
-                    value.subCategoryId == null ? value.subCategoryTitle : '',
-                image: imageFileList.first,
-                imageFeedback: feedbackImageFileList);
+                comment: commentToSend,
+                rating: ratingToSend,
+                nameSubCatalog: value.subCategoryId == null
+                    ? value.subCategoryTitle ?? ''
+                    : '',
+                image: imageFileList.isNotEmpty ? imageFileList.first : null,
+                imageFeedback: _isOwner ? null : feedbackImageFileList,
+              );
+              if (!mounted) return;
+              Toaster.showTopShortToast(context,
+                  message: 'Компания успешно добавлена!');
+            } catch (e) {
+              Toaster.showTopShortToast(context, message: e.toString());
+            }
+
+            // BlocProvider.of<NewProductCubit>(context).createNewProduct(
+            //     cityId: value.cityId ?? 0,
+            //     countryId: value.countryId ?? 0,
+            //     name: value.productName ?? '',
+            //     address: value.address ?? '',
+            //     organisationPhone: value.phoneNumber ?? '',
+            //     websiteUrl: value.link ?? '',
+            //     catalogId: value.categoryId ?? 0,
+            //     subCatalogId: value.subCategoryId ?? 0,
+            //     comment: value.feedbackText ?? '',
+            //     rating: value.rating ?? 0,
+            //     nameSubCatalog:
+            //         value.subCategoryId == null ? value.subCategoryTitle : '',
+            //     image: imageFileList.first,
+            //     imageFeedback: feedbackImageFileList);
             setState(() {});
           }
           log('${value.categoryId} => ${value.categoryTitle}');
@@ -892,30 +1000,79 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
           style: AppTextStyles.fs14w500.copyWith(height: 1.2),
         ),
         const Gap(8),
-        SizedBox(
-          height: 44,
-          child: CustomTextField(
-            textStyle: AppTextStyles.fs14w500,
-            controller: phoneController,
-            onChanged: (text) {
-              value.phoneNumber = maskPhoneFormatter.getUnmaskedText();
-              checkAllowTapButton();
-            },
-            inputFormatters: [maskPhoneFormatter],
-            keyboardType: TextInputType.number,
-            hintText: 'Номер телефона',
-            fillColor: AppColors.btnGrey,
-            hintStyle:
-                AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
-            focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    width: 1, color: AppColors.borderTextField),
-                borderRadius: BorderRadius.circular(12)),
-            enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    width: 1, color: AppColors.borderTextField),
-                borderRadius: BorderRadius.circular(12)),
-          ),
+
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                key: Key(selectedCountry?.code ?? 'default'),
+                height: 44,
+                obscureText: false,
+                focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(12)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        width: 1, color: AppColors.borderTextField),
+                    borderRadius: BorderRadius.circular(12)),
+                prefixIconWidget: Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: DropdownButton<Country>(
+                    value: selectedCountry,
+                    borderRadius: BorderRadius.circular(12),
+                    items: countries.map((country) {
+                      return DropdownMenuItem<Country>(
+                        value: country,
+                        child: Text('${country.name} ${country.code}'),
+                      );
+                    }).toList(),
+                    onChanged: (Country? newCountry) {
+                      if (newCountry != null) {
+                        _updateCountryAndFormat(newCountry);
+                        // setState(() {
+                        //   selectedCountry = newCountry;
+                        //   phoneController.clear();
+                        // });
+                      }
+                    },
+                    dropdownColor: Colors.white,
+                    underline: const SizedBox(),
+                  ),
+                ),
+                controller: phoneController,
+                inputFormatters: [
+                  _phoneMaskFormatter ??
+                      MaskTextInputFormatter(mask: '##########')
+                  // MaskTextInputFormatter(
+                  //   mask: selectedCountry?.mask,
+                  //   filter: {"#": RegExp(r'[0-9]')},
+                  // ),
+                ],
+                keyboardType: TextInputType.phone,
+                hintText: selectedCountry?.mask.replaceAll('#', '_'),
+                onChanged: (value) {
+                  final digitsOnly = value.replaceAll(RegExp(r'[^0-9]'), '');
+                  widget.value.phoneNumber =
+                      '${selectedCountry!.code}$digitsOnly';
+                  checkAllowTapButton();
+                },
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return _phoneError.value =
+                        context.localized.required_to_fill;
+                  }
+                  String unmasked = value.replaceAll(RegExp(r'[^0-9]'), '');
+                  if (unmasked.length != selectedCountry!.digitLength) {
+                    // return _phoneError.value =
+                    //     context.localized.incorrectNumberFormat;
+                  }
+                  return _phoneError.value = null;
+                },
+              ),
+            ),
+          ],
         ),
 
         const Gap(16),

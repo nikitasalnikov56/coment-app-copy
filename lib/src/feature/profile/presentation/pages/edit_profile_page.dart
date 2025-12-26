@@ -92,6 +92,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _surnameError.dispose();
     _emailError.dispose();
     _passwordError.dispose();
+    _phoneError.dispose();
     _allowTapButton.dispose();
     passwordFocus.dispose();
     birthDateController.dispose();
@@ -502,6 +503,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               },
                             ),
                             const Gap(16),
+
+                            ///
+                            /// edit date of birth
+                            ///
                             Text(
                               context.localized.enterYourBirthDate,
                               style:
@@ -520,6 +525,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               ),
                             ),
                             const Gap(16),
+
+                            ///
+                            /// edit phone number
+                            ///
                             Text(
                               context.localized.enterYourPhoneNumber,
                               style: AppTextStyles.fs14w400,
