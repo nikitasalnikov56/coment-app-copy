@@ -164,6 +164,19 @@
   "sent": "Отправлено",
   "companyAdd": "Добавить компанию",
   "payment": "Оплата",
-  "message": "Чат"
+  "message": "Чат",
+   "payment": "Оплата",
+  "saved_cards": "Сохранённые карты",
+  "add_new_card": "Добавить новую карту",
+  "card_number": "Номер карты",
+  "expiry_month": "ММ",
+  "expiry_year": "ГГ",
+  "cardholder_name": "Имя владельца карты",
+  "attach_card": "Привязать карту",
+  "invalid_card_number": "Неверный номер карты",
+  "specify_expiry_date": "Укажите срок действия",
+  "specify_cardholder_name": "Укажите имя владельца",
+  "card_added": "Карта добавлена",
+  "error": "Ошибка:"
 
 }

@@ -1099,6 +1099,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat'**
   String get message;
+
+  /// No description provided for @saved_cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved cards'**
+  String get saved_cards;
+
+  /// No description provided for @add_new_card.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new card'**
+  String get add_new_card;
+
+  /// No description provided for @card_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get card_number;
+
+  /// No description provided for @expiry_month.
+  ///
+  /// In en, this message translates to:
+  /// **'MM'**
+  String get expiry_month;
+
+  /// No description provided for @expiry_year.
+  ///
+  /// In en, this message translates to:
+  /// **'YY'**
+  String get expiry_year;
+
+  /// No description provided for @cardholder_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Cardholder name'**
+  String get cardholder_name;
+
+  /// No description provided for @attach_card.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach card'**
+  String get attach_card;
+
+  /// No description provided for @invalid_card_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid card number'**
+  String get invalid_card_number;
+
+  /// No description provided for @specify_expiry_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Specify expiry date'**
+  String get specify_expiry_date;
+
+  /// No description provided for @specify_cardholder_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Specify cardholder name'**
+  String get specify_cardholder_name;
+
+  /// No description provided for @card_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Card added'**
+  String get card_added;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error:'**
+  String get error;
 }
 
 class _AppLocalizationsDelegate

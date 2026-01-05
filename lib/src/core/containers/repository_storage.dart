@@ -1,5 +1,7 @@
 import 'package:coment_app/src/feature/catalog/data/catalog_remote_ds.dart';
 import 'package:coment_app/src/feature/catalog/data/catalog_repository.dart';
+import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
+import 'package:coment_app/src/feature/profile/data/payment_repository.dart';
 import 'package:coment_app/src/feature/settings/data/app_settings_datasource.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,6 +39,8 @@ abstract class IRepositoryStorage {
   IProfileRemoteDS get profileRemoteDS;
   IMainRemoteDS get mainRemoteDS;
   ICatalogRemoteDS get catalogRemoteDS;
+  IPaymentRepository get paymentRepository;
+  PaymentRemoteDs get paymentRemoteDS;
 
   void close();
 }
@@ -84,7 +88,7 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         baseUrl: 'http://10.0.2.2:5000/api/v1/',
-      //  baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
+        //  baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           baseUrl: 'http://10.0.2.2:5000/api/v1/',
@@ -149,4 +153,15 @@ class RepositoryStorage implements IRepositoryStorage {
   ///
   @override
   IAuthDao get authDao => AuthDao(sharedPreferences: _sharedPreferences);
+
+  @override
+PaymentRemoteDs get paymentRemoteDS => PaymentRemoteDsImpl(
+      restClient: restClient,
+    );
+
+@override
+IPaymentRepository get paymentRepository => PaymentRepositoryImpl(
+      remoteDS: paymentRemoteDS,
+      authRepository: authRepository, // ← уже есть
+    );
 }

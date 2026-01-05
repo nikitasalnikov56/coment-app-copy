@@ -526,4 +526,40 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get message => 'Chat';
+
+  @override
+  String get saved_cards => 'Saqlangan kartalar';
+
+  @override
+  String get add_new_card => 'Yangi karta qo\'shish';
+
+  @override
+  String get card_number => 'Karta raqami';
+
+  @override
+  String get expiry_month => 'MM';
+
+  @override
+  String get expiry_year => 'YY';
+
+  @override
+  String get cardholder_name => 'Karta egasining ismi';
+
+  @override
+  String get attach_card => 'Kartani bog\'lash';
+
+  @override
+  String get invalid_card_number => 'Noto\'g\'ri karta raqami';
+
+  @override
+  String get specify_expiry_date => 'Amal qilish muddatini ko\'rsating';
+
+  @override
+  String get specify_cardholder_name => 'Karta egasining ismini ko\'rsating';
+
+  @override
+  String get card_added => 'Karta qo\'shildi';
+
+  @override
+  String get error => 'Xatolik:';
 }

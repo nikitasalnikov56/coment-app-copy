@@ -163,5 +163,18 @@
   "sent": "Yuborildi",
   "companyAdd": "Kompaniya qo'shish",
   "payment": "To'lov",
-  "message": "Chat"
+  "message": "Chat",
+  "payment": "To'lov",
+  "saved_cards": "Saqlangan kartalar",
+  "add_new_card": "Yangi karta qo'shish",
+  "card_number": "Karta raqami",
+  "expiry_month": "MM",
+  "expiry_year": "YY",
+  "cardholder_name": "Karta egasining ismi",
+  "attach_card": "Kartani bog'lash",
+  "invalid_card_number": "Noto'g'ri karta raqami",
+  "specify_expiry_date": "Amal qilish muddatini ko'rsating",
+  "specify_cardholder_name": "Karta egasining ismini ko'rsating",
+  "card_added": "Karta qo'shildi",
+  "error": "Xatolik:"
 }

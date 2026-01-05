@@ -524,4 +524,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get message => 'Chat';
+
+  @override
+  String get saved_cards => 'Saved cards';
+
+  @override
+  String get add_new_card => 'Add new card';
+
+  @override
+  String get card_number => 'Card number';
+
+  @override
+  String get expiry_month => 'MM';
+
+  @override
+  String get expiry_year => 'YY';
+
+  @override
+  String get cardholder_name => 'Cardholder name';
+
+  @override
+  String get attach_card => 'Attach card';
+
+  @override
+  String get invalid_card_number => 'Invalid card number';
+
+  @override
+  String get specify_expiry_date => 'Specify expiry date';
+
+  @override
+  String get specify_cardholder_name => 'Specify cardholder name';
+
+  @override
+  String get card_added => 'Card added';
+
+  @override
+  String get error => 'Error:';
 }

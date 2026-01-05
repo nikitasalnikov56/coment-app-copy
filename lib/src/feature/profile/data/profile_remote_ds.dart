@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -43,6 +42,7 @@ abstract interface class IProfileRemoteDS {
   Future<List<String>> getMyDocuments();
 
   Future<void> deleteDocument(String url);
+
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -238,4 +238,6 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
   Future<void> deleteDocument(String url) async {
     await restClient.delete('uploads/document', body: {'url': url});
   }
+
+
 }

@@ -525,4 +525,40 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get message => 'Чат';
+
+  @override
+  String get saved_cards => 'Сақталған карталар';
+
+  @override
+  String get add_new_card => 'Жаңа карта қосу';
+
+  @override
+  String get card_number => 'Карта нөмірі';
+
+  @override
+  String get expiry_month => 'АА';
+
+  @override
+  String get expiry_year => 'ЖЖ';
+
+  @override
+  String get cardholder_name => 'Карта иесінің аты';
+
+  @override
+  String get attach_card => 'Картаны байланыстыру';
+
+  @override
+  String get invalid_card_number => 'Қате карта нөмірі';
+
+  @override
+  String get specify_expiry_date => 'Жарамдылық мерзімін көрсетіңіз';
+
+  @override
+  String get specify_cardholder_name => 'Карта иесінің атын көрсетіңіз';
+
+  @override
+  String get card_added => 'Карта қосылды';
+
+  @override
+  String get error => 'Қате:';
 }

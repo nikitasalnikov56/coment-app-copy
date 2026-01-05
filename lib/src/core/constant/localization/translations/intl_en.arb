@@ -164,5 +164,18 @@
   "sent": "Sent",
   "companyAdd": "Add a company",
   "payment": "Payment",
-  "message": "Chat"
+  "message": "Chat",
+  "payment": "Payment",
+  "saved_cards": "Saved cards",
+  "add_new_card": "Add new card",
+  "card_number": "Card number",
+  "expiry_month": "MM",
+  "expiry_year": "YY",
+  "cardholder_name": "Cardholder name",
+  "attach_card": "Attach card",
+  "invalid_card_number": "Invalid card number",
+  "specify_expiry_date": "Specify expiry date",
+  "specify_cardholder_name": "Specify cardholder name",
+  "card_added": "Card added",
+  "error": "Error:"
 }

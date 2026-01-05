@@ -524,4 +524,40 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get message => 'Чат';
+
+  @override
+  String get saved_cards => 'Сохранённые карты';
+
+  @override
+  String get add_new_card => 'Добавить новую карту';
+
+  @override
+  String get card_number => 'Номер карты';
+
+  @override
+  String get expiry_month => 'ММ';
+
+  @override
+  String get expiry_year => 'ГГ';
+
+  @override
+  String get cardholder_name => 'Имя владельца карты';
+
+  @override
+  String get attach_card => 'Привязать карту';
+
+  @override
+  String get invalid_card_number => 'Неверный номер карты';
+
+  @override
+  String get specify_expiry_date => 'Укажите срок действия';
+
+  @override
+  String get specify_cardholder_name => 'Укажите имя владельца';
+
+  @override
+  String get card_added => 'Карта добавлена';
+
+  @override
+  String get error => 'Ошибка:';
 }

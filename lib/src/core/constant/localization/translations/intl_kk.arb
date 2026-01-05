@@ -164,5 +164,18 @@
   "sent": "Жіберілді",
   "companyAdd": "Компания қосу",
   "payment": "Төлем",
-  "message": "Чат"
+  "message": "Чат",
+  "payment": "Төлем",
+  "saved_cards": "Сақталған карталар",
+  "add_new_card": "Жаңа карта қосу",
+  "card_number": "Карта нөмірі",
+  "expiry_month": "АА",
+  "expiry_year": "ЖЖ",
+  "cardholder_name": "Карта иесінің аты",
+  "attach_card": "Картаны байланыстыру",
+  "invalid_card_number": "Қате карта нөмірі",
+  "specify_expiry_date": "Жарамдылық мерзімін көрсетіңіз",
+  "specify_cardholder_name": "Карта иесінің атын көрсетіңіз",
+  "card_added": "Карта қосылды",
+  "error": "Қате:"
 }

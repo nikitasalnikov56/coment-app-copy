@@ -508,4 +508,40 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get message => '聊天';
+
+  @override
+  String get saved_cards => '已保存的卡';
+
+  @override
+  String get add_new_card => '添加新卡';
+
+  @override
+  String get card_number => '卡号';
+
+  @override
+  String get expiry_month => '月';
+
+  @override
+  String get expiry_year => '年';
+
+  @override
+  String get cardholder_name => '持卡人姓名';
+
+  @override
+  String get attach_card => '绑定卡';
+
+  @override
+  String get invalid_card_number => '无效卡号';
+
+  @override
+  String get specify_expiry_date => '请输入有效期';
+
+  @override
+  String get specify_cardholder_name => '请输入持卡人姓名';
+
+  @override
+  String get card_added => '卡已添加';
+
+  @override
+  String get error => '错误：';
 }

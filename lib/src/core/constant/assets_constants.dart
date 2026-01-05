@@ -140,6 +140,7 @@ class AssetsConstants {
   static const String companyAdd = 'assets/icons/add_company.svg';
   static const String payment = 'assets/icons/payment.svg';
   static const String message = 'assets/icons/message.svg';
+  static const String visa = 'assets/images/svg/visa.svg';
 
   // PNG
   static const String image = 'assets/images/image.png';
@@ -194,6 +195,13 @@ class AssetsConstants {
   static const String splashText = 'assets/images/png/splash-text.png';
   static const String supportServiceBS = 'assets/images/png/support_service_b_s.png';
   static const String closeSvgrepoPng = 'assets/images/png/close_svgrepo.png';
+  static const String humo = 'assets/images/png/humo.png';
+  static const String uzcard = 'assets/images/png/uzcard.png';
+  static const String mastercard = 'assets/images/png/mastercard.png';
+  static const String unionpay = 'assets/images/png/unionpay.png';
+  static const String payme = 'assets/images/png/payme.png';
+  static const String uzumBank = 'assets/images/png/uzum_bank.png';
+  static const String click = 'assets/images/png/click.png';
 
   // SVG (в папке assets/images/svg/)
   static const String image3Svg = 'assets/images/svg/image-3.svg';
