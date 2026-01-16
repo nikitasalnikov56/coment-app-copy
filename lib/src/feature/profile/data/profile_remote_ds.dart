@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,12 +39,20 @@ abstract interface class IProfileRemoteDS {
 
   Future<List<FeedbackDTO>> myFeedbacks();
 
-  Future<List<String>> uploadDocuments(List<File> files);
+  Future<List<String>> uploadDocuments(
+    List<File> files,
+    // int companyId,
+  );
 
   Future<List<String>> getMyDocuments();
 
   Future<void> deleteDocument(String url);
 
+  Future<List<ProductDTO>> getMyCompanies();
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  });
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -102,8 +112,9 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       if (cityId > 0) data['city_id'] = cityId.toString();
       if (password.isNotEmpty) data['password'] = password;
       if (languageId > 0) data['language_id'] = languageId.toString();
-      if (birthDate != null && birthDate.isNotEmpty)
+      if (birthDate != null && birthDate.isNotEmpty) {
         data['birthDate'] = birthDate;
+      }
 
       final FormData formData = FormData.fromMap(data);
       if (avatar != null) {
@@ -203,7 +214,10 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
   }
 
   @override
-  Future<List<String>> uploadDocuments(List<File> files) async {
+  Future<List<String>> uploadDocuments(
+    List<File> files,
+    // int companyId,
+  ) async {
     final formData = FormData();
     for (final file in files) {
       formData.files.add(
@@ -222,7 +236,6 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       body: formData,
       // headers: {'Content-Type': 'multipart/form-data'},
     );
-
     final urls = response['urls'] as List?;
     return urls?.map((e) => e as String).toList() ?? [];
   }
@@ -239,5 +252,53 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
     await restClient.delete('uploads/document', body: {'url': url});
   }
 
+//  @override
+//   Future<List<ProductDTO>> getMyCompanies() async {
+//     try {
+//       final response = await restClient.get('/verification/companies/me');
+//       final list = response as List;
+//       return list
+//           .map((e) => ProductDTO.fromJson(e as Map<String, dynamic>))
+//           .toList();
+//     } catch (e, st) {
+//       TalkerLoggerUtil.talker.error('#getMyCompanies - $e', e, st);
+//       rethrow;
+//     }
+//   }
 
+  @override
+  Future<List<ProductDTO>> getMyCompanies() async {
+    try {
+      final response = await restClient.get('/verification/companies/me');
+      final list = response['data'] as List?; // ← Берём массив из поля 'data'
+      if (list == null) {
+        return [];
+      }
+      return list
+          .map((e) => ProductDTO.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#getMyCompanies - $e', e, st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  }) async {
+    try {
+      final body = {
+        'companyId': companyId,
+        'documentUrls': documentUrls,
+      };
+      final response =
+          await restClient.post('/verification/requests', body: body);
+      return VerificationResponse.fromJson(response);
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#createVerificationRequest - $e', e, st);
+      rethrow;
+    }
+  }
 }

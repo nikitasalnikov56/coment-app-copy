@@ -267,6 +267,7 @@ class AssetsConstants {
   static const String companyAdd = 'assets/icons/add_company.svg';
   static const String payment = 'assets/icons/payment.svg';
   static const String message = 'assets/icons/message.svg';
+  static const String visa = 'assets/images/svg/visa.svg';
 
   // PNG
   static const String image = 'assets/images/image.png';
@@ -321,6 +322,13 @@ class AssetsConstants {
   static const String splashText = 'assets/images/png/splash-text.png';
   static const String supportServiceBS = 'assets/images/png/support_service_b_s.png';
   static const String closeSvgrepoPng = 'assets/images/png/close_svgrepo.png';
+  static const String humo = 'assets/images/png/humo.png';
+  static const String uzcard = 'assets/images/png/uzcard.png';
+  static const String mastercard = 'assets/images/png/mastercard.png';
+  static const String unionpay = 'assets/images/png/unionpay.png';
+  static const String payme = 'assets/images/png/payme.png';
+  static const String uzumBank = 'assets/images/png/uzum_bank.png';
+  static const String click = 'assets/images/png/click.png';
 
   // SVG (в папке assets/images/svg/)
   static const String image3Svg = 'assets/images/svg/image-3.svg';
@@ -1562,6 +1570,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat'**
   String get message;
+
+  /// No description provided for @saved_cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved cards'**
+  String get saved_cards;
+
+  /// No description provided for @add_new_card.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new card'**
+  String get add_new_card;
+
+  /// No description provided for @card_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get card_number;
+
+  /// No description provided for @expiry_month.
+  ///
+  /// In en, this message translates to:
+  /// **'MM'**
+  String get expiry_month;
+
+  /// No description provided for @expiry_year.
+  ///
+  /// In en, this message translates to:
+  /// **'YY'**
+  String get expiry_year;
+
+  /// No description provided for @cardholder_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Cardholder name'**
+  String get cardholder_name;
+
+  /// No description provided for @attach_card.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach card'**
+  String get attach_card;
+
+  /// No description provided for @invalid_card_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid card number'**
+  String get invalid_card_number;
+
+  /// No description provided for @specify_expiry_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Specify expiry date'**
+  String get specify_expiry_date;
+
+  /// No description provided for @specify_cardholder_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Specify cardholder name'**
+  String get specify_cardholder_name;
+
+  /// No description provided for @card_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Card added'**
+  String get card_added;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error:'**
+  String get error;
 }
 
 class _AppLocalizationsDelegate
@@ -2133,6 +2213,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get message => 'Chat';
+
+  @override
+  String get saved_cards => 'Saved cards';
+
+  @override
+  String get add_new_card => 'Add new card';
+
+  @override
+  String get card_number => 'Card number';
+
+  @override
+  String get expiry_month => 'MM';
+
+  @override
+  String get expiry_year => 'YY';
+
+  @override
+  String get cardholder_name => 'Cardholder name';
+
+  @override
+  String get attach_card => 'Attach card';
+
+  @override
+  String get invalid_card_number => 'Invalid card number';
+
+  @override
+  String get specify_expiry_date => 'Specify expiry date';
+
+  @override
+  String get specify_cardholder_name => 'Specify cardholder name';
+
+  @override
+  String get card_added => 'Card added';
+
+  @override
+  String get error => 'Error:';
 }
 
 
@@ -2666,6 +2782,42 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get message => 'Чат';
+
+  @override
+  String get saved_cards => 'Сақталған карталар';
+
+  @override
+  String get add_new_card => 'Жаңа карта қосу';
+
+  @override
+  String get card_number => 'Карта нөмірі';
+
+  @override
+  String get expiry_month => 'АА';
+
+  @override
+  String get expiry_year => 'ЖЖ';
+
+  @override
+  String get cardholder_name => 'Карта иесінің аты';
+
+  @override
+  String get attach_card => 'Картаны байланыстыру';
+
+  @override
+  String get invalid_card_number => 'Қате карта нөмірі';
+
+  @override
+  String get specify_expiry_date => 'Жарамдылық мерзімін көрсетіңіз';
+
+  @override
+  String get specify_cardholder_name => 'Карта иесінің атын көрсетіңіз';
+
+  @override
+  String get card_added => 'Карта қосылды';
+
+  @override
+  String get error => 'Қате:';
 }
 
 
@@ -3198,6 +3350,42 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get message => 'Чат';
+
+  @override
+  String get saved_cards => 'Сохранённые карты';
+
+  @override
+  String get add_new_card => 'Добавить новую карту';
+
+  @override
+  String get card_number => 'Номер карты';
+
+  @override
+  String get expiry_month => 'ММ';
+
+  @override
+  String get expiry_year => 'ГГ';
+
+  @override
+  String get cardholder_name => 'Имя владельца карты';
+
+  @override
+  String get attach_card => 'Привязать карту';
+
+  @override
+  String get invalid_card_number => 'Неверный номер карты';
+
+  @override
+  String get specify_expiry_date => 'Укажите срок действия';
+
+  @override
+  String get specify_cardholder_name => 'Укажите имя владельца';
+
+  @override
+  String get card_added => 'Карта добавлена';
+
+  @override
+  String get error => 'Ошибка:';
 }
 
 
@@ -3732,6 +3920,42 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get message => 'Chat';
+
+  @override
+  String get saved_cards => 'Saqlangan kartalar';
+
+  @override
+  String get add_new_card => 'Yangi karta qo\'shish';
+
+  @override
+  String get card_number => 'Karta raqami';
+
+  @override
+  String get expiry_month => 'MM';
+
+  @override
+  String get expiry_year => 'YY';
+
+  @override
+  String get cardholder_name => 'Karta egasining ismi';
+
+  @override
+  String get attach_card => 'Kartani bog\'lash';
+
+  @override
+  String get invalid_card_number => 'Noto\'g\'ri karta raqami';
+
+  @override
+  String get specify_expiry_date => 'Amal qilish muddatini ko\'rsating';
+
+  @override
+  String get specify_cardholder_name => 'Karta egasining ismini ko\'rsating';
+
+  @override
+  String get card_added => 'Karta qo\'shildi';
+
+  @override
+  String get error => 'Xatolik:';
 }
 
 
@@ -4248,6 +4472,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get message => '聊天';
+
+  @override
+  String get saved_cards => '已保存的卡';
+
+  @override
+  String get add_new_card => '添加新卡';
+
+  @override
+  String get card_number => '卡号';
+
+  @override
+  String get expiry_month => '月';
+
+  @override
+  String get expiry_year => '年';
+
+  @override
+  String get cardholder_name => '持卡人姓名';
+
+  @override
+  String get attach_card => '绑定卡';
+
+  @override
+  String get invalid_card_number => '无效卡号';
+
+  @override
+  String get specify_expiry_date => '请输入有效期';
+
+  @override
+  String get specify_cardholder_name => '请输入持卡人姓名';
+
+  @override
+  String get card_added => '卡已添加';
+
+  @override
+  String get error => '错误：';
 }
 
 
@@ -4420,7 +4680,20 @@ lib\src\core\constant\localization\translations\intl_en.arb
   "sent": "Sent",
   "companyAdd": "Add a company",
   "payment": "Payment",
-  "message": "Chat"
+  "message": "Chat",
+  "payment": "Payment",
+  "saved_cards": "Saved cards",
+  "add_new_card": "Add new card",
+  "card_number": "Card number",
+  "expiry_month": "MM",
+  "expiry_year": "YY",
+  "cardholder_name": "Cardholder name",
+  "attach_card": "Attach card",
+  "invalid_card_number": "Invalid card number",
+  "specify_expiry_date": "Specify expiry date",
+  "specify_cardholder_name": "Specify cardholder name",
+  "card_added": "Card added",
+  "error": "Error:"
 }
 
 
@@ -4592,7 +4865,20 @@ lib\src\core\constant\localization\translations\intl_kk.arb
   "sent": "Жіберілді",
   "companyAdd": "Компания қосу",
   "payment": "Төлем",
-  "message": "Чат"
+  "message": "Чат",
+  "payment": "Төлем",
+  "saved_cards": "Сақталған карталар",
+  "add_new_card": "Жаңа карта қосу",
+  "card_number": "Карта нөмірі",
+  "expiry_month": "АА",
+  "expiry_year": "ЖЖ",
+  "cardholder_name": "Карта иесінің аты",
+  "attach_card": "Картаны байланыстыру",
+  "invalid_card_number": "Қате карта нөмірі",
+  "specify_expiry_date": "Жарамдылық мерзімін көрсетіңіз",
+  "specify_cardholder_name": "Карта иесінің атын көрсетіңіз",
+  "card_added": "Карта қосылды",
+  "error": "Қате:"
 }
 
 
@@ -4764,7 +5050,20 @@ lib\src\core\constant\localization\translations\intl_ru.arb
   "sent": "Отправлено",
   "companyAdd": "Добавить компанию",
   "payment": "Оплата",
-  "message": "Чат"
+  "message": "Чат",
+   "payment": "Оплата",
+  "saved_cards": "Сохранённые карты",
+  "add_new_card": "Добавить новую карту",
+  "card_number": "Номер карты",
+  "expiry_month": "ММ",
+  "expiry_year": "ГГ",
+  "cardholder_name": "Имя владельца карты",
+  "attach_card": "Привязать карту",
+  "invalid_card_number": "Неверный номер карты",
+  "specify_expiry_date": "Укажите срок действия",
+  "specify_cardholder_name": "Укажите имя владельца",
+  "card_added": "Карта добавлена",
+  "error": "Ошибка:"
 
 }
 
@@ -4936,7 +5235,20 @@ lib\src\core\constant\localization\translations\intl_uz.arb
   "sent": "Yuborildi",
   "companyAdd": "Kompaniya qo'shish",
   "payment": "To'lov",
-  "message": "Chat"
+  "message": "Chat",
+  "payment": "To'lov",
+  "saved_cards": "Saqlangan kartalar",
+  "add_new_card": "Yangi karta qo'shish",
+  "card_number": "Karta raqami",
+  "expiry_month": "MM",
+  "expiry_year": "YY",
+  "cardholder_name": "Karta egasining ismi",
+  "attach_card": "Kartani bog'lash",
+  "invalid_card_number": "Noto'g'ri karta raqami",
+  "specify_expiry_date": "Amal qilish muddatini ko'rsating",
+  "specify_cardholder_name": "Karta egasining ismini ko'rsating",
+  "card_added": "Karta qo'shildi",
+  "error": "Xatolik:"
 }
 
 
@@ -5108,7 +5420,20 @@ lib\src\core\constant\localization\translations\intl_zh.arb
   "sent": "发送",
   "companyAdd": "添加一家公司",
   "payment": "支付",
-  "message": "聊天"
+  "message": "聊天",
+  "payment": "支付",
+  "saved_cards": "已保存的卡",
+  "add_new_card": "添加新卡",
+  "card_number": "卡号",
+  "expiry_month": "月",
+  "expiry_year": "年",
+  "cardholder_name": "持卡人姓名",
+  "attach_card": "绑定卡",
+  "invalid_card_number": "无效卡号",
+  "specify_expiry_date": "请输入有效期",
+  "specify_cardholder_name": "请输入持卡人姓名",
+  "card_added": "卡已添加",
+  "error": "错误："
 }
 
 
@@ -5186,6 +5511,8 @@ lib\src\core\containers\repository_storage.dart
 -----------------------------------------------
 import 'package:coment_app/src/feature/catalog/data/catalog_remote_ds.dart';
 import 'package:coment_app/src/feature/catalog/data/catalog_repository.dart';
+import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
+import 'package:coment_app/src/feature/profile/data/payment_repository.dart';
 import 'package:coment_app/src/feature/settings/data/app_settings_datasource.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5223,6 +5550,8 @@ abstract class IRepositoryStorage {
   IProfileRemoteDS get profileRemoteDS;
   IMainRemoteDS get mainRemoteDS;
   ICatalogRemoteDS get catalogRemoteDS;
+  IPaymentRepository get paymentRepository;
+  PaymentRemoteDs get paymentRemoteDS;
 
   void close();
 }
@@ -5270,7 +5599,7 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         baseUrl: 'http://10.0.2.2:5000/api/v1/',
-      //  baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
+        //  baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           baseUrl: 'http://10.0.2.2:5000/api/v1/',
@@ -5335,6 +5664,17 @@ class RepositoryStorage implements IRepositoryStorage {
   ///
   @override
   IAuthDao get authDao => AuthDao(sharedPreferences: _sharedPreferences);
+
+  @override
+PaymentRemoteDs get paymentRemoteDS => PaymentRemoteDsImpl(
+      restClient: restClient,
+    );
+
+@override
+IPaymentRepository get paymentRepository => PaymentRepositoryImpl(
+      remoteDS: paymentRemoteDS,
+      authRepository: authRepository, // ← уже есть
+    );
 }
 
 
@@ -5801,8 +6141,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 class $AppDatabaseManager {
-  final _$AppDatabase db;
-  $AppDatabaseManager(this.db);
+  final _$AppDatabase _db;
+  $AppDatabaseManager(this._db);
 }
 
 
@@ -38878,10 +39218,10 @@ mixin _$ComplainDTO {
   int? get id => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
   String? get type =>
-      throw _privateConstructorUsedError; 
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: 'created_at')
   String? get createdAt =>
-      throw _privateConstructorUsedError; 
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: 'updated_at')
   String? get updatedAt => throw _privateConstructorUsedError;
 
@@ -39034,11 +39374,11 @@ class _$ComplainDTOImpl implements _ComplainDTO {
   final String? text;
   @override
   final String? type;
-
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
-
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'updated_at')
   final String? updatedAt;
@@ -39100,10 +39440,10 @@ abstract class _ComplainDTO implements ComplainDTO {
   @override
   String? get text;
   @override
-  String? get type; 
+  String? get type; // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'created_at')
-  String? get createdAt; 
+  String? get createdAt; // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'updated_at')
   String? get updatedAt;
@@ -61476,13 +61816,33 @@ class LoadDocumentsCubit extends Cubit<LoadDocumentsState> {
   LoadDocumentsCubit(this.dataSource)
       : super(const LoadDocumentsState.initial());
 
+  Future<void> fetchDocuments() async {
+    emit(const LoadDocumentsState.loading());
+    try {
+      final urls = await dataSource.getMyDocuments();
+      emit(LoadDocumentsState.loaded(urls));
+    } catch (e) {
+      emit(LoadDocumentsState.failure(e.toString()));
+    }
+  }
+
   Future<void> uploadDocuments(List<File> files) async {
     emit(const LoadDocumentsState.loading());
     try {
       final urls = await dataSource.uploadDocuments(files);
       emit(LoadDocumentsState.success(urls));
     } catch (e) {
-      print(e.toString());
+      emit(LoadDocumentsState.failure(e.toString()));
+    }
+  }
+
+  Future<void> deleteDocument(String url) async {
+    emit(const LoadDocumentsState.loading());
+    try {
+      await dataSource.deleteDocument(url);
+      // После успешного удаления — перезагружаем список
+      await fetchDocuments();
+    } catch (e) {
       emit(LoadDocumentsState.failure(e.toString()));
     }
   }
@@ -61493,6 +61853,7 @@ class LoadDocumentsState with _$LoadDocumentsState {
   const factory LoadDocumentsState.initial() = _Initial;
   const factory LoadDocumentsState.loading() = _Loading;
   const factory LoadDocumentsState.success(List<String> urls) = _Success;
+  const factory LoadDocumentsState.loaded(List<String> urls) = _Loaded;
   const factory LoadDocumentsState.failure(String error) = _Failure;
 }
 
@@ -61523,6 +61884,7 @@ mixin _$LoadDocumentsState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<String> urls) success,
+    required TResult Function(List<String> urls) loaded,
     required TResult Function(String error) failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -61531,6 +61893,7 @@ mixin _$LoadDocumentsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<String> urls)? success,
+    TResult? Function(List<String> urls)? loaded,
     TResult? Function(String error)? failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -61539,6 +61902,7 @@ mixin _$LoadDocumentsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<String> urls)? success,
+    TResult Function(List<String> urls)? loaded,
     TResult Function(String error)? failure,
     required TResult orElse(),
   }) =>
@@ -61548,6 +61912,7 @@ mixin _$LoadDocumentsState {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
     required TResult Function(_Failure value) failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -61556,6 +61921,7 @@ mixin _$LoadDocumentsState {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Failure value)? failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -61564,6 +61930,7 @@ mixin _$LoadDocumentsState {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) =>
@@ -61635,6 +62002,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<String> urls) success,
+    required TResult Function(List<String> urls) loaded,
     required TResult Function(String error) failure,
   }) {
     return initial();
@@ -61646,6 +62014,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<String> urls)? success,
+    TResult? Function(List<String> urls)? loaded,
     TResult? Function(String error)? failure,
   }) {
     return initial?.call();
@@ -61657,6 +62026,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<String> urls)? success,
+    TResult Function(List<String> urls)? loaded,
     TResult Function(String error)? failure,
     required TResult orElse(),
   }) {
@@ -61672,6 +62042,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
     required TResult Function(_Failure value) failure,
   }) {
     return initial(this);
@@ -61683,6 +62054,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Failure value)? failure,
   }) {
     return initial?.call(this);
@@ -61694,6 +62066,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
@@ -61752,6 +62125,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<String> urls) success,
+    required TResult Function(List<String> urls) loaded,
     required TResult Function(String error) failure,
   }) {
     return loading();
@@ -61763,6 +62137,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<String> urls)? success,
+    TResult? Function(List<String> urls)? loaded,
     TResult? Function(String error)? failure,
   }) {
     return loading?.call();
@@ -61774,6 +62149,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<String> urls)? success,
+    TResult Function(List<String> urls)? loaded,
     TResult Function(String error)? failure,
     required TResult orElse(),
   }) {
@@ -61789,6 +62165,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
     required TResult Function(_Failure value) failure,
   }) {
     return loading(this);
@@ -61800,6 +62177,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Failure value)? failure,
   }) {
     return loading?.call(this);
@@ -61811,6 +62189,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
@@ -61902,6 +62281,7 @@ class _$SuccessImpl implements _Success {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<String> urls) success,
+    required TResult Function(List<String> urls) loaded,
     required TResult Function(String error) failure,
   }) {
     return success(urls);
@@ -61913,6 +62293,7 @@ class _$SuccessImpl implements _Success {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<String> urls)? success,
+    TResult? Function(List<String> urls)? loaded,
     TResult? Function(String error)? failure,
   }) {
     return success?.call(urls);
@@ -61924,6 +62305,7 @@ class _$SuccessImpl implements _Success {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<String> urls)? success,
+    TResult Function(List<String> urls)? loaded,
     TResult Function(String error)? failure,
     required TResult orElse(),
   }) {
@@ -61939,6 +62321,7 @@ class _$SuccessImpl implements _Success {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
     required TResult Function(_Failure value) failure,
   }) {
     return success(this);
@@ -61950,6 +62333,7 @@ class _$SuccessImpl implements _Success {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Failure value)? failure,
   }) {
     return success?.call(this);
@@ -61961,6 +62345,7 @@ class _$SuccessImpl implements _Success {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
@@ -61980,6 +62365,170 @@ abstract class _Success implements LoadDocumentsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadedImplCopyWith<$Res> {
+  factory _$$LoadedImplCopyWith(
+          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
+      __$$LoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<String> urls});
+}
+
+/// @nodoc
+class __$$LoadedImplCopyWithImpl<$Res>
+    extends _$LoadDocumentsStateCopyWithImpl<$Res, _$LoadedImpl>
+    implements _$$LoadedImplCopyWith<$Res> {
+  __$$LoadedImplCopyWithImpl(
+      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? urls = null,
+  }) {
+    return _then(_$LoadedImpl(
+      null == urls
+          ? _value._urls
+          : urls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LoadedImpl implements _Loaded {
+  const _$LoadedImpl(final List<String> urls) : _urls = urls;
+
+  final List<String> _urls;
+  @override
+  List<String> get urls {
+    if (_urls is EqualUnmodifiableListView) return _urls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_urls);
+  }
+
+  @override
+  String toString() {
+    return 'LoadDocumentsState.loaded(urls: $urls)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadedImpl &&
+            const DeepCollectionEquality().equals(other._urls, _urls));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_urls));
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      __$$LoadedImplCopyWithImpl<_$LoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> urls) success,
+    required TResult Function(List<String> urls) loaded,
+    required TResult Function(String error) failure,
+  }) {
+    return loaded(urls);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> urls)? success,
+    TResult? Function(List<String> urls)? loaded,
+    TResult? Function(String error)? failure,
+  }) {
+    return loaded?.call(urls);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> urls)? success,
+    TResult Function(List<String> urls)? loaded,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(urls);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return loaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return loaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loaded implements LoadDocumentsState {
+  const factory _Loaded(final List<String> urls) = _$LoadedImpl;
+
+  List<String> get urls;
+
+  /// Create a copy of LoadDocumentsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -62054,6 +62603,7 @@ class _$FailureImpl implements _Failure {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<String> urls) success,
+    required TResult Function(List<String> urls) loaded,
     required TResult Function(String error) failure,
   }) {
     return failure(error);
@@ -62065,6 +62615,7 @@ class _$FailureImpl implements _Failure {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<String> urls)? success,
+    TResult? Function(List<String> urls)? loaded,
     TResult? Function(String error)? failure,
   }) {
     return failure?.call(error);
@@ -62076,6 +62627,7 @@ class _$FailureImpl implements _Failure {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<String> urls)? success,
+    TResult Function(List<String> urls)? loaded,
     TResult Function(String error)? failure,
     required TResult orElse(),
   }) {
@@ -62091,6 +62643,7 @@ class _$FailureImpl implements _Failure {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
     required TResult Function(_Failure value) failure,
   }) {
     return failure(this);
@@ -62102,6 +62655,7 @@ class _$FailureImpl implements _Failure {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Failure value)? failure,
   }) {
     return failure?.call(this);
@@ -62113,6 +62667,7 @@ class _$FailureImpl implements _Failure {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
@@ -62830,6 +63385,860 @@ abstract class _ErrorState implements MyFeedbacksState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorStateImplCopyWith<_$ErrorStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\profile\bloc\payment_cubit.dart
+-----------------------------------------------
+// lib/src/feature/profile/bloc/payment_cubit.dart
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
+import 'package:coment_app/src/feature/profile/models/request/save_payment_card_request.dart';
+import 'package:coment_app/src/feature/profile/models/response/save_payment_card_response.dart';
+
+part 'payment_cubit.freezed.dart';
+
+class PaymentCubit extends Cubit<PaymentState> {
+  final PaymentRemoteDs dataSource;
+
+  PaymentCubit(this.dataSource) : super(const PaymentState.initial());
+
+  Future<void> loadCards() async {
+    emit(const PaymentState.loading());
+    try {
+      final cards = await dataSource.getPaymentCards();
+      emit(PaymentState.loaded(cards));
+    } catch (e) {
+      emit(PaymentState.failure(e.toString()));
+    }
+  }
+
+  Future<void> saveCard(SavePaymentCardRequest request) async {
+    emit(const PaymentState.loading());
+    try {
+      await dataSource.saveCard(request);
+      // Перезагружаем список после сохранения
+      await loadCards();
+      // emit(const PaymentState.success());
+    } catch (e) {
+      emit(PaymentState.failure(e.toString()));
+    }
+  }
+
+  Future<void> deleteCard(int cardId) async {
+    emit(const PaymentState.loading());
+    try {
+      await dataSource.deletePaymentCard(cardId);
+      // Перезагружаем список после удаления
+      await loadCards();
+    } catch (e) {
+      emit(PaymentState.failure(e.toString()));
+    }
+  }
+}
+
+@freezed
+class PaymentState with _$PaymentState {
+  const factory PaymentState.initial() = _Initial;
+  const factory PaymentState.loading() = _Loading;
+  const factory PaymentState.success() = _Success;
+  const factory PaymentState.loaded(List<SavedPaymentCardResponse> cards) = _Loaded;
+  const factory PaymentState.failure(String error) = _Failure;
+}
+
+
+lib\src\feature\profile\bloc\payment_cubit.freezed.dart
+-------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'payment_cubit.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$PaymentState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(List<SavedPaymentCardResponse> cards) loaded,
+    required TResult Function(String error) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult? Function(String error)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PaymentStateCopyWith<$Res> {
+  factory $PaymentStateCopyWith(
+          PaymentState value, $Res Function(PaymentState) then) =
+      _$PaymentStateCopyWithImpl<$Res, PaymentState>;
+}
+
+/// @nodoc
+class _$PaymentStateCopyWithImpl<$Res, $Val extends PaymentState>
+    implements $PaymentStateCopyWith<$Res> {
+  _$PaymentStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$PaymentStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
+
+  @override
+  String toString() {
+    return 'PaymentState.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(List<SavedPaymentCardResponse> cards) loaded,
+    required TResult Function(String error) failure,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult? Function(String error)? failure,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Initial implements PaymentState {
+  const factory _Initial() = _$InitialImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$PaymentStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
+
+  @override
+  String toString() {
+    return 'PaymentState.loading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(List<SavedPaymentCardResponse> cards) loaded,
+    required TResult Function(String error) failure,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult? Function(String error)? failure,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loading implements PaymentState {
+  const factory _Loading() = _$LoadingImpl;
+}
+
+/// @nodoc
+abstract class _$$SuccessImplCopyWith<$Res> {
+  factory _$$SuccessImplCopyWith(
+          _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
+      __$$SuccessImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SuccessImplCopyWithImpl<$Res>
+    extends _$PaymentStateCopyWithImpl<$Res, _$SuccessImpl>
+    implements _$$SuccessImplCopyWith<$Res> {
+  __$$SuccessImplCopyWithImpl(
+      _$SuccessImpl _value, $Res Function(_$SuccessImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$SuccessImpl implements _Success {
+  const _$SuccessImpl();
+
+  @override
+  String toString() {
+    return 'PaymentState.success()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SuccessImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(List<SavedPaymentCardResponse> cards) loaded,
+    required TResult Function(String error) failure,
+  }) {
+    return success();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult? Function(String error)? failure,
+  }) {
+    return success?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return success(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Success implements PaymentState {
+  const factory _Success() = _$SuccessImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadedImplCopyWith<$Res> {
+  factory _$$LoadedImplCopyWith(
+          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
+      __$$LoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<SavedPaymentCardResponse> cards});
+}
+
+/// @nodoc
+class __$$LoadedImplCopyWithImpl<$Res>
+    extends _$PaymentStateCopyWithImpl<$Res, _$LoadedImpl>
+    implements _$$LoadedImplCopyWith<$Res> {
+  __$$LoadedImplCopyWithImpl(
+      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? cards = null,
+  }) {
+    return _then(_$LoadedImpl(
+      null == cards
+          ? _value._cards
+          : cards // ignore: cast_nullable_to_non_nullable
+              as List<SavedPaymentCardResponse>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LoadedImpl implements _Loaded {
+  const _$LoadedImpl(final List<SavedPaymentCardResponse> cards)
+      : _cards = cards;
+
+  final List<SavedPaymentCardResponse> _cards;
+  @override
+  List<SavedPaymentCardResponse> get cards {
+    if (_cards is EqualUnmodifiableListView) return _cards;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_cards);
+  }
+
+  @override
+  String toString() {
+    return 'PaymentState.loaded(cards: $cards)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadedImpl &&
+            const DeepCollectionEquality().equals(other._cards, _cards));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_cards));
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      __$$LoadedImplCopyWithImpl<_$LoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(List<SavedPaymentCardResponse> cards) loaded,
+    required TResult Function(String error) failure,
+  }) {
+    return loaded(cards);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult? Function(String error)? failure,
+  }) {
+    return loaded?.call(cards);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(cards);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return loaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return loaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loaded implements PaymentState {
+  const factory _Loaded(final List<SavedPaymentCardResponse> cards) =
+      _$LoadedImpl;
+
+  List<SavedPaymentCardResponse> get cards;
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$FailureImplCopyWith<$Res> {
+  factory _$$FailureImplCopyWith(
+          _$FailureImpl value, $Res Function(_$FailureImpl) then) =
+      __$$FailureImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String error});
+}
+
+/// @nodoc
+class __$$FailureImplCopyWithImpl<$Res>
+    extends _$PaymentStateCopyWithImpl<$Res, _$FailureImpl>
+    implements _$$FailureImplCopyWith<$Res> {
+  __$$FailureImplCopyWithImpl(
+      _$FailureImpl _value, $Res Function(_$FailureImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? error = null,
+  }) {
+    return _then(_$FailureImpl(
+      null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$FailureImpl implements _Failure {
+  const _$FailureImpl(this.error);
+
+  @override
+  final String error;
+
+  @override
+  String toString() {
+    return 'PaymentState.failure(error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FailureImpl &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, error);
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FailureImplCopyWith<_$FailureImpl> get copyWith =>
+      __$$FailureImplCopyWithImpl<_$FailureImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(List<SavedPaymentCardResponse> cards) loaded,
+    required TResult Function(String error) failure,
+  }) {
+    return failure(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult? Function(String error)? failure,
+  }) {
+    return failure?.call(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(List<SavedPaymentCardResponse> cards)? loaded,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return failure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return failure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Failure implements PaymentState {
+  const factory _Failure(final String error) = _$FailureImpl;
+
+  String get error;
+
+  /// Create a copy of PaymentState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FailureImplCopyWith<_$FailureImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -66505,11 +67914,140 @@ abstract class _ErrorState implements TechSupportState {
 
 
 
+lib\src\feature\profile\data\payment_remote_ds.dart
+---------------------------------------------------
+import 'package:coment_app/src/core/rest_client/rest_client.dart';
+import 'package:coment_app/src/feature/profile/models/request/save_payment_card_request.dart';
+import 'package:coment_app/src/feature/profile/models/response/save_payment_card_response.dart';
+
+
+abstract interface class PaymentRemoteDs {
+  Future<void> saveCard(SavePaymentCardRequest request);
+  Future<List<SavedPaymentCardResponse>> getPaymentCards();
+  Future<void> deletePaymentCard(int cardId);
+}
+
+class PaymentRemoteDsImpl implements PaymentRemoteDs {
+  final IRestClient restClient;
+
+  const PaymentRemoteDsImpl({
+    required this.restClient,
+  });
+
+  @override
+  Future<void> deletePaymentCard(int cardId) async {
+    await restClient.delete('payments/cards/$cardId');
+  }
+
+@override
+Future<List<SavedPaymentCardResponse>> getPaymentCards() async {
+  final response = await restClient.get('payments/cards');
+
+   final list = response['data'] as List; // ← безопасно
+  return list
+      .map((e) => SavedPaymentCardResponse.fromJson(e as Map<String, dynamic>))
+      .toList();
+}
+
+
+  @override
+  Future<void> saveCard(SavePaymentCardRequest request) async {
+    await restClient.post('payments/cards', body: request.toJson());
+  }
+}
+
+
+
+lib\src\feature\profile\data\payment_repository.dart
+----------------------------------------------------
+import 'package:coment_app/src/core/rest_client/rest_client.dart';
+import 'package:coment_app/src/feature/profile/models/request/save_payment_card_request.dart';
+import 'package:coment_app/src/core/utils/talker_logger_util.dart';
+import 'package:coment_app/src/feature/auth/data/auth_repository.dart';
+import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
+import 'package:coment_app/src/feature/profile/models/response/save_payment_card_response.dart';
+
+
+
+abstract interface class IPaymentRepository {
+  Future<List<SavedPaymentCardResponse>> getPaymentCards();
+  Future<void> saveCard(SavePaymentCardRequest request);
+  Future<void> deletePaymentCard(int cardId);
+}
+
+
+
+class PaymentRepositoryImpl implements IPaymentRepository {
+  const PaymentRepositoryImpl({
+    required this.remoteDS,
+    required this.authRepository,
+  });
+
+  final PaymentRemoteDs remoteDS;
+  final IAuthRepository authRepository;
+
+  @override
+  Future<List<SavedPaymentCardResponse>> getPaymentCards() async {
+    try {
+      return await remoteDS.getPaymentCards();
+    } catch (e) {
+      if (e is CustomBackendException && e.statusCode == 401) {
+        try {
+          await authRepository.refreshAccessToken();
+          return await remoteDS.getPaymentCards();
+        } catch (refreshError) {
+          rethrow;
+        }
+      }
+      TalkerLoggerUtil.talker.error('getPaymentCards failed', e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> saveCard(SavePaymentCardRequest request) async {
+    try {
+      await remoteDS.saveCard(request);
+    } catch (e) {
+      if (e is CustomBackendException && e.statusCode == 401) {
+        try {
+          await authRepository.refreshAccessToken();
+          await remoteDS.saveCard(request);
+          return;
+        } catch (refreshError) {
+          rethrow;
+        }
+      }
+      TalkerLoggerUtil.talker.error('saveCard failed', e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deletePaymentCard(int cardId) async {
+    try {
+      await remoteDS.deletePaymentCard(cardId);
+    } catch (e) {
+      if (e is CustomBackendException && e.statusCode == 401) {
+        try {
+          await authRepository.refreshAccessToken();
+          await remoteDS.deletePaymentCard(cardId);
+          return;
+        } catch (refreshError) {
+          rethrow;
+        }
+      }
+      TalkerLoggerUtil.talker.error('deletePaymentCard failed', e);
+      rethrow;
+    }
+  }
+}
+
+
 lib\src\feature\profile\data\profile_remote_ds.dart
 ---------------------------------------------------
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -66548,6 +68086,11 @@ abstract interface class IProfileRemoteDS {
   Future<List<FeedbackDTO>> myFeedbacks();
 
   Future<List<String>> uploadDocuments(List<File> files);
+
+  Future<List<String>> getMyDocuments();
+
+  Future<void> deleteDocument(String url);
+
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -66731,6 +68274,20 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
     final urls = response['urls'] as List?;
     return urls?.map((e) => e as String).toList() ?? [];
   }
+
+  @override
+  Future<List<String>> getMyDocuments() async {
+    final response = await restClient.get('uploads/my-documents');
+    final urls = response['urls'] as List?;
+    return urls?.map((e) => e as String).toList() ?? [];
+  }
+
+  @override
+  Future<void> deleteDocument(String url) async {
+    await restClient.delete('uploads/document', body: {'url': url});
+  }
+
+
 }
 
 
@@ -67321,6 +68878,345 @@ Map<String, dynamic> _$$AddressPayloadImplToJson(
       if (instance.additionalComment case final value?)
         'additional_comment': value,
       if (instance.cityId case final value?) 'city_id': value,
+    };
+
+
+
+lib\src\feature\profile\models\request\save_payment_card_request.dart
+---------------------------------------------------------------------
+// lib/src/feature/profile/models/request/save_payment_card_request.dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'save_payment_card_request.freezed.dart';
+part 'save_payment_card_request.g.dart';
+
+@freezed
+class SavePaymentCardRequest with _$SavePaymentCardRequest {
+  const factory SavePaymentCardRequest({
+    required String token,
+    required String last4,
+    required String brand,
+    required String expMonth,
+    required String expYear,
+    required String cardHolderName, 
+  }) = _SavePaymentCardRequest;
+
+  factory SavePaymentCardRequest.fromJson(Map<String, dynamic> json) =>
+      _$SavePaymentCardRequestFromJson(json);
+}
+
+
+lib\src\feature\profile\models\request\save_payment_card_request.freezed.dart
+-----------------------------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'save_payment_card_request.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+SavePaymentCardRequest _$SavePaymentCardRequestFromJson(
+    Map<String, dynamic> json) {
+  return _SavePaymentCardRequest.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SavePaymentCardRequest {
+  String get token => throw _privateConstructorUsedError;
+  String get last4 => throw _privateConstructorUsedError;
+  String get brand => throw _privateConstructorUsedError;
+  String get expMonth => throw _privateConstructorUsedError;
+  String get expYear => throw _privateConstructorUsedError;
+  String get cardHolderName => throw _privateConstructorUsedError;
+
+  /// Serializes this SavePaymentCardRequest to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SavePaymentCardRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SavePaymentCardRequestCopyWith<SavePaymentCardRequest> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SavePaymentCardRequestCopyWith<$Res> {
+  factory $SavePaymentCardRequestCopyWith(SavePaymentCardRequest value,
+          $Res Function(SavePaymentCardRequest) then) =
+      _$SavePaymentCardRequestCopyWithImpl<$Res, SavePaymentCardRequest>;
+  @useResult
+  $Res call(
+      {String token,
+      String last4,
+      String brand,
+      String expMonth,
+      String expYear,
+      String cardHolderName});
+}
+
+/// @nodoc
+class _$SavePaymentCardRequestCopyWithImpl<$Res,
+        $Val extends SavePaymentCardRequest>
+    implements $SavePaymentCardRequestCopyWith<$Res> {
+  _$SavePaymentCardRequestCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SavePaymentCardRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? token = null,
+    Object? last4 = null,
+    Object? brand = null,
+    Object? expMonth = null,
+    Object? expYear = null,
+    Object? cardHolderName = null,
+  }) {
+    return _then(_value.copyWith(
+      token: null == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String,
+      last4: null == last4
+          ? _value.last4
+          : last4 // ignore: cast_nullable_to_non_nullable
+              as String,
+      brand: null == brand
+          ? _value.brand
+          : brand // ignore: cast_nullable_to_non_nullable
+              as String,
+      expMonth: null == expMonth
+          ? _value.expMonth
+          : expMonth // ignore: cast_nullable_to_non_nullable
+              as String,
+      expYear: null == expYear
+          ? _value.expYear
+          : expYear // ignore: cast_nullable_to_non_nullable
+              as String,
+      cardHolderName: null == cardHolderName
+          ? _value.cardHolderName
+          : cardHolderName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SavePaymentCardRequestImplCopyWith<$Res>
+    implements $SavePaymentCardRequestCopyWith<$Res> {
+  factory _$$SavePaymentCardRequestImplCopyWith(
+          _$SavePaymentCardRequestImpl value,
+          $Res Function(_$SavePaymentCardRequestImpl) then) =
+      __$$SavePaymentCardRequestImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String token,
+      String last4,
+      String brand,
+      String expMonth,
+      String expYear,
+      String cardHolderName});
+}
+
+/// @nodoc
+class __$$SavePaymentCardRequestImplCopyWithImpl<$Res>
+    extends _$SavePaymentCardRequestCopyWithImpl<$Res,
+        _$SavePaymentCardRequestImpl>
+    implements _$$SavePaymentCardRequestImplCopyWith<$Res> {
+  __$$SavePaymentCardRequestImplCopyWithImpl(
+      _$SavePaymentCardRequestImpl _value,
+      $Res Function(_$SavePaymentCardRequestImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SavePaymentCardRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? token = null,
+    Object? last4 = null,
+    Object? brand = null,
+    Object? expMonth = null,
+    Object? expYear = null,
+    Object? cardHolderName = null,
+  }) {
+    return _then(_$SavePaymentCardRequestImpl(
+      token: null == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String,
+      last4: null == last4
+          ? _value.last4
+          : last4 // ignore: cast_nullable_to_non_nullable
+              as String,
+      brand: null == brand
+          ? _value.brand
+          : brand // ignore: cast_nullable_to_non_nullable
+              as String,
+      expMonth: null == expMonth
+          ? _value.expMonth
+          : expMonth // ignore: cast_nullable_to_non_nullable
+              as String,
+      expYear: null == expYear
+          ? _value.expYear
+          : expYear // ignore: cast_nullable_to_non_nullable
+              as String,
+      cardHolderName: null == cardHolderName
+          ? _value.cardHolderName
+          : cardHolderName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SavePaymentCardRequestImpl implements _SavePaymentCardRequest {
+  const _$SavePaymentCardRequestImpl(
+      {required this.token,
+      required this.last4,
+      required this.brand,
+      required this.expMonth,
+      required this.expYear,
+      required this.cardHolderName});
+
+  factory _$SavePaymentCardRequestImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SavePaymentCardRequestImplFromJson(json);
+
+  @override
+  final String token;
+  @override
+  final String last4;
+  @override
+  final String brand;
+  @override
+  final String expMonth;
+  @override
+  final String expYear;
+  @override
+  final String cardHolderName;
+
+  @override
+  String toString() {
+    return 'SavePaymentCardRequest(token: $token, last4: $last4, brand: $brand, expMonth: $expMonth, expYear: $expYear, cardHolderName: $cardHolderName)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SavePaymentCardRequestImpl &&
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.last4, last4) || other.last4 == last4) &&
+            (identical(other.brand, brand) || other.brand == brand) &&
+            (identical(other.expMonth, expMonth) ||
+                other.expMonth == expMonth) &&
+            (identical(other.expYear, expYear) || other.expYear == expYear) &&
+            (identical(other.cardHolderName, cardHolderName) ||
+                other.cardHolderName == cardHolderName));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, token, last4, brand, expMonth, expYear, cardHolderName);
+
+  /// Create a copy of SavePaymentCardRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SavePaymentCardRequestImplCopyWith<_$SavePaymentCardRequestImpl>
+      get copyWith => __$$SavePaymentCardRequestImplCopyWithImpl<
+          _$SavePaymentCardRequestImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SavePaymentCardRequestImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SavePaymentCardRequest implements SavePaymentCardRequest {
+  const factory _SavePaymentCardRequest(
+      {required final String token,
+      required final String last4,
+      required final String brand,
+      required final String expMonth,
+      required final String expYear,
+      required final String cardHolderName}) = _$SavePaymentCardRequestImpl;
+
+  factory _SavePaymentCardRequest.fromJson(Map<String, dynamic> json) =
+      _$SavePaymentCardRequestImpl.fromJson;
+
+  @override
+  String get token;
+  @override
+  String get last4;
+  @override
+  String get brand;
+  @override
+  String get expMonth;
+  @override
+  String get expYear;
+  @override
+  String get cardHolderName;
+
+  /// Create a copy of SavePaymentCardRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SavePaymentCardRequestImplCopyWith<_$SavePaymentCardRequestImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\profile\models\request\save_payment_card_request.g.dart
+-----------------------------------------------------------------------
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'save_payment_card_request.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$SavePaymentCardRequestImpl _$$SavePaymentCardRequestImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SavePaymentCardRequestImpl(
+      token: json['token'] as String,
+      last4: json['last4'] as String,
+      brand: json['brand'] as String,
+      expMonth: json['expMonth'] as String,
+      expYear: json['expYear'] as String,
+      cardHolderName: json['cardHolderName'] as String,
+    );
+
+Map<String, dynamic> _$$SavePaymentCardRequestImplToJson(
+        _$SavePaymentCardRequestImpl instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+      'last4': instance.last4,
+      'brand': instance.brand,
+      'expMonth': instance.expMonth,
+      'expYear': instance.expYear,
+      'cardHolderName': instance.cardHolderName,
     };
 
 
@@ -68689,6 +70585,424 @@ Map<String, dynamic> _$$DocumentDTOImplToJson(_$DocumentDTOImpl instance) =>
 
 
 
+lib\src\feature\profile\models\response\save_payment_card_response.dart
+-----------------------------------------------------------------------
+// ignore_for_file: invalid_annotation_target
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'save_payment_card_response.freezed.dart';
+part 'save_payment_card_response.g.dart';
+
+@freezed
+class SavedPaymentCardResponse with _$SavedPaymentCardResponse {
+  const factory SavedPaymentCardResponse({
+    @JsonKey(name: 'id') required int id,
+    @JsonKey(name: 'last4') required String last4,
+    @JsonKey(name: 'brand') required String brand,
+    @JsonKey(name: 'expMonth') required String expMonth,
+    @JsonKey(name: 'expYear') required String expYear,
+    @JsonKey(name: 'isDefault') required bool isDefault,
+    @JsonKey(name: 'createdAt') required String createdAt, // если backend возвращает
+     @JsonKey(name: 'card_holder_name') required String cardHolderName,
+  }) = _SavedPaymentCardResponse;
+
+  factory SavedPaymentCardResponse.fromJson(Map<String, dynamic> json) 
+      => _$SavedPaymentCardResponseFromJson(json);
+  
+      
+}
+
+
+lib\src\feature\profile\models\response\save_payment_card_response.freezed.dart
+-------------------------------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'save_payment_card_response.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+SavedPaymentCardResponse _$SavedPaymentCardResponseFromJson(
+    Map<String, dynamic> json) {
+  return _SavedPaymentCardResponse.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SavedPaymentCardResponse {
+  @JsonKey(name: 'id')
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last4')
+  String get last4 => throw _privateConstructorUsedError;
+  @JsonKey(name: 'brand')
+  String get brand => throw _privateConstructorUsedError;
+  @JsonKey(name: 'expMonth')
+  String get expMonth => throw _privateConstructorUsedError;
+  @JsonKey(name: 'expYear')
+  String get expYear => throw _privateConstructorUsedError;
+  @JsonKey(name: 'isDefault')
+  bool get isDefault => throw _privateConstructorUsedError;
+  @JsonKey(name: 'createdAt')
+  String get createdAt =>
+      throw _privateConstructorUsedError; // если backend возвращает
+  @JsonKey(name: 'cardHolderName')
+  String get cardHolderName => throw _privateConstructorUsedError;
+
+  /// Serializes this SavedPaymentCardResponse to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SavedPaymentCardResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SavedPaymentCardResponseCopyWith<SavedPaymentCardResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SavedPaymentCardResponseCopyWith<$Res> {
+  factory $SavedPaymentCardResponseCopyWith(SavedPaymentCardResponse value,
+          $Res Function(SavedPaymentCardResponse) then) =
+      _$SavedPaymentCardResponseCopyWithImpl<$Res, SavedPaymentCardResponse>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'id') int id,
+      @JsonKey(name: 'last4') String last4,
+      @JsonKey(name: 'brand') String brand,
+      @JsonKey(name: 'expMonth') String expMonth,
+      @JsonKey(name: 'expYear') String expYear,
+      @JsonKey(name: 'isDefault') bool isDefault,
+      @JsonKey(name: 'createdAt') String createdAt,
+      @JsonKey(name: 'cardHolderName') String cardHolderName});
+}
+
+/// @nodoc
+class _$SavedPaymentCardResponseCopyWithImpl<$Res,
+        $Val extends SavedPaymentCardResponse>
+    implements $SavedPaymentCardResponseCopyWith<$Res> {
+  _$SavedPaymentCardResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SavedPaymentCardResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? last4 = null,
+    Object? brand = null,
+    Object? expMonth = null,
+    Object? expYear = null,
+    Object? isDefault = null,
+    Object? createdAt = null,
+    Object? cardHolderName = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      last4: null == last4
+          ? _value.last4
+          : last4 // ignore: cast_nullable_to_non_nullable
+              as String,
+      brand: null == brand
+          ? _value.brand
+          : brand // ignore: cast_nullable_to_non_nullable
+              as String,
+      expMonth: null == expMonth
+          ? _value.expMonth
+          : expMonth // ignore: cast_nullable_to_non_nullable
+              as String,
+      expYear: null == expYear
+          ? _value.expYear
+          : expYear // ignore: cast_nullable_to_non_nullable
+              as String,
+      isDefault: null == isDefault
+          ? _value.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      cardHolderName: null == cardHolderName
+          ? _value.cardHolderName
+          : cardHolderName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SavedPaymentCardResponseImplCopyWith<$Res>
+    implements $SavedPaymentCardResponseCopyWith<$Res> {
+  factory _$$SavedPaymentCardResponseImplCopyWith(
+          _$SavedPaymentCardResponseImpl value,
+          $Res Function(_$SavedPaymentCardResponseImpl) then) =
+      __$$SavedPaymentCardResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'id') int id,
+      @JsonKey(name: 'last4') String last4,
+      @JsonKey(name: 'brand') String brand,
+      @JsonKey(name: 'expMonth') String expMonth,
+      @JsonKey(name: 'expYear') String expYear,
+      @JsonKey(name: 'isDefault') bool isDefault,
+      @JsonKey(name: 'createdAt') String createdAt,
+      @JsonKey(name: 'cardHolderName') String cardHolderName});
+}
+
+/// @nodoc
+class __$$SavedPaymentCardResponseImplCopyWithImpl<$Res>
+    extends _$SavedPaymentCardResponseCopyWithImpl<$Res,
+        _$SavedPaymentCardResponseImpl>
+    implements _$$SavedPaymentCardResponseImplCopyWith<$Res> {
+  __$$SavedPaymentCardResponseImplCopyWithImpl(
+      _$SavedPaymentCardResponseImpl _value,
+      $Res Function(_$SavedPaymentCardResponseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SavedPaymentCardResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? last4 = null,
+    Object? brand = null,
+    Object? expMonth = null,
+    Object? expYear = null,
+    Object? isDefault = null,
+    Object? createdAt = null,
+    Object? cardHolderName = null,
+  }) {
+    return _then(_$SavedPaymentCardResponseImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      last4: null == last4
+          ? _value.last4
+          : last4 // ignore: cast_nullable_to_non_nullable
+              as String,
+      brand: null == brand
+          ? _value.brand
+          : brand // ignore: cast_nullable_to_non_nullable
+              as String,
+      expMonth: null == expMonth
+          ? _value.expMonth
+          : expMonth // ignore: cast_nullable_to_non_nullable
+              as String,
+      expYear: null == expYear
+          ? _value.expYear
+          : expYear // ignore: cast_nullable_to_non_nullable
+              as String,
+      isDefault: null == isDefault
+          ? _value.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      cardHolderName: null == cardHolderName
+          ? _value.cardHolderName
+          : cardHolderName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SavedPaymentCardResponseImpl implements _SavedPaymentCardResponse {
+  const _$SavedPaymentCardResponseImpl(
+      {@JsonKey(name: 'id') required this.id,
+      @JsonKey(name: 'last4') required this.last4,
+      @JsonKey(name: 'brand') required this.brand,
+      @JsonKey(name: 'expMonth') required this.expMonth,
+      @JsonKey(name: 'expYear') required this.expYear,
+      @JsonKey(name: 'isDefault') required this.isDefault,
+      @JsonKey(name: 'createdAt') required this.createdAt,
+      @JsonKey(name: 'cardHolderName') required this.cardHolderName});
+
+  factory _$SavedPaymentCardResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SavedPaymentCardResponseImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'id')
+  final int id;
+  @override
+  @JsonKey(name: 'last4')
+  final String last4;
+  @override
+  @JsonKey(name: 'brand')
+  final String brand;
+  @override
+  @JsonKey(name: 'expMonth')
+  final String expMonth;
+  @override
+  @JsonKey(name: 'expYear')
+  final String expYear;
+  @override
+  @JsonKey(name: 'isDefault')
+  final bool isDefault;
+  @override
+  @JsonKey(name: 'createdAt')
+  final String createdAt;
+// если backend возвращает
+  @override
+  @JsonKey(name: 'cardHolderName')
+  final String cardHolderName;
+
+  @override
+  String toString() {
+    return 'SavedPaymentCardResponse(id: $id, last4: $last4, brand: $brand, expMonth: $expMonth, expYear: $expYear, isDefault: $isDefault, createdAt: $createdAt, cardHolderName: $cardHolderName)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SavedPaymentCardResponseImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.last4, last4) || other.last4 == last4) &&
+            (identical(other.brand, brand) || other.brand == brand) &&
+            (identical(other.expMonth, expMonth) ||
+                other.expMonth == expMonth) &&
+            (identical(other.expYear, expYear) || other.expYear == expYear) &&
+            (identical(other.isDefault, isDefault) ||
+                other.isDefault == isDefault) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.cardHolderName, cardHolderName) ||
+                other.cardHolderName == cardHolderName));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, last4, brand, expMonth,
+      expYear, isDefault, createdAt, cardHolderName);
+
+  /// Create a copy of SavedPaymentCardResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SavedPaymentCardResponseImplCopyWith<_$SavedPaymentCardResponseImpl>
+      get copyWith => __$$SavedPaymentCardResponseImplCopyWithImpl<
+          _$SavedPaymentCardResponseImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SavedPaymentCardResponseImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SavedPaymentCardResponse implements SavedPaymentCardResponse {
+  const factory _SavedPaymentCardResponse(
+      {@JsonKey(name: 'id') required final int id,
+      @JsonKey(name: 'last4') required final String last4,
+      @JsonKey(name: 'brand') required final String brand,
+      @JsonKey(name: 'expMonth') required final String expMonth,
+      @JsonKey(name: 'expYear') required final String expYear,
+      @JsonKey(name: 'isDefault') required final bool isDefault,
+      @JsonKey(name: 'createdAt') required final String createdAt,
+      @JsonKey(name: 'cardHolderName')
+      required final String cardHolderName}) = _$SavedPaymentCardResponseImpl;
+
+  factory _SavedPaymentCardResponse.fromJson(Map<String, dynamic> json) =
+      _$SavedPaymentCardResponseImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'id')
+  int get id;
+  @override
+  @JsonKey(name: 'last4')
+  String get last4;
+  @override
+  @JsonKey(name: 'brand')
+  String get brand;
+  @override
+  @JsonKey(name: 'expMonth')
+  String get expMonth;
+  @override
+  @JsonKey(name: 'expYear')
+  String get expYear;
+  @override
+  @JsonKey(name: 'isDefault')
+  bool get isDefault;
+  @override
+  @JsonKey(name: 'createdAt')
+  String get createdAt; // если backend возвращает
+  @override
+  @JsonKey(name: 'cardHolderName')
+  String get cardHolderName;
+
+  /// Create a copy of SavedPaymentCardResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SavedPaymentCardResponseImplCopyWith<_$SavedPaymentCardResponseImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\profile\models\response\save_payment_card_response.g.dart
+-------------------------------------------------------------------------
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'save_payment_card_response.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$SavedPaymentCardResponseImpl _$$SavedPaymentCardResponseImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SavedPaymentCardResponseImpl(
+      id: (json['id'] as num).toInt(),
+      last4: json['last4'] as String,
+      brand: json['brand'] as String,
+      expMonth: json['expMonth'] as String,
+      expYear: json['expYear'] as String,
+      isDefault: json['isDefault'] as bool,
+      createdAt: json['createdAt'] as String,
+      cardHolderName: json['cardHolderName'] as String,
+    );
+
+Map<String, dynamic> _$$SavedPaymentCardResponseImplToJson(
+        _$SavedPaymentCardResponseImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'last4': instance.last4,
+      'brand': instance.brand,
+      'expMonth': instance.expMonth,
+      'expYear': instance.expYear,
+      'isDefault': instance.isDefault,
+      'createdAt': instance.createdAt,
+      'cardHolderName': instance.cardHolderName,
+    };
+
+
+
 lib\src\feature\profile\presentation\profile.dart
 -------------------------------------------------
 export 'pages/edit_profile_page.dart';
@@ -69523,10 +71837,13 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:coment_app/src/feature/catalog/presentation/widgets/choose_image_bs.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class LoadDocumentsPage extends StatelessWidget {
@@ -69536,7 +71853,8 @@ class LoadDocumentsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          LoadDocumentsCubit(context.repository.profileRemoteDS),
+          LoadDocumentsCubit(context.repository.profileRemoteDS)
+            ..fetchDocuments(),
       child: const LoadingDocumentWidget(),
     );
   }
@@ -69553,6 +71871,7 @@ class LoadingDocumentWidget extends StatefulWidget {
 class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
   final List<File> _imageFiles = [];
   final List<File> _documentFiles = [];
+  List<String> _existingDocuments = [];
   static const int _maxTotalFiles = 10;
   final ImagePicker imagePicker = ImagePicker();
   bool _isSubmitted = false;
@@ -69646,14 +71965,22 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(context.localized.documentsSentForReview),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.green,
               ),
             );
-            // _imageFiles.clear();
-            // _documentFiles.clear();
+            _imageFiles.clear();
+            _documentFiles.clear();
             // setState(() {});
             setState(() {
               _isSubmitted = true;
+            });
+            context.read<LoadDocumentsCubit>().fetchDocuments();
+          },
+          loaded: (urls) {
+            // _existingDocuments = urls;
+            setState(() {
+              _existingDocuments = urls;
+              _isSubmitted = false; // сброс флага отправки
             });
           },
           failure: (error) {
@@ -69678,6 +72005,81 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
             padding: const EdgeInsets.only(bottom: 12.0),
             child: Column(
               children: [
+                // === Секция: Ранее загруженные документы (только просмотр) ===
+                if (_existingDocuments.isNotEmpty)
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Ранее загруженные документы',
+                          style: AppTextStyles.fs14w600
+                              .copyWith(color: AppColors.grey2),
+                        ),
+                        const Gap(8),
+                        SizedBox(
+                          height: 150 * _existingDocuments.length.toDouble(),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            // physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _existingDocuments.length,
+                            itemBuilder: (context, index) {
+                              final url = _existingDocuments[index];
+                              final isImage = url.endsWith('.png') ||
+                                  url.endsWith('.jpg') ||
+                                  url.endsWith('.jpeg');
+                              final name = Uri.parse(url).pathSegments.last;
+
+                              return Slidable(
+                                endActionPane: ActionPane(
+                                  motion: const StretchMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(12),
+                                        bottomRight: Radius.circular(12),
+                                      ),
+                                      onPressed: (ctx) async {
+                                        final url = _existingDocuments[index];
+                                        await context
+                                            .read<LoadDocumentsCubit>()
+                                            .deleteDocument(url);
+                                      },
+                                      backgroundColor: AppColors.red700,
+                                      icon: Icons.delete,
+                                      label: 'Delete',
+                                    ),
+                                  ],
+                                ),
+                                child: ListTile(
+                                  leading: isImage
+                                      ? const Icon(Icons.image,
+                                          color: AppColors.mainColor)
+                                      : const Icon(Icons.insert_drive_file),
+                                  title: Text(name),
+                                  onTap: () async {
+                                    if (!await launchUrl(Uri.parse(url))) {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Не удалось открыть файл')),
+                                        );
+                                      }
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                 // Изображения — GridView
                 if (_imageFiles.isNotEmpty)
                   Expanded(
@@ -69704,29 +72106,29 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
                                   height: double.infinity,
                                 ),
                               ),
-                              
-                                Positioned(
-                                  top: 4,
-                                  right: 4,
-                                  child: GestureDetector(
-                                    onTap: () => _removeImage(index),
-                                    child: Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black54,
-                                      ),
-                                      child: const Icon(Icons.close,
-                                          color: Colors.white, size: 16),
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: GestureDetector(
+                                  onTap: () => _removeImage(index),
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black54,
                                     ),
+                                    child: const Icon(Icons.close,
+                                        color: Colors.white, size: 16),
                                   ),
                                 ),
+                              ),
                               if (_isSubmitted)
-                               const  Align(
+                                const Align(
                                   alignment: Alignment.bottomRight,
-                                  child:  Padding(
-                                    padding: EdgeInsets.only(right: 8.0, bottom: 8),
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 8.0, bottom: 8),
                                     child: Icon(Icons.check_circle,
                                         color: AppColors.green, size: 20),
                                   ),
@@ -69753,25 +72155,22 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
                                 leading: const Icon(Icons.insert_drive_file),
                                 title: Text(_getDisplayName(
                                     _documentFiles[index].path)),
-                                trailing:
-                                    SizedBox(
-                                      width: 80,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          if (_isSubmitted)
-                                           const Icon(Icons.check_circle,
+                                trailing: SizedBox(
+                                  width: 80,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      if (_isSubmitted)
+                                        const Icon(Icons.check_circle,
                                             color: AppColors.green, size: 20),
-                                          IconButton(
-                                              icon: const Icon(Icons.close),
-                                              onPressed: () => _removeDocument(index),
-                                            ),
-                                        ],
+                                      IconButton(
+                                        icon: const Icon(Icons.close),
+                                        onPressed: () => _removeDocument(index),
                                       ),
-                                    )
-                                    ,
+                                    ],
+                                  ),
+                                ),
                               ),
-                            
                             ],
                           );
                         },
@@ -69867,10 +72266,67 @@ class MessagePage extends StatelessWidget {
 lib\src\feature\profile\presentation\pages\payment_page.dart
 ------------------------------------------------------------
 import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/theme/resources.dart';
+import 'package:coment_app/src/feature/profile/presentation/widgets/add_payment_cards.dart';
+import 'package:coment_app/src/feature/profile/presentation/widgets/make_payment.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:payment_card/payment_card.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:coment_app/src/feature/profile/bloc/payment_cubit.dart';
 
+extension BrandToCardNetwork on String {
+  CardNetwork toCardNetwork() {
+    switch (this) {
+      case 'visa':
+        return CardNetwork.visa;
+      case 'mastercard':
+        return CardNetwork.mastercard;
+      // Другие бренды → CardNetwork.other (т.к. нет unionpay/humo/uzcard в пакете)
+      default:
+        return CardNetwork.other;
+    }
+  }
+
+  Color getCardColor() {
+    switch (this) {
+      case 'visa':
+        return const Color(0xFF1A1F71);
+      case 'mastercard':
+        return const Color.fromARGB(255, 173, 17, 22);
+      case 'humo':
+        return const Color(0xFF009EE2);
+      case 'uzcard':
+        return const Color.fromARGB(255, 44, 3, 107);
+      case 'unionpay':
+        return const Color(0xFFA10000);
+      case 'kzt':
+        return const Color(0xFFD1B700);
+      default:
+        return Colors.grey;
+    }
+  }
+
+  String getCardTypeName() {
+    switch (this) {
+      case 'humo':
+        return 'HUMO';
+      case 'uzcard':
+        return 'UZCARD';
+      case 'unionpay':
+        return 'UNIONPAY';
+      case 'kzt':
+        return 'KAZAKHSTAN';
+      case 'visa':
+        return 'VISA';
+      case 'mastercard':
+        return 'MASTERCARD';
+      default:
+        return toUpperCase();
+    }
+  }
+}
 
 @RoutePage()
 class PaymentPage extends StatelessWidget {
@@ -69878,16 +72334,83 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: context.localized.payment,
-      ),
-      body: const Center(
-        child: Text('Здесь можно добавить работу с настройкой карты и оплаты.'),
-      ),
+    return BlocProvider(
+      create: (context) =>
+          PaymentCubit(context.repository.paymentRemoteDS)..loadCards(),
+      child: const _PaymentView(),
     );
   }
 }
+
+class _PaymentView extends StatefulWidget {
+  const _PaymentView();
+
+  @override
+  State<_PaymentView> createState() => _PaymentViewState();
+}
+
+class _PaymentViewState extends State<_PaymentView> {
+  int _currentIndex = 0;
+
+  void onTap(int value) {
+    setState(() {
+      _currentIndex = value;
+    });
+  }
+
+  List<Widget> screens = [
+    const AddPaymentCards(),
+    const MakePayment(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(title: context.localized.payment),
+      bottomNavigationBar: SizedBox(
+
+        height: MediaQuery.of(context).size.height / 10,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: _currentIndex == 0 ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+          children: [
+            ColoredBox(
+              color: AppColors.mainColor,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                height: 3,
+              ),
+            ),
+            Expanded(
+              // height: MediaQuery.of(context).size.height / 10,
+              child: BottomNavigationBar(
+                backgroundColor: AppColors.backgroundColor,
+                selectedLabelStyle: AppTextStyles.fs12w600,
+                unselectedLabelStyle: AppTextStyles.fs12w600,
+                selectedItemColor: AppColors.mainColor,
+                unselectedItemColor: AppColors.greyText,
+                iconSize: 30,
+                currentIndex: _currentIndex,
+                onTap: (value) => onTap(value),
+                items: [
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.add_card),
+                    label: context.localized.add_new_card,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.payments_outlined),
+                    label: context.localized.payment,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: screens[_currentIndex],
+    );
+  }
+}
+
 
 
 lib\src\feature\profile\presentation\pages\profile_page.dart
@@ -70597,6 +73120,373 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
 
 
 
+lib\src\feature\profile\presentation\widgets\add_payment_cards.dart
+-------------------------------------------------------------------
+import 'package:coment_app/src/core/constant/assets_constants.dart';
+import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
+import 'package:coment_app/src/feature/profile/bloc/payment_cubit.dart';
+import 'package:coment_app/src/feature/profile/models/request/save_payment_card_request.dart';
+import 'package:coment_app/src/feature/profile/models/response/save_payment_card_response.dart'
+    as my;
+import 'package:coment_app/src/feature/profile/presentation/pages/payment_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+
+class AddPaymentCards extends StatefulWidget {
+  const AddPaymentCards({super.key});
+
+  @override
+  State<AddPaymentCards> createState() => _AddPaymentCardsState();
+}
+
+class _AddPaymentCardsState extends State<AddPaymentCards> {
+  final _numberCtrl = TextEditingController();
+  final _monthCtrl = TextEditingController();
+  final _yearCtrl = TextEditingController();
+  final _cardHolderNameCtrl = TextEditingController();
+  String? _detectedBrand;
+
+  // Добавь FocusNode'ы
+  final _monthFocus = FocusNode();
+  final _yearFocus = FocusNode();
+  final _nameFocus = FocusNode();
+
+  @override
+  void dispose() {
+    _numberCtrl.dispose();
+    _monthCtrl.dispose();
+    _yearCtrl.dispose();
+    _cardHolderNameCtrl.dispose();
+    _monthFocus.dispose();
+    _yearFocus.dispose();
+    _nameFocus.dispose();
+    super.dispose();
+  }
+
+  void _onNumberChanged(String value) {
+    final clean = value.replaceAll(RegExp(r'[^0-9]'), '');
+    String? brand = _detectBrand(clean);
+    if (brand != _detectedBrand) {
+      setState(() => _detectedBrand = brand);
+    }
+    final formatted = _formatCardNumber(clean);
+    if (_numberCtrl.text != formatted) {
+      _numberCtrl.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    }
+  }
+
+  String _formatCardNumber(String clean) {
+    if (clean.isEmpty) return '';
+    final cleanTruncated = clean.length > 16 ? clean.substring(0, 16) : clean;
+    final parts = <String>[];
+    for (int i = 0; i < cleanTruncated.length; i += 4) {
+      parts.add(
+        cleanTruncated.substring(
+          i,
+          i + 4 > cleanTruncated.length ? cleanTruncated.length : i + 4,
+        ),
+      );
+    }
+    return parts.join(' ');
+  }
+
+  String? _detectBrand(String clean) {
+    if (clean.startsWith('4')) return 'visa';
+    if (RegExp(r'^5[1-5]|^2[2-7]').hasMatch(clean)) return 'mastercard';
+    if (clean.startsWith('9860')) return 'humo';
+    if (clean.startsWith('8600') || clean.startsWith('5614')) return 'uzcard';
+    if (RegExp(r'^62|^81|^99').hasMatch(clean)) return 'unionpay';
+    if (clean.startsWith('4') || clean.startsWith('5')) return 'kzt';
+    return null;
+  }
+
+  Widget cardImage(String brand) {
+    if (brand == 'humo') {
+      return Image.asset(AssetsConstants.humo);
+    } else if (brand == 'uzcard') {
+      return Container(
+          width: 35,
+          height: 40,
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(3.5)),
+          child: Image.asset(AssetsConstants.uzcard));
+    } else if (brand == 'mastercard') {
+      return SizedBox(
+        width: 50,
+        height: 40,
+        child: Image.asset(
+          AssetsConstants.mastercard,
+        ),
+      );
+    } else if (brand == 'unionpay') {
+      return Image.asset(AssetsConstants.unionpay);
+    } else {
+      return SvgPicture.asset(AssetsConstants.visa);
+    }
+  }
+
+  void _addCard(BuildContext context) {
+    final cleanNumber = _numberCtrl.text.replaceAll(' ', '');
+    if (cleanNumber.length < 13) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.localized.invalid_card_number,
+          ),
+        ),
+      );
+      return;
+    }
+    if (_monthCtrl.text.length != 2 || _yearCtrl.text.length != 2) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.localized.specify_expiry_date,
+          ),
+        ),
+      );
+      return;
+    }
+    // if (_cardHolderNameCtrl.text.length < 3) {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(const SnackBar(content: Text('Укажите CVV')));
+    //   return;
+    // }
+
+    final token = 'fake_token_${DateTime.now().millisecondsSinceEpoch}';
+    final last4 = cleanNumber.substring(cleanNumber.length - 4);
+    final brand = _detectedBrand ?? 'unknown';
+    final expMonth = _monthCtrl.text;
+    final expYear = _yearCtrl.text;
+    final cardHolderName = _cardHolderNameCtrl.text;
+
+    if (cardHolderName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.localized.specify_cardholder_name,
+          ),
+        ),
+      );
+      return;
+    }
+
+    context.read<PaymentCubit>().saveCard(
+          SavePaymentCardRequest(
+            token: token,
+            last4: last4,
+            brand: brand,
+            expMonth: expMonth,
+            expYear: expYear,
+            cardHolderName: cardHolderName,
+          ),
+        );
+
+    _numberCtrl.clear();
+    _monthCtrl.clear();
+    _yearCtrl.clear();
+    _cardHolderNameCtrl.clear();
+    setState(() => _detectedBrand = null);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<PaymentCubit, PaymentState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          success: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(context.localized.card_added),
+                  backgroundColor: Colors.green),
+            );
+          },
+          failure: (error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text('${context.localized.error} $error'),
+                  backgroundColor: Colors.red),
+            );
+          },
+        );
+      },
+      builder: (context, state) {
+        List<my.SavedPaymentCardResponse> paymentCards = [];
+        bool isLoading = false;
+
+        state.maybeWhen(
+          loaded: (cards) {
+            paymentCards = cards;
+          },
+          loading: () {
+            isLoading = true;
+          },
+          orElse: () {},
+        );
+
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              if (paymentCards.isNotEmpty) ...[
+                Text(context.localized.saved_cards,
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 12),
+                for (final card in paymentCards)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: SizedBox(
+                      height: 250,
+                      child: Card(
+                        color: card.brand.getCardColor(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    card.brand == 'visa' ||
+                                            card.brand == 'master'
+                                        ? Icons.credit_card
+                                        : Icons.account_balance,
+                                    color: Colors.white,
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    '•••• •••• •••• ${card.last4}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${card.expMonth}/${card.expYear}',
+                                    style:
+                                        const TextStyle(color: Colors.white70),
+                                  ),
+                                  Text(
+                                    card.cardHolderName,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                // width: 10,
+                                // height: 13.56,
+
+                                child: cardImage(card.brand),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 24),
+              ],
+              Text(context.localized.add_new_card,
+                  style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _numberCtrl,
+                onChanged: _onNumberChanged,
+                decoration: InputDecoration(
+                  labelText: context.localized.card_number,
+                  prefixIcon: _detectedBrand != null
+                      ? Icon(
+                          _detectedBrand == 'visa' || _detectedBrand == 'master'
+                              ? Icons.credit_card
+                              : Icons.account_balance,
+                          color: _detectedBrand!.getCardColor(),
+                        )
+                      : null,
+                  border: const OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _monthCtrl,
+                      focusNode: _monthFocus,
+                      decoration: InputDecoration(
+                        labelText: context.localized.expiry_month,
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      maxLength: 2,
+                      onChanged: (value) {
+                        if (value.length == 2) {
+                          _yearFocus.requestFocus();
+                        }
+
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextField(
+                      controller: _yearCtrl,
+                      focusNode: _yearFocus,
+                      decoration: InputDecoration(
+                        labelText: context.localized.expiry_year,
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      maxLength: 2,
+                      onChanged: (value) {
+                        if (value.length == 2) {
+                          _nameFocus.requestFocus();
+                        }
+
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 12),
+              TextField(
+                controller: _cardHolderNameCtrl,
+                focusNode: _nameFocus,
+                decoration: InputDecoration(
+                  labelText: context.localized.cardholder_name,
+                  border: const OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.name,
+                textCapitalization: TextCapitalization.characters,
+              ),
+              const SizedBox(height: 35),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: isLoading ? null : () => _addCard(context),
+                  child: isLoading
+                      ? const CircularProgressIndicator()
+                      : Text(context.localized.attach_card),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+
 lib\src\feature\profile\presentation\widgets\language_bottom_sheet.dart
 -----------------------------------------------------------------------
 import 'dart:developer';
@@ -71155,6 +74045,55 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet> {
           const Gap(20),
         ],
       ),
+    );
+  }
+}
+
+
+
+lib\src\feature\profile\presentation\widgets\make_payment.dart
+--------------------------------------------------------------
+import 'package:coment_app/src/core/constant/assets_constants.dart';
+import 'package:flutter/material.dart';
+
+class MakePayment extends StatefulWidget {
+  const MakePayment({super.key});
+
+  @override
+  State<MakePayment> createState() => _MakePaymentState();
+}
+
+class _MakePaymentState extends State<MakePayment> {
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      padding: const EdgeInsets.all(16),
+      crossAxisCount: 3,
+      mainAxisSpacing: 6,
+      crossAxisSpacing: 6,
+      children: [
+        Card(
+          child: Center(
+            child: Image.asset(AssetsConstants.payme),
+          ),
+        ),
+        Card(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: Image.asset(AssetsConstants.click),
+              ),
+            ),
+          ),
+        ),
+        Card(
+          child: Center(
+            child: Image.asset(AssetsConstants.uzumBank),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -73943,4 +76882,4 @@ class _SignInPage extends StatelessWidget {
 
 
 
-=== Всего файлов: 335 ===
+=== Всего файлов: 347 ===

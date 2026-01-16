@@ -1,9 +1,12 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
 import 'package:coment_app/src/core/utils/talker_logger_util.dart';
 import 'package:coment_app/src/feature/auth/data/auth_repository.dart';
 import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_response.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:coment_app/src/core/rest_client/models/basic_response.dart';
@@ -14,7 +17,6 @@ abstract interface class IProfileRepository {
   Future<UserDTO> profileData();
 
   Future<BasicResponse> deleteAccount({required String password});
-
 
   Future<BasicResponse> logout();
 
@@ -37,6 +39,17 @@ abstract interface class IProfileRepository {
     required int languageId,
     XFile? avatar,
   });
+
+  Future<List<String>> uploadDocuments(List<File> files,
+      // {required int companyId}
+      );
+
+Future<List<ProductDTO>> getMyCompanies();
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  });
+
 }
 
 class ProfileRepositoryImpl implements IProfileRepository {
@@ -186,4 +199,77 @@ class ProfileRepositoryImpl implements IProfileRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<List<String>> uploadDocuments(List<File> files,
+      // {required int companyId}
+      ) async {
+    try {
+      return await _remoteDS.uploadDocuments(
+        files,
+        // companyId,
+      );
+    } on CustomBackendException catch (e) {
+      if (e.statusCode == 401) {
+        try {
+          await _authRepository.refreshAccessToken();
+          return await _remoteDS.uploadDocuments(
+            files,
+            // companyId,
+          );
+        } catch (refreshError) {
+          rethrow;
+        }
+      }
+      rethrow;
+    }
+  }
+
+
+@override
+  Future<List<ProductDTO>> getMyCompanies() async {
+    try {
+      return await _remoteDS.getMyCompanies();
+    } on CustomBackendException catch (e) {
+      if (e.statusCode == 401) {
+        try {
+          await _authRepository.refreshAccessToken();
+          return await _remoteDS.getMyCompanies();
+        } catch (refreshError) {
+          await _authRepository.clearUser();
+          rethrow;
+        }
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  }) async {
+    try {
+      return await _remoteDS.createVerificationRequest(
+        companyId: companyId,
+        documentUrls: documentUrls,
+      );
+    } on CustomBackendException catch (e) {
+      if (e.statusCode == 401) {
+        try {
+          await _authRepository.refreshAccessToken();
+          return await _remoteDS.createVerificationRequest(
+            companyId: companyId,
+            documentUrls: documentUrls,
+          );
+        } catch (refreshError) {
+          await _authRepository.clearUser();
+          rethrow;
+        }
+      }
+      rethrow;
+    }
+  }
+
+
 }

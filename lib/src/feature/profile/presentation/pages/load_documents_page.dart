@@ -14,6 +14,8 @@ import 'package:path/path.dart' as p;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:coment_app/src/feature/profile/bloc/verification_cubit.dart';
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
 
 @RoutePage()
 class LoadDocumentsPage extends StatelessWidget {
@@ -21,10 +23,18 @@ class LoadDocumentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          LoadDocumentsCubit(context.repository.profileRemoteDS)
-            ..fetchDocuments(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              LoadDocumentsCubit(context.repository.profileRemoteDS)
+                ..fetchDocuments(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              VerificationCubit(context.repository.profileRepository),
+        ),
+      ],
       child: const LoadingDocumentWidget(),
     );
   }
@@ -45,6 +55,9 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
   static const int _maxTotalFiles = 10;
   final ImagePicker imagePicker = ImagePicker();
   bool _isSubmitted = false;
+
+  List<ProductDTO> _myCompanies = []; // Список компаний владельца
+  ProductDTO? _selectedCompany; // Выбранная компания
 
   bool get _canAddMore =>
       _imageFiles.length + _documentFiles.length < _maxTotalFiles;
@@ -122,280 +135,435 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
     );
   }
 
+  void _selectCompany(ProductDTO company) {
+    setState(() {
+      _selectedCompany = company;
+    });
+  }
+
   String _getDisplayName(String path) {
     return p.basename(path);
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<VerificationCubit>().fetchMyCompanies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoadDocumentsCubit, LoadDocumentsState>(
+    return BlocListener<VerificationCubit, VerificationState>(
       listener: (context, state) {
         state.maybeWhen(
-          success: (urls) {
+          success: (request) {
+            setState(() {
+              _imageFiles.clear();
+              _documentFiles.clear();
+              _selectedCompany = null;
+              _isSubmitted = true;
+            });
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(context.localized.documentsSentForReview),
+              const SnackBar(
+                content: Text(
+                  'Запрос на верификацию отправлен!',
+                ),
                 backgroundColor: AppColors.green,
               ),
             );
-            _imageFiles.clear();
-            _documentFiles.clear();
-            // setState(() {});
-            setState(() {
-              _isSubmitted = true;
-            });
-            context.read<LoadDocumentsCubit>().fetchDocuments();
-          },
-          loaded: (urls) {
-            // _existingDocuments = urls;
-            setState(() {
-              _existingDocuments = urls;
-              _isSubmitted = false; // сброс флага отправки
-            });
+            // Также можно обновить список документов, если нужно
+            // context.read<LoadDocumentsCubit>().fetchDocuments();
           },
           failure: (error) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Ошибка: $error'),
-                backgroundColor: Colors.red,
+                content: Text('Ошибка верификации: $error'),
+                backgroundColor: AppColors.red2,
               ),
             );
           },
           orElse: () {},
         );
+        state.maybeWhen(
+          companiesLoaded: (companies) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                setState(() {
+                  _myCompanies = companies;
+                });
+              }
+            });
+          },
+          orElse: () {},
+        );
+        // Обновление списка компаний
+        // if (state is VerificationState.companiesLoaded) {
+        //   WidgetsBinding.instance.addPostFrameCallback((_) {
+        //     if (mounted) {
+        //       setState(() {
+        //         _myCompanies = state.companies;
+        //       });
+        //     }
+        //   });
+        // }
       },
-      builder: (BuildContext context, LoadDocumentsState state) {
-        return Scaffold(
-          appBar: CustomAppBar(
-            title: context.localized.loadDocuments,
-            shape: const Border(
-                bottom: BorderSide(color: AppColors.dividerColor, width: 0.5)),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: Column(
-              children: [
-                // === Секция: Ранее загруженные документы (только просмотр) ===
-                if (_existingDocuments.isNotEmpty)
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Ранее загруженные документы',
-                          style: AppTextStyles.fs14w600
-                              .copyWith(color: AppColors.grey2),
-                        ),
-                        const Gap(8),
-                        SizedBox(
-                          height: 150 * _existingDocuments.length.toDouble(),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            // physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _existingDocuments.length,
-                            itemBuilder: (context, index) {
-                              final url = _existingDocuments[index];
-                              final isImage = url.endsWith('.png') ||
-                                  url.endsWith('.jpg') ||
-                                  url.endsWith('.jpeg');
-                              final name = Uri.parse(url).pathSegments.last;
+      child: BlocConsumer<LoadDocumentsCubit, LoadDocumentsState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            success: (urls) {
+              if (_selectedCompany != null) {
+                context.read<VerificationCubit>().createVerificationRequest(
+                      companyId: _selectedCompany!.id!,
+                      documentUrls: urls,
+                    );
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(context.localized.documentsSentForReview),
+                  backgroundColor: AppColors.green,
+                ),
+              );
+              _imageFiles.clear();
+              _documentFiles.clear();
+              // setState(() {});
+              setState(() {
+                _isSubmitted = true;
+              });
+              context.read<LoadDocumentsCubit>().fetchDocuments();
+            },
+            loaded: (urls) {
+              // _existingDocuments = urls;
+              setState(() {
+                _existingDocuments = urls;
+                _isSubmitted = false; // сброс флага отправки
+              });
+            },
+            failure: (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Ошибка: $error'),
+                  backgroundColor: AppColors.red2,
+                ),
+              );
+            },
+            orElse: () {},
+          );
+        },
+        builder: (BuildContext context, LoadDocumentsState state) {
+          final verificationState = context.watch<VerificationCubit>().state;
+          final isCompaniesLoading = verificationState.maybeWhen(
+            loading: () => true,
+            orElse: () => false,
+          );
+          final bool isVerificationLoading = verificationState.maybeWhen(
+            loading: () => true,
+            orElse: () => false,
+          );
+          return Scaffold(
+            appBar: CustomAppBar(
+              title: context.localized.loadDocuments,
+              shape: const Border(
+                  bottom:
+                      BorderSide(color: AppColors.dividerColor, width: 0.5)),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: Column(
+                children: [
+                  // === Секция: Выбор компании ===
 
-                              return Slidable(
-                                endActionPane: ActionPane(
-                                  motion: const StretchMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(12),
-                                        bottomRight: Radius.circular(12),
-                                      ),
-                                      onPressed: (ctx) async {
-                                        final url = _existingDocuments[index];
-                                        await context
-                                            .read<LoadDocumentsCubit>()
-                                            .deleteDocument(url);
-                                      },
-                                      backgroundColor: AppColors.red700,
-                                      icon: Icons.delete,
-                                      label: 'Delete',
-                                    ),
-                                  ],
-                                ),
-                                child: ListTile(
-                                  leading: isImage
-                                      ? const Icon(Icons.image,
-                                          color: AppColors.mainColor)
-                                      : const Icon(Icons.insert_drive_file),
-                                  title: Text(name),
-                                  onTap: () async {
-                                    if (!await launchUrl(Uri.parse(url))) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'Не удалось открыть файл')),
-                                        );
-                                      }
-                                    }
-                                  },
-                                ),
-                              );
-                            },
+                  if (_myCompanies.isEmpty && !isCompaniesLoading)
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text('У вас пока нет компаний.'),
+                    )
+                  else if (!isCompaniesLoading)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Выберите компанию для верификации',
+                            style: AppTextStyles.fs14w600
+                                .copyWith(color: AppColors.grey2),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                // Изображения — GridView
-                if (_imageFiles.isNotEmpty)
-                  Expanded(
-                    flex: (_imageFiles.length > 3) ? 2 : 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 15,
-                          crossAxisSpacing: 15,
-                        ),
-                        itemCount: _imageFiles.length,
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  _imageFiles[index],
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: () => _removeImage(index),
+                          const Gap(8),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _myCompanies.length,
+                              itemBuilder: (context, index) {
+                                final company = _myCompanies[index];
+                                final isSelected =
+                                    _selectedCompany?.id == company.id;
+                                return GestureDetector(
+                                  onTap: () => _selectCompany(company),
                                   child: Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.black54,
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? AppColors.mainColor
+                                          : AppColors.grey2,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? AppColors.mainColor
+                                            : AppColors.borderTextField,
+                                      ),
                                     ),
-                                    child: const Icon(Icons.close,
-                                        color: Colors.white, size: 16),
+                                    child: Center(
+                                      child: Text(
+                                        company.name ?? 'Без названия',
+                                        style: AppTextStyles.fs12w500.copyWith(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : AppColors.text,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              if (_isSubmitted)
-                                const Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.only(right: 8.0, bottom: 8),
-                                    child: Icon(Icons.check_circle,
-                                        color: AppColors.green, size: 20),
-                                  ),
-                                ),
-                            ],
-                          );
-                        },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
 
-                // Документы — ListView
-                if (_documentFiles.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                      height: 100 * _documentFiles.length.toDouble(),
-                      child: ListView.builder(
-                        itemCount: _documentFiles.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              ListTile(
-                                leading: const Icon(Icons.insert_drive_file),
-                                title: Text(_getDisplayName(
-                                    _documentFiles[index].path)),
-                                trailing: SizedBox(
-                                  width: 80,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                  // === Секция: Ранее загруженные документы (только просмотр) ===
+                  if (_existingDocuments.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Ранее загруженные документы',
+                            style: AppTextStyles.fs14w600
+                                .copyWith(color: AppColors.grey2),
+                          ),
+                          const Gap(8),
+                          SizedBox(
+                            height: 150 * _existingDocuments.length.toDouble(),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              // physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _existingDocuments.length,
+                              itemBuilder: (context, index) {
+                                final url = _existingDocuments[index];
+                                final isImage = url.endsWith('.png') ||
+                                    url.endsWith('.jpg') ||
+                                    url.endsWith('.jpeg');
+                                final name = Uri.parse(url).pathSegments.last;
+
+                                return Slidable(
+                                  endActionPane: ActionPane(
+                                    motion: const StretchMotion(),
                                     children: [
-                                      if (_isSubmitted)
-                                        const Icon(Icons.check_circle,
-                                            color: AppColors.green, size: 20),
-                                      IconButton(
-                                        icon: const Icon(Icons.close),
-                                        onPressed: () => _removeDocument(index),
+                                      SlidableAction(
+                                        borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(12),
+                                          bottomRight: Radius.circular(12),
+                                        ),
+                                        onPressed: (ctx) async {
+                                          final url = _existingDocuments[index];
+                                          await context
+                                              .read<LoadDocumentsCubit>()
+                                              .deleteDocument(url);
+                                        },
+                                        backgroundColor: AppColors.red700,
+                                        icon: Icons.delete,
+                                        label: 'Delete',
                                       ),
                                     ],
                                   ),
+                                  child: ListTile(
+                                    leading: isImage
+                                        ? const Icon(Icons.image,
+                                            color: AppColors.mainColor)
+                                        : const Icon(Icons.insert_drive_file),
+                                    title: Text(name),
+                                    onTap: () async {
+                                      if (!await launchUrl(Uri.parse(url))) {
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    'Не удалось открыть файл')),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  // Изображения — GridView
+                  if (_imageFiles.isNotEmpty)
+                    Expanded(
+                      flex: (_imageFiles.length > 3) ? 2 : 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 15,
+                            crossAxisSpacing: 15,
+                          ),
+                          itemCount: _imageFiles.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.file(
+                                    _imageFiles[index],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                // Кнопка "+"
-                if (_canAddMore)
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: GestureDetector(
-                      onTap: _showAddOptions,
-                      child: Container(
-                        height: 56,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.mainColor),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.add,
-                              color: AppColors.mainColor, size: 32),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                const SizedBox(height: 16),
-
-                // Кнопка отправки
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: CustomButton(
-                    onPressed: (_imageFiles.isEmpty && _documentFiles.isEmpty)
-                        ? null
-                        : () {
-                            final allFiles = [
-                              ..._imageFiles,
-                              ..._documentFiles
-                            ];
-                            context
-                                .read<LoadDocumentsCubit>()
-                                .uploadDocuments(allFiles);
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: GestureDetector(
+                                    onTap: () => _removeImage(index),
+                                    child: Container(
+                                      width: 24,
+                                      height: 24,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.black54,
+                                      ),
+                                      child: const Icon(Icons.close,
+                                          color: Colors.white, size: 16),
+                                    ),
+                                  ),
+                                ),
+                                if (_isSubmitted)
+                                  const Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 8.0, bottom: 8),
+                                      child: Icon(Icons.check_circle,
+                                          color: AppColors.green, size: 20),
+                                    ),
+                                  ),
+                              ],
+                            );
                           },
-                    style: const ButtonStyle(),
-                    child: Text(context.localized.send),
+                        ),
+                      ),
+                    ),
+
+                  // Документы — ListView
+                  if (_documentFiles.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SizedBox(
+                        height: 100 * _documentFiles.length.toDouble(),
+                        child: ListView.builder(
+                          itemCount: _documentFiles.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                  leading: const Icon(Icons.insert_drive_file),
+                                  title: Text(_getDisplayName(
+                                      _documentFiles[index].path)),
+                                  trailing: SizedBox(
+                                    width: 80,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        if (_isSubmitted)
+                                          const Icon(Icons.check_circle,
+                                              color: AppColors.green, size: 20),
+                                        IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () =>
+                                              _removeDocument(index),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+
+                  // Кнопка "+"
+                  if (_canAddMore)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: GestureDetector(
+                        onTap: _showAddOptions,
+                        child: Container(
+                          height: 56,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColors.mainColor),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.add,
+                                color: AppColors.mainColor, size: 32),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  const SizedBox(height: 16),
+
+                  // Кнопка отправки
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: CustomButton(
+                      onPressed:
+                          (_imageFiles.isEmpty && _documentFiles.isEmpty) ||
+                                  _selectedCompany == null ||
+                                  isCompaniesLoading ||
+                                  isVerificationLoading
+                              ? null
+                              : () {
+                                  final allFiles = [
+                                    ..._imageFiles,
+                                    ..._documentFiles
+                                  ];
+                                  context
+                                      .read<LoadDocumentsCubit>()
+                                      .uploadDocuments(allFiles);
+                                },
+                      style: const ButtonStyle(),
+                      child: Text(context.localized.send),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

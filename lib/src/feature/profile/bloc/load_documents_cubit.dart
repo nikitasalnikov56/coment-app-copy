@@ -22,10 +22,16 @@ class LoadDocumentsCubit extends Cubit<LoadDocumentsState> {
     }
   }
 
-  Future<void> uploadDocuments(List<File> files) async {
+  Future<void> uploadDocuments(
+    List<File> files,
+    // int companyId,
+  ) async {
     emit(const LoadDocumentsState.loading());
     try {
-      final urls = await dataSource.uploadDocuments(files);
+      final urls = await dataSource.uploadDocuments(
+        files,
+        // companyId,
+      );
       emit(LoadDocumentsState.success(urls));
     } catch (e) {
       emit(LoadDocumentsState.failure(e.toString()));
