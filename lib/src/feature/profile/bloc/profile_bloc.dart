@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
+import 'package:coment_app/src/core/utils/talker_logger_util.dart';
 import 'package:coment_app/src/feature/auth/data/auth_repository.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/profile/data/profile_repository.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'profile_bloc.freezed.dart';
@@ -24,6 +26,7 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
         getProfile: (event) async => _getProfile(emit),
         logOut: (event) async => _logOut(emit),
         deleteAccount: (event) async => _deleteAccount(emit, event.password),
+        getVerificationStatus: (event) => _getVerificationStatus(emit),
         // updateAvatar: (event) async => _updateAvatar(event, emit),
         // deleteAvatar: (event) async => _deleteAvatar(emit),
         // updateProfile: (event) async => _updateProfile(event, emit),
@@ -32,7 +35,6 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
   }
   final IAuthRepository _authRepository;
   final IProfileRepository _profileRepository;
-  
 
   bool get isAuthenticated => _authRepository.isAuthenticated;
 
@@ -51,7 +53,7 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
 
       final user = await _profileRepository.profileData();
 
-      emit(ProfileState.loaded(user: user));
+      emit(ProfileState.loaded(user: user, verificationStatus: null));
     } on RestClientException catch (e) {
       emit(ProfileState.error(message: e.message));
     } catch (e) {
@@ -86,11 +88,28 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
 
       emit(ProfileState.exited(message: result.message ?? ''));
     } on RestClientException catch (e) {
-       print('DELETE ERROR: ${e.message}');
+      print('DELETE ERROR: ${e.message}');
       emit(ProfileState.error(message: e.message));
     } catch (e) {
-         print('DELETE UNKNOWN ERROR: $e');
+      print('DELETE UNKNOWN ERROR: $e');
       emit(ProfileState.error(message: e.toString()));
+    }
+  }
+
+  Future<void> _getVerificationStatus(Emitter<ProfileState> emit) async {
+    try {
+      final status = await _profileRepository.getVerificationStatus();
+      state.maybeWhen(
+        loaded: (user, currentStatus) {
+          emit(ProfileState.loaded(user: user, verificationStatus: status));
+        },
+        orElse: () {
+          // Если профиль ещё не загружен, ничего не делаем
+        },
+      );
+    } catch (e, stackTrace) {
+      TalkerLoggerUtil.talker
+          .error('Failed to load verification status', e, stackTrace);
     }
   }
 }
@@ -101,7 +120,9 @@ class ProfileEvent with _$ProfileEvent {
 
   const factory ProfileEvent.logOut() = _LogOut;
 
-  const factory ProfileEvent.deleteAccount({required String password}) = _DeleteAccount;
+  const factory ProfileEvent.deleteAccount({required String password}) =
+      _DeleteAccount;
+  const factory ProfileEvent.getVerificationStatus() = _GetVerificationStatus;
 }
 
 @freezed
@@ -110,6 +131,7 @@ class ProfileState with _$ProfileState {
 
   const factory ProfileState.loaded({
     required UserDTO user,
+    VerificationStatus? verificationStatus,
   }) = _LoadedState;
 
   const factory ProfileState.exited({

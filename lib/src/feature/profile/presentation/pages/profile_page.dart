@@ -14,6 +14,7 @@ import 'package:coment_app/src/feature/app/router/app_router.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
 import 'package:coment_app/src/feature/main/presentation/widgets/city_main_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/language_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/logout_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/profile_avatar.dart';
@@ -34,10 +35,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+
   @override
   void initState() {
     super.initState();
     BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+    BlocProvider.of<ProfileBLoC>(context)
+        .add(const ProfileEvent.getVerificationStatus());
     BlocProvider.of<DictionaryCubit>(context).getDictionary();
   }
 
@@ -85,11 +90,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 // context.router.popUntil((route) => route.settings.name == LauncherRoute.name);
                 BlocProvider.of<AppBloc>(context).add(const AppEvent.exiting());
               },
-              loaded: (userDTO) {
+              loaded: (userDTO, _) {
                 selectedLanguageId = userDTO.language?.id;
                 log(selectedLanguageId.toString());
                 setState(() {});
               },
+            
               orElse: () {
                 context.loaderOverlay.hide();
               },
@@ -107,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text("Or else"),
                 );
               },
-              loaded: (userDTO) {
+              loaded: (userDTO, verificationStatus) {
                 return SmartRefresher(
                   header: const RefreshClassicHeader(),
                   controller: _refreshController,
@@ -160,6 +166,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                           height: 1.2,
                                         ),
                                       ),
+                                      if (verificationStatus != null)
+                                        _buildVerificationStatus(
+                                            verificationStatus),
+                                      
                                       const Gap(8),
                                       Text(
                                         userDTO.email ?? '',
@@ -341,8 +351,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     icon: AssetsConstants.payment,
                                     title: context.localized.payment,
                                     onTap: () {
-                                      context.router
-                                          .push(const PaymentRoute());
+                                      context.router.push(const PaymentRoute());
                                     },
                                   )
                                 : const SizedBox(),
@@ -353,8 +362,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     icon: AssetsConstants.message,
                                     title: context.localized.message,
                                     onTap: () {
-                                      context.router
-                                          .push(const MessageRoute());
+                                      context.router.push(const MessageRoute());
                                     },
                                   )
                                 : const SizedBox(),
@@ -392,4 +400,42 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  Widget _buildVerificationStatus(VerificationStatus status) {
+  String message;
+  Color color;
+  IconData icon;
+
+  switch (status.status) {
+    case 'approved':
+      message = 'Верифицирован';
+      color = Colors.green;
+      icon = Icons.check_circle;
+      break;
+    case 'pending':
+      message = 'На рассмотрении';
+      color = Colors.orange;
+      icon = Icons.hourglass_empty;
+      break;
+    case 'rejected':
+      message = ' Отклонено';
+      color = Colors.red;
+      icon = Icons.cancel;
+      break;
+    default:
+      message = 'Не запрашивалось';
+      color = Colors.grey;
+      icon = Icons.info_outline;
+  }
+
+  return Row(
+    children: [
+      Icon(icon, color: color, size: 16),
+      const Gap(4),
+      Text(
+        message,
+        style: AppTextStyles.fs14w500.copyWith(color: color),
+      ),
+    ],
+  );
+}
 }

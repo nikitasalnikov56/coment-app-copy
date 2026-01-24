@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
 import 'package:coment_app/src/feature/profile/models/response/verification_response.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,6 +54,8 @@ abstract interface class IProfileRemoteDS {
     required int companyId,
     required List<String> documentUrls,
   });
+
+  Future<VerificationStatus> getVerificationStatus();
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -252,19 +255,19 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
     await restClient.delete('uploads/document', body: {'url': url});
   }
 
-//  @override
-//   Future<List<ProductDTO>> getMyCompanies() async {
-//     try {
-//       final response = await restClient.get('/verification/companies/me');
-//       final list = response as List;
-//       return list
-//           .map((e) => ProductDTO.fromJson(e as Map<String, dynamic>))
-//           .toList();
-//     } catch (e, st) {
-//       TalkerLoggerUtil.talker.error('#getMyCompanies - $e', e, st);
-//       rethrow;
-//     }
-//   }
+  @override
+  Future<VerificationStatus> getVerificationStatus() async {
+    try {
+      final Map<String, dynamic> response = await restClient.get(
+        '/verification/status',
+        queryParams: {},
+      );
+      return VerificationStatus.fromJson(response);
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#getVerificationStatus - $e', e, st);
+      rethrow;
+    }
+  }
 
   @override
   Future<List<ProductDTO>> getMyCompanies() async {

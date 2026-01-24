@@ -6141,8 +6141,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 class $AppDatabaseManager {
-  final _$AppDatabase _db;
-  $AppDatabaseManager(this._db);
+  final _$AppDatabase db;
+  $AppDatabaseManager(this.db);
 }
 
 
@@ -6602,6 +6602,9 @@ class $AssetsImagesPngGen {
   AssetGenImage get chatAvatar =>
       const AssetGenImage('assets/images/png/chat_avatar.png');
 
+  /// File path: assets/images/png/click.png
+  AssetGenImage get click => const AssetGenImage('assets/images/png/click.png');
+
   /// File path: assets/images/png/close_svgrepo.png
   AssetGenImage get closeSvgrepo =>
       const AssetGenImage('assets/images/png/close_svgrepo.png');
@@ -6641,6 +6644,9 @@ class $AssetsImagesPngGen {
   /// File path: assets/images/png/history_zhekas_doner.png
   AssetGenImage get historyZhekasDoner =>
       const AssetGenImage('assets/images/png/history_zhekas_doner.png');
+
+  /// File path: assets/images/png/humo.png
+  AssetGenImage get humo => const AssetGenImage('assets/images/png/humo.png');
 
   /// File path: assets/images/png/iitu.png
   AssetGenImage get iitu => const AssetGenImage('assets/images/png/iitu.png');
@@ -6747,6 +6753,10 @@ class $AssetsImagesPngGen {
   AssetGenImage get logoIitu =>
       const AssetGenImage('assets/images/png/logo_iitu.png');
 
+  /// File path: assets/images/png/mastercard.png
+  AssetGenImage get mastercard =>
+      const AssetGenImage('assets/images/png/mastercard.png');
+
   /// File path: assets/images/png/miniImages.png
   AssetGenImage get miniImages =>
       const AssetGenImage('assets/images/png/miniImages.png');
@@ -6758,6 +6768,9 @@ class $AssetsImagesPngGen {
   /// File path: assets/images/png/pattern.png
   AssetGenImage get pattern =>
       const AssetGenImage('assets/images/png/pattern.png');
+
+  /// File path: assets/images/png/payme.png
+  AssetGenImage get payme => const AssetGenImage('assets/images/png/payme.png');
 
   /// File path: assets/images/png/product_favorite.png
   AssetGenImage get productFavorite =>
@@ -6783,6 +6796,18 @@ class $AssetsImagesPngGen {
   AssetGenImage get supportServiceBS =>
       const AssetGenImage('assets/images/png/support_service_b_s.png');
 
+  /// File path: assets/images/png/unionpay.png
+  AssetGenImage get unionpay =>
+      const AssetGenImage('assets/images/png/unionpay.png');
+
+  /// File path: assets/images/png/uzcard.png
+  AssetGenImage get uzcard =>
+      const AssetGenImage('assets/images/png/uzcard.png');
+
+  /// File path: assets/images/png/uzum_bank.png
+  AssetGenImage get uzumBank =>
+      const AssetGenImage('assets/images/png/uzum_bank.png');
+
   /// List of all assets
   List<dynamic> get values => [
         addPhoto,
@@ -6792,6 +6817,7 @@ class $AssetsImagesPngGen {
         cash,
         catalog,
         chatAvatar,
+        click,
         closeSvgrepo,
         emptyChatPage,
         emptyFeedback,
@@ -6802,6 +6828,7 @@ class $AssetsImagesPngGen {
         historyBeautySalon,
         historyBerekeBank,
         historyZhekasDoner,
+        humo,
         iitu,
         imageExample,
         image17,
@@ -6829,15 +6856,20 @@ class $AssetsImagesPngGen {
         listImg,
         listImg2,
         logoIitu,
+        mastercard,
         miniImages,
         notActiveStar32,
         pattern,
+        payme,
         productFavorite,
         productImage,
         profilePage,
         slider,
         splashText,
-        supportServiceBS
+        supportServiceBS,
+        unionpay,
+        uzcard,
+        uzumBank
       ];
 }
 
@@ -6854,8 +6886,12 @@ class $AssetsImagesSvgGen {
   SvgGenImage get topGreenCurveContainer =>
       const SvgGenImage('assets/images/svg/top-green-curve-container.svg');
 
+  /// File path: assets/images/svg/visa.svg
+  SvgGenImage get visa => const SvgGenImage('assets/images/svg/visa.svg');
+
   /// List of all assets
-  List<SvgGenImage> get values => [image3, pattern, topGreenCurveContainer];
+  List<SvgGenImage> get values =>
+      [image3, pattern, topGreenCurveContainer, visa];
 }
 
 class $AssetsImagesWebpGen {
@@ -19537,175 +19573,6 @@ final class AppRunner {
 
 lib\src\feature\app\logic\notification_service.dart
 ---------------------------------------------------
-// import 'dart:developer';
-// import 'dart:io';
-
-// import 'package:auto_route/auto_route.dart';
-// import 'package:coment_app/src/feature/app/logic/reactivex_service.dart';
-// import 'package:coment_app/src/feature/app/router/app_router.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:coment_app/src/feature/app/logic/push_data_dto.dart';
-// import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
-
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-// const _tag = 'NotificationService';
-
-// const AndroidNotificationChannel channel = AndroidNotificationChannel(
-//   'high_importance_channel', // id
-//   'High Importance Notifications', // title
-//   description: 'This channel is used for important notifications.', // description
-//   importance: Importance.high,
-// );
-
-// class NotificationService {
-//   NotificationService();
-//   late FirebaseMessaging _messaging;
-
-//   Future<void> init() async {
-//     _messaging = FirebaseMessaging.instance;
-//     _messaging.getInitialMessage().then((value) => log('Message is $value', name: _tag));
-
-//     if (Platform.isIOS) {
-//       await _requestPermissionToNotifications(_messaging);
-//     }
-
-//     _messaging.setForegroundNotificationPresentationOptions(
-//       alert: true,
-//       // badge: true,
-//       sound: true,
-//     );
-
-//     const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-//     const initializationSettingsIOs = DarwinInitializationSettings();
-//     const initializationSettings = InitializationSettings(
-//       android: initializationSettingsAndroid,
-//       iOS: initializationSettingsIOs,
-//     );
-//     // ignore: avoid-ignoring-return-values
-//     flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-//     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
-//       final RemoteNotification? notification = event.notification;
-//       log('event˝ data --- ${event.data}', name: _tag);
-
-//       ///
-//       /// parse zone
-//       ///
-//       try {
-//         final data = PushDataDTO.fromJson(event.data);
-//         ReactiveXService().pushRepeater.sink.add(data);
-//       } catch (e) {
-//         log('catch - $e', name: _tag);
-//         rethrow;
-//       }
-
-//       final AndroidNotification? android = Platform.isAndroid ? event.notification?.android : null;
-
-//       if (notification != null) {
-//         if (Platform.isAndroid && android != null) {
-//           flutterLocalNotificationsPlugin.show(
-//             notification.hashCode,
-//             notification.title,
-//             notification.body,
-//             NotificationDetails(
-//               android: AndroidNotificationDetails(
-//                 channel.id,
-//                 channel.name,
-//                 icon: '@mipmap/ic_launcher',
-//               ),
-//             ),
-//           );
-//         }
-//       }
-//     });
-//   }
-
-//   Future<void> onMessageOpenedApp(BuildContext context) async {
-//     FirebaseMessaging.instance.getInitialMessage().then((message) {
-//       if (message != null) {
-//         if (!context.mounted) return;
-//         _handleOnTap(message, context);
-//       }
-//     });
-//     FirebaseMessaging.onMessageOpenedApp.listen((event) async {
-//       if (!context.mounted) return;
-//       _handleOnTap(event, context);
-//     });
-//   }
-
-//   /// Handle firebase notification tap
-//   void _handleOnTap(RemoteMessage event, BuildContext context) {
-//     log('"ONTAP:::" data --- ${event.data}', name: _tag);
-//     log('"ONTAP:" data --- ${event.data['type']}', name: _tag);
-
-//     try {
-//       final data = PushDataDTO.fromJson(event.data);
-//       log('${data.feedbackId}', name: 'feedback id from push');
-//       context.router.replaceAll([
-//         LauncherRoute(),
-//         FeedbackDetailRoute(id: int.parse(data.feedbackId ?? '0'), userId: 0, needPageCard: true),
-//       ]);
-//     } catch (e, stackTrace) {
-//       log('Error navigating to detail screen: $e\n$stackTrace', name: _tag);
-//     }
-//   }
-
-//   Future<String?> getDeviceToken({
-//     required IAuthDao authDao,
-//   }) async {
-//     final String? deviceToken = await FirebaseMessaging.instance.getToken();
-//     if (deviceToken != null) {
-//       await authDao.deviceToken.setValue(deviceToken);
-//     }
-//     log('$deviceToken', name: _tag);
-//     return deviceToken;
-//   }
-
-//   Future<void> _requestPermissionToNotifications(
-//     FirebaseMessaging messaging,
-//   ) async {
-//     final NotificationSettings settings = await messaging.requestPermission();
-
-//     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-//       if (kDebugMode) {
-//         print('User granted permission');
-//       }
-//     } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-//       if (kDebugMode) {
-//         print('User granted provisional permission');
-//       }
-//     } else {
-//       if (kDebugMode) {
-//         print('User declined or has not accepted permission');
-//       }
-//     }
-//   }
-
-//   Future<void> subscribeToTopic({
-//     required String topic,
-//   }) async {
-//     try {
-//       await FirebaseMessaging.instance.subscribeToTopic('push_$topic');
-//     } catch (e) {
-//       log('$e', name: _tag);
-//     }
-//   }
-
-//   Future<void> unsubscribeFromTopic({
-//     required String topic,
-//   }) async {
-//     try {
-//       await FirebaseMessaging.instance.unsubscribeFromTopic('push_$topic');
-//     } catch (e) {
-//       log('$e', name: _tag);
-//     }
-//   }
-// }
 import 'dart:developer';
 import 'dart:io';
 
@@ -38617,6 +38484,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         'feedback/complaint/$feedId',
         body: {'text': text, 'type': type},
       );
+     
       return ComplainDTO.fromJson(response);
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#catalog page complain - $e', e, st);
@@ -39218,10 +39086,10 @@ mixin _$ComplainDTO {
   int? get id => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
   String? get type =>
-      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
+      throw _privateConstructorUsedError; 
   @JsonKey(name: 'created_at')
   String? get createdAt =>
-      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
+      throw _privateConstructorUsedError; 
   @JsonKey(name: 'updated_at')
   String? get updatedAt => throw _privateConstructorUsedError;
 
@@ -39374,11 +39242,11 @@ class _$ComplainDTOImpl implements _ComplainDTO {
   final String? text;
   @override
   final String? type;
-// ignore: invalid_annotation_target
+
   @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
-// ignore: invalid_annotation_target
+
   @override
   @JsonKey(name: 'updated_at')
   final String? updatedAt;
@@ -39440,10 +39308,10 @@ abstract class _ComplainDTO implements ComplainDTO {
   @override
   String? get text;
   @override
-  String? get type; // ignore: invalid_annotation_target
+  String? get type; 
   @override
   @JsonKey(name: 'created_at')
-  String? get createdAt; // ignore: invalid_annotation_target
+  String? get createdAt; 
   @override
   @JsonKey(name: 'updated_at')
   String? get updatedAt;
@@ -42258,7 +42126,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
   Widget build(BuildContext context) {
     final profileState = context.watch<ProfileBLoC>().state;
     final isOwner = profileState.maybeWhen(
-      loaded: (userDTO) => userDTO.role == 'owner',
+      loaded: (userDTO, _) => userDTO.role == 'owner',
       orElse: () => false,
     );
     _isOwner = isOwner;
@@ -60790,7 +60658,7 @@ class _MainPageState extends State<MainPage> {
                     state.maybeWhen(
                       error: (message) {},
                       loading: () {},
-                      loaded: (userDTO) {
+                      loaded: (userDTO, _) {
                         cityId = userDTO.city?.id;
                         countryId = userDTO.city?.country?.id;
 
@@ -61826,10 +61694,16 @@ class LoadDocumentsCubit extends Cubit<LoadDocumentsState> {
     }
   }
 
-  Future<void> uploadDocuments(List<File> files) async {
+  Future<void> uploadDocuments(
+    List<File> files,
+    // int companyId,
+  ) async {
     emit(const LoadDocumentsState.loading());
     try {
-      final urls = await dataSource.uploadDocuments(files);
+      final urls = await dataSource.uploadDocuments(
+        files,
+        // companyId,
+      );
       emit(LoadDocumentsState.success(urls));
     } catch (e) {
       emit(LoadDocumentsState.failure(e.toString()));
@@ -64250,9 +64124,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
+import 'package:coment_app/src/core/utils/talker_logger_util.dart';
 import 'package:coment_app/src/feature/auth/data/auth_repository.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/profile/data/profile_repository.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'profile_bloc.freezed.dart';
@@ -64272,6 +64148,7 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
         getProfile: (event) async => _getProfile(emit),
         logOut: (event) async => _logOut(emit),
         deleteAccount: (event) async => _deleteAccount(emit, event.password),
+        getVerificationStatus: (event) => _getVerificationStatus(emit),
         // updateAvatar: (event) async => _updateAvatar(event, emit),
         // deleteAvatar: (event) async => _deleteAvatar(emit),
         // updateProfile: (event) async => _updateProfile(event, emit),
@@ -64280,7 +64157,6 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
   }
   final IAuthRepository _authRepository;
   final IProfileRepository _profileRepository;
-  
 
   bool get isAuthenticated => _authRepository.isAuthenticated;
 
@@ -64299,7 +64175,7 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
 
       final user = await _profileRepository.profileData();
 
-      emit(ProfileState.loaded(user: user));
+      emit(ProfileState.loaded(user: user, verificationStatus: null));
     } on RestClientException catch (e) {
       emit(ProfileState.error(message: e.message));
     } catch (e) {
@@ -64334,11 +64210,28 @@ class ProfileBLoC extends Bloc<ProfileEvent, ProfileState> {
 
       emit(ProfileState.exited(message: result.message ?? ''));
     } on RestClientException catch (e) {
-       print('DELETE ERROR: ${e.message}');
+      print('DELETE ERROR: ${e.message}');
       emit(ProfileState.error(message: e.message));
     } catch (e) {
-         print('DELETE UNKNOWN ERROR: $e');
+      print('DELETE UNKNOWN ERROR: $e');
       emit(ProfileState.error(message: e.toString()));
+    }
+  }
+
+  Future<void> _getVerificationStatus(Emitter<ProfileState> emit) async {
+    try {
+      final status = await _profileRepository.getVerificationStatus();
+      state.maybeWhen(
+        loaded: (user, currentStatus) {
+          emit(ProfileState.loaded(user: user, verificationStatus: status));
+        },
+        orElse: () {
+          // Если профиль ещё не загружен, ничего не делаем
+        },
+      );
+    } catch (e, stackTrace) {
+      TalkerLoggerUtil.talker
+          .error('Failed to load verification status', e, stackTrace);
     }
   }
 }
@@ -64349,7 +64242,9 @@ class ProfileEvent with _$ProfileEvent {
 
   const factory ProfileEvent.logOut() = _LogOut;
 
-  const factory ProfileEvent.deleteAccount({required String password}) = _DeleteAccount;
+  const factory ProfileEvent.deleteAccount({required String password}) =
+      _DeleteAccount;
+  const factory ProfileEvent.getVerificationStatus() = _GetVerificationStatus;
 }
 
 @freezed
@@ -64358,6 +64253,7 @@ class ProfileState with _$ProfileState {
 
   const factory ProfileState.loaded({
     required UserDTO user,
+    VerificationStatus? verificationStatus,
   }) = _LoadedState;
 
   const factory ProfileState.exited({
@@ -64396,6 +64292,7 @@ mixin _$ProfileEvent {
     required TResult Function() getProfile,
     required TResult Function() logOut,
     required TResult Function(String password) deleteAccount,
+    required TResult Function() getVerificationStatus,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -64403,6 +64300,7 @@ mixin _$ProfileEvent {
     TResult? Function()? getProfile,
     TResult? Function()? logOut,
     TResult? Function(String password)? deleteAccount,
+    TResult? Function()? getVerificationStatus,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -64410,6 +64308,7 @@ mixin _$ProfileEvent {
     TResult Function()? getProfile,
     TResult Function()? logOut,
     TResult Function(String password)? deleteAccount,
+    TResult Function()? getVerificationStatus,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -64418,6 +64317,8 @@ mixin _$ProfileEvent {
     required TResult Function(_GetProfile value) getProfile,
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_DeleteAccount value) deleteAccount,
+    required TResult Function(_GetVerificationStatus value)
+        getVerificationStatus,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -64425,6 +64326,7 @@ mixin _$ProfileEvent {
     TResult? Function(_GetProfile value)? getProfile,
     TResult? Function(_LogOut value)? logOut,
     TResult? Function(_DeleteAccount value)? deleteAccount,
+    TResult? Function(_GetVerificationStatus value)? getVerificationStatus,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -64432,6 +64334,7 @@ mixin _$ProfileEvent {
     TResult Function(_GetProfile value)? getProfile,
     TResult Function(_LogOut value)? logOut,
     TResult Function(_DeleteAccount value)? deleteAccount,
+    TResult Function(_GetVerificationStatus value)? getVerificationStatus,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -64502,6 +64405,7 @@ class _$GetProfileImpl implements _GetProfile {
     required TResult Function() getProfile,
     required TResult Function() logOut,
     required TResult Function(String password) deleteAccount,
+    required TResult Function() getVerificationStatus,
   }) {
     return getProfile();
   }
@@ -64512,6 +64416,7 @@ class _$GetProfileImpl implements _GetProfile {
     TResult? Function()? getProfile,
     TResult? Function()? logOut,
     TResult? Function(String password)? deleteAccount,
+    TResult? Function()? getVerificationStatus,
   }) {
     return getProfile?.call();
   }
@@ -64522,6 +64427,7 @@ class _$GetProfileImpl implements _GetProfile {
     TResult Function()? getProfile,
     TResult Function()? logOut,
     TResult Function(String password)? deleteAccount,
+    TResult Function()? getVerificationStatus,
     required TResult orElse(),
   }) {
     if (getProfile != null) {
@@ -64536,6 +64442,8 @@ class _$GetProfileImpl implements _GetProfile {
     required TResult Function(_GetProfile value) getProfile,
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_DeleteAccount value) deleteAccount,
+    required TResult Function(_GetVerificationStatus value)
+        getVerificationStatus,
   }) {
     return getProfile(this);
   }
@@ -64546,6 +64454,7 @@ class _$GetProfileImpl implements _GetProfile {
     TResult? Function(_GetProfile value)? getProfile,
     TResult? Function(_LogOut value)? logOut,
     TResult? Function(_DeleteAccount value)? deleteAccount,
+    TResult? Function(_GetVerificationStatus value)? getVerificationStatus,
   }) {
     return getProfile?.call(this);
   }
@@ -64556,6 +64465,7 @@ class _$GetProfileImpl implements _GetProfile {
     TResult Function(_GetProfile value)? getProfile,
     TResult Function(_LogOut value)? logOut,
     TResult Function(_DeleteAccount value)? deleteAccount,
+    TResult Function(_GetVerificationStatus value)? getVerificationStatus,
     required TResult orElse(),
   }) {
     if (getProfile != null) {
@@ -64613,6 +64523,7 @@ class _$LogOutImpl implements _LogOut {
     required TResult Function() getProfile,
     required TResult Function() logOut,
     required TResult Function(String password) deleteAccount,
+    required TResult Function() getVerificationStatus,
   }) {
     return logOut();
   }
@@ -64623,6 +64534,7 @@ class _$LogOutImpl implements _LogOut {
     TResult? Function()? getProfile,
     TResult? Function()? logOut,
     TResult? Function(String password)? deleteAccount,
+    TResult? Function()? getVerificationStatus,
   }) {
     return logOut?.call();
   }
@@ -64633,6 +64545,7 @@ class _$LogOutImpl implements _LogOut {
     TResult Function()? getProfile,
     TResult Function()? logOut,
     TResult Function(String password)? deleteAccount,
+    TResult Function()? getVerificationStatus,
     required TResult orElse(),
   }) {
     if (logOut != null) {
@@ -64647,6 +64560,8 @@ class _$LogOutImpl implements _LogOut {
     required TResult Function(_GetProfile value) getProfile,
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_DeleteAccount value) deleteAccount,
+    required TResult Function(_GetVerificationStatus value)
+        getVerificationStatus,
   }) {
     return logOut(this);
   }
@@ -64657,6 +64572,7 @@ class _$LogOutImpl implements _LogOut {
     TResult? Function(_GetProfile value)? getProfile,
     TResult? Function(_LogOut value)? logOut,
     TResult? Function(_DeleteAccount value)? deleteAccount,
+    TResult? Function(_GetVerificationStatus value)? getVerificationStatus,
   }) {
     return logOut?.call(this);
   }
@@ -64667,6 +64583,7 @@ class _$LogOutImpl implements _LogOut {
     TResult Function(_GetProfile value)? getProfile,
     TResult Function(_LogOut value)? logOut,
     TResult Function(_DeleteAccount value)? deleteAccount,
+    TResult Function(_GetVerificationStatus value)? getVerificationStatus,
     required TResult orElse(),
   }) {
     if (logOut != null) {
@@ -64752,6 +64669,7 @@ class _$DeleteAccountImpl implements _DeleteAccount {
     required TResult Function() getProfile,
     required TResult Function() logOut,
     required TResult Function(String password) deleteAccount,
+    required TResult Function() getVerificationStatus,
   }) {
     return deleteAccount(password);
   }
@@ -64762,6 +64680,7 @@ class _$DeleteAccountImpl implements _DeleteAccount {
     TResult? Function()? getProfile,
     TResult? Function()? logOut,
     TResult? Function(String password)? deleteAccount,
+    TResult? Function()? getVerificationStatus,
   }) {
     return deleteAccount?.call(password);
   }
@@ -64772,6 +64691,7 @@ class _$DeleteAccountImpl implements _DeleteAccount {
     TResult Function()? getProfile,
     TResult Function()? logOut,
     TResult Function(String password)? deleteAccount,
+    TResult Function()? getVerificationStatus,
     required TResult orElse(),
   }) {
     if (deleteAccount != null) {
@@ -64786,6 +64706,8 @@ class _$DeleteAccountImpl implements _DeleteAccount {
     required TResult Function(_GetProfile value) getProfile,
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_DeleteAccount value) deleteAccount,
+    required TResult Function(_GetVerificationStatus value)
+        getVerificationStatus,
   }) {
     return deleteAccount(this);
   }
@@ -64796,6 +64718,7 @@ class _$DeleteAccountImpl implements _DeleteAccount {
     TResult? Function(_GetProfile value)? getProfile,
     TResult? Function(_LogOut value)? logOut,
     TResult? Function(_DeleteAccount value)? deleteAccount,
+    TResult? Function(_GetVerificationStatus value)? getVerificationStatus,
   }) {
     return deleteAccount?.call(this);
   }
@@ -64806,6 +64729,7 @@ class _$DeleteAccountImpl implements _DeleteAccount {
     TResult Function(_GetProfile value)? getProfile,
     TResult Function(_LogOut value)? logOut,
     TResult Function(_DeleteAccount value)? deleteAccount,
+    TResult Function(_GetVerificationStatus value)? getVerificationStatus,
     required TResult orElse(),
   }) {
     if (deleteAccount != null) {
@@ -64829,11 +64753,133 @@ abstract class _DeleteAccount implements ProfileEvent {
 }
 
 /// @nodoc
+abstract class _$$GetVerificationStatusImplCopyWith<$Res> {
+  factory _$$GetVerificationStatusImplCopyWith(
+          _$GetVerificationStatusImpl value,
+          $Res Function(_$GetVerificationStatusImpl) then) =
+      __$$GetVerificationStatusImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GetVerificationStatusImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$GetVerificationStatusImpl>
+    implements _$$GetVerificationStatusImplCopyWith<$Res> {
+  __$$GetVerificationStatusImplCopyWithImpl(_$GetVerificationStatusImpl _value,
+      $Res Function(_$GetVerificationStatusImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$GetVerificationStatusImpl implements _GetVerificationStatus {
+  const _$GetVerificationStatusImpl();
+
+  @override
+  String toString() {
+    return 'ProfileEvent.getVerificationStatus()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetVerificationStatusImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() getProfile,
+    required TResult Function() logOut,
+    required TResult Function(String password) deleteAccount,
+    required TResult Function() getVerificationStatus,
+  }) {
+    return getVerificationStatus();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? getProfile,
+    TResult? Function()? logOut,
+    TResult? Function(String password)? deleteAccount,
+    TResult? Function()? getVerificationStatus,
+  }) {
+    return getVerificationStatus?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? getProfile,
+    TResult Function()? logOut,
+    TResult Function(String password)? deleteAccount,
+    TResult Function()? getVerificationStatus,
+    required TResult orElse(),
+  }) {
+    if (getVerificationStatus != null) {
+      return getVerificationStatus();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetProfile value) getProfile,
+    required TResult Function(_LogOut value) logOut,
+    required TResult Function(_DeleteAccount value) deleteAccount,
+    required TResult Function(_GetVerificationStatus value)
+        getVerificationStatus,
+  }) {
+    return getVerificationStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_GetProfile value)? getProfile,
+    TResult? Function(_LogOut value)? logOut,
+    TResult? Function(_DeleteAccount value)? deleteAccount,
+    TResult? Function(_GetVerificationStatus value)? getVerificationStatus,
+  }) {
+    return getVerificationStatus?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetProfile value)? getProfile,
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_DeleteAccount value)? deleteAccount,
+    TResult Function(_GetVerificationStatus value)? getVerificationStatus,
+    required TResult orElse(),
+  }) {
+    if (getVerificationStatus != null) {
+      return getVerificationStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetVerificationStatus implements ProfileEvent {
+  const factory _GetVerificationStatus() = _$GetVerificationStatusImpl;
+}
+
+/// @nodoc
 mixin _$ProfileState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(UserDTO user) loaded,
+    required TResult Function(
+            UserDTO user, VerificationStatus? verificationStatus)
+        loaded,
     required TResult Function(String message) exited,
     required TResult Function(String message) error,
   }) =>
@@ -64841,7 +64887,8 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(UserDTO user)? loaded,
+    TResult? Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult? Function(String message)? exited,
     TResult? Function(String message)? error,
   }) =>
@@ -64849,7 +64896,8 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(UserDTO user)? loaded,
+    TResult Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult Function(String message)? exited,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -64945,7 +64993,9 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(UserDTO user) loaded,
+    required TResult Function(
+            UserDTO user, VerificationStatus? verificationStatus)
+        loaded,
     required TResult Function(String message) exited,
     required TResult Function(String message) error,
   }) {
@@ -64956,7 +65006,8 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(UserDTO user)? loaded,
+    TResult? Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult? Function(String message)? exited,
     TResult? Function(String message)? error,
   }) {
@@ -64967,7 +65018,8 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(UserDTO user)? loaded,
+    TResult Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult Function(String message)? exited,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -65026,9 +65078,10 @@ abstract class _$$LoadedStateImplCopyWith<$Res> {
           _$LoadedStateImpl value, $Res Function(_$LoadedStateImpl) then) =
       __$$LoadedStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({UserDTO user});
+  $Res call({UserDTO user, VerificationStatus? verificationStatus});
 
   $UserDTOCopyWith<$Res> get user;
+  $VerificationStatusCopyWith<$Res>? get verificationStatus;
 }
 
 /// @nodoc
@@ -65045,12 +65098,17 @@ class __$$LoadedStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? user = null,
+    Object? verificationStatus = freezed,
   }) {
     return _then(_$LoadedStateImpl(
       user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as UserDTO,
+      verificationStatus: freezed == verificationStatus
+          ? _value.verificationStatus
+          : verificationStatus // ignore: cast_nullable_to_non_nullable
+              as VerificationStatus?,
     ));
   }
 
@@ -65063,19 +65121,36 @@ class __$$LoadedStateImplCopyWithImpl<$Res>
       return _then(_value.copyWith(user: value));
     });
   }
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VerificationStatusCopyWith<$Res>? get verificationStatus {
+    if (_value.verificationStatus == null) {
+      return null;
+    }
+
+    return $VerificationStatusCopyWith<$Res>(_value.verificationStatus!,
+        (value) {
+      return _then(_value.copyWith(verificationStatus: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$LoadedStateImpl implements _LoadedState {
-  const _$LoadedStateImpl({required this.user});
+  const _$LoadedStateImpl({required this.user, this.verificationStatus});
 
   @override
   final UserDTO user;
+  @override
+  final VerificationStatus? verificationStatus;
 
   @override
   String toString() {
-    return 'ProfileState.loaded(user: $user)';
+    return 'ProfileState.loaded(user: $user, verificationStatus: $verificationStatus)';
   }
 
   @override
@@ -65083,11 +65158,13 @@ class _$LoadedStateImpl implements _LoadedState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedStateImpl &&
-            (identical(other.user, user) || other.user == user));
+            (identical(other.user, user) || other.user == user) &&
+            (identical(other.verificationStatus, verificationStatus) ||
+                other.verificationStatus == verificationStatus));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, user);
+  int get hashCode => Object.hash(runtimeType, user, verificationStatus);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -65101,35 +65178,39 @@ class _$LoadedStateImpl implements _LoadedState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(UserDTO user) loaded,
+    required TResult Function(
+            UserDTO user, VerificationStatus? verificationStatus)
+        loaded,
     required TResult Function(String message) exited,
     required TResult Function(String message) error,
   }) {
-    return loaded(user);
+    return loaded(user, verificationStatus);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(UserDTO user)? loaded,
+    TResult? Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult? Function(String message)? exited,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(user);
+    return loaded?.call(user, verificationStatus);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(UserDTO user)? loaded,
+    TResult Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult Function(String message)? exited,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(user);
+      return loaded(user, verificationStatus);
     }
     return orElse();
   }
@@ -65173,9 +65254,12 @@ class _$LoadedStateImpl implements _LoadedState {
 }
 
 abstract class _LoadedState implements ProfileState {
-  const factory _LoadedState({required final UserDTO user}) = _$LoadedStateImpl;
+  const factory _LoadedState(
+      {required final UserDTO user,
+      final VerificationStatus? verificationStatus}) = _$LoadedStateImpl;
 
   UserDTO get user;
+  VerificationStatus? get verificationStatus;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -65253,7 +65337,9 @@ class _$ExitedStateImpl implements _ExitedState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(UserDTO user) loaded,
+    required TResult Function(
+            UserDTO user, VerificationStatus? verificationStatus)
+        loaded,
     required TResult Function(String message) exited,
     required TResult Function(String message) error,
   }) {
@@ -65264,7 +65350,8 @@ class _$ExitedStateImpl implements _ExitedState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(UserDTO user)? loaded,
+    TResult? Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult? Function(String message)? exited,
     TResult? Function(String message)? error,
   }) {
@@ -65275,7 +65362,8 @@ class _$ExitedStateImpl implements _ExitedState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(UserDTO user)? loaded,
+    TResult Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult Function(String message)? exited,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -65406,7 +65494,9 @@ class _$ErrorStateImpl implements _ErrorState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(UserDTO user) loaded,
+    required TResult Function(
+            UserDTO user, VerificationStatus? verificationStatus)
+        loaded,
     required TResult Function(String message) exited,
     required TResult Function(String message) error,
   }) {
@@ -65417,7 +65507,8 @@ class _$ErrorStateImpl implements _ErrorState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(UserDTO user)? loaded,
+    TResult? Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult? Function(String message)? exited,
     TResult? Function(String message)? error,
   }) {
@@ -65428,7 +65519,8 @@ class _$ErrorStateImpl implements _ErrorState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(UserDTO user)? loaded,
+    TResult Function(UserDTO user, VerificationStatus? verificationStatus)?
+        loaded,
     TResult Function(String message)? exited,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -67222,6 +67314,904 @@ abstract class _ErrorState implements ProfileEditState {
 
 
 
+lib\src\feature\profile\bloc\verification_cubit.dart
+----------------------------------------------------
+// lib/src/feature/profile/bloc/verification_cubit.dart
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+// import 'package:coment_app/src/feature/companies/models/company_dto.dart';
+import 'package:coment_app/src/feature/profile/data/profile_repository.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_response.dart';
+
+part 'verification_cubit.freezed.dart';
+
+class VerificationCubit extends Cubit<VerificationState> {
+  final IProfileRepository _repository;
+
+  VerificationCubit(this._repository) : super(const VerificationState.initial());
+
+  Future<void> fetchMyCompanies() async {
+    emit(const VerificationState.loading());
+    try {
+      final companies = await _repository.getMyCompanies();
+      emit(VerificationState.companiesLoaded(companies: companies));
+    } catch (e) {
+      emit(VerificationState.failure(error: e.toString()));
+    }
+  }
+
+  Future<void> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  }) async {
+    emit(const VerificationState.loading());
+    try {
+      final response = await _repository.createVerificationRequest(
+        companyId: companyId,
+        documentUrls: documentUrls,
+      );
+      emit(VerificationState.success(request: response));
+    } catch (e) {
+      emit(VerificationState.failure(error: e.toString()));
+    }
+  }
+}
+
+@freezed
+class VerificationState with _$VerificationState {
+  const factory VerificationState.initial() = _Initial;
+  const factory VerificationState.loading() = _Loading;
+  const factory VerificationState.companiesLoaded({required List<ProductDTO> companies}) = _CompaniesLoaded;
+  const factory VerificationState.success({required VerificationResponse request}) = _Success;
+  const factory VerificationState.failure({required String error}) = _Failure;
+}
+
+
+lib\src\feature\profile\bloc\verification_cubit.freezed.dart
+------------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'verification_cubit.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$VerificationState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ProductDTO> companies) companiesLoaded,
+    required TResult Function(VerificationResponse request) success,
+    required TResult Function(String error) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult? Function(VerificationResponse request)? success,
+    TResult? Function(String error)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult Function(VerificationResponse request)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_CompaniesLoaded value) companiesLoaded,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VerificationStateCopyWith<$Res> {
+  factory $VerificationStateCopyWith(
+          VerificationState value, $Res Function(VerificationState) then) =
+      _$VerificationStateCopyWithImpl<$Res, VerificationState>;
+}
+
+/// @nodoc
+class _$VerificationStateCopyWithImpl<$Res, $Val extends VerificationState>
+    implements $VerificationStateCopyWith<$Res> {
+  _$VerificationStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$VerificationStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
+
+  @override
+  String toString() {
+    return 'VerificationState.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ProductDTO> companies) companiesLoaded,
+    required TResult Function(VerificationResponse request) success,
+    required TResult Function(String error) failure,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult? Function(VerificationResponse request)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult Function(VerificationResponse request)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_CompaniesLoaded value) companiesLoaded,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Initial implements VerificationState {
+  const factory _Initial() = _$InitialImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$VerificationStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
+
+  @override
+  String toString() {
+    return 'VerificationState.loading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ProductDTO> companies) companiesLoaded,
+    required TResult Function(VerificationResponse request) success,
+    required TResult Function(String error) failure,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult? Function(VerificationResponse request)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult Function(VerificationResponse request)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_CompaniesLoaded value) companiesLoaded,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loading implements VerificationState {
+  const factory _Loading() = _$LoadingImpl;
+}
+
+/// @nodoc
+abstract class _$$CompaniesLoadedImplCopyWith<$Res> {
+  factory _$$CompaniesLoadedImplCopyWith(_$CompaniesLoadedImpl value,
+          $Res Function(_$CompaniesLoadedImpl) then) =
+      __$$CompaniesLoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<ProductDTO> companies});
+}
+
+/// @nodoc
+class __$$CompaniesLoadedImplCopyWithImpl<$Res>
+    extends _$VerificationStateCopyWithImpl<$Res, _$CompaniesLoadedImpl>
+    implements _$$CompaniesLoadedImplCopyWith<$Res> {
+  __$$CompaniesLoadedImplCopyWithImpl(
+      _$CompaniesLoadedImpl _value, $Res Function(_$CompaniesLoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? companies = null,
+  }) {
+    return _then(_$CompaniesLoadedImpl(
+      companies: null == companies
+          ? _value._companies
+          : companies // ignore: cast_nullable_to_non_nullable
+              as List<ProductDTO>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CompaniesLoadedImpl implements _CompaniesLoaded {
+  const _$CompaniesLoadedImpl({required final List<ProductDTO> companies})
+      : _companies = companies;
+
+  final List<ProductDTO> _companies;
+  @override
+  List<ProductDTO> get companies {
+    if (_companies is EqualUnmodifiableListView) return _companies;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_companies);
+  }
+
+  @override
+  String toString() {
+    return 'VerificationState.companiesLoaded(companies: $companies)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CompaniesLoadedImpl &&
+            const DeepCollectionEquality()
+                .equals(other._companies, _companies));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_companies));
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CompaniesLoadedImplCopyWith<_$CompaniesLoadedImpl> get copyWith =>
+      __$$CompaniesLoadedImplCopyWithImpl<_$CompaniesLoadedImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ProductDTO> companies) companiesLoaded,
+    required TResult Function(VerificationResponse request) success,
+    required TResult Function(String error) failure,
+  }) {
+    return companiesLoaded(companies);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult? Function(VerificationResponse request)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return companiesLoaded?.call(companies);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult Function(VerificationResponse request)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (companiesLoaded != null) {
+      return companiesLoaded(companies);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_CompaniesLoaded value) companiesLoaded,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return companiesLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return companiesLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (companiesLoaded != null) {
+      return companiesLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CompaniesLoaded implements VerificationState {
+  const factory _CompaniesLoaded({required final List<ProductDTO> companies}) =
+      _$CompaniesLoadedImpl;
+
+  List<ProductDTO> get companies;
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CompaniesLoadedImplCopyWith<_$CompaniesLoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SuccessImplCopyWith<$Res> {
+  factory _$$SuccessImplCopyWith(
+          _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
+      __$$SuccessImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({VerificationResponse request});
+
+  $VerificationResponseCopyWith<$Res> get request;
+}
+
+/// @nodoc
+class __$$SuccessImplCopyWithImpl<$Res>
+    extends _$VerificationStateCopyWithImpl<$Res, _$SuccessImpl>
+    implements _$$SuccessImplCopyWith<$Res> {
+  __$$SuccessImplCopyWithImpl(
+      _$SuccessImpl _value, $Res Function(_$SuccessImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? request = null,
+  }) {
+    return _then(_$SuccessImpl(
+      request: null == request
+          ? _value.request
+          : request // ignore: cast_nullable_to_non_nullable
+              as VerificationResponse,
+    ));
+  }
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VerificationResponseCopyWith<$Res> get request {
+    return $VerificationResponseCopyWith<$Res>(_value.request, (value) {
+      return _then(_value.copyWith(request: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$SuccessImpl implements _Success {
+  const _$SuccessImpl({required this.request});
+
+  @override
+  final VerificationResponse request;
+
+  @override
+  String toString() {
+    return 'VerificationState.success(request: $request)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SuccessImpl &&
+            (identical(other.request, request) || other.request == request));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, request);
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      __$$SuccessImplCopyWithImpl<_$SuccessImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ProductDTO> companies) companiesLoaded,
+    required TResult Function(VerificationResponse request) success,
+    required TResult Function(String error) failure,
+  }) {
+    return success(request);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult? Function(VerificationResponse request)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return success?.call(request);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult Function(VerificationResponse request)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(request);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_CompaniesLoaded value) companiesLoaded,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return success(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Success implements VerificationState {
+  const factory _Success({required final VerificationResponse request}) =
+      _$SuccessImpl;
+
+  VerificationResponse get request;
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$FailureImplCopyWith<$Res> {
+  factory _$$FailureImplCopyWith(
+          _$FailureImpl value, $Res Function(_$FailureImpl) then) =
+      __$$FailureImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String error});
+}
+
+/// @nodoc
+class __$$FailureImplCopyWithImpl<$Res>
+    extends _$VerificationStateCopyWithImpl<$Res, _$FailureImpl>
+    implements _$$FailureImplCopyWith<$Res> {
+  __$$FailureImplCopyWithImpl(
+      _$FailureImpl _value, $Res Function(_$FailureImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? error = null,
+  }) {
+    return _then(_$FailureImpl(
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$FailureImpl implements _Failure {
+  const _$FailureImpl({required this.error});
+
+  @override
+  final String error;
+
+  @override
+  String toString() {
+    return 'VerificationState.failure(error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FailureImpl &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, error);
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FailureImplCopyWith<_$FailureImpl> get copyWith =>
+      __$$FailureImplCopyWithImpl<_$FailureImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ProductDTO> companies) companiesLoaded,
+    required TResult Function(VerificationResponse request) success,
+    required TResult Function(String error) failure,
+  }) {
+    return failure(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult? Function(VerificationResponse request)? success,
+    TResult? Function(String error)? failure,
+  }) {
+    return failure?.call(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ProductDTO> companies)? companiesLoaded,
+    TResult Function(VerificationResponse request)? success,
+    TResult Function(String error)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_CompaniesLoaded value) companiesLoaded,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Failure value) failure,
+  }) {
+    return failure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Failure value)? failure,
+  }) {
+    return failure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_CompaniesLoaded value)? companiesLoaded,
+    TResult Function(_Success value)? success,
+    TResult Function(_Failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Failure implements VerificationState {
+  const factory _Failure({required final String error}) = _$FailureImpl;
+
+  String get error;
+
+  /// Create a copy of VerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FailureImplCopyWith<_$FailureImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
 lib\src\feature\profile\bloc\write_tech_support_cubit.dart
 ----------------------------------------------------------
 import 'package:coment_app/src/feature/profile/data/profile_repository.dart';
@@ -68049,6 +69039,9 @@ lib\src\feature\profile\data\profile_remote_ds.dart
 import 'dart:developer';
 import 'dart:io';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_response.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -68085,12 +69078,22 @@ abstract interface class IProfileRemoteDS {
 
   Future<List<FeedbackDTO>> myFeedbacks();
 
-  Future<List<String>> uploadDocuments(List<File> files);
+  Future<List<String>> uploadDocuments(
+    List<File> files,
+    // int companyId,
+  );
 
   Future<List<String>> getMyDocuments();
 
   Future<void> deleteDocument(String url);
 
+  Future<List<ProductDTO>> getMyCompanies();
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  });
+
+  Future<VerificationStatus> getVerificationStatus();
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -68150,8 +69153,9 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       if (cityId > 0) data['city_id'] = cityId.toString();
       if (password.isNotEmpty) data['password'] = password;
       if (languageId > 0) data['language_id'] = languageId.toString();
-      if (birthDate != null && birthDate.isNotEmpty)
+      if (birthDate != null && birthDate.isNotEmpty) {
         data['birthDate'] = birthDate;
+      }
 
       final FormData formData = FormData.fromMap(data);
       if (avatar != null) {
@@ -68251,7 +69255,10 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
   }
 
   @override
-  Future<List<String>> uploadDocuments(List<File> files) async {
+  Future<List<String>> uploadDocuments(
+    List<File> files,
+    // int companyId,
+  ) async {
     final formData = FormData();
     for (final file in files) {
       formData.files.add(
@@ -68270,7 +69277,6 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       body: formData,
       // headers: {'Content-Type': 'multipart/form-data'},
     );
-
     final urls = response['urls'] as List?;
     return urls?.map((e) => e as String).toList() ?? [];
   }
@@ -68287,7 +69293,55 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
     await restClient.delete('uploads/document', body: {'url': url});
   }
 
+  @override
+  Future<VerificationStatus> getVerificationStatus() async {
+    try {
+      final Map<String, dynamic> response = await restClient.get(
+        '/verification/status',
+        queryParams: {},
+      );
+      return VerificationStatus.fromJson(response);
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#getVerificationStatus - $e', e, st);
+      rethrow;
+    }
+  }
 
+  @override
+  Future<List<ProductDTO>> getMyCompanies() async {
+    try {
+      final response = await restClient.get('/verification/companies/me');
+      final list = response['data'] as List?; // ← Берём массив из поля 'data'
+      if (list == null) {
+        return [];
+      }
+      return list
+          .map((e) => ProductDTO.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#getMyCompanies - $e', e, st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  }) async {
+    try {
+      final body = {
+        'companyId': companyId,
+        'documentUrls': documentUrls,
+      };
+      final response =
+          await restClient.post('/verification/requests', body: body);
+      return VerificationResponse.fromJson(response);
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#createVerificationRequest - $e', e, st);
+      rethrow;
+    }
+  }
 }
 
 
@@ -68295,11 +69349,15 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
 lib\src\feature\profile\data\profile_repository.dart
 ----------------------------------------------------
 import 'dart:developer';
+import 'dart:io';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
 import 'package:coment_app/src/core/utils/talker_logger_util.dart';
 import 'package:coment_app/src/feature/auth/data/auth_repository.dart';
 import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_response.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:coment_app/src/core/rest_client/models/basic_response.dart';
@@ -68310,7 +69368,6 @@ abstract interface class IProfileRepository {
   Future<UserDTO> profileData();
 
   Future<BasicResponse> deleteAccount({required String password});
-
 
   Future<BasicResponse> logout();
 
@@ -68333,6 +69390,18 @@ abstract interface class IProfileRepository {
     required int languageId,
     XFile? avatar,
   });
+
+  Future<List<String>> uploadDocuments(List<File> files,
+      // {required int companyId}
+      );
+
+Future<List<ProductDTO>> getMyCompanies();
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  });
+
+Future<VerificationStatus> getVerificationStatus();
 }
 
 class ProfileRepositoryImpl implements IProfileRepository {
@@ -68482,6 +69551,83 @@ class ProfileRepositoryImpl implements IProfileRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<List<String>> uploadDocuments(List<File> files,
+      // {required int companyId}
+      ) async {
+    try {
+      return await _remoteDS.uploadDocuments(
+        files,
+        // companyId,
+      );
+    } on CustomBackendException catch (e) {
+      if (e.statusCode == 401) {
+        try {
+          await _authRepository.refreshAccessToken();
+          return await _remoteDS.uploadDocuments(
+            files,
+            // companyId,
+          );
+        } catch (refreshError) {
+          rethrow;
+        }
+      }
+      rethrow;
+    }
+  }
+
+
+@override
+  Future<List<ProductDTO>> getMyCompanies() async {
+    try {
+      return await _remoteDS.getMyCompanies();
+    } on CustomBackendException catch (e) {
+      if (e.statusCode == 401) {
+        try {
+          await _authRepository.refreshAccessToken();
+          return await _remoteDS.getMyCompanies();
+        } catch (refreshError) {
+          await _authRepository.clearUser();
+          rethrow;
+        }
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<VerificationResponse> createVerificationRequest({
+    required int companyId,
+    required List<String> documentUrls,
+  }) async {
+    try {
+      return await _remoteDS.createVerificationRequest(
+        companyId: companyId,
+        documentUrls: documentUrls,
+      );
+    } on CustomBackendException catch (e) {
+      if (e.statusCode == 401) {
+        try {
+          await _authRepository.refreshAccessToken();
+          return await _remoteDS.createVerificationRequest(
+            companyId: companyId,
+            documentUrls: documentUrls,
+          );
+        } catch (refreshError) {
+          await _authRepository.clearUser();
+          rethrow;
+        }
+      }
+      rethrow;
+    }
+  }
+
+@override
+Future<VerificationStatus> getVerificationStatus() async {
+  final response = await _remoteDS.getVerificationStatus();
+  return response;
+}
 }
 
 
@@ -70654,7 +71800,7 @@ mixin _$SavedPaymentCardResponse {
   @JsonKey(name: 'createdAt')
   String get createdAt =>
       throw _privateConstructorUsedError; // если backend возвращает
-  @JsonKey(name: 'cardHolderName')
+  @JsonKey(name: 'card_holder_name')
   String get cardHolderName => throw _privateConstructorUsedError;
 
   /// Serializes this SavedPaymentCardResponse to a JSON map.
@@ -70681,7 +71827,7 @@ abstract class $SavedPaymentCardResponseCopyWith<$Res> {
       @JsonKey(name: 'expYear') String expYear,
       @JsonKey(name: 'isDefault') bool isDefault,
       @JsonKey(name: 'createdAt') String createdAt,
-      @JsonKey(name: 'cardHolderName') String cardHolderName});
+      @JsonKey(name: 'card_holder_name') String cardHolderName});
 }
 
 /// @nodoc
@@ -70763,7 +71909,7 @@ abstract class _$$SavedPaymentCardResponseImplCopyWith<$Res>
       @JsonKey(name: 'expYear') String expYear,
       @JsonKey(name: 'isDefault') bool isDefault,
       @JsonKey(name: 'createdAt') String createdAt,
-      @JsonKey(name: 'cardHolderName') String cardHolderName});
+      @JsonKey(name: 'card_holder_name') String cardHolderName});
 }
 
 /// @nodoc
@@ -70838,7 +71984,7 @@ class _$SavedPaymentCardResponseImpl implements _SavedPaymentCardResponse {
       @JsonKey(name: 'expYear') required this.expYear,
       @JsonKey(name: 'isDefault') required this.isDefault,
       @JsonKey(name: 'createdAt') required this.createdAt,
-      @JsonKey(name: 'cardHolderName') required this.cardHolderName});
+      @JsonKey(name: 'card_holder_name') required this.cardHolderName});
 
   factory _$SavedPaymentCardResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$SavedPaymentCardResponseImplFromJson(json);
@@ -70866,7 +72012,7 @@ class _$SavedPaymentCardResponseImpl implements _SavedPaymentCardResponse {
   final String createdAt;
 // если backend возвращает
   @override
-  @JsonKey(name: 'cardHolderName')
+  @JsonKey(name: 'card_holder_name')
   final String cardHolderName;
 
   @override
@@ -70924,7 +72070,7 @@ abstract class _SavedPaymentCardResponse implements SavedPaymentCardResponse {
       @JsonKey(name: 'expYear') required final String expYear,
       @JsonKey(name: 'isDefault') required final bool isDefault,
       @JsonKey(name: 'createdAt') required final String createdAt,
-      @JsonKey(name: 'cardHolderName')
+      @JsonKey(name: 'card_holder_name')
       required final String cardHolderName}) = _$SavedPaymentCardResponseImpl;
 
   factory _SavedPaymentCardResponse.fromJson(Map<String, dynamic> json) =
@@ -70952,7 +72098,7 @@ abstract class _SavedPaymentCardResponse implements SavedPaymentCardResponse {
   @JsonKey(name: 'createdAt')
   String get createdAt; // если backend возвращает
   @override
-  @JsonKey(name: 'cardHolderName')
+  @JsonKey(name: 'card_holder_name')
   String get cardHolderName;
 
   /// Create a copy of SavedPaymentCardResponse
@@ -70985,7 +72131,7 @@ _$SavedPaymentCardResponseImpl _$$SavedPaymentCardResponseImplFromJson(
       expYear: json['expYear'] as String,
       isDefault: json['isDefault'] as bool,
       createdAt: json['createdAt'] as String,
-      cardHolderName: json['cardHolderName'] as String,
+      cardHolderName: json['card_holder_name'] as String,
     );
 
 Map<String, dynamic> _$$SavedPaymentCardResponseImplToJson(
@@ -70998,7 +72144,643 @@ Map<String, dynamic> _$$SavedPaymentCardResponseImplToJson(
       'expYear': instance.expYear,
       'isDefault': instance.isDefault,
       'createdAt': instance.createdAt,
-      'cardHolderName': instance.cardHolderName,
+      'card_holder_name': instance.cardHolderName,
+    };
+
+
+
+lib\src\feature\profile\models\response\verification_response.dart
+------------------------------------------------------------------
+// lib/src/feature/profile/models/response/verification_response.dart
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'verification_response.freezed.dart';
+part 'verification_response.g.dart';
+
+@freezed
+class VerificationResponse with _$VerificationResponse {
+  const factory VerificationResponse({
+    required int id,
+    // required int companyId,
+    required UserDTO user,
+    required ProductDTO company,
+    required List<String> documentUrls,
+    String? status,
+    String? createdAt,
+  }) = _VerificationResponse;
+
+  factory VerificationResponse.fromJson(Map<String, dynamic> json) =>
+      _$VerificationResponseFromJson(json);
+}
+
+
+lib\src\feature\profile\models\response\verification_response.freezed.dart
+--------------------------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'verification_response.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+VerificationResponse _$VerificationResponseFromJson(Map<String, dynamic> json) {
+  return _VerificationResponse.fromJson(json);
+}
+
+/// @nodoc
+mixin _$VerificationResponse {
+  int get id => throw _privateConstructorUsedError; // required int companyId,
+  UserDTO get user => throw _privateConstructorUsedError;
+  ProductDTO get company => throw _privateConstructorUsedError;
+  List<String> get documentUrls => throw _privateConstructorUsedError;
+  String? get status => throw _privateConstructorUsedError;
+  String? get createdAt => throw _privateConstructorUsedError;
+
+  /// Serializes this VerificationResponse to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of VerificationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $VerificationResponseCopyWith<VerificationResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VerificationResponseCopyWith<$Res> {
+  factory $VerificationResponseCopyWith(VerificationResponse value,
+          $Res Function(VerificationResponse) then) =
+      _$VerificationResponseCopyWithImpl<$Res, VerificationResponse>;
+  @useResult
+  $Res call(
+      {int id,
+      UserDTO user,
+      ProductDTO company,
+      List<String> documentUrls,
+      String? status,
+      String? createdAt});
+
+  $UserDTOCopyWith<$Res> get user;
+  $ProductDTOCopyWith<$Res> get company;
+}
+
+/// @nodoc
+class _$VerificationResponseCopyWithImpl<$Res,
+        $Val extends VerificationResponse>
+    implements $VerificationResponseCopyWith<$Res> {
+  _$VerificationResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of VerificationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? user = null,
+    Object? company = null,
+    Object? documentUrls = null,
+    Object? status = freezed,
+    Object? createdAt = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      user: null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserDTO,
+      company: null == company
+          ? _value.company
+          : company // ignore: cast_nullable_to_non_nullable
+              as ProductDTO,
+      documentUrls: null == documentUrls
+          ? _value.documentUrls
+          : documentUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+
+  /// Create a copy of VerificationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserDTOCopyWith<$Res> get user {
+    return $UserDTOCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value) as $Val);
+    });
+  }
+
+  /// Create a copy of VerificationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ProductDTOCopyWith<$Res> get company {
+    return $ProductDTOCopyWith<$Res>(_value.company, (value) {
+      return _then(_value.copyWith(company: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$VerificationResponseImplCopyWith<$Res>
+    implements $VerificationResponseCopyWith<$Res> {
+  factory _$$VerificationResponseImplCopyWith(_$VerificationResponseImpl value,
+          $Res Function(_$VerificationResponseImpl) then) =
+      __$$VerificationResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      UserDTO user,
+      ProductDTO company,
+      List<String> documentUrls,
+      String? status,
+      String? createdAt});
+
+  @override
+  $UserDTOCopyWith<$Res> get user;
+  @override
+  $ProductDTOCopyWith<$Res> get company;
+}
+
+/// @nodoc
+class __$$VerificationResponseImplCopyWithImpl<$Res>
+    extends _$VerificationResponseCopyWithImpl<$Res, _$VerificationResponseImpl>
+    implements _$$VerificationResponseImplCopyWith<$Res> {
+  __$$VerificationResponseImplCopyWithImpl(_$VerificationResponseImpl _value,
+      $Res Function(_$VerificationResponseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VerificationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? user = null,
+    Object? company = null,
+    Object? documentUrls = null,
+    Object? status = freezed,
+    Object? createdAt = freezed,
+  }) {
+    return _then(_$VerificationResponseImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      user: null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserDTO,
+      company: null == company
+          ? _value.company
+          : company // ignore: cast_nullable_to_non_nullable
+              as ProductDTO,
+      documentUrls: null == documentUrls
+          ? _value._documentUrls
+          : documentUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$VerificationResponseImpl implements _VerificationResponse {
+  const _$VerificationResponseImpl(
+      {required this.id,
+      required this.user,
+      required this.company,
+      required final List<String> documentUrls,
+      this.status,
+      this.createdAt})
+      : _documentUrls = documentUrls;
+
+  factory _$VerificationResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$VerificationResponseImplFromJson(json);
+
+  @override
+  final int id;
+// required int companyId,
+  @override
+  final UserDTO user;
+  @override
+  final ProductDTO company;
+  final List<String> _documentUrls;
+  @override
+  List<String> get documentUrls {
+    if (_documentUrls is EqualUnmodifiableListView) return _documentUrls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_documentUrls);
+  }
+
+  @override
+  final String? status;
+  @override
+  final String? createdAt;
+
+  @override
+  String toString() {
+    return 'VerificationResponse(id: $id, user: $user, company: $company, documentUrls: $documentUrls, status: $status, createdAt: $createdAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$VerificationResponseImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.user, user) || other.user == user) &&
+            (identical(other.company, company) || other.company == company) &&
+            const DeepCollectionEquality()
+                .equals(other._documentUrls, _documentUrls) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, user, company,
+      const DeepCollectionEquality().hash(_documentUrls), status, createdAt);
+
+  /// Create a copy of VerificationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$VerificationResponseImplCopyWith<_$VerificationResponseImpl>
+      get copyWith =>
+          __$$VerificationResponseImplCopyWithImpl<_$VerificationResponseImpl>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$VerificationResponseImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _VerificationResponse implements VerificationResponse {
+  const factory _VerificationResponse(
+      {required final int id,
+      required final UserDTO user,
+      required final ProductDTO company,
+      required final List<String> documentUrls,
+      final String? status,
+      final String? createdAt}) = _$VerificationResponseImpl;
+
+  factory _VerificationResponse.fromJson(Map<String, dynamic> json) =
+      _$VerificationResponseImpl.fromJson;
+
+  @override
+  int get id; // required int companyId,
+  @override
+  UserDTO get user;
+  @override
+  ProductDTO get company;
+  @override
+  List<String> get documentUrls;
+  @override
+  String? get status;
+  @override
+  String? get createdAt;
+
+  /// Create a copy of VerificationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$VerificationResponseImplCopyWith<_$VerificationResponseImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\profile\models\response\verification_response.g.dart
+--------------------------------------------------------------------
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'verification_response.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$VerificationResponseImpl _$$VerificationResponseImplFromJson(
+        Map<String, dynamic> json) =>
+    _$VerificationResponseImpl(
+      id: (json['id'] as num).toInt(),
+      user: UserDTO.fromJson(json['user'] as Map<String, dynamic>),
+      company: ProductDTO.fromJson(json['company'] as Map<String, dynamic>),
+      documentUrls: (json['documentUrls'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      status: json['status'] as String?,
+      createdAt: json['createdAt'] as String?,
+    );
+
+Map<String, dynamic> _$$VerificationResponseImplToJson(
+        _$VerificationResponseImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'user': instance.user,
+      'company': instance.company,
+      'documentUrls': instance.documentUrls,
+      'status': instance.status,
+      'createdAt': instance.createdAt,
+    };
+
+
+
+lib\src\feature\profile\models\response\verification_status.dart
+----------------------------------------------------------------
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'verification_status.freezed.dart';
+part 'verification_status.g.dart';
+
+@freezed
+class VerificationStatus with _$VerificationStatus {
+  const factory VerificationStatus({
+    required String status, // approved, pending, rejected, not_requested
+    String? message,
+    int? companyId,
+  }) = _VerificationStatus;
+
+  factory VerificationStatus.fromJson(Map<String, dynamic> json) =>
+      _$VerificationStatusFromJson(json);
+}
+
+
+
+lib\src\feature\profile\models\response\verification_status.freezed.dart
+------------------------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'verification_status.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+VerificationStatus _$VerificationStatusFromJson(Map<String, dynamic> json) {
+  return _VerificationStatus.fromJson(json);
+}
+
+/// @nodoc
+mixin _$VerificationStatus {
+  String get status =>
+      throw _privateConstructorUsedError; // approved, pending, rejected, not_requested
+  String? get message => throw _privateConstructorUsedError;
+  int? get companyId => throw _privateConstructorUsedError;
+
+  /// Serializes this VerificationStatus to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of VerificationStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $VerificationStatusCopyWith<VerificationStatus> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VerificationStatusCopyWith<$Res> {
+  factory $VerificationStatusCopyWith(
+          VerificationStatus value, $Res Function(VerificationStatus) then) =
+      _$VerificationStatusCopyWithImpl<$Res, VerificationStatus>;
+  @useResult
+  $Res call({String status, String? message, int? companyId});
+}
+
+/// @nodoc
+class _$VerificationStatusCopyWithImpl<$Res, $Val extends VerificationStatus>
+    implements $VerificationStatusCopyWith<$Res> {
+  _$VerificationStatusCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of VerificationStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? status = null,
+    Object? message = freezed,
+    Object? companyId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      companyId: freezed == companyId
+          ? _value.companyId
+          : companyId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$VerificationStatusImplCopyWith<$Res>
+    implements $VerificationStatusCopyWith<$Res> {
+  factory _$$VerificationStatusImplCopyWith(_$VerificationStatusImpl value,
+          $Res Function(_$VerificationStatusImpl) then) =
+      __$$VerificationStatusImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String status, String? message, int? companyId});
+}
+
+/// @nodoc
+class __$$VerificationStatusImplCopyWithImpl<$Res>
+    extends _$VerificationStatusCopyWithImpl<$Res, _$VerificationStatusImpl>
+    implements _$$VerificationStatusImplCopyWith<$Res> {
+  __$$VerificationStatusImplCopyWithImpl(_$VerificationStatusImpl _value,
+      $Res Function(_$VerificationStatusImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VerificationStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? status = null,
+    Object? message = freezed,
+    Object? companyId = freezed,
+  }) {
+    return _then(_$VerificationStatusImpl(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      companyId: freezed == companyId
+          ? _value.companyId
+          : companyId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$VerificationStatusImpl implements _VerificationStatus {
+  const _$VerificationStatusImpl(
+      {required this.status, this.message, this.companyId});
+
+  factory _$VerificationStatusImpl.fromJson(Map<String, dynamic> json) =>
+      _$$VerificationStatusImplFromJson(json);
+
+  @override
+  final String status;
+// approved, pending, rejected, not_requested
+  @override
+  final String? message;
+  @override
+  final int? companyId;
+
+  @override
+  String toString() {
+    return 'VerificationStatus(status: $status, message: $message, companyId: $companyId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$VerificationStatusImpl &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.companyId, companyId) ||
+                other.companyId == companyId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, status, message, companyId);
+
+  /// Create a copy of VerificationStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$VerificationStatusImplCopyWith<_$VerificationStatusImpl> get copyWith =>
+      __$$VerificationStatusImplCopyWithImpl<_$VerificationStatusImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$VerificationStatusImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _VerificationStatus implements VerificationStatus {
+  const factory _VerificationStatus(
+      {required final String status,
+      final String? message,
+      final int? companyId}) = _$VerificationStatusImpl;
+
+  factory _VerificationStatus.fromJson(Map<String, dynamic> json) =
+      _$VerificationStatusImpl.fromJson;
+
+  @override
+  String get status; // approved, pending, rejected, not_requested
+  @override
+  String? get message;
+  @override
+  int? get companyId;
+
+  /// Create a copy of VerificationStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$VerificationStatusImplCopyWith<_$VerificationStatusImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\profile\models\response\verification_status.g.dart
+------------------------------------------------------------------
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'verification_status.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$VerificationStatusImpl _$$VerificationStatusImplFromJson(
+        Map<String, dynamic> json) =>
+    _$VerificationStatusImpl(
+      status: json['status'] as String,
+      message: json['message'] as String?,
+      companyId: (json['companyId'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$VerificationStatusImplToJson(
+        _$VerificationStatusImpl instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'companyId': instance.companyId,
     };
 
 
@@ -71844,6 +73626,8 @@ import 'package:path/path.dart' as p;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:coment_app/src/feature/profile/bloc/verification_cubit.dart';
+import 'package:coment_app/src/feature/main/model/product_dto.dart';
 
 @RoutePage()
 class LoadDocumentsPage extends StatelessWidget {
@@ -71851,10 +73635,18 @@ class LoadDocumentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          LoadDocumentsCubit(context.repository.profileRemoteDS)
-            ..fetchDocuments(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              LoadDocumentsCubit(context.repository.profileRemoteDS)
+                ..fetchDocuments(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              VerificationCubit(context.repository.profileRepository),
+        ),
+      ],
       child: const LoadingDocumentWidget(),
     );
   }
@@ -71875,6 +73667,9 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
   static const int _maxTotalFiles = 10;
   final ImagePicker imagePicker = ImagePicker();
   bool _isSubmitted = false;
+
+  List<ProductDTO> _myCompanies = []; // Список компаний владельца
+  ProductDTO? _selectedCompany; // Выбранная компания
 
   bool get _canAddMore =>
       _imageFiles.length + _documentFiles.length < _maxTotalFiles;
@@ -71952,280 +73747,435 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
     );
   }
 
+  void _selectCompany(ProductDTO company) {
+    setState(() {
+      _selectedCompany = company;
+    });
+  }
+
   String _getDisplayName(String path) {
     return p.basename(path);
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<VerificationCubit>().fetchMyCompanies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoadDocumentsCubit, LoadDocumentsState>(
+    return BlocListener<VerificationCubit, VerificationState>(
       listener: (context, state) {
         state.maybeWhen(
-          success: (urls) {
+          success: (request) {
+            setState(() {
+              _imageFiles.clear();
+              _documentFiles.clear();
+              _selectedCompany = null;
+              _isSubmitted = true;
+            });
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(context.localized.documentsSentForReview),
+              const SnackBar(
+                content: Text(
+                  'Запрос на верификацию отправлен!',
+                ),
                 backgroundColor: AppColors.green,
               ),
             );
-            _imageFiles.clear();
-            _documentFiles.clear();
-            // setState(() {});
-            setState(() {
-              _isSubmitted = true;
-            });
-            context.read<LoadDocumentsCubit>().fetchDocuments();
-          },
-          loaded: (urls) {
-            // _existingDocuments = urls;
-            setState(() {
-              _existingDocuments = urls;
-              _isSubmitted = false; // сброс флага отправки
-            });
+            // Также можно обновить список документов, если нужно
+            // context.read<LoadDocumentsCubit>().fetchDocuments();
           },
           failure: (error) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Ошибка: $error'),
-                backgroundColor: Colors.red,
+                content: Text('Ошибка верификации: $error'),
+                backgroundColor: AppColors.red2,
               ),
             );
           },
           orElse: () {},
         );
+        state.maybeWhen(
+          companiesLoaded: (companies) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                setState(() {
+                  _myCompanies = companies;
+                });
+              }
+            });
+          },
+          orElse: () {},
+        );
+        // Обновление списка компаний
+        // if (state is VerificationState.companiesLoaded) {
+        //   WidgetsBinding.instance.addPostFrameCallback((_) {
+        //     if (mounted) {
+        //       setState(() {
+        //         _myCompanies = state.companies;
+        //       });
+        //     }
+        //   });
+        // }
       },
-      builder: (BuildContext context, LoadDocumentsState state) {
-        return Scaffold(
-          appBar: CustomAppBar(
-            title: context.localized.loadDocuments,
-            shape: const Border(
-                bottom: BorderSide(color: AppColors.dividerColor, width: 0.5)),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: Column(
-              children: [
-                // === Секция: Ранее загруженные документы (только просмотр) ===
-                if (_existingDocuments.isNotEmpty)
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Ранее загруженные документы',
-                          style: AppTextStyles.fs14w600
-                              .copyWith(color: AppColors.grey2),
-                        ),
-                        const Gap(8),
-                        SizedBox(
-                          height: 150 * _existingDocuments.length.toDouble(),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            // physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _existingDocuments.length,
-                            itemBuilder: (context, index) {
-                              final url = _existingDocuments[index];
-                              final isImage = url.endsWith('.png') ||
-                                  url.endsWith('.jpg') ||
-                                  url.endsWith('.jpeg');
-                              final name = Uri.parse(url).pathSegments.last;
+      child: BlocConsumer<LoadDocumentsCubit, LoadDocumentsState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            success: (urls) {
+              if (_selectedCompany != null) {
+                context.read<VerificationCubit>().createVerificationRequest(
+                      companyId: _selectedCompany!.id!,
+                      documentUrls: urls,
+                    );
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(context.localized.documentsSentForReview),
+                  backgroundColor: AppColors.green,
+                ),
+              );
+              _imageFiles.clear();
+              _documentFiles.clear();
+              // setState(() {});
+              setState(() {
+                _isSubmitted = true;
+              });
+              context.read<LoadDocumentsCubit>().fetchDocuments();
+            },
+            loaded: (urls) {
+              // _existingDocuments = urls;
+              setState(() {
+                _existingDocuments = urls;
+                _isSubmitted = false; // сброс флага отправки
+              });
+            },
+            failure: (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Ошибка: $error'),
+                  backgroundColor: AppColors.red2,
+                ),
+              );
+            },
+            orElse: () {},
+          );
+        },
+        builder: (BuildContext context, LoadDocumentsState state) {
+          final verificationState = context.watch<VerificationCubit>().state;
+          final isCompaniesLoading = verificationState.maybeWhen(
+            loading: () => true,
+            orElse: () => false,
+          );
+          final bool isVerificationLoading = verificationState.maybeWhen(
+            loading: () => true,
+            orElse: () => false,
+          );
+          return Scaffold(
+            appBar: CustomAppBar(
+              title: context.localized.loadDocuments,
+              shape: const Border(
+                  bottom:
+                      BorderSide(color: AppColors.dividerColor, width: 0.5)),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: Column(
+                children: [
+                  // === Секция: Выбор компании ===
 
-                              return Slidable(
-                                endActionPane: ActionPane(
-                                  motion: const StretchMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(12),
-                                        bottomRight: Radius.circular(12),
-                                      ),
-                                      onPressed: (ctx) async {
-                                        final url = _existingDocuments[index];
-                                        await context
-                                            .read<LoadDocumentsCubit>()
-                                            .deleteDocument(url);
-                                      },
-                                      backgroundColor: AppColors.red700,
-                                      icon: Icons.delete,
-                                      label: 'Delete',
-                                    ),
-                                  ],
-                                ),
-                                child: ListTile(
-                                  leading: isImage
-                                      ? const Icon(Icons.image,
-                                          color: AppColors.mainColor)
-                                      : const Icon(Icons.insert_drive_file),
-                                  title: Text(name),
-                                  onTap: () async {
-                                    if (!await launchUrl(Uri.parse(url))) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'Не удалось открыть файл')),
-                                        );
-                                      }
-                                    }
-                                  },
-                                ),
-                              );
-                            },
+                  if (_myCompanies.isEmpty && !isCompaniesLoading)
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text('У вас пока нет компаний.'),
+                    )
+                  else if (!isCompaniesLoading)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Выберите компанию для верификации',
+                            style: AppTextStyles.fs14w600
+                                .copyWith(color: AppColors.grey2),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                // Изображения — GridView
-                if (_imageFiles.isNotEmpty)
-                  Expanded(
-                    flex: (_imageFiles.length > 3) ? 2 : 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 15,
-                          crossAxisSpacing: 15,
-                        ),
-                        itemCount: _imageFiles.length,
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  _imageFiles[index],
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: () => _removeImage(index),
+                          const Gap(8),
+                          SizedBox(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _myCompanies.length,
+                              itemBuilder: (context, index) {
+                                final company = _myCompanies[index];
+                                final isSelected =
+                                    _selectedCompany?.id == company.id;
+                                return GestureDetector(
+                                  onTap: () => _selectCompany(company),
                                   child: Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.black54,
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? AppColors.mainColor
+                                          : AppColors.grey2,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? AppColors.mainColor
+                                            : AppColors.borderTextField,
+                                      ),
                                     ),
-                                    child: const Icon(Icons.close,
-                                        color: Colors.white, size: 16),
+                                    child: Center(
+                                      child: Text(
+                                        company.name ?? 'Без названия',
+                                        style: AppTextStyles.fs12w500.copyWith(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : AppColors.text,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              if (_isSubmitted)
-                                const Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.only(right: 8.0, bottom: 8),
-                                    child: Icon(Icons.check_circle,
-                                        color: AppColors.green, size: 20),
-                                  ),
-                                ),
-                            ],
-                          );
-                        },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
 
-                // Документы — ListView
-                if (_documentFiles.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                      height: 100 * _documentFiles.length.toDouble(),
-                      child: ListView.builder(
-                        itemCount: _documentFiles.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              ListTile(
-                                leading: const Icon(Icons.insert_drive_file),
-                                title: Text(_getDisplayName(
-                                    _documentFiles[index].path)),
-                                trailing: SizedBox(
-                                  width: 80,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                  // === Секция: Ранее загруженные документы (только просмотр) ===
+                  if (_existingDocuments.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Ранее загруженные документы',
+                            style: AppTextStyles.fs14w600
+                                .copyWith(color: AppColors.grey2),
+                          ),
+                          const Gap(8),
+                          SizedBox(
+                            height: 150 * _existingDocuments.length.toDouble(),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              // physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _existingDocuments.length,
+                              itemBuilder: (context, index) {
+                                final url = _existingDocuments[index];
+                                final isImage = url.endsWith('.png') ||
+                                    url.endsWith('.jpg') ||
+                                    url.endsWith('.jpeg');
+                                final name = Uri.parse(url).pathSegments.last;
+
+                                return Slidable(
+                                  endActionPane: ActionPane(
+                                    motion: const StretchMotion(),
                                     children: [
-                                      if (_isSubmitted)
-                                        const Icon(Icons.check_circle,
-                                            color: AppColors.green, size: 20),
-                                      IconButton(
-                                        icon: const Icon(Icons.close),
-                                        onPressed: () => _removeDocument(index),
+                                      SlidableAction(
+                                        borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(12),
+                                          bottomRight: Radius.circular(12),
+                                        ),
+                                        onPressed: (ctx) async {
+                                          final url = _existingDocuments[index];
+                                          await context
+                                              .read<LoadDocumentsCubit>()
+                                              .deleteDocument(url);
+                                        },
+                                        backgroundColor: AppColors.red700,
+                                        icon: Icons.delete,
+                                        label: 'Delete',
                                       ),
                                     ],
                                   ),
+                                  child: ListTile(
+                                    leading: isImage
+                                        ? const Icon(Icons.image,
+                                            color: AppColors.mainColor)
+                                        : const Icon(Icons.insert_drive_file),
+                                    title: Text(name),
+                                    onTap: () async {
+                                      if (!await launchUrl(Uri.parse(url))) {
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    'Не удалось открыть файл')),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  // Изображения — GridView
+                  if (_imageFiles.isNotEmpty)
+                    Expanded(
+                      flex: (_imageFiles.length > 3) ? 2 : 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 15,
+                            crossAxisSpacing: 15,
+                          ),
+                          itemCount: _imageFiles.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.file(
+                                    _imageFiles[index],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                // Кнопка "+"
-                if (_canAddMore)
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: GestureDetector(
-                      onTap: _showAddOptions,
-                      child: Container(
-                        height: 56,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.mainColor),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.add,
-                              color: AppColors.mainColor, size: 32),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                const SizedBox(height: 16),
-
-                // Кнопка отправки
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: CustomButton(
-                    onPressed: (_imageFiles.isEmpty && _documentFiles.isEmpty)
-                        ? null
-                        : () {
-                            final allFiles = [
-                              ..._imageFiles,
-                              ..._documentFiles
-                            ];
-                            context
-                                .read<LoadDocumentsCubit>()
-                                .uploadDocuments(allFiles);
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: GestureDetector(
+                                    onTap: () => _removeImage(index),
+                                    child: Container(
+                                      width: 24,
+                                      height: 24,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.black54,
+                                      ),
+                                      child: const Icon(Icons.close,
+                                          color: Colors.white, size: 16),
+                                    ),
+                                  ),
+                                ),
+                                if (_isSubmitted)
+                                  const Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 8.0, bottom: 8),
+                                      child: Icon(Icons.check_circle,
+                                          color: AppColors.green, size: 20),
+                                    ),
+                                  ),
+                              ],
+                            );
                           },
-                    style: const ButtonStyle(),
-                    child: Text(context.localized.send),
+                        ),
+                      ),
+                    ),
+
+                  // Документы — ListView
+                  if (_documentFiles.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SizedBox(
+                        height: 100 * _documentFiles.length.toDouble(),
+                        child: ListView.builder(
+                          itemCount: _documentFiles.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                  leading: const Icon(Icons.insert_drive_file),
+                                  title: Text(_getDisplayName(
+                                      _documentFiles[index].path)),
+                                  trailing: SizedBox(
+                                    width: 80,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        if (_isSubmitted)
+                                          const Icon(Icons.check_circle,
+                                              color: AppColors.green, size: 20),
+                                        IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () =>
+                                              _removeDocument(index),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+
+                  // Кнопка "+"
+                  if (_canAddMore)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: GestureDetector(
+                        onTap: _showAddOptions,
+                        child: Container(
+                          height: 56,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColors.mainColor),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.add,
+                                color: AppColors.mainColor, size: 32),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  const SizedBox(height: 16),
+
+                  // Кнопка отправки
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: CustomButton(
+                      onPressed:
+                          (_imageFiles.isEmpty && _documentFiles.isEmpty) ||
+                                  _selectedCompany == null ||
+                                  isCompaniesLoading ||
+                                  isVerificationLoading
+                              ? null
+                              : () {
+                                  final allFiles = [
+                                    ..._imageFiles,
+                                    ..._documentFiles
+                                  ];
+                                  context
+                                      .read<LoadDocumentsCubit>()
+                                      .uploadDocuments(allFiles);
+                                },
+                      style: const ButtonStyle(),
+                      child: Text(context.localized.send),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -72431,6 +74381,7 @@ import 'package:coment_app/src/feature/app/router/app_router.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
 import 'package:coment_app/src/feature/main/presentation/widgets/city_main_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/language_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/logout_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/profile_avatar.dart';
@@ -72451,10 +74402,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+
   @override
   void initState() {
     super.initState();
     BlocProvider.of<ProfileBLoC>(context).add(const ProfileEvent.getProfile());
+    BlocProvider.of<ProfileBLoC>(context)
+        .add(const ProfileEvent.getVerificationStatus());
     BlocProvider.of<DictionaryCubit>(context).getDictionary();
   }
 
@@ -72502,11 +74457,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 // context.router.popUntil((route) => route.settings.name == LauncherRoute.name);
                 BlocProvider.of<AppBloc>(context).add(const AppEvent.exiting());
               },
-              loaded: (userDTO) {
+              loaded: (userDTO, _) {
                 selectedLanguageId = userDTO.language?.id;
                 log(selectedLanguageId.toString());
                 setState(() {});
               },
+            
               orElse: () {
                 context.loaderOverlay.hide();
               },
@@ -72524,7 +74480,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text("Or else"),
                 );
               },
-              loaded: (userDTO) {
+              loaded: (userDTO, verificationStatus) {
                 return SmartRefresher(
                   header: const RefreshClassicHeader(),
                   controller: _refreshController,
@@ -72577,6 +74533,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                           height: 1.2,
                                         ),
                                       ),
+                                      if (verificationStatus != null)
+                                        _buildVerificationStatus(
+                                            verificationStatus),
+                                      
                                       const Gap(8),
                                       Text(
                                         userDTO.email ?? '',
@@ -72758,8 +74718,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     icon: AssetsConstants.payment,
                                     title: context.localized.payment,
                                     onTap: () {
-                                      context.router
-                                          .push(const PaymentRoute());
+                                      context.router.push(const PaymentRoute());
                                     },
                                   )
                                 : const SizedBox(),
@@ -72770,8 +74729,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     icon: AssetsConstants.message,
                                     title: context.localized.message,
                                     onTap: () {
-                                      context.router
-                                          .push(const MessageRoute());
+                                      context.router.push(const MessageRoute());
                                     },
                                   )
                                 : const SizedBox(),
@@ -72809,6 +74767,44 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  Widget _buildVerificationStatus(VerificationStatus status) {
+  String message;
+  Color color;
+  IconData icon;
+
+  switch (status.status) {
+    case 'approved':
+      message = 'Верифицирован';
+      color = Colors.green;
+      icon = Icons.check_circle;
+      break;
+    case 'pending':
+      message = 'На рассмотрении';
+      color = Colors.orange;
+      icon = Icons.hourglass_empty;
+      break;
+    case 'rejected':
+      message = ' Отклонено';
+      color = Colors.red;
+      icon = Icons.cancel;
+      break;
+    default:
+      message = 'Не запрашивалось';
+      color = Colors.grey;
+      icon = Icons.info_outline;
+  }
+
+  return Row(
+    children: [
+      Icon(icon, color: color, size: 16),
+      const Gap(4),
+      Text(
+        message,
+        style: AppTextStyles.fs14w500.copyWith(color: color),
+      ),
+    ],
+  );
+}
 }
 
 
@@ -76882,4 +78878,4 @@ class _SignInPage extends StatelessWidget {
 
 
 
-=== Всего файлов: 347 ===
+=== Всего файлов: 355 ===

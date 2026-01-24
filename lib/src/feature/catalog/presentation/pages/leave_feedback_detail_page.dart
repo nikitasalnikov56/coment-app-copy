@@ -280,7 +280,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
   Widget build(BuildContext context) {
     final profileState = context.watch<ProfileBLoC>().state;
     final isOwner = profileState.maybeWhen(
-      loaded: (userDTO) => userDTO.role == 'owner',
+      loaded: (userDTO, _) => userDTO.role == 'owner',
       orElse: () => false,
     );
     _isOwner = isOwner;

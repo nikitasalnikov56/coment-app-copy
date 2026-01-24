@@ -7,6 +7,7 @@ import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
 import 'package:coment_app/src/feature/profile/models/response/verification_response.dart';
+import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:coment_app/src/core/rest_client/models/basic_response.dart';
@@ -50,6 +51,7 @@ Future<List<ProductDTO>> getMyCompanies();
     required List<String> documentUrls,
   });
 
+Future<VerificationStatus> getVerificationStatus();
 }
 
 class ProfileRepositoryImpl implements IProfileRepository {
@@ -271,5 +273,9 @@ class ProfileRepositoryImpl implements IProfileRepository {
     }
   }
 
-
+@override
+Future<VerificationStatus> getVerificationStatus() async {
+  final response = await _remoteDS.getVerificationStatus();
+  return response;
+}
 }

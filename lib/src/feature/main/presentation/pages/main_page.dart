@@ -131,7 +131,7 @@ class _MainPageState extends State<MainPage> {
                     state.maybeWhen(
                       error: (message) {},
                       loading: () {},
-                      loaded: (userDTO) {
+                      loaded: (userDTO, _) {
                         cityId = userDTO.city?.id;
                         countryId = userDTO.city?.country?.id;
 
