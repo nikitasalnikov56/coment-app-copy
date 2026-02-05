@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:coment_app/src/core/constant/constants.dart';
@@ -35,8 +33,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-
   @override
   void initState() {
     super.initState();
@@ -81,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Toaster.showErrorTopShortToast(context, message);
               },
               loading: () {
-                context.loaderOverlay.show();
+                // context.loaderOverlay.show();
                 _refreshController.resetNoData();
               },
               exited: (message) {
@@ -92,10 +88,8 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               loaded: (userDTO, _) {
                 selectedLanguageId = userDTO.language?.id;
-                log(selectedLanguageId.toString());
                 setState(() {});
               },
-            
               orElse: () {
                 context.loaderOverlay.hide();
               },
@@ -110,16 +104,24 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               orElse: () {
                 return const Center(
-                  child: Text("Or else"),
+                  child: Text("Ошибка загрузки"),
                 );
               },
               loaded: (userDTO, verificationStatus) {
+                print(userDTO.role); // что выводит?
+                print(userDTO.role == 'owner');
+
+                final userRole = userDTO.role?.toLowerCase().trim() ?? '';
+                final isOwner = userRole == 'owner';
                 return SmartRefresher(
                   header: const RefreshClassicHeader(),
                   controller: _refreshController,
                   onRefresh: () async {
-                    BlocProvider.of<ProfileBLoC>(context)
-                        .add(const ProfileEvent.getProfile());
+                    final bloc = BlocProvider.of<ProfileBLoC>(context);
+
+                    bloc.add(const ProfileEvent.getProfile());
+                    bloc.add(const ProfileEvent.getVerificationStatus());
+                    BlocProvider.of<DictionaryCubit>(context).getDictionary();
                     _refreshController.refreshCompleted();
                   },
                   child: CustomScrollView(
@@ -169,7 +171,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                       if (verificationStatus != null)
                                         _buildVerificationStatus(
                                             verificationStatus),
-                                      
                                       const Gap(8),
                                       Text(
                                         userDTO.email ?? '',
@@ -322,8 +323,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                             ),
                             const Gap(12),
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
+                            if (isOwner)
+                              Column(
+                                spacing: 12,
+                                children: [
+                                  ProfileRowButton(
                                     icon: AssetsConstants.documentsAdd,
                                     title: context.localized.loadDocuments,
                                     onTap: () {
@@ -331,41 +335,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                         const LoadDocumentsRoute(),
                                       );
                                     },
-                                  )
-                                : const SizedBox(),
-                            const Gap(12),
-
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
+                                  ),
+                                  ProfileRowButton(
                                     icon: AssetsConstants.companyAdd,
                                     title: context.localized.companyAdd,
                                     onTap: () {
                                       context.router
                                           .push(const SelectCategoriesRoute());
                                     },
-                                  )
-                                : const SizedBox(),
-                            const Gap(12),
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
+                                  ),
+                                  ProfileRowButton(
                                     icon: AssetsConstants.payment,
                                     title: context.localized.payment,
                                     onTap: () {
                                       context.router.push(const PaymentRoute());
                                     },
                                   )
-                                : const SizedBox(),
-                            const Gap(12),
-
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
-                                    icon: AssetsConstants.message,
-                                    title: context.localized.message,
-                                    onTap: () {
-                                      context.router.push(const MessageRoute());
-                                    },
-                                  )
-                                : const SizedBox(),
+                                ],
+                              ),
+                            ProfileRowButton(
+                              icon: AssetsConstants.message,
+                              title: context.localized.message,
+                              onTap: () {
+                                context.router.push(const MessageRoute());
+                              },
+                            ),
+                            // : const SizedBox(),
                             const Gap(12),
 
                             ///
@@ -400,42 +395,43 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
   Widget _buildVerificationStatus(VerificationStatus status) {
-  String message;
-  Color color;
-  IconData icon;
+    String message;
+    Color color;
+    IconData icon;
 
-  switch (status.status) {
-    case 'approved':
-      message = 'Верифицирован';
-      color = Colors.green;
-      icon = Icons.check_circle;
-      break;
-    case 'pending':
-      message = 'На рассмотрении';
-      color = Colors.orange;
-      icon = Icons.hourglass_empty;
-      break;
-    case 'rejected':
-      message = ' Отклонено';
-      color = Colors.red;
-      icon = Icons.cancel;
-      break;
-    default:
-      message = 'Не запрашивалось';
-      color = Colors.grey;
-      icon = Icons.info_outline;
+    switch (status.status) {
+      case 'approved':
+        message = 'Верифицирован';
+        color = Colors.green;
+        icon = Icons.check_circle;
+        break;
+      case 'pending':
+        message = 'На рассмотрении';
+        color = Colors.orange;
+        icon = Icons.hourglass_empty;
+        break;
+      case 'rejected':
+        message = ' Отклонено';
+        color = Colors.red;
+        icon = Icons.cancel;
+        break;
+      default:
+        message = 'Не запрашивалось';
+        color = Colors.grey;
+        icon = Icons.info_outline;
+    }
+
+    return Row(
+      children: [
+        Icon(icon, color: color, size: 16),
+        const Gap(4),
+        Text(
+          message,
+          style: AppTextStyles.fs14w500.copyWith(color: color),
+        ),
+      ],
+    );
   }
-
-  return Row(
-    children: [
-      Icon(icon, color: color, size: 16),
-      const Gap(4),
-      Text(
-        message,
-        style: AppTextStyles.fs14w500.copyWith(color: color),
-      ),
-    ],
-  );
-}
 }

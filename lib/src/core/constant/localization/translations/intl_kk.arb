@@ -177,5 +177,8 @@
   "specify_expiry_date": "Жарамдылық мерзімін көрсетіңіз",
   "specify_cardholder_name": "Карта иесінің атын көрсетіңіз",
   "card_added": "Карта қосылды",
-  "error": "Қате:"
+  "error": "Қате:",
+  "noMessagesYet": "Әзірге хабарламалар жоқ",
+  "writeAComment": "Пікір жазыңыз...",
+  "chatWithCompany": "Компаниямен чат"
 }

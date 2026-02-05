@@ -562,4 +562,13 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get error => 'Xatolik:';
+
+  @override
+  String get noMessagesYet => 'Hozircha xabarlar yo‘q';
+
+  @override
+  String get writeAComment => 'Izoh yozing...';
+
+  @override
+  String get chatWithCompany => 'Kompaniya bilan chat';
 }

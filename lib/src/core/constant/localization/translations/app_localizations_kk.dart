@@ -561,4 +561,13 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get error => 'Қате:';
+
+  @override
+  String get noMessagesYet => 'Әзірге хабарламалар жоқ';
+
+  @override
+  String get writeAComment => 'Пікір жазыңыз...';
+
+  @override
+  String get chatWithCompany => 'Компаниямен чат';
 }

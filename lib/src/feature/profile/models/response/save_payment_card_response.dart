@@ -15,7 +15,7 @@ class SavedPaymentCardResponse with _$SavedPaymentCardResponse {
     @JsonKey(name: 'expYear') required String expYear,
     @JsonKey(name: 'isDefault') required bool isDefault,
     @JsonKey(name: 'createdAt') required String createdAt, // если backend возвращает
-     @JsonKey(name: 'card_holder_name') required String cardHolderName,
+     @JsonKey(name: 'cardHolderName') required String cardHolderName,
   }) = _SavedPaymentCardResponse;
 
   factory SavedPaymentCardResponse.fromJson(Map<String, dynamic> json) 

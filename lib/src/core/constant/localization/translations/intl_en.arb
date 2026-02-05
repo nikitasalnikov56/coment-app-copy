@@ -177,5 +177,8 @@
   "specify_expiry_date": "Specify expiry date",
   "specify_cardholder_name": "Specify cardholder name",
   "card_added": "Card added",
-  "error": "Error:"
+  "error": "Error:",
+  "noMessagesYet": "No messages yet",
+"writeAComment": "Write a comment...",
+"chatWithCompany": "Chat with company"
 }

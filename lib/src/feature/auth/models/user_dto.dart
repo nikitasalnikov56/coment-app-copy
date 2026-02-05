@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
+
 @freezed
 class UserDTO with _$UserDTO {
   const factory UserDTO({
@@ -18,6 +19,7 @@ class UserDTO with _$UserDTO {
     String? avatar,
     CityDTO? city,
     LanguageDTO? language,
+    @JsonKey(defaultValue: 0)
     int? rating,
     @JsonKey(name: 'city_name') String? cityName,
     @JsonKey(name: 'created_at') DateTime? createdAt,

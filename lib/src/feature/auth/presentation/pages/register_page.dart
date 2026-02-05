@@ -275,7 +275,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Gap(70),
+                        const Gap(20),
                         Text(
                           context.localized.accountRegister, //accountRegister
                           style: AppTextStyles.fs26w700.copyWith(height: 1.25),

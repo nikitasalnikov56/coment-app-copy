@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
@@ -13,6 +14,7 @@ import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/core/utils/image_util.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/catalog/bloc/complain_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/like_comment_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/product_info_cubit.dart';
@@ -22,6 +24,7 @@ import 'package:coment_app/src/feature/catalog/widgets/review_avatar.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
 import 'package:coment_app/src/feature/main/presentation/widgets/popular_feedback_item.dart';
+import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,26 +88,26 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     super.initState();
   }
 
+  Future<LatLng?> _geocodeAddress(
+      String country, String city, String address) async {
+    final query = Uri.encodeComponent('$country, $city, $address');
+    final url =
+        'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1';
 
-Future<LatLng?> _geocodeAddress(String country, String city, String address) async {
-  final query = Uri.encodeComponent('$country, $city, $address');
-  final url = 'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1';
-
-  try {
-    final response = await Dio().get(url, options: Options(headers: {
-      'User-Agent': 'ComentApp/1.0 (contact@coment.app)'
-    }));
-    if (response.data is List && response.data.isNotEmpty) {
-      final lat = double.parse(response.data[0]['lat']);
-      final lon = double.parse(response.data[0]['lon']);
-      return LatLng(lat, lon);
+    try {
+      final response = await Dio().get(url,
+          options: Options(
+              headers: {'User-Agent': 'ComentApp/1.0 (contact@coment.app)'}));
+      if (response.data is List && response.data.isNotEmpty) {
+        final lat = double.parse(response.data[0]['lat']);
+        final lon = double.parse(response.data[0]['lon']);
+        return LatLng(lat, lon);
+      }
+    } catch (e) {
+      // ignore
     }
-  } catch (e) {
-    // ignore
+    return null;
   }
-  return null;
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +153,6 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
           } else {
             _geocodedPosition = Future.value(null);
           }
-
         },
       );
     }, builder: (context, state) {
@@ -169,6 +171,7 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
         ),
         loaded: (data) {
           return Scaffold(
+            floatingActionButton: _chatButtonIfApplicable(data),
             appBar: const CustomAppBar(),
             body: CustomScrollView(
               slivers: [
@@ -389,7 +392,6 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
                                 ),
                               ),
                             ),
-
                           const Gap(10),
                           InkWell(
                             onTap: () {
@@ -607,7 +609,7 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
             ),
           ),
         ),
-        
+
         const Gap(12),
       ],
     );
@@ -711,9 +713,13 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
               children: [
                 SvgPicture.asset(AssetsConstants.icLocation),
                 const Gap(6),
-                Text(
-                  data.address ?? '',
-                  style: AppTextStyles.fs14w500,
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/1.2),
+                  child: Text(
+                    data.address ?? '',
+                   maxLines: 2,
+                    style: AppTextStyles.fs14w500,
+                  ),
                 )
               ],
             ),
@@ -722,13 +728,13 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Row(
+              spacing: 6,
               children: [
                 SvgPicture.asset(AssetsConstants.phone),
-                const Gap(6),
                 Text(
                   data.organisationPhone ?? '',
                   style: AppTextStyles.fs14w500,
-                )
+                ),
               ],
             ),
           ),
@@ -780,101 +786,122 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
     );
   }
 
-  // Widget _mapWidget(ProductDTO data) {
-  //   final address = data.address ?? '';
-  //   final cityName = data.city?.name ?? '';
-  //   final countryName = data.country?.name ?? '';
-
-
-  //   return GestureDetector(
-  //     onTap: () {
-  //       context.router.push(
-  //         MapRoute(
-  //           country: countryName,
-  //           city: cityName,
-  //           address: address,
-  //         ),
-  //       );
-  //     },
-  //     child: Container(
-  //       height: 120,
-  //       decoration: BoxDecoration(
-  //         color: AppColors.grey2,
-  //         borderRadius: BorderRadius.circular(12),
-  //       ),
-  //       child: Center(
-  //         child: 
-  //         Text(
-  //           context.localized.showOnMap,
-  //           style: AppTextStyles.fs14w500.copyWith(
-  //             color: AppColors.mainColor,
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-Widget _mapWidget(ProductDTO data) {
-  return GestureDetector(
-    onTap: () {
-     
-      context.router.push(
-        MapRoute(
-          country: data.country?.name ?? '',
-          city: data.city?.name ?? '',
-          address: data.address ?? '',
+ 
+  Widget _mapWidget(ProductDTO data) {
+    return GestureDetector(
+      onTap: () {
+        context.router.push(
+          MapRoute(
+            country: data.country?.name ?? '',
+            city: data.city?.name ?? '',
+            address: data.address ?? '',
+          ),
+        );
+      },
+      child: Container(
+        height: 120,
+        decoration: BoxDecoration(
+          color: AppColors.grey2,
+          borderRadius: BorderRadius.circular(12),
         ),
-      );
-    },
-    child: Container(
-      height: 120,
-      decoration: BoxDecoration(
-        color: AppColors.grey2,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: FutureBuilder<LatLng?>(
-        future: _geocodedPosition,
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            final center = snapshot.data!;
-            return IgnorePointer(
-              child: FlutterMap(
-                options: MapOptions(
-                  initialCenter: center,
-                  initialZoom: 15,
-                  interactionOptions: const InteractionOptions(flags: InteractiveFlag.none),
+        child: FutureBuilder<LatLng?>(
+          future: _geocodedPosition,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data != null) {
+              final center = snapshot.data!;
+              return IgnorePointer(
+                child: FlutterMap(
+                  options: MapOptions(
+                    initialCenter: center,
+                    initialZoom: 15,
+                    interactionOptions:
+                        const InteractionOptions(flags: InteractiveFlag.none),
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'com.coment.app',
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: center,
+                          width: 24,
+                          height: 24,
+                          child: const Icon(Icons.location_on,
+                              color: Colors.red, size: 20),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                children: [
-                  TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.coment.app',
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: center,
-                        width: 24,
-                        height: 24,
-                        child: const Icon(Icons.location_on, color: Colors.red, size: 20),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          } else {
-            // fallback — текст, если геокодинг не удался
-            return Center(
-              child: Text(
-                context.localized.showOnMap,
-                style: AppTextStyles.fs14w500.copyWith(color: AppColors.mainColor),
-              ),
-            );
-          }
-        },
+              );
+            } else {
+              // fallback — текст, если геокодинг не удался
+              return Center(
+                child: Text(
+                  context.localized.showOnMap,
+                  style: AppTextStyles.fs14w500
+                      .copyWith(color: AppColors.mainColor),
+                ),
+              );
+            }
+          },
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
+  Widget? _chatButtonIfApplicable(ProductDTO data) {
+    final profileBloc = context.read<ProfileBLoC>();
+    final currentUser = profileBloc.state.maybeWhen(
+      orElse: () => null,
+      loaded: (user, _) => user,
+    );
+
+    if (data.isVerified != true || currentUser == null) return null;
+
+    final isOwner = currentUser.id == data.ownerId;
+    if (isOwner) return null;
+
+    // 🔑 Получаем токен из AuthDao
+    String? userJsonString = context.repository.authDao.user.value;
+    String? accessToken;
+
+    if (userJsonString != null &&
+        userJsonString.isNotEmpty &&
+        userJsonString != 'null') {
+      try {
+        final userDataMap = jsonDecode(userJsonString) as Map<String, dynamic>;
+        final userFromStorage = UserDTO.fromJson(userDataMap);
+        accessToken = userFromStorage.accessToken;
+      } catch (e) {
+        print('❌ Failed to parse user from storage: $e');
+      }
+    }
+
+    if (accessToken == null) {
+      return null; // Скрываем кнопку, если токена нет
+    }
+
+    return FloatingActionButton(
+      backgroundColor: AppColors.mainColor,
+      onPressed: () {
+        context.router.push(
+          ChatRoute(
+            companyId: data.id ?? 0,
+            companyName: data.name ?? '',
+            accessToken: accessToken ?? '',
+            currentUser: currentUser,
+          ),
+        );
+      },
+      child: SvgPicture.asset(
+        AssetsConstants.message,
+        color: AppColors.white,
+        width: 25,
+      ),
+    );
+  }
 }

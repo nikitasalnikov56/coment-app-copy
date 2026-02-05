@@ -560,4 +560,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get error => 'Ошибка:';
+
+  @override
+  String get noMessagesYet => 'Сообщений пока нет';
+
+  @override
+  String get writeAComment => 'Напишите комментарий...';
+
+  @override
+  String get chatWithCompany => 'Чат с компанией';
 }

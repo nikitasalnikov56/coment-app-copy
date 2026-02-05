@@ -4,23 +4,23 @@ import 'package:coment_app/src/feature/profile/presentation/widgets/add_payment_
 import 'package:coment_app/src/feature/profile/presentation/widgets/make_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:payment_card/payment_card.dart';
+// import 'package:payment_card/payment_card.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/profile/bloc/payment_cubit.dart';
 
 extension BrandToCardNetwork on String {
-  CardNetwork toCardNetwork() {
-    switch (this) {
-      case 'visa':
-        return CardNetwork.visa;
-      case 'mastercard':
-        return CardNetwork.mastercard;
-      // Другие бренды → CardNetwork.other (т.к. нет unionpay/humo/uzcard в пакете)
-      default:
-        return CardNetwork.other;
-    }
-  }
+  // CardNetwork toCardNetwork() {
+  //   switch (this) {
+  //     case 'visa':
+  //       return CardNetwork.visa;
+  //     case 'mastercard':
+  //       return CardNetwork.mastercard;
+  //     // Другие бренды → CardNetwork.other (т.к. нет unionpay/humo/uzcard в пакете)
+  //     default:
+  //       return CardNetwork.other;
+  //   }
+  // }
 
   Color getCardColor() {
     switch (this) {

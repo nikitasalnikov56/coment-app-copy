@@ -176,5 +176,8 @@
   "specify_expiry_date": "Amal qilish muddatini ko'rsating",
   "specify_cardholder_name": "Karta egasining ismini ko'rsating",
   "card_added": "Karta qo'shildi",
-  "error": "Xatolik:"
+  "error": "Xatolik:",
+  "noMessagesYet": "Hozircha xabarlar yo‘q",
+  "writeAComment": "Izoh yozing...",
+  "chatWithCompany": "Kompaniya bilan chat"
 }

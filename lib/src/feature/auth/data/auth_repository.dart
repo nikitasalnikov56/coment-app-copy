@@ -222,7 +222,7 @@
 //     // 1. Читаем текущий токен
 //     final refreshToken = await _secureStorage.read(key: 'refresh_token');
 //     log('READ refresh_token: $refreshToken', name: 'REFRESH');
-    
+
 //     if (refreshToken == null) throw Exception('No refresh token');
 
 //     // 2. Делаем запрос (теперь ответ будет содержать новый refresh_token)
@@ -239,9 +239,9 @@
 //     final userStr = _authDao.user.value;
 //     if (userStr != null) {
 //       final userMap = jsonDecode(userStr) as Map<String, dynamic>;
-      
+
 //       userMap['access_token'] = response['access_token'];
-      
+
 //       // Если бэкенд не возвращает refresh_token внутри user, можно обновить его и тут для консистентности,
 //       // но главное - это secureStorage.
 //       if (newRefreshToken != null) {
@@ -340,6 +340,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:coment_app/src/core/utils/jwt_parser.dart';
 import 'package:coment_app/src/feature/auth/data/auth_remote_ds.dart';
 import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
@@ -396,7 +397,7 @@ abstract interface class IAuthRepository {
   Future<List<Map<String, dynamic>>> getForceUpdateVersion();
 
   Future sendDeviceToken();
-  
+
   Future<void> refreshAccessToken();
 }
 
@@ -512,11 +513,12 @@ class AuthRepositoryImpl implements IAuthRepository {
         recaptchaToken: recaptchaToken,
       );
       // Сохраняем refresh в secure storage
-      await _secureStorage.write(key: 'refresh_token', value: user.refreshToken);
-      
+      await _secureStorage.write(
+          key: 'refresh_token', value: user.refreshToken);
+
       // Сохраняем UserDTO в SharedPrefs
       await _authDao.user.setValue(jsonEncode(user.toJson()));
-      
+
       log('Login successful, user: $user', name: 'auth repo');
       return user;
     } catch (e) {
@@ -530,7 +532,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     // 1. Читаем текущий токен
     final refreshToken = await _secureStorage.read(key: 'refresh_token');
     log('READ refresh_token: $refreshToken', name: 'REFRESH');
-    
+
     if (refreshToken == null) throw Exception('No refresh token');
 
     // 2. Делаем запрос (теперь ответ содержит новый refresh_token)
@@ -547,11 +549,33 @@ class AuthRepositoryImpl implements IAuthRepository {
     final userStr = _authDao.user.value;
     if (userStr != null) {
       final userMap = jsonDecode(userStr) as Map<String, dynamic>;
-      
+      final newAccessToken = response['access_token'] as String?;
+      if (newAccessToken != null) {
+        userMap['access_token'] = newAccessToken;
+        // 🔥 ПАРСИМ НОВЫЙ ТОКЕН И ОБНОВЛЯЕМ ID И РОЛЬ
+        final payload = JwtParser.parsePayload(newAccessToken);
+        if (payload != null) {
+          final userId = payload['sub'] as int?;
+          final role = payload['role'] as String?;
+
+          if (userId != null && userId > 0) {
+            userMap['id'] = userId;
+          }
+          if (role != null) {
+            userMap['role'] = role;
+          }
+        }
+        if (newRefreshToken != null) {
+          userMap['refresh_token'] = newRefreshToken;
+        }
+
+        await _authDao.user.setValue(jsonEncode(userMap));
+      }
+
       userMap['access_token'] = response['access_token'];
-      
+
       if (newRefreshToken != null) {
-         userMap['refresh_token'] = newRefreshToken;
+        userMap['refresh_token'] = newRefreshToken;
       }
 
       await _authDao.user.setValue(jsonEncode(userMap));
@@ -598,10 +622,11 @@ class AuthRepositoryImpl implements IAuthRepository {
         recaptchaToken: recaptchaToken,
         role: role,
       );
-      
-      await _secureStorage.write(key: 'refresh_token', value: user.refreshToken);
+
+      await _secureStorage.write(
+          key: 'refresh_token', value: user.refreshToken);
       log('SAVED refresh_token: ${user.refreshToken}', name: 'AUTH');
-      
+
       await _authDao.user.setValue(jsonEncode(user.toJson()));
       return user;
     } catch (e) {

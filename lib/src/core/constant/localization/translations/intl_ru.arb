@@ -177,6 +177,9 @@
   "specify_expiry_date": "Укажите срок действия",
   "specify_cardholder_name": "Укажите имя владельца",
   "card_added": "Карта добавлена",
-  "error": "Ошибка:"
+  "error": "Ошибка:",
+  "noMessagesYet": "Сообщений пока нет",
+  "writeAComment": "Напишите комментарий...",
+  "chatWithCompany": "Чат с компанией"
 
 }

@@ -1642,6 +1642,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error:'**
   String get error;
+
+  /// No description provided for @noMessagesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessagesYet;
+
+  /// No description provided for @writeAComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a comment...'**
+  String get writeAComment;
+
+  /// No description provided for @chatWithCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with company'**
+  String get chatWithCompany;
 }
 
 class _AppLocalizationsDelegate
@@ -2249,6 +2267,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error => 'Error:';
+
+  @override
+  String get noMessagesYet => 'No messages yet';
+
+  @override
+  String get writeAComment => 'Write a comment...';
+
+  @override
+  String get chatWithCompany => 'Chat with company';
 }
 
 
@@ -2818,6 +2845,15 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get error => 'Қате:';
+
+  @override
+  String get noMessagesYet => 'Әзірге хабарламалар жоқ';
+
+  @override
+  String get writeAComment => 'Пікір жазыңыз...';
+
+  @override
+  String get chatWithCompany => 'Компаниямен чат';
 }
 
 
@@ -3386,6 +3422,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get error => 'Ошибка:';
+
+  @override
+  String get noMessagesYet => 'Сообщений пока нет';
+
+  @override
+  String get writeAComment => 'Напишите комментарий...';
+
+  @override
+  String get chatWithCompany => 'Чат с компанией';
 }
 
 
@@ -3956,6 +4001,15 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get error => 'Xatolik:';
+
+  @override
+  String get noMessagesYet => 'Hozircha xabarlar yo‘q';
+
+  @override
+  String get writeAComment => 'Izoh yozing...';
+
+  @override
+  String get chatWithCompany => 'Kompaniya bilan chat';
 }
 
 
@@ -4508,6 +4562,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get error => '错误：';
+
+  @override
+  String get noMessagesYet => '暂无消息';
+
+  @override
+  String get writeAComment => '写评论...';
+
+  @override
+  String get chatWithCompany => '与公司聊天';
 }
 
 
@@ -4693,7 +4756,10 @@ lib\src\core\constant\localization\translations\intl_en.arb
   "specify_expiry_date": "Specify expiry date",
   "specify_cardholder_name": "Specify cardholder name",
   "card_added": "Card added",
-  "error": "Error:"
+  "error": "Error:",
+  "noMessagesYet": "No messages yet",
+"writeAComment": "Write a comment...",
+"chatWithCompany": "Chat with company"
 }
 
 
@@ -4878,7 +4944,10 @@ lib\src\core\constant\localization\translations\intl_kk.arb
   "specify_expiry_date": "Жарамдылық мерзімін көрсетіңіз",
   "specify_cardholder_name": "Карта иесінің атын көрсетіңіз",
   "card_added": "Карта қосылды",
-  "error": "Қате:"
+  "error": "Қате:",
+  "noMessagesYet": "Әзірге хабарламалар жоқ",
+  "writeAComment": "Пікір жазыңыз...",
+  "chatWithCompany": "Компаниямен чат"
 }
 
 
@@ -5063,7 +5132,10 @@ lib\src\core\constant\localization\translations\intl_ru.arb
   "specify_expiry_date": "Укажите срок действия",
   "specify_cardholder_name": "Укажите имя владельца",
   "card_added": "Карта добавлена",
-  "error": "Ошибка:"
+  "error": "Ошибка:",
+  "noMessagesYet": "Сообщений пока нет",
+  "writeAComment": "Напишите комментарий...",
+  "chatWithCompany": "Чат с компанией"
 
 }
 
@@ -5248,7 +5320,10 @@ lib\src\core\constant\localization\translations\intl_uz.arb
   "specify_expiry_date": "Amal qilish muddatini ko'rsating",
   "specify_cardholder_name": "Karta egasining ismini ko'rsating",
   "card_added": "Karta qo'shildi",
-  "error": "Xatolik:"
+  "error": "Xatolik:",
+  "noMessagesYet": "Hozircha xabarlar yo‘q",
+  "writeAComment": "Izoh yozing...",
+  "chatWithCompany": "Kompaniya bilan chat"
 }
 
 
@@ -5433,7 +5508,10 @@ lib\src\core\constant\localization\translations\intl_zh.arb
   "specify_expiry_date": "请输入有效期",
   "specify_cardholder_name": "请输入持卡人姓名",
   "card_added": "卡已添加",
-  "error": "错误："
+  "error": "错误：",
+  "noMessagesYet": "暂无消息",
+  "writeAComment": "写评论...",
+  "chatWithCompany": "与公司聊天"
 }
 
 
@@ -5511,6 +5589,8 @@ lib\src\core\containers\repository_storage.dart
 -----------------------------------------------
 import 'package:coment_app/src/feature/catalog/data/catalog_remote_ds.dart';
 import 'package:coment_app/src/feature/catalog/data/catalog_repository.dart';
+import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
+import 'package:coment_app/src/feature/chat/data/chat_repository_impl.dart';
 import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
 import 'package:coment_app/src/feature/profile/data/payment_repository.dart';
 import 'package:coment_app/src/feature/settings/data/app_settings_datasource.dart';
@@ -5552,6 +5632,9 @@ abstract class IRepositoryStorage {
   ICatalogRemoteDS get catalogRemoteDS;
   IPaymentRepository get paymentRepository;
   PaymentRemoteDs get paymentRemoteDS;
+
+
+  IChatRepository get chatRepository;
 
   void close();
 }
@@ -5666,15 +5749,20 @@ class RepositoryStorage implements IRepositoryStorage {
   IAuthDao get authDao => AuthDao(sharedPreferences: _sharedPreferences);
 
   @override
-PaymentRemoteDs get paymentRemoteDS => PaymentRemoteDsImpl(
-      restClient: restClient,
-    );
+  PaymentRemoteDs get paymentRemoteDS => PaymentRemoteDsImpl(
+        restClient: restClient,
+      );
 
-@override
-IPaymentRepository get paymentRepository => PaymentRepositoryImpl(
-      remoteDS: paymentRemoteDS,
-      authRepository: authRepository, // ← уже есть
-    );
+  @override
+  IPaymentRepository get paymentRepository => PaymentRepositoryImpl(
+        remoteDS: paymentRemoteDS,
+        authRepository: authRepository, // ← уже есть
+      );
+
+
+  @override
+  IChatRepository get chatRepository => ChatRepositoryImpl(restClient);
+
 }
 
 
@@ -13968,7 +14056,8 @@ import 'package:stack_trace/stack_trace.dart';
 ///
 /// This is a zone-scoped logger, which means that it can be overridden
 /// in nested zones or during tests.
-RefinedLogger get logger => Zone.current[_loggerKey] as RefinedLogger? ?? _logger;
+RefinedLogger get logger =>
+    Zone.current[_loggerKey] as RefinedLogger? ?? _logger;
 
 /// Runs [callback] with the given [logger] instance.
 ///
@@ -21591,6 +21680,7 @@ import 'package:coment_app/src/feature/catalog/presentation/pages/select_categor
 import 'package:coment_app/src/feature/catalog/presentation/pages/subcatalog_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/product_detail_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/feedback_detail_page.dart';
+import 'package:coment_app/src/feature/chat/presentation/chat_page.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/main_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
@@ -21697,7 +21787,11 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: SelectCategoriesRoute.page),
         AutoRoute(page: LeaveFeedbackDetailRoute.page),
         AutoRoute(page: MapRoute.page),
+
+      //chat
+        AutoRoute(page: ChatRoute.page),
       ];
+ 
 }
 
 @RoutePage(name: 'BaseMainFeedTab')
@@ -21714,6 +21808,7 @@ class BaseCatalogPage extends AutoRouter {
 class BaseProfilePage extends AutoRouter {
   const BaseProfilePage({super.key});
 }
+
 
 
 
@@ -21825,6 +21920,72 @@ class CatalogRoute extends PageRouteInfo<void> {
       return WrappedRoute(child: const CatalogPage());
     },
   );
+}
+
+/// generated route for
+/// [ChatPage]
+class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
+  ChatRoute({
+    Key? key,
+    required int companyId,
+    required String companyName,
+    required UserDTO currentUser,
+    required String accessToken,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatRoute.name,
+         args: ChatRouteArgs(
+           key: key,
+           companyId: companyId,
+           companyName: companyName,
+           currentUser: currentUser,
+           accessToken: accessToken,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatRouteArgs>();
+      return WrappedRoute(
+        child: ChatPage(
+          key: args.key,
+          companyId: args.companyId,
+          companyName: args.companyName,
+          currentUser: args.currentUser,
+          accessToken: args.accessToken,
+        ),
+      );
+    },
+  );
+}
+
+class ChatRouteArgs {
+  const ChatRouteArgs({
+    this.key,
+    required this.companyId,
+    required this.companyName,
+    required this.currentUser,
+    required this.accessToken,
+  });
+
+  final Key? key;
+
+  final int companyId;
+
+  final String companyName;
+
+  final UserDTO currentUser;
+
+  final String accessToken;
+
+  @override
+  String toString() {
+    return 'ChatRouteArgs{key: $key, companyId: $companyId, companyName: $companyName, currentUser: $currentUser, accessToken: $accessToken}';
+  }
 }
 
 /// generated route for
@@ -22423,7 +22584,7 @@ class MessageRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const MessagePage();
+      return WrappedRoute(child: const MessagePage());
     },
   );
 }
@@ -28253,6 +28414,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
+
 @freezed
 class UserDTO with _$UserDTO {
   const factory UserDTO({
@@ -28265,6 +28427,7 @@ class UserDTO with _$UserDTO {
     String? avatar,
     CityDTO? city,
     LanguageDTO? language,
+    @JsonKey(defaultValue: 0)
     int? rating,
     @JsonKey(name: 'city_name') String? cityName,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -28319,6 +28482,7 @@ mixin _$UserDTO {
   String? get avatar => throw _privateConstructorUsedError;
   CityDTO? get city => throw _privateConstructorUsedError;
   LanguageDTO? get language => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 0)
   int? get rating => throw _privateConstructorUsedError;
   @JsonKey(name: 'city_name')
   String? get cityName => throw _privateConstructorUsedError;
@@ -28359,7 +28523,7 @@ abstract class $UserDTOCopyWith<$Res> {
       @JsonKey(name: 'avatar_url') String? avatar,
       CityDTO? city,
       LanguageDTO? language,
-      int? rating,
+      @JsonKey(defaultValue: 0) int? rating,
       @JsonKey(name: 'city_name') String? cityName,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
@@ -28517,7 +28681,7 @@ abstract class _$$UserDTOImplCopyWith<$Res> implements $UserDTOCopyWith<$Res> {
       @JsonKey(name: 'avatar_url') String? avatar,
       CityDTO? city,
       LanguageDTO? language,
-      int? rating,
+      @JsonKey(defaultValue: 0) int? rating,
       @JsonKey(name: 'city_name') String? cityName,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
@@ -28643,7 +28807,7 @@ class _$UserDTOImpl implements _UserDTO {
       @JsonKey(name: 'avatar_url') this.avatar,
       this.city,
       this.language,
-      this.rating,
+      @JsonKey(defaultValue: 0) this.rating,
       @JsonKey(name: 'city_name') this.cityName,
       @JsonKey(name: 'created_at') this.createdAt,
       @JsonKey(name: 'updated_at') this.updatedAt,
@@ -28675,6 +28839,7 @@ class _$UserDTOImpl implements _UserDTO {
   @override
   final LanguageDTO? language;
   @override
+  @JsonKey(defaultValue: 0)
   final int? rating;
   @override
   @JsonKey(name: 'city_name')
@@ -28783,7 +28948,7 @@ abstract class _UserDTO implements UserDTO {
       @JsonKey(name: 'avatar_url') final String? avatar,
       final CityDTO? city,
       final LanguageDTO? language,
-      final int? rating,
+      @JsonKey(defaultValue: 0) final int? rating,
       @JsonKey(name: 'city_name') final String? cityName,
       @JsonKey(name: 'created_at') final DateTime? createdAt,
       @JsonKey(name: 'updated_at') final DateTime? updatedAt,
@@ -28814,6 +28979,7 @@ abstract class _UserDTO implements UserDTO {
   @override
   LanguageDTO? get language;
   @override
+  @JsonKey(defaultValue: 0)
   int? get rating;
   @override
   @JsonKey(name: 'city_name')
@@ -28873,7 +29039,7 @@ _$UserDTOImpl _$$UserDTOImplFromJson(Map<String, dynamic> json) =>
       language: json['language'] == null
           ? null
           : LanguageDTO.fromJson(json['language'] as Map<String, dynamic>),
-      rating: (json['rating'] as num?)?.toInt(),
+      rating: (json['rating'] as num?)?.toInt() ?? 0,
       cityName: json['city_name'] as String?,
       createdAt: json['created_at'] == null
           ? null
@@ -43725,6 +43891,7 @@ class _MapPageState extends State<MapPage> {
 lib\src\feature\catalog\presentation\pages\product_detail_page.dart
 -------------------------------------------------------------------
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
@@ -43739,6 +43906,7 @@ import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/core/utils/image_util.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/catalog/bloc/complain_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/like_comment_cubit.dart';
 import 'package:coment_app/src/feature/catalog/bloc/product_info_cubit.dart';
@@ -43748,6 +43916,7 @@ import 'package:coment_app/src/feature/catalog/widgets/review_avatar.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
 import 'package:coment_app/src/feature/main/presentation/widgets/popular_feedback_item.dart';
+import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43811,26 +43980,26 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     super.initState();
   }
 
+  Future<LatLng?> _geocodeAddress(
+      String country, String city, String address) async {
+    final query = Uri.encodeComponent('$country, $city, $address');
+    final url =
+        'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1';
 
-Future<LatLng?> _geocodeAddress(String country, String city, String address) async {
-  final query = Uri.encodeComponent('$country, $city, $address');
-  final url = 'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1';
-
-  try {
-    final response = await Dio().get(url, options: Options(headers: {
-      'User-Agent': 'ComentApp/1.0 (contact@coment.app)'
-    }));
-    if (response.data is List && response.data.isNotEmpty) {
-      final lat = double.parse(response.data[0]['lat']);
-      final lon = double.parse(response.data[0]['lon']);
-      return LatLng(lat, lon);
+    try {
+      final response = await Dio().get(url,
+          options: Options(
+              headers: {'User-Agent': 'ComentApp/1.0 (contact@coment.app)'}));
+      if (response.data is List && response.data.isNotEmpty) {
+        final lat = double.parse(response.data[0]['lat']);
+        final lon = double.parse(response.data[0]['lon']);
+        return LatLng(lat, lon);
+      }
+    } catch (e) {
+      // ignore
     }
-  } catch (e) {
-    // ignore
+    return null;
   }
-  return null;
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -43876,7 +44045,6 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
           } else {
             _geocodedPosition = Future.value(null);
           }
-
         },
       );
     }, builder: (context, state) {
@@ -43895,6 +44063,7 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
         ),
         loaded: (data) {
           return Scaffold(
+            floatingActionButton: _chatButtonIfApplicable(data),
             appBar: const CustomAppBar(),
             body: CustomScrollView(
               slivers: [
@@ -44115,7 +44284,6 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
                                 ),
                               ),
                             ),
-
                           const Gap(10),
                           InkWell(
                             onTap: () {
@@ -44333,7 +44501,7 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
             ),
           ),
         ),
-        
+
         const Gap(12),
       ],
     );
@@ -44448,13 +44616,13 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Row(
+              spacing: 6,
               children: [
                 SvgPicture.asset(AssetsConstants.phone),
-                const Gap(6),
                 Text(
                   data.organisationPhone ?? '',
                   style: AppTextStyles.fs14w500,
-                )
+                ),
               ],
             ),
           ),
@@ -44511,7 +44679,6 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
   //   final cityName = data.city?.name ?? '';
   //   final countryName = data.country?.name ?? '';
 
-
   //   return GestureDetector(
   //     onTap: () {
   //       context.router.push(
@@ -44529,7 +44696,7 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
   //         borderRadius: BorderRadius.circular(12),
   //       ),
   //       child: Center(
-  //         child: 
+  //         child:
   //         Text(
   //           context.localized.showOnMap,
   //           style: AppTextStyles.fs14w500.copyWith(
@@ -44540,69 +44707,123 @@ Future<LatLng?> _geocodeAddress(String country, String city, String address) asy
   //     ),
   //   );
   // }
-Widget _mapWidget(ProductDTO data) {
-  return GestureDetector(
-    onTap: () {
-     
-      context.router.push(
-        MapRoute(
-          country: data.country?.name ?? '',
-          city: data.city?.name ?? '',
-          address: data.address ?? '',
+  Widget _mapWidget(ProductDTO data) {
+    return GestureDetector(
+      onTap: () {
+        context.router.push(
+          MapRoute(
+            country: data.country?.name ?? '',
+            city: data.city?.name ?? '',
+            address: data.address ?? '',
+          ),
+        );
+      },
+      child: Container(
+        height: 120,
+        decoration: BoxDecoration(
+          color: AppColors.grey2,
+          borderRadius: BorderRadius.circular(12),
         ),
-      );
-    },
-    child: Container(
-      height: 120,
-      decoration: BoxDecoration(
-        color: AppColors.grey2,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: FutureBuilder<LatLng?>(
-        future: _geocodedPosition,
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            final center = snapshot.data!;
-            return IgnorePointer(
-              child: FlutterMap(
-                options: MapOptions(
-                  initialCenter: center,
-                  initialZoom: 15,
-                  interactionOptions: const InteractionOptions(flags: InteractiveFlag.none),
+        child: FutureBuilder<LatLng?>(
+          future: _geocodedPosition,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data != null) {
+              final center = snapshot.data!;
+              return IgnorePointer(
+                child: FlutterMap(
+                  options: MapOptions(
+                    initialCenter: center,
+                    initialZoom: 15,
+                    interactionOptions:
+                        const InteractionOptions(flags: InteractiveFlag.none),
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'com.coment.app',
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: center,
+                          width: 24,
+                          height: 24,
+                          child: const Icon(Icons.location_on,
+                              color: Colors.red, size: 20),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                children: [
-                  TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.coment.app',
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: center,
-                        width: 24,
-                        height: 24,
-                        child: const Icon(Icons.location_on, color: Colors.red, size: 20),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          } else {
-            // fallback — текст, если геокодинг не удался
-            return Center(
-              child: Text(
-                context.localized.showOnMap,
-                style: AppTextStyles.fs14w500.copyWith(color: AppColors.mainColor),
-              ),
-            );
-          }
-        },
+              );
+            } else {
+              // fallback — текст, если геокодинг не удался
+              return Center(
+                child: Text(
+                  context.localized.showOnMap,
+                  style: AppTextStyles.fs14w500
+                      .copyWith(color: AppColors.mainColor),
+                ),
+              );
+            }
+          },
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
+  Widget? _chatButtonIfApplicable(ProductDTO data) {
+    final profileBloc = context.read<ProfileBLoC>();
+    final currentUser = profileBloc.state.maybeWhen(
+      orElse: () => null,
+      loaded: (user, _) => user,
+    );
+
+    if (data.isVerified != true || currentUser == null) return null;
+
+    final isOwner = currentUser.id == data.ownerId;
+    if (isOwner) return null;
+
+    // 🔑 Получаем токен из AuthDao
+    String? userJsonString = context.repository.authDao.user.value;
+    String? accessToken;
+
+    if (userJsonString != null &&
+        userJsonString.isNotEmpty &&
+        userJsonString != 'null') {
+      try {
+        final userDataMap = jsonDecode(userJsonString) as Map<String, dynamic>;
+        final userFromStorage = UserDTO.fromJson(userDataMap);
+        accessToken = userFromStorage.accessToken;
+      } catch (e) {
+        print('❌ Failed to parse user from storage: $e');
+      }
+    }
+
+    if (accessToken == null) {
+      return null; // Скрываем кнопку, если токена нет
+    }
+
+    return FloatingActionButton(
+      backgroundColor: AppColors.mainColor,
+      onPressed: () {
+        context.router.push(
+          ChatRoute(
+            companyId: data.id ?? 0,
+            companyName: data.name ?? '',
+            accessToken: accessToken ?? '',
+            currentUser: currentUser,
+          ),
+        );
+      },
+      child: SvgPicture.asset(
+        AssetsConstants.message,
+        color: AppColors.white,
+        width: 25,
+      ),
+    );
+  }
 }
 
 
@@ -50484,6 +50705,2309 @@ class ThankYouBs extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+
+
+lib\src\feature\chat\bloc\chat_cubit.dart
+-----------------------------------------
+// lib/src/feature/chat/bloc/chat_cubit.dart
+import 'dart:async';
+
+import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
+import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'chat_cubit.freezed.dart';
+
+class ChatCubit extends Cubit<ChatState> {
+  final IChatRepository _repository;
+  final int _companyId;
+  final String _token;
+   late final StreamSubscription _messagesSubscription;
+
+  ChatCubit(this._repository, this._companyId, this._token) : super(const ChatState.initial()) {
+    _repository.connectToChat(_companyId, _token);
+    _messagesSubscription = _listenToMessages();
+  }
+    Stream<List<ChatMessageDTO>> get messagesStream => _repository.getMessagesStream(_companyId);
+
+  StreamSubscription _listenToMessages() {
+   return _repository.getMessagesStream(_companyId).listen((messages) {
+      emit(ChatState.loaded(messages));
+    }, onError: (error) {
+      emit(ChatState.error(error.toString()));
+    });
+  }
+
+  Future<void> sendMessage(String content) async {
+    if (content.trim().isEmpty) return;
+    try {
+      await _repository.sendMessage( content);
+    } catch (e) {
+      emit(ChatState.error(e.toString()));
+    }
+  }
+
+  // 🔥 КЛЮЧЕВОЙ МОМЕНТ: ЗАКРЫВАЕМ ВСЁ ПРИ УНИЧТОЖЕНИИ CUBIT
+  @override
+  Future<void> close() {
+    _messagesSubscription.cancel(); // Отписываемся от стрима
+    _repository.disconnect(); // Закрываем WebSocket
+    // ⚠️ НЕ вызываем _repository.dispose() здесь, если репозиторий используется где-то ещё!
+    return super.close();
+  }
+}
+
+@freezed
+class ChatState with _$ChatState {
+  const factory ChatState.initial() = _Initial;
+  const factory ChatState.loading() = _Loading;
+  const factory ChatState.loaded(List<ChatMessageDTO> messages) = _Loaded;
+  const factory ChatState.error(String message) = _Error;
+}
+
+
+lib\src\feature\chat\bloc\chat_cubit.freezed.dart
+-------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'chat_cubit.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$ChatState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(String message) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(String message)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChatStateCopyWith<$Res> {
+  factory $ChatStateCopyWith(ChatState value, $Res Function(ChatState) then) =
+      _$ChatStateCopyWithImpl<$Res, ChatState>;
+}
+
+/// @nodoc
+class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
+    implements $ChatStateCopyWith<$Res> {
+  _$ChatStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$ChatStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
+
+  @override
+  String toString() {
+    return 'ChatState.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Initial implements ChatState {
+  const factory _Initial() = _$InitialImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$ChatStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
+
+  @override
+  String toString() {
+    return 'ChatState.loading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loading implements ChatState {
+  const factory _Loading() = _$LoadingImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadedImplCopyWith<$Res> {
+  factory _$$LoadedImplCopyWith(
+          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
+      __$$LoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<ChatMessageDTO> messages});
+}
+
+/// @nodoc
+class __$$LoadedImplCopyWithImpl<$Res>
+    extends _$ChatStateCopyWithImpl<$Res, _$LoadedImpl>
+    implements _$$LoadedImplCopyWith<$Res> {
+  __$$LoadedImplCopyWithImpl(
+      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? messages = null,
+  }) {
+    return _then(_$LoadedImpl(
+      null == messages
+          ? _value._messages
+          : messages // ignore: cast_nullable_to_non_nullable
+              as List<ChatMessageDTO>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LoadedImpl implements _Loaded {
+  const _$LoadedImpl(final List<ChatMessageDTO> messages)
+      : _messages = messages;
+
+  final List<ChatMessageDTO> _messages;
+  @override
+  List<ChatMessageDTO> get messages {
+    if (_messages is EqualUnmodifiableListView) return _messages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_messages);
+  }
+
+  @override
+  String toString() {
+    return 'ChatState.loaded(messages: $messages)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadedImpl &&
+            const DeepCollectionEquality().equals(other._messages, _messages));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_messages));
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      __$$LoadedImplCopyWithImpl<_$LoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return loaded(messages);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return loaded?.call(messages);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(messages);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return loaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return loaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loaded implements ChatState {
+  const factory _Loaded(final List<ChatMessageDTO> messages) = _$LoadedImpl;
+
+  List<ChatMessageDTO> get messages;
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ErrorImplCopyWith<$Res> {
+  factory _$$ErrorImplCopyWith(
+          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
+      __$$ErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
+}
+
+/// @nodoc
+class __$$ErrorImplCopyWithImpl<$Res>
+    extends _$ChatStateCopyWithImpl<$Res, _$ErrorImpl>
+    implements _$$ErrorImplCopyWith<$Res> {
+  __$$ErrorImplCopyWithImpl(
+      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$ErrorImpl(
+      null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ErrorImpl implements _Error {
+  const _$ErrorImpl(this.message);
+
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'ChatState.error(message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorImpl &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return error?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Error implements ChatState {
+  const factory _Error(final String message) = _$ErrorImpl;
+
+  String get message;
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\chat\bloc\conversations_cubit.dart
+--------------------------------------------------
+// lib/src/feature/chat/cubit/conversations_cubit.dart
+import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'conversations_cubit.freezed.dart';
+
+
+class ConversationsCubit extends Cubit<ConversationsState> {
+  final IChatRepository _repository;
+
+  ConversationsCubit(this._repository) : super(const ConversationsState.initial());
+
+  Future<void> loadConversations(String token) async {
+    emit(const ConversationsState.loading());
+    try {
+      final conversations = await _repository.findConversationsForUser(token);
+      emit(ConversationsState.loaded(conversations));
+    } catch (e) {
+      emit(ConversationsState.error(e.toString()));
+    }
+  }
+}
+
+// lib/src/feature/chat/cubit/conversations_state.dart
+@freezed
+class ConversationsState with _$ConversationsState {
+  const factory ConversationsState.initial() = _Initial;
+  const factory ConversationsState.loading() = _Loading;
+  const factory ConversationsState.loaded(List<ConversationDTO> conversations) = _Loaded;
+  const factory ConversationsState.error(String message) = _Error;
+}
+
+
+lib\src\feature\chat\bloc\conversations_cubit.freezed.dart
+----------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'conversations_cubit.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$ConversationsState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ConversationDTO> conversations) loaded,
+    required TResult Function(String message) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ConversationDTO> conversations)? loaded,
+    TResult? Function(String message)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ConversationDTO> conversations)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ConversationsStateCopyWith<$Res> {
+  factory $ConversationsStateCopyWith(
+          ConversationsState value, $Res Function(ConversationsState) then) =
+      _$ConversationsStateCopyWithImpl<$Res, ConversationsState>;
+}
+
+/// @nodoc
+class _$ConversationsStateCopyWithImpl<$Res, $Val extends ConversationsState>
+    implements $ConversationsStateCopyWith<$Res> {
+  _$ConversationsStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$ConversationsStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
+
+  @override
+  String toString() {
+    return 'ConversationsState.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ConversationDTO> conversations) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ConversationDTO> conversations)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ConversationDTO> conversations)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Initial implements ConversationsState {
+  const factory _Initial() = _$InitialImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$ConversationsStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
+
+  @override
+  String toString() {
+    return 'ConversationsState.loading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ConversationDTO> conversations) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ConversationDTO> conversations)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ConversationDTO> conversations)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loading implements ConversationsState {
+  const factory _Loading() = _$LoadingImpl;
+}
+
+/// @nodoc
+abstract class _$$LoadedImplCopyWith<$Res> {
+  factory _$$LoadedImplCopyWith(
+          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
+      __$$LoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<ConversationDTO> conversations});
+}
+
+/// @nodoc
+class __$$LoadedImplCopyWithImpl<$Res>
+    extends _$ConversationsStateCopyWithImpl<$Res, _$LoadedImpl>
+    implements _$$LoadedImplCopyWith<$Res> {
+  __$$LoadedImplCopyWithImpl(
+      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? conversations = null,
+  }) {
+    return _then(_$LoadedImpl(
+      null == conversations
+          ? _value._conversations
+          : conversations // ignore: cast_nullable_to_non_nullable
+              as List<ConversationDTO>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LoadedImpl implements _Loaded {
+  const _$LoadedImpl(final List<ConversationDTO> conversations)
+      : _conversations = conversations;
+
+  final List<ConversationDTO> _conversations;
+  @override
+  List<ConversationDTO> get conversations {
+    if (_conversations is EqualUnmodifiableListView) return _conversations;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_conversations);
+  }
+
+  @override
+  String toString() {
+    return 'ConversationsState.loaded(conversations: $conversations)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadedImpl &&
+            const DeepCollectionEquality()
+                .equals(other._conversations, _conversations));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_conversations));
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      __$$LoadedImplCopyWithImpl<_$LoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ConversationDTO> conversations) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return loaded(conversations);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ConversationDTO> conversations)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return loaded?.call(conversations);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ConversationDTO> conversations)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(conversations);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return loaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return loaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (loaded != null) {
+      return loaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loaded implements ConversationsState {
+  const factory _Loaded(final List<ConversationDTO> conversations) =
+      _$LoadedImpl;
+
+  List<ConversationDTO> get conversations;
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ErrorImplCopyWith<$Res> {
+  factory _$$ErrorImplCopyWith(
+          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
+      __$$ErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
+}
+
+/// @nodoc
+class __$$ErrorImplCopyWithImpl<$Res>
+    extends _$ConversationsStateCopyWithImpl<$Res, _$ErrorImpl>
+    implements _$$ErrorImplCopyWith<$Res> {
+  __$$ErrorImplCopyWithImpl(
+      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$ErrorImpl(
+      null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ErrorImpl implements _Error {
+  const _$ErrorImpl(this.message);
+
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'ConversationsState.error(message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorImpl &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ConversationDTO> conversations) loaded,
+    required TResult Function(String message) error,
+  }) {
+    return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ConversationDTO> conversations)? loaded,
+    TResult? Function(String message)? error,
+  }) {
+    return error?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ConversationDTO> conversations)? loaded,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Error implements ConversationsState {
+  const factory _Error(final String message) = _$ErrorImpl;
+
+  String get message;
+
+  /// Create a copy of ConversationsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\chat\data\chat_repository.dart
+----------------------------------------------
+// lib/src/feature/chat/data/chat_repository.dart
+import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
+
+abstract class IChatRepository {
+  Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId);
+  Future<void> sendMessage(String content);
+  Future<void> connectToChat(int conversationId, String token);
+  Future<void> disconnect();
+    Future<List<ConversationDTO>> findConversationsForUser(String token);
+}
+
+
+lib\src\feature\chat\data\chat_repository_impl.dart
+---------------------------------------------------
+// lib/src/feature/chat/data/chat_repository_impl.dart
+import 'package:coment_app/src/core/rest_client/rest_client.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:coment_app/src/core/utils/refined_logger.dart';
+import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:rxdart/rxdart.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
+class ChatRepositoryImpl implements IChatRepository {
+  final IRestClient _restClient;
+  String? _currentToken;
+
+
+  // Состояние соединения
+  WebSocketChannel? _channel;
+  // final StreamController<List<ChatMessageDTO>> _messagesController = StreamController.broadcast();
+  final BehaviorSubject<List<ChatMessageDTO>> _messagesController =
+      BehaviorSubject.seeded([]);
+  int? _currentConversationId;
+  int? _currentCompanyId;
+
+  ChatRepositoryImpl(this._restClient);
+
+  @override
+  Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId) {
+    return _messagesController.stream;
+  }
+
+  Future<List<ChatMessageDTO>> _loadHistory(int companyId, String token) async {
+    try {
+      final response = await _restClient.get(
+        'conversations/$companyId/messages',
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      final items = (response['items'] as List?) ?? [];
+      final list = <ChatMessageDTO>[];
+      for (var item in items) {
+        try {
+          list.add(ChatMessageDTO.fromJson(item as Map<String, dynamic>));
+        } catch (e, stack) {
+          logger.error('Failed to parse message', error: e, stackTrace: stack);
+          // Пропускаем битое сообщение
+        }
+      }
+      return list;
+    } catch (e) {
+      logger.error('Load history failed', error: e);
+      return [];
+    }
+  }
+
+  @override
+  Future<void> connectToChat(int companyId, String token) async {
+    _currentToken = token;
+    _currentCompanyId = companyId;
+    final chatInfo = await _restClient.get(
+      'conversations/by-company/$companyId',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    // Проверьте, что companyId — это число, а не строка
+    print('companyId type: ${companyId.runtimeType}'); // должно быть int
+    final conversationId = chatInfo['id'] as int;
+
+    // if (_channel != null) {
+    //   if (_currentConversationId == conversationId) return; // уже подключены
+    //   await disconnect();
+    // }
+
+    _currentConversationId = conversationId;
+    final uri = Uri(
+      scheme: kIsWeb ? 'wss' : 'ws',
+      host: kIsWeb ? 'localhost' : '10.0.2.2',
+      port: kIsWeb ? 443 : 5000,
+      path: '/chat',
+      queryParameters: {'token': token},
+    );
+
+    try {
+      _channel = IOWebSocketChannel.connect(uri.toString());
+      _channel!.stream.listen(
+        _handleMessage,
+        onError: (error) {
+          logger.error('WebSocket error', error: error);
+          _messagesController.addError(error);
+        },
+        onDone: () {
+          logger.info('WebSocket connection closed');
+          _channel = null;
+        },
+      );
+
+      // Присоединяемся к чату
+      _sendJson({
+        'event': 'join',
+        'data': {'conversationId': conversationId}
+      });
+    } catch (e) {
+      logger.error('Failed to connect to chat', error: e);
+      _messagesController.addError(e);
+    }
+  }
+
+  void _handleMessage(dynamic data) {
+    try {
+      final message = jsonDecode(data as String);
+      final event = message['event'];
+
+      switch (event) {
+        case 'message.new':
+          final msgData = message['data'];
+          final sender = UserDTO.fromJson(msgData['sender']);
+          final newMessage = ChatMessageDTO(
+            id: msgData['id'],
+            content: msgData['content'],
+            createdAt: DateTime.parse(msgData['createdAt']),
+            sender: sender,
+            conversationId: msgData['conversationId'],
+          );
+          final current = _messagesController.value;
+          _messagesController.add([newMessage, ...current]);
+          break;
+        case 'joined':
+          if (_currentCompanyId != null && _currentToken != null) {
+            _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
+              _messagesController.add(history);
+            }).catchError((e) {
+              logger.error('Failed to load history', error: e);
+            });
+          }
+          break;
+        case 'error':
+          _messagesController
+              .addError(message['data']?.toString() ?? 'Unknown error');
+          break;
+      }
+    } catch (e) {
+      logger.error('Error handling WebSocket message', error: e);
+    }
+  }
+
+  @override
+  Future<void> sendMessage(String content) async {
+    if (_channel == null || _currentConversationId == null) {
+      throw Exception('Not connected to any conversation');
+    }
+    _sendJson({
+      'event': 'message.send',
+      'data': {
+        'conversationId': _currentConversationId,
+        'content': content.trim()
+      },
+    });
+  }
+
+  void _sendJson(Map<String, dynamic> data) {
+    if (_channel != null) {
+      _channel!.sink.add(jsonEncode(data));
+    }
+  }
+
+  @override
+  Future<void> disconnect() async {
+    if (_channel != null) {
+      await _channel!.sink.close();
+      _channel = null;
+      _currentConversationId = null;
+    }
+  }
+
+  // // Опционально: закрыть стрим при уничтожении
+  // void dispose() {
+  //   _messagesController.close();
+  //   disconnect();
+  // }
+
+  // В ChatRepositoryImpl
+  @override
+  Future<List<ConversationDTO>> findConversationsForUser(String token) async {
+   
+
+    final response = await _restClient.get(
+      'conversations',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    final items = (response['data'] as List?) ?? [];
+    return items
+        .map((e) => ConversationDTO.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+}
+
+
+
+lib\src\feature\chat\model\chat_message_dto.dart
+------------------------------------------------
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'chat_message_dto.freezed.dart';
+part 'chat_message_dto.g.dart';
+
+
+@freezed
+class ChatMessageDTO with _$ChatMessageDTO {
+  const factory ChatMessageDTO({
+    
+    required int id,
+    required String content,
+    required DateTime createdAt,
+    required UserDTO sender,
+     int? conversationId,
+  }) = _ChatMessageDTO;
+
+  factory ChatMessageDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChatMessageDTOFromJson(json);
+}
+
+
+
+
+lib\src\feature\chat\model\chat_message_dto.freezed.dart
+--------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'chat_message_dto.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+ChatMessageDTO _$ChatMessageDTOFromJson(Map<String, dynamic> json) {
+  return _ChatMessageDTO.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ChatMessageDTO {
+  int get id => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  UserDTO get sender => throw _privateConstructorUsedError;
+  int? get conversationId => throw _privateConstructorUsedError;
+
+  /// Serializes this ChatMessageDTO to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ChatMessageDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ChatMessageDTOCopyWith<ChatMessageDTO> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChatMessageDTOCopyWith<$Res> {
+  factory $ChatMessageDTOCopyWith(
+          ChatMessageDTO value, $Res Function(ChatMessageDTO) then) =
+      _$ChatMessageDTOCopyWithImpl<$Res, ChatMessageDTO>;
+  @useResult
+  $Res call(
+      {int id,
+      String content,
+      DateTime createdAt,
+      UserDTO sender,
+      int? conversationId});
+
+  $UserDTOCopyWith<$Res> get sender;
+}
+
+/// @nodoc
+class _$ChatMessageDTOCopyWithImpl<$Res, $Val extends ChatMessageDTO>
+    implements $ChatMessageDTOCopyWith<$Res> {
+  _$ChatMessageDTOCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ChatMessageDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? content = null,
+    Object? createdAt = null,
+    Object? sender = null,
+    Object? conversationId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      sender: null == sender
+          ? _value.sender
+          : sender // ignore: cast_nullable_to_non_nullable
+              as UserDTO,
+      conversationId: freezed == conversationId
+          ? _value.conversationId
+          : conversationId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+
+  /// Create a copy of ChatMessageDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserDTOCopyWith<$Res> get sender {
+    return $UserDTOCopyWith<$Res>(_value.sender, (value) {
+      return _then(_value.copyWith(sender: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ChatMessageDTOImplCopyWith<$Res>
+    implements $ChatMessageDTOCopyWith<$Res> {
+  factory _$$ChatMessageDTOImplCopyWith(_$ChatMessageDTOImpl value,
+          $Res Function(_$ChatMessageDTOImpl) then) =
+      __$$ChatMessageDTOImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      String content,
+      DateTime createdAt,
+      UserDTO sender,
+      int? conversationId});
+
+  @override
+  $UserDTOCopyWith<$Res> get sender;
+}
+
+/// @nodoc
+class __$$ChatMessageDTOImplCopyWithImpl<$Res>
+    extends _$ChatMessageDTOCopyWithImpl<$Res, _$ChatMessageDTOImpl>
+    implements _$$ChatMessageDTOImplCopyWith<$Res> {
+  __$$ChatMessageDTOImplCopyWithImpl(
+      _$ChatMessageDTOImpl _value, $Res Function(_$ChatMessageDTOImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChatMessageDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? content = null,
+    Object? createdAt = null,
+    Object? sender = null,
+    Object? conversationId = freezed,
+  }) {
+    return _then(_$ChatMessageDTOImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      sender: null == sender
+          ? _value.sender
+          : sender // ignore: cast_nullable_to_non_nullable
+              as UserDTO,
+      conversationId: freezed == conversationId
+          ? _value.conversationId
+          : conversationId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ChatMessageDTOImpl implements _ChatMessageDTO {
+  const _$ChatMessageDTOImpl(
+      {required this.id,
+      required this.content,
+      required this.createdAt,
+      required this.sender,
+      this.conversationId});
+
+  factory _$ChatMessageDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChatMessageDTOImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final String content;
+  @override
+  final DateTime createdAt;
+  @override
+  final UserDTO sender;
+  @override
+  final int? conversationId;
+
+  @override
+  String toString() {
+    return 'ChatMessageDTO(id: $id, content: $content, createdAt: $createdAt, sender: $sender, conversationId: $conversationId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChatMessageDTOImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.content, content) || other.content == content) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.sender, sender) || other.sender == sender) &&
+            (identical(other.conversationId, conversationId) ||
+                other.conversationId == conversationId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, content, createdAt, sender, conversationId);
+
+  /// Create a copy of ChatMessageDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChatMessageDTOImplCopyWith<_$ChatMessageDTOImpl> get copyWith =>
+      __$$ChatMessageDTOImplCopyWithImpl<_$ChatMessageDTOImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ChatMessageDTOImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ChatMessageDTO implements ChatMessageDTO {
+  const factory _ChatMessageDTO(
+      {required final int id,
+      required final String content,
+      required final DateTime createdAt,
+      required final UserDTO sender,
+      final int? conversationId}) = _$ChatMessageDTOImpl;
+
+  factory _ChatMessageDTO.fromJson(Map<String, dynamic> json) =
+      _$ChatMessageDTOImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  String get content;
+  @override
+  DateTime get createdAt;
+  @override
+  UserDTO get sender;
+  @override
+  int? get conversationId;
+
+  /// Create a copy of ChatMessageDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ChatMessageDTOImplCopyWith<_$ChatMessageDTOImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\chat\model\chat_message_dto.g.dart
+--------------------------------------------------
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'chat_message_dto.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$ChatMessageDTOImpl _$$ChatMessageDTOImplFromJson(Map<String, dynamic> json) =>
+    _$ChatMessageDTOImpl(
+      id: (json['id'] as num).toInt(),
+      content: json['content'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      sender: UserDTO.fromJson(json['sender'] as Map<String, dynamic>),
+      conversationId: (json['conversationId'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$ChatMessageDTOImplToJson(
+        _$ChatMessageDTOImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'content': instance.content,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'sender': instance.sender,
+      'conversationId': instance.conversationId,
+    };
+
+
+
+lib\src\feature\chat\model\conversation_dto.dart
+------------------------------------------------
+// lib/src/feature/chat/model/conversation_dto.dart
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+
+class ConversationDTO {
+  final int id;
+  final String? title;
+  final ChatMessageDTO? lastMessage;
+  final List<UserDTO> participants;
+
+  ConversationDTO({
+    required this.id,
+    this.title,
+    this.lastMessage,
+    required this.participants,
+  });
+
+  factory ConversationDTO.fromJson(Map<String, dynamic> json) {
+    return ConversationDTO(
+      id: json['id'] as int? ?? 0,
+      title: json['title'] as String?,
+      lastMessage: json['lastMessage'] != null
+          ? ChatMessageDTO.fromJson(json['lastMessage'] as Map<String, dynamic>)
+          : null,
+      participants: (json['participants'] as List?)
+              ?.map((e) => UserDTO.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+
+lib\src\feature\chat\presentation\chat_page.dart
+------------------------------------------------
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/constant/assets_constants.dart';
+import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
+import 'package:coment_app/src/core/theme/resources.dart';
+import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
+import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
+import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+
+@RoutePage()
+class ChatPage extends StatefulWidget implements AutoRouteWrapper {
+  const ChatPage({
+    super.key,
+    required this.companyId,
+    required this.companyName,
+    required this.currentUser,
+    required this.accessToken,
+  });
+
+  final int companyId;
+  final String companyName;
+  final String accessToken;
+  final UserDTO currentUser;
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ChatCubit(
+        context.repository.chatRepository,
+        companyId,
+        accessToken,
+      ),
+      child: this,
+    );
+  }
+}
+
+class _ChatPageState extends State<ChatPage> {
+  final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ChatCubit, ChatState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          orElse: () {},
+          error: (message) {
+            Toaster.showErrorTopShortToast(context, message);
+          },
+        );
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: widget.companyName,
+           
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: StreamBuilder<List<ChatMessageDTO>>(
+                  stream: context.read<ChatCubit>().messagesStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text(
+                          context.localized.noMessagesYet,
+                          style: AppTextStyles.fs16w400,
+                        ),
+                      );
+                    }
+
+                    final messages = snapshot.data!;
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (_scrollController.hasClients) {
+                        _scrollController.animateTo(
+                          _scrollController.position.minScrollExtent,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                      }
+                    });
+
+                    return ListView.builder(
+                      controller: _scrollController,
+                      reverse: true,
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final message = messages[index];
+                        final isOwnMessage =
+                            message.sender.id == widget.currentUser.id;
+                        return _buildMessageBubble(message, isOwnMessage);
+                      },
+                    );
+                  },
+                ),
+              ),
+              _buildInputArea(),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: isOwnMessage ? 60 : 16,
+        right: isOwnMessage ? 16 : 60,
+        top: 8,
+        bottom: 8,
+      ),
+      child: Row(
+        mainAxisAlignment:
+            isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          if (!isOwnMessage)
+            Container(
+              width: 32,
+              height: 32,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.grey,
+              ),
+              child: message.sender.avatar != null
+                  ? CircleAvatar(
+                      backgroundImage: NetworkImage(message.sender.avatar!),
+                      radius: 16,
+                    )
+                  : const Icon(
+                      Icons.person,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+            ),
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+              margin: EdgeInsets.only(
+                left: !isOwnMessage ? 8 : 0,
+                right: isOwnMessage ? 8 : 0,
+              ),
+              decoration: BoxDecoration(
+                color: isOwnMessage
+                    ? AppColors.mainColor
+                    : AppColors.backgroundInputGrey,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Text(
+                message.content,
+                style: AppTextStyles.fs14w400.copyWith(
+                  color: isOwnMessage ? Colors.white : AppColors.text,
+                ),
+              ),
+            ),
+          ),
+          if (isOwnMessage)
+            Container(
+              width: 32,
+              height: 32,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.mainColor,
+              ),
+              child: widget.currentUser.avatar != null
+                  ? CircleAvatar(
+                      backgroundImage: NetworkImage(widget.currentUser.avatar!),
+                      radius: 16,
+                    )
+                  : const Icon(
+                      Icons.person,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputArea() {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              decoration: InputDecoration(
+                hintText: context.localized.writeAComment,
+                hintStyle: AppTextStyles.fs14w400.copyWith(
+                  color: AppColors.greyTextColor,
+                ),
+                filled: true,
+                fillColor: AppColors.backgroundInputGrey,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+              textInputAction: TextInputAction.send,
+              onSubmitted: (_) => _sendMessage(),
+            ),
+          ),
+          const Gap(8),
+          FloatingActionButton(
+            backgroundColor: AppColors.mainColor,
+            mini: true,
+            onPressed: _sendMessage,
+            child: SvgPicture.asset(
+              AssetsConstants.icSend,
+              color: Colors.white,
+              width: 20,
+              height: 20,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _sendMessage() {
+    final text = _textController.text.trim();
+    if (text.isEmpty) return;
+
+    context.read<ChatCubit>().sendMessage(text);
+    _textController.clear();
+  }
+}
+
+
+
+lib\src\feature\chat\presentation\widgets\chat_list_item.dart
+-------------------------------------------------------------
+// lib/src/feature/chat/presentation/widgets/chat_list_item.dart
+import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
+import 'package:coment_app/src/feature/app/router/app_router.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
+import 'package:flutter/material.dart';
+
+class ChatListItem extends StatelessWidget {
+  final ConversationDTO conversation;
+  // final VoidCallback onTap;
+
+  const ChatListItem({
+    required this.conversation,
+    // required this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Берём НЕ текущего пользователя, а другого участника
+    final currentUser = context.repository.authRepository.user!;
+    final currentUserId = currentUser.id;
+    final otherUser = conversation.participants.firstWhere(
+      (user) => user.id != currentUserId,
+      orElse: () => conversation.participants.first,
+    );
+    // Определяем название чата
+    String chatTitle;
+    if (currentUser.role == 'owner') {
+      // Владелец видит имя пользователя
+      chatTitle = otherUser.name ?? 'Пользователь';
+    } else {
+      // Пользователь видит название компании
+      // Извлекаем ID компании из title "company-497"
+      final match =
+          RegExp(r'company-(\d+)').firstMatch(conversation.title ?? '');
+      if (match != null) {
+        // Здесь можно сделать маппинг ID → название, но пока используем имя владельца
+        chatTitle = otherUser.name ?? 'Компания';
+      } else {
+        chatTitle = otherUser.name ?? 'Чат';
+      }
+    }
+
+    return ListTile(
+      leading:
+          CircleAvatar(child: Text(otherUser.name?.substring(0, 1) ?? '?')),
+      title: Text(chatTitle),
+      subtitle: Text(conversation.lastMessage?.content ?? ''),
+      trailing: conversation.lastMessage?.createdAt != null
+          ? Text(
+              '${conversation.lastMessage!.createdAt.hour}:${conversation.lastMessage!.createdAt.minute}')
+          : null,
+      onTap: (){
+        final companyId = _extractCompanyId(conversation.title);
+        if (companyId == null) return;
+          context.router.push(
+          ChatRoute(
+            companyId: companyId,
+            companyName: chatTitle, // ← правильное название
+            currentUser: currentUser,
+            accessToken: currentUser.accessToken!,
+          ),
+        );
+      },
+    );
+  }
+  int? _extractCompanyId(String? title) {
+    final match = RegExp(r'company-(\d+)').firstMatch(title ?? '');
+    return match != null ? int.parse(match.group(1)!) : null;
   }
 }
 
@@ -58952,6 +61476,8 @@ class ProductDTO with _$ProductDTO {
     List<BranchesDTO>? branches,
     List<FeedbackDTO>? feedback,
     @JsonKey(name: 'created_at') String? createdAt,
+    bool? isVerified,
+     int? ownerId,
   }) = _ProductDTO;
 
   factory ProductDTO.fromJson(Map<String, dynamic> json) => _$ProductDTOFromJson(json);
@@ -59040,6 +61566,8 @@ mixin _$ProductDTO {
   List<FeedbackDTO>? get feedback => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   String? get createdAt => throw _privateConstructorUsedError;
+  bool? get isVerified => throw _privateConstructorUsedError;
+  int? get ownerId => throw _privateConstructorUsedError;
 
   /// Serializes this ProductDTO to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59075,7 +61603,9 @@ abstract class $ProductDTOCopyWith<$Res> {
       @JsonKey(name: 'feedback_images') List<String>? feedbackImages,
       List<BranchesDTO>? branches,
       List<FeedbackDTO>? feedback,
-      @JsonKey(name: 'created_at') String? createdAt});
+      @JsonKey(name: 'created_at') String? createdAt,
+      bool? isVerified,
+      int? ownerId});
 
   $CatalogDTOCopyWith<$Res>? get catalog;
   $SubCatalogDTOCopyWith<$Res>? get subCatalog;
@@ -59117,6 +61647,8 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
     Object? branches = freezed,
     Object? feedback = freezed,
     Object? createdAt = freezed,
+    Object? isVerified = freezed,
+    Object? ownerId = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -59191,6 +61723,14 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String?,
+      isVerified: freezed == isVerified
+          ? _value.isVerified
+          : isVerified // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      ownerId: freezed == ownerId
+          ? _value.ownerId
+          : ownerId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -59291,7 +61831,9 @@ abstract class _$$ProductDTOImplCopyWith<$Res>
       @JsonKey(name: 'feedback_images') List<String>? feedbackImages,
       List<BranchesDTO>? branches,
       List<FeedbackDTO>? feedback,
-      @JsonKey(name: 'created_at') String? createdAt});
+      @JsonKey(name: 'created_at') String? createdAt,
+      bool? isVerified,
+      int? ownerId});
 
   @override
   $CatalogDTOCopyWith<$Res>? get catalog;
@@ -59336,6 +61878,8 @@ class __$$ProductDTOImplCopyWithImpl<$Res>
     Object? branches = freezed,
     Object? feedback = freezed,
     Object? createdAt = freezed,
+    Object? isVerified = freezed,
+    Object? ownerId = freezed,
   }) {
     return _then(_$ProductDTOImpl(
       id: freezed == id
@@ -59410,6 +61954,14 @@ class __$$ProductDTOImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String?,
+      isVerified: freezed == isVerified
+          ? _value.isVerified
+          : isVerified // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      ownerId: freezed == ownerId
+          ? _value.ownerId
+          : ownerId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -59435,7 +61987,9 @@ class _$ProductDTOImpl implements _ProductDTO {
       @JsonKey(name: 'feedback_images') final List<String>? feedbackImages,
       final List<BranchesDTO>? branches,
       final List<FeedbackDTO>? feedback,
-      @JsonKey(name: 'created_at') this.createdAt})
+      @JsonKey(name: 'created_at') this.createdAt,
+      this.isVerified,
+      this.ownerId})
       : _feedbackImages = feedbackImages,
         _branches = branches,
         _feedback = feedback;
@@ -59509,10 +62063,14 @@ class _$ProductDTOImpl implements _ProductDTO {
   @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
+  @override
+  final bool? isVerified;
+  @override
+  final int? ownerId;
 
   @override
   String toString() {
-    return 'ProductDTO(id: $id, name: $name, image: $image, branch: $branch, organisationPhone: $organisationPhone, websiteUrl: $websiteUrl, address: $address, catalog: $catalog, subCatalog: $subCatalog, country: $country, city: $city, rating: $rating, feedbackCount: $feedbackCount, ratingCounts: $ratingCounts, feedbackImages: $feedbackImages, branches: $branches, feedback: $feedback, createdAt: $createdAt)';
+    return 'ProductDTO(id: $id, name: $name, image: $image, branch: $branch, organisationPhone: $organisationPhone, websiteUrl: $websiteUrl, address: $address, catalog: $catalog, subCatalog: $subCatalog, country: $country, city: $city, rating: $rating, feedbackCount: $feedbackCount, ratingCounts: $ratingCounts, feedbackImages: $feedbackImages, branches: $branches, feedback: $feedback, createdAt: $createdAt, isVerified: $isVerified, ownerId: $ownerId)';
   }
 
   @override
@@ -59544,31 +62102,37 @@ class _$ProductDTOImpl implements _ProductDTO {
             const DeepCollectionEquality().equals(other._branches, _branches) &&
             const DeepCollectionEquality().equals(other._feedback, _feedback) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.isVerified, isVerified) ||
+                other.isVerified == isVerified) &&
+            (identical(other.ownerId, ownerId) || other.ownerId == ownerId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      image,
-      branch,
-      organisationPhone,
-      websiteUrl,
-      address,
-      catalog,
-      subCatalog,
-      country,
-      city,
-      rating,
-      feedbackCount,
-      ratingCounts,
-      const DeepCollectionEquality().hash(_feedbackImages),
-      const DeepCollectionEquality().hash(_branches),
-      const DeepCollectionEquality().hash(_feedback),
-      createdAt);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        name,
+        image,
+        branch,
+        organisationPhone,
+        websiteUrl,
+        address,
+        catalog,
+        subCatalog,
+        country,
+        city,
+        rating,
+        feedbackCount,
+        ratingCounts,
+        const DeepCollectionEquality().hash(_feedbackImages),
+        const DeepCollectionEquality().hash(_branches),
+        const DeepCollectionEquality().hash(_feedback),
+        createdAt,
+        isVerified,
+        ownerId
+      ]);
 
   /// Create a copy of ProductDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -59605,7 +62169,9 @@ abstract class _ProductDTO implements ProductDTO {
       @JsonKey(name: 'feedback_images') final List<String>? feedbackImages,
       final List<BranchesDTO>? branches,
       final List<FeedbackDTO>? feedback,
-      @JsonKey(name: 'created_at') final String? createdAt}) = _$ProductDTOImpl;
+      @JsonKey(name: 'created_at') final String? createdAt,
+      final bool? isVerified,
+      final int? ownerId}) = _$ProductDTOImpl;
 
   factory _ProductDTO.fromJson(Map<String, dynamic> json) =
       _$ProductDTOImpl.fromJson;
@@ -59652,6 +62218,10 @@ abstract class _ProductDTO implements ProductDTO {
   @override
   @JsonKey(name: 'created_at')
   String? get createdAt;
+  @override
+  bool? get isVerified;
+  @override
+  int? get ownerId;
 
   /// Create a copy of ProductDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -60431,6 +63001,8 @@ _$ProductDTOImpl _$$ProductDTOImplFromJson(Map<String, dynamic> json) =>
           ?.map((e) => FeedbackDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: json['created_at'] as String?,
+      isVerified: json['isVerified'] as bool?,
+      ownerId: (json['ownerId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ProductDTOImplToJson(_$ProductDTOImpl instance) =>
@@ -60453,6 +63025,8 @@ Map<String, dynamic> _$$ProductDTOImplToJson(_$ProductDTOImpl instance) =>
       'branches': instance.branches,
       'feedback': instance.feedback,
       'created_at': instance.createdAt,
+      'isVerified': instance.isVerified,
+      'ownerId': instance.ownerId,
     };
 
 _$BranchesDTOImpl _$$BranchesDTOImplFromJson(Map<String, dynamic> json) =>
@@ -73619,7 +76193,6 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:coment_app/src/feature/catalog/presentation/widgets/choose_image_bs.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
@@ -73837,14 +76410,12 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
               );
               _imageFiles.clear();
               _documentFiles.clear();
-              // setState(() {});
               setState(() {
                 _isSubmitted = true;
               });
               context.read<LoadDocumentsCubit>().fetchDocuments();
             },
             loaded: (urls) {
-              // _existingDocuments = urls;
               setState(() {
                 _existingDocuments = urls;
                 _isSubmitted = false; // сброс флага отправки
@@ -73863,6 +76434,7 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
         },
         builder: (BuildContext context, LoadDocumentsState state) {
           final verificationState = context.watch<VerificationCubit>().state;
+
           final isCompaniesLoading = verificationState.maybeWhen(
             loading: () => true,
             orElse: () => false,
@@ -73871,310 +76443,389 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
             loading: () => true,
             orElse: () => false,
           );
+
           return Scaffold(
             appBar: CustomAppBar(
               title: context.localized.loadDocuments,
               shape: const Border(
                   bottom:
                       BorderSide(color: AppColors.dividerColor, width: 0.5)),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.only(bottom: 12.0),
-              child: Column(
-                children: [
-                  // === Секция: Выбор компании ===
-
-                  if (_myCompanies.isEmpty && !isCompaniesLoading)
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text('У вас пока нет компаний.'),
-                    )
-                  else if (!isCompaniesLoading)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Выберите компанию для верификации',
-                            style: AppTextStyles.fs14w600
-                                .copyWith(color: AppColors.grey2),
-                          ),
-                          const Gap(8),
-                          SizedBox(
-                            height: 60,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _myCompanies.length,
-                              itemBuilder: (context, index) {
-                                final company = _myCompanies[index];
-                                final isSelected =
-                                    _selectedCompany?.id == company.id;
-                                return GestureDetector(
-                                  onTap: () => _selectCompany(company),
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 8),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? AppColors.mainColor
-                                          : AppColors.grey2,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? AppColors.mainColor
-                                            : AppColors.borderTextField,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        company.name ?? 'Без названия',
-                                        style: AppTextStyles.fs12w500.copyWith(
-                                          color: isSelected
-                                              ? Colors.white
-                                              : AppColors.text,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+              actions: [
+                if (_canAddMore)
+                  GestureDetector(
+                    onTap: _showAddOptions,
+                    child: Container(
+                      margin: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppColors.mainColor,
+                        border: Border.all(color: AppColors.mainColor),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Добавить файл',
+                        style: AppTextStyles.fs14w500.copyWith(
+                          color: AppColors.grey2,
+                        ),
                       ),
                     ),
+                  ),
+              ],
+            ),
+            bottomSheet: SendButtonWidget(
+              imageFiles: _imageFiles,
+              documentFiles: _documentFiles,
+              isCompaniesLoading: isCompaniesLoading,
+              isVerificationLoading: isVerificationLoading,
+              selectedCompany: _selectedCompany,
+            ),
+            body: Column(
+              children: [
+                // === Секция: Выбор компании ===
 
-                  // === Секция: Ранее загруженные документы (только просмотр) ===
-                  if (_existingDocuments.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Ранее загруженные документы',
-                            style: AppTextStyles.fs14w600
-                                .copyWith(color: AppColors.grey2),
+                if (_myCompanies.isEmpty && !isCompaniesLoading)
+                  Container(
+                    margin: const EdgeInsets.only(top: 24),
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.grey.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.dividerColor),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'У вас пока нет компаний.',
+                        style: AppTextStyles.fs14w500.copyWith(
+                          color: AppColors.greyTextColor2,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                else if (!isCompaniesLoading)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(24),
+                        Text(
+                          'Выберите компанию для верификации',
+                          style: AppTextStyles.fs14w600
+                              .copyWith(color: AppColors.greyTextColor2),
+                        ),
+                        const Gap(8),
+                        SizedBox(
+                          height: 60,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _myCompanies.length,
+                            itemBuilder: (context, index) {
+                              final company = _myCompanies[index];
+                              final isSelected =
+                                  _selectedCompany?.id == company.id;
+                              return GestureDetector(
+                                onTap: () => _selectCompany(company),
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? AppColors.mainColor
+                                        : AppColors.grey.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? AppColors.mainColor
+                                          : AppColors.borderTextField,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      company.name ?? 'Без названия',
+                                      style: AppTextStyles.fs12w500.copyWith(
+                                        color: isSelected
+                                            ? Colors.white
+                                            : AppColors.greyTextColor2,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                          const Gap(8),
-                          SizedBox(
-                            height: 150 * _existingDocuments.length.toDouble(),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              // physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _existingDocuments.length,
-                              itemBuilder: (context, index) {
-                                final url = _existingDocuments[index];
-                                final isImage = url.endsWith('.png') ||
-                                    url.endsWith('.jpg') ||
-                                    url.endsWith('.jpeg');
-                                final name = Uri.parse(url).pathSegments.last;
+                        ),
+                        const Gap(18),
+                      ],
+                    ),
+                  ),
+                const Divider(
+                  height: 5,
+                  thickness: 2,
+                  color: AppColors.greyTextColor,
+                ),
+                // === Секция: Ранее загруженные документы (только просмотр) ===
+                if (_existingDocuments.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(24),
+                        Text(
+                          'Ранее загруженные документы',
+                          style: AppTextStyles.fs14w600
+                              .copyWith(color: AppColors.greyTextColor2),
+                        ),
+                        const Gap(8),
+                        SizedBox(
+                          height: 150 * _existingDocuments.length.toDouble(),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            // physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _existingDocuments.length,
+                            itemBuilder: (context, index) {
+                              final url = _existingDocuments[index];
+                              final isImage = url.endsWith('.png') ||
+                                  url.endsWith('.jpg') ||
+                                  url.endsWith('.jpeg');
+                              final name = Uri.parse(url).pathSegments.last;
 
-                                return Slidable(
-                                  endActionPane: ActionPane(
-                                    motion: const StretchMotion(),
-                                    children: [
-                                      SlidableAction(
-                                        borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(12),
-                                          bottomRight: Radius.circular(12),
+                              return DecoratedBox(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: AppColors.borderColor,
+                                ),
+                                child: ListTile(
+                                  trailing: IconButton(
+                                    color: AppColors.red2,
+                                    onPressed: () async {
+                                      final url = _existingDocuments[index];
+                                      await context
+                                          .read<LoadDocumentsCubit>()
+                                          .deleteDocument(url);
+                                    },
+                                    icon: const Icon(
+                                      Icons.close_rounded,
+                                    ),
+                                  ),
+                                  leading: isImage
+                                      ? const Icon(Icons.image,
+                                          color: AppColors.mainColor)
+                                      : const Icon(
+                                          Icons.insert_drive_file,
+                                          color: AppColors.greyTextColor2,
                                         ),
-                                        onPressed: (ctx) async {
-                                          final url = _existingDocuments[index];
-                                          await context
-                                              .read<LoadDocumentsCubit>()
-                                              .deleteDocument(url);
-                                        },
-                                        backgroundColor: AppColors.red700,
-                                        icon: Icons.delete,
-                                        label: 'Delete',
+                                  title: Text(
+                                    name,
+                                    style: AppTextStyles.fs16w400,
+                                  ),
+                                  onTap: () async {
+                                    if (!await launchUrl(Uri.parse(url))) {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Не удалось открыть файл')),
+                                        );
+                                      }
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                const Divider(
+                  height: 5,
+                  thickness: 2,
+                  color: AppColors.greyTextColor,
+                ),
+                // Изображения — GridView
+                if (_imageFiles.isNotEmpty)
+                  Expanded(
+                    flex: (_imageFiles.length > 3) ? 2 : 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                        ),
+                        itemCount: _imageFiles.length,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.file(
+                                  _imageFiles[index],
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                ),
+                              ),
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: GestureDetector(
+                                  onTap: () => _removeImage(index),
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black54,
+                                    ),
+                                    child: const Icon(Icons.close,
+                                        color: Colors.white, size: 16),
+                                  ),
+                                ),
+                              ),
+                              if (_isSubmitted)
+                                const Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 8.0, bottom: 8),
+                                    child: Icon(Icons.check_circle,
+                                        color: AppColors.green, size: 20),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                // Документы — ListView
+                if (_documentFiles.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: SizedBox(
+                      height: 100 * _documentFiles.length.toDouble(),
+                      child: ListView.builder(
+                        itemCount: _documentFiles.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.insert_drive_file,
+                                  color: AppColors.greyTextColor2,
+                                ),
+                                title: Text(_getDisplayName(
+                                    _documentFiles[index].path)),
+                                trailing: SizedBox(
+                                  width: 80,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      if (_isSubmitted)
+                                        const Icon(Icons.check_circle,
+                                            color: AppColors.green, size: 20),
+                                      IconButton(
+                                        icon: const Icon(Icons.close),
+                                        onPressed: () => _removeDocument(index),
                                       ),
                                     ],
                                   ),
-                                  child: ListTile(
-                                    leading: isImage
-                                        ? const Icon(Icons.image,
-                                            color: AppColors.mainColor)
-                                        : const Icon(Icons.insert_drive_file),
-                                    title: Text(name),
-                                    onTap: () async {
-                                      if (!await launchUrl(Uri.parse(url))) {
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'Не удалось открыть файл')),
-                                          );
-                                        }
-                                      }
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  // Изображения — GridView
-                  if (_imageFiles.isNotEmpty)
-                    Expanded(
-                      flex: (_imageFiles.length > 3) ? 2 : 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 15,
-                            crossAxisSpacing: 15,
-                          ),
-                          itemCount: _imageFiles.length,
-                          itemBuilder: (context, index) {
-                            return Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    _imageFiles[index],
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                  ),
                                 ),
-                                Positioned(
-                                  top: 4,
-                                  right: 4,
-                                  child: GestureDetector(
-                                    onTap: () => _removeImage(index),
-                                    child: Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black54,
-                                      ),
-                                      child: const Icon(Icons.close,
-                                          color: Colors.white, size: 16),
-                                    ),
-                                  ),
-                                ),
-                                if (_isSubmitted)
-                                  const Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right: 8.0, bottom: 8),
-                                      child: Icon(Icons.check_circle,
-                                          color: AppColors.green, size: 20),
-                                    ),
-                                  ),
-                              ],
-                            );
-                          },
-                        ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                    ),
-
-                  // Документы — ListView
-                  if (_documentFiles.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SizedBox(
-                        height: 100 * _documentFiles.length.toDouble(),
-                        child: ListView.builder(
-                          itemCount: _documentFiles.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  leading: const Icon(Icons.insert_drive_file),
-                                  title: Text(_getDisplayName(
-                                      _documentFiles[index].path)),
-                                  trailing: SizedBox(
-                                    width: 80,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        if (_isSubmitted)
-                                          const Icon(Icons.check_circle,
-                                              color: AppColors.green, size: 20),
-                                        IconButton(
-                                          icon: const Icon(Icons.close),
-                                          onPressed: () =>
-                                              _removeDocument(index),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-
-                  // Кнопка "+"
-                  if (_canAddMore)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: GestureDetector(
-                        onTap: _showAddOptions,
-                        child: Container(
-                          height: 56,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.mainColor),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Center(
-                            child: Icon(Icons.add,
-                                color: AppColors.mainColor, size: 32),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  const SizedBox(height: 16),
-
-                  // Кнопка отправки
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: CustomButton(
-                      onPressed:
-                          (_imageFiles.isEmpty && _documentFiles.isEmpty) ||
-                                  _selectedCompany == null ||
-                                  isCompaniesLoading ||
-                                  isVerificationLoading
-                              ? null
-                              : () {
-                                  final allFiles = [
-                                    ..._imageFiles,
-                                    ..._documentFiles
-                                  ];
-                                  context
-                                      .read<LoadDocumentsCubit>()
-                                      .uploadDocuments(allFiles);
-                                },
-                      style: const ButtonStyle(),
-                      child: Text(context.localized.send),
                     ),
                   ),
-                ],
-              ),
+
+                // Кнопка "+"
+
+                // // Кнопка отправки
+
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 24, bottom: 24),
+                //   child: CustomButton(
+                //     onPressed:
+                //         (_imageFiles.isEmpty && _documentFiles.isEmpty) ||
+                //                 _selectedCompany == null ||
+                //                 isCompaniesLoading ||
+                //                 isVerificationLoading
+                //             ? null
+                //             : () {
+                //                 final allFiles = [
+                //                   ..._imageFiles,
+                //                   ..._documentFiles
+                //                 ];
+                //                 context
+                //                     .read<LoadDocumentsCubit>()
+                //                     .uploadDocuments(allFiles);
+                //               },
+                //     style: ButtonStyle(
+                //         minimumSize: WidgetStateProperty.all(
+                //             const Size(double.infinity, 56))),
+                //     child: Text(
+                //       context.localized.send,
+                //       style: AppTextStyles.fs16w500
+                //           .copyWith(color: Colors.white),
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class SendButtonWidget extends StatelessWidget {
+  const SendButtonWidget({
+    super.key,
+    required this.imageFiles,
+    required this.documentFiles,
+    required this.selectedCompany,
+    required this.isCompaniesLoading,
+    required this.isVerificationLoading,
+  });
+  final List<File> imageFiles;
+  final List<File> documentFiles;
+  final ProductDTO? selectedCompany;
+  final bool isCompaniesLoading;
+  final bool isVerificationLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, bottom: 24, left: 24, right: 24),
+      child: CustomButton(
+        onPressed: (imageFiles.isEmpty && documentFiles.isEmpty) ||
+                selectedCompany == null ||
+                isCompaniesLoading ||
+                isVerificationLoading
+            ? null
+            : () {
+                final allFiles = [...imageFiles, ...documentFiles];
+                context.read<LoadDocumentsCubit>().uploadDocuments(allFiles);
+              },
+        style: ButtonStyle(
+            minimumSize:
+                WidgetStateProperty.all(const Size(double.infinity, 56))),
+        child: Text(
+          context.localized.send,
+          style: AppTextStyles.fs16w500.copyWith(color: Colors.white),
+        ),
       ),
     );
   }
@@ -74185,28 +76836,135 @@ class _LoadingDocumentStateWidgetState extends State<LoadingDocumentWidget> {
 lib\src\feature\profile\presentation\pages\message_page.dart
 ------------------------------------------------------------
 import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
 import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
+import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:coment_app/src/feature/chat/bloc/conversations_cubit.dart';
+import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
+import 'package:coment_app/src/feature/chat/presentation/widgets/chat_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class MessagePage extends StatelessWidget {
+class MessagePage extends StatefulWidget implements AutoRouteWrapper {
   const MessagePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(
-        actions: [
-          Expanded(flex: 2, child: SizedBox()),
-          Expanded(
-            flex: 8,
+  State<MessagePage> createState() => _MessagePageState();
 
-            child:  CustomTextField(),
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    final token = context.repository.authRepository.user?.accessToken;
+    if (token == null) {
+      return const Scaffold(
+        body: Center(child: Text('Не авторизован')),
+      );
+    }
+    return BlocProvider(
+      create: (context) => ConversationsCubit(context.repository.chatRepository)
+        ..loadConversations(token),
+      child: this,
+    );
+  }
+}
+
+class _MessagePageState extends State<MessagePage> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ConversationsCubit, ConversationsState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          error: (message) => Toaster.showErrorTopShortToast(context, message),
+          orElse: () {},
+        );
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: CustomAppBar(
+            actions: [
+              const Expanded(flex: 2, child: SizedBox()),
+              Expanded(
+                flex: 8,
+                child: CustomTextField(
+                  hintText: context.localized.search,
+                ),
+              ),
+              const Expanded(flex: 1, child: SizedBox()),
+            ],
           ),
-          Expanded(flex: 1, child: SizedBox()),
-        ],
-      ),
+          body: state.maybeWhen(
+            orElse: () {
+              return null;
+            },
+            initial: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            loaded: (conversations) {
+              if (conversations.isEmpty) {
+                return const Center(child: Text('Нет сообщений'));
+              }
+              return ListView.builder(
+                itemCount: conversations.length,
+                itemBuilder: (context, index) {
+                  final conv = conversations[index];
+                  return ChatListItem(
+                    conversation: conv,
+                    // onTap: () {
+                    //   final match =
+                    //       RegExp(r'company-(\d+)').firstMatch(conv.title ?? '');
+                    //   final companyId =
+                    //       match != null ? int.parse(match.group(1)!) : null;
+                    //   if (companyId != null) {
+                    //     context.router.push(
+                    //       ChatRoute(
+                    //         companyId: companyId,
+                    //         currentUser:
+                    //             context.repository.authRepository.user!,
+                    //         accessToken: context
+                    //             .repository.authRepository.user!.accessToken!,
+                    //       ),
+                    //     );
+                    //   }
+                    // },
+                  );
+                },
+              );
+            },
+            error: (message) => Center(child: Text('Ошибка: $message')),
+          ),
+        );
+      },
+    );
+  }
+  //  // Вспомогательный метод для извлечения companyId из чата
+  // int? _extractCompanyId(ConversationDTO conv) {
+  //   // Если title = "company-497", извлекаем 497
+  //   if (conv.title?.startsWith('company-') ?? false) {
+  //     final idStr = conv.title!.split('-').last;
+  //     return int.tryParse(idStr);
+  //   }
+  //   // Или ищем владельца среди участников
+  //   final owner = conv.participants.firstWhere(
+  //     (user) => user.role == 'owner',
+  //     orElse: () => conv.participants.firstWhere(
+  //       (user) => user.id != context.repository.authRepository.currentUser?.id,
+  //       orElse: () => conv.participants[0],
+  //     ),
+  //   );
+  //   // Но лучше хранить companyId отдельно в ConversationDTO
+  //   return null;
+  // }
+}
+
+class MessageList extends StatelessWidget {
+  const MessageList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ConversationsCubit, ConversationsState>(
+      builder: (context, state) {
+        return const Placeholder();
+      },
     );
   }
 }
@@ -74402,8 +77160,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-
   @override
   void initState() {
     super.initState();
@@ -74462,7 +77218,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 log(selectedLanguageId.toString());
                 setState(() {});
               },
-            
               orElse: () {
                 context.loaderOverlay.hide();
               },
@@ -74536,7 +77291,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                       if (verificationStatus != null)
                                         _buildVerificationStatus(
                                             verificationStatus),
-                                      
                                       const Gap(8),
                                       Text(
                                         userDTO.email ?? '',
@@ -74767,44 +77521,45 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
   Widget _buildVerificationStatus(VerificationStatus status) {
-  String message;
-  Color color;
-  IconData icon;
+    String message;
+    Color color;
+    IconData icon;
 
-  switch (status.status) {
-    case 'approved':
-      message = 'Верифицирован';
-      color = Colors.green;
-      icon = Icons.check_circle;
-      break;
-    case 'pending':
-      message = 'На рассмотрении';
-      color = Colors.orange;
-      icon = Icons.hourglass_empty;
-      break;
-    case 'rejected':
-      message = ' Отклонено';
-      color = Colors.red;
-      icon = Icons.cancel;
-      break;
-    default:
-      message = 'Не запрашивалось';
-      color = Colors.grey;
-      icon = Icons.info_outline;
+    switch (status.status) {
+      case 'approved':
+        message = 'Верифицирован';
+        color = Colors.green;
+        icon = Icons.check_circle;
+        break;
+      case 'pending':
+        message = 'На рассмотрении';
+        color = Colors.orange;
+        icon = Icons.hourglass_empty;
+        break;
+      case 'rejected':
+        message = ' Отклонено';
+        color = Colors.red;
+        icon = Icons.cancel;
+        break;
+      default:
+        message = 'Не запрашивалось';
+        color = Colors.grey;
+        icon = Icons.info_outline;
+    }
+
+    return Row(
+      children: [
+        Icon(icon, color: color, size: 16),
+        const Gap(4),
+        Text(
+          message,
+          style: AppTextStyles.fs14w500.copyWith(color: color),
+        ),
+      ],
+    );
   }
-
-  return Row(
-    children: [
-      Icon(icon, color: color, size: 16),
-      const Gap(4),
-      Text(
-        message,
-        style: AppTextStyles.fs14w500.copyWith(color: color),
-      ),
-    ],
-  );
-}
 }
 
 
@@ -78878,4 +81633,4 @@ class _SignInPage extends StatelessWidget {
 
 
 
-=== Всего файлов: 355 ===
+=== Всего файлов: 367 ===

@@ -544,4 +544,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get error => '错误：';
+
+  @override
+  String get noMessagesYet => '暂无消息';
+
+  @override
+  String get writeAComment => '写评论...';
+
+  @override
+  String get chatWithCompany => '与公司聊天';
 }

@@ -177,5 +177,8 @@
   "specify_expiry_date": "请输入有效期",
   "specify_cardholder_name": "请输入持卡人姓名",
   "card_added": "卡已添加",
-  "error": "错误："
+  "error": "错误：",
+  "noMessagesYet": "暂无消息",
+  "writeAComment": "写评论...",
+  "chatWithCompany": "与公司聊天"
 }

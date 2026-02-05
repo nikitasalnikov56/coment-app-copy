@@ -560,4 +560,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error => 'Error:';
+
+  @override
+  String get noMessagesYet => 'No messages yet';
+
+  @override
+  String get writeAComment => 'Write a comment...';
+
+  @override
+  String get chatWithCompany => 'Chat with company';
 }

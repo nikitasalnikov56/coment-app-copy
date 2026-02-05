@@ -1171,6 +1171,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error:'**
   String get error;
+
+  /// No description provided for @noMessagesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessagesYet;
+
+  /// No description provided for @writeAComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a comment...'**
+  String get writeAComment;
+
+  /// No description provided for @chatWithCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with company'**
+  String get chatWithCompany;
 }
 
 class _AppLocalizationsDelegate

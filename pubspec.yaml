@@ -84,7 +84,9 @@ dependencies:
   latlong2: ^0.9.1
   file_picker: ^10.3.7
   flutter_slidable: ^4.0.3
-  payment_card: ^0.0.1
+  # payment_card: ^0.0.1
+  web_socket_channel: ^3.0.3
+
   
   # geolocator: ^14.0.2
 

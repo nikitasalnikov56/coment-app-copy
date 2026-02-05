@@ -1,4 +1,5 @@
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
+import 'package:coment_app/src/core/utils/jwt_parser.dart';
 import 'package:coment_app/src/core/utils/talker_logger_util.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 
@@ -19,8 +20,8 @@ abstract interface class IAuthRemoteDS {
     String? deviceToken,
     String? deviceType,
     required String birthDate,
-     String? recaptchaToken,
-     required String role,
+    String? recaptchaToken,
+    required String role,
   });
 
   Future<String> forgotPassword({
@@ -43,7 +44,8 @@ abstract interface class IAuthRemoteDS {
     required String deviceType,
   });
 
-Future<Map<String, dynamic>> refreshToken(String refreshToken);
+  Future<Map<String, dynamic>> refreshToken(String refreshToken);
+  UserDTO updateUserFromToken(UserDTO user);
 }
 
 class AuthRemoteDSImpl implements IAuthRemoteDS {
@@ -51,6 +53,25 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     required this.restClient,
   });
   final IRestClient restClient;
+
+  /// Обновляет данные пользователя из JWT токена
+  @override
+  UserDTO updateUserFromToken(UserDTO user) {
+    if (user.accessToken == null || user.accessToken!.isEmpty) return user;
+
+    final payload = JwtParser.parsePayload(user.accessToken!);
+    if (payload == null) return user;
+
+    final userId = payload['sub'] as int?;
+    final role = payload['role'] as String?;
+    final email = payload['email'] as String?;
+
+    return user.copyWith(
+      id: userId ?? user.id,
+      role: role ?? user.role,
+      email: email ?? user.email,
+    );
+  }
 
   @override
   Future<UserDTO> login({
@@ -72,8 +93,10 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         },
       );
 
-      // final UserDTO user = UserDTO.fromJson(response['data'] as Map<String, dynamic>);
-      return UserDTO.fromJson(response);
+      final user = UserDTO.fromJson(response);
+
+      return updateUserFromToken(user);
+      // UserDTO.fromJson(response);
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#login - $e', e, st);
       rethrow;
@@ -109,7 +132,10 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         },
       );
 
-      return UserDTO.fromJson(response);
+      final user = UserDTO.fromJson(response);
+
+      return updateUserFromToken(user);
+      // return UserDTO.fromJson(response);
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#register - $e', e, st);
       rethrow;
@@ -129,7 +155,8 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         return payload;
       } else {
         throw WrongResponseTypeException(
-          message: '''Unexpected response body type: ${response.runtimeType}\n$response''',
+          message:
+              '''Unexpected response body type: ${response.runtimeType}\n$response''',
         );
       }
     } catch (e, st) {
@@ -151,7 +178,8 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         return payload;
       } else {
         throw WrongResponseTypeException(
-          message: '''Unexpected response body type: ${response.runtimeType}\n$response''',
+          message:
+              '''Unexpected response body type: ${response.runtimeType}\n$response''',
         );
       }
     } catch (e, st) {
@@ -169,7 +197,11 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     try {
       await restClient.post(
         '/reset/change-password',
-        body: {'password': password, 'password_confirmation': passwordConfirmation, 'token': token},
+        body: {
+          'password': password,
+          'password_confirmation': passwordConfirmation,
+          'token': token
+        },
       );
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#newPassword - $e', e, st);
@@ -197,17 +229,16 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     }
   }
 
-@override
-Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
-  try {
-    final response = await restClient.post('auth/refresh', body: {
-      'refresh_token': refreshToken,
-    });
-    return response; // должно содержать {"access_token": "..."}
-  } catch (e, st) {
-    TalkerLoggerUtil.talker.error('#refreshToken - $e', e, st);
-    rethrow;
+  @override
+  Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
+    try {
+      final response = await restClient.post('auth/refresh', body: {
+        'refresh_token': refreshToken,
+      });
+      return response; // должно содержать {"access_token": "..."}
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#refreshToken - $e', e, st);
+      rethrow;
+    }
   }
-}
-
 }

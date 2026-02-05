@@ -28,6 +28,8 @@ class ProductDTO with _$ProductDTO {
     List<BranchesDTO>? branches,
     List<FeedbackDTO>? feedback,
     @JsonKey(name: 'created_at') String? createdAt,
+    bool? isVerified,
+     int? ownerId,
   }) = _ProductDTO;
 
   factory ProductDTO.fromJson(Map<String, dynamic> json) => _$ProductDTOFromJson(json);
