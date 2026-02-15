@@ -25,7 +25,13 @@ class CustomTabWidget extends StatelessWidget {
       text: title,
       iconMargin: const EdgeInsets.only(bottom: 8),
       icon: SvgPicture.asset(
-        tabIndex == currentIndex ? activeIcon : icon,
+        icon,
+        // tabIndex == currentIndex ? activeIcon :
+        colorFilter: ColorFilter.mode(
+            tabIndex == currentIndex
+                ? AppColors.mainColor
+                : AppColors.greyTextColor,
+            BlendMode.srcIn),
       ),
     );
   }

@@ -242,7 +242,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     onPressed: () {
                       birthDateController.text =
                           tempDate.toIso8601String().split('T')[0];
-                                          if (context.mounted) {
+                      if (context.mounted) {
                         setState(() {});
                       }
                       Navigator.pop(context);
@@ -633,8 +633,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   valueListenable: _passwordError,
                                   hintText: context.localized.enterThePassword,
                                   onChanged: (value) {
+                                    if (value.isEmpty) {
+                                      _passwordError.value =
+                                          context.localized.required_to_fill;
+                                    } else if (value.length < 9) {
+                                      _passwordError.value =
+                                          context.localized.minCharacters;
+                                    } else {
+                                      _passwordError.value = null;
+                                    }
                                     checkAllowTapButton();
                                   },
+                                  validator: null,
                                 );
                               },
                             ),

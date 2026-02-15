@@ -164,7 +164,7 @@
   "sent": "Sent",
   "companyAdd": "Add a company",
   "payment": "Payment",
-  "message": "Chat",
+  "message": "Messenger",
   "payment": "Payment",
   "saved_cards": "Saved cards",
   "add_new_card": "Add new card",
@@ -180,5 +180,6 @@
   "error": "Error:",
   "noMessagesYet": "No messages yet",
 "writeAComment": "Write a comment...",
-"chatWithCompany": "Chat with company"
+"chatWithCompany": "Chat with company",
+ "minCharacters": "Minimum 9 characters"
 }

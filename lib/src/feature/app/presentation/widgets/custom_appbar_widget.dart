@@ -3,9 +3,11 @@ import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
+import 'package:gap/gap.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
+  final String? subTitle;
 
   final String? svg;
   final Color? color;
@@ -15,9 +17,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ShapeBorder? shape;
   final TextStyle? textStyle;
   final bool isBackButton;
+  final bool isOnline;
+  final TextStyle? subTitleStyle;
   const CustomAppBar({
     super.key,
     this.title,
+    this.subTitle,
     this.actions,
     this.onPressed,
     this.color,
@@ -25,7 +30,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.quarterTurns,
     this.shape,
     this.textStyle,
+    this.subTitleStyle,
     this.isBackButton = true,
+    this.isOnline = false,
   });
 
   @override
@@ -45,9 +52,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
       ),
       centerTitle: true,
-      title: title != null
-          ? Text(title!, style: textStyle ?? AppTextStyles.fs16w700.copyWith(color: AppColors.text))
-          : const SizedBox(),
+      title: Column(
+        children: [
+          title != null
+              ? Text(title!,
+                  style: textStyle ??
+                      AppTextStyles.fs16w700.copyWith(color: AppColors.text))
+              : const SizedBox(),
+          const Gap(2),
+          subTitle != null
+              ? Text(subTitle!, style: subTitleStyle)
+              : const SizedBox(),
+        ],
+      ),
       actions: actions,
       shape: shape,
     );

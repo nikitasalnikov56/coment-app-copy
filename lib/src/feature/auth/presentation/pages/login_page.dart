@@ -170,19 +170,18 @@ class _LoginPageState extends State<LoginPage> {
                                 valueListenable: _passwordError,
                                 hintText: context.localized.password,
                                 onChanged: (value) {
+                                  if (value.isEmpty) {
+                                  _passwordError.value =
+                                      context.localized.required_to_fill;
+                                } else if (value.length < 9) {
+                                  _passwordError.value =
+                                      context.localized.minCharacters;
+                                } else {
+                                  _passwordError.value = null;
+                                }
                                   checkAllowTapButton();
                                 },
-                                validator: (String? value) {
-                                  return null;
-
-                                  // if (value == null || value.isEmpty) {
-                                  //   return _passwordError.value = 'Неверный пароль';
-                                  // }
-                                  // // if (value.length < 6) {
-                                  // //   return _passwordError.value = 'Минимальная длина пароля - 6';
-                                  // // }
-                                  // return _passwordError.value = null;
-                                },
+                                validator: null,
                               );
                             },
                           ),

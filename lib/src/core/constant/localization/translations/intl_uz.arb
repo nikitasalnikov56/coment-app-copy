@@ -163,7 +163,7 @@
   "sent": "Yuborildi",
   "companyAdd": "Kompaniya qo'shish",
   "payment": "To'lov",
-  "message": "Chat",
+  "message": "Messendjer",
   "payment": "To'lov",
   "saved_cards": "Saqlangan kartalar",
   "add_new_card": "Yangi karta qo'shish",
@@ -179,5 +179,6 @@
   "error": "Xatolik:",
   "noMessagesYet": "Hozircha xabarlar yo‘q",
   "writeAComment": "Izoh yozing...",
-  "chatWithCompany": "Kompaniya bilan chat"
+  "chatWithCompany": "Kompaniya bilan chat",
+  "minCharacters": "Kamida 9 ta belgi"
 }

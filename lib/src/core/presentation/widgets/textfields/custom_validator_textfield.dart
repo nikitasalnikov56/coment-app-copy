@@ -45,68 +45,67 @@ class CustomValidatorTextfield extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: valueListenable,
       builder: (context, v, c) {
-        return SizedBox(
-          height: 44,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: TextFormField(
-                  readOnly: readOnly,
-                  onTap: onTap,
-                  autofocus: autofocus,
-                  autocorrect: false,
-                  focusNode: focusNode,
-                  obscureText: obscureText?.value ?? false,
-                  obscuringCharacter: '*',
-                  style: style,
-                  inputFormatters: inputFormatters,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: keyboardType,
-                  controller: controller,
-                  onChanged: onChanged,
-                  cursorHeight: 18,
-                  validator: validator,
-                  decoration: InputDecoration(
-                    helperText: helperText,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(12)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 1, color: AppColors.red2),
-                        borderRadius: BorderRadius.circular(12)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1, color: AppColors.borderTextField),
-                        borderRadius: BorderRadius.circular(12)),
-                    fillColor: v == null ? null : AppColors.muteRed,
-                    suffixIcon: obscureText != null
-                        ? PasswordEyeSuffixIcon(
-                            valueListenable: obscureText!,
-                            hasError: valueListenable.value != null,
-                          )
-                        : suffixIcon,
-                    hintText: hintText,
-                    hintStyle: AppTextStyles.fs14w500
-                        .copyWith(color: AppColors.base400, height: 1.55),
-                    errorStyle: const TextStyle(
-                      height: 0,
-                      fontSize: 0,
-                    ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 44,
+              child: TextFormField(
+                readOnly: readOnly,
+                onTap: onTap,
+                autofocus: autofocus,
+                autocorrect: false,
+                focusNode: focusNode,
+                obscureText: obscureText?.value ?? false,
+                obscuringCharacter: '*',
+                style: style,
+                inputFormatters: inputFormatters,
+                textAlignVertical: TextAlignVertical.center,
+                keyboardType: keyboardType,
+                controller: controller,
+                onChanged: onChanged,
+                cursorHeight: 18,
+                validator: validator,
+                decoration: InputDecoration(
+                  helperText: helperText,
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(12)),
+                  errorBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(width: 1, color: AppColors.red2),
+                      borderRadius: BorderRadius.circular(12)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          width: 1, color: AppColors.borderTextField),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: v == null ? null : AppColors.muteRed,
+                  suffixIcon: obscureText != null
+                      ? PasswordEyeSuffixIcon(
+                          valueListenable: obscureText!,
+                          hasError: valueListenable.value != null,
+                        )
+                      : suffixIcon,
+                  hintText: hintText,
+                  hintStyle: AppTextStyles.fs14w500
+                      .copyWith(color: AppColors.base400, height: 1.55),
+                  errorStyle: const TextStyle(
+                    height: 0,
+                    fontSize: 0,
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: ErrorTextWidget(
-                  text: valueListenable.value,
-                ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: ErrorTextWidget(
+                text: valueListenable.value,
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

@@ -27,7 +27,7 @@ class _BaseStudentState extends State<BaseStudent> with TickerProviderStateMixin
     super.initState();
 
     _tabController = TabController(
-      length: 3,
+      length: 4,
       vsync: this,
     );
   }
@@ -47,6 +47,7 @@ class _BaseStudentState extends State<BaseStudent> with TickerProviderStateMixin
         routes: const [
           BaseMainFeedTab(),
           BaseCatalogTab(),
+          BaseChatTab(),
           BaseProfileTab(),
         ],
         appBarBuilder: (context, tabsRouter) => switch (tabsRouter.activeIndex) {
@@ -134,7 +135,7 @@ class _BaseStudentBottomNavbarState extends State<BaseStudentBottomNavbar> {
         indicator: TabDotIndicator(),
         onTap: (value) {
           HapticFeedback.mediumImpact();
-          if (value == 2 && !context.appBloc.isAuthenticated) {
+          if ((value == 2 || value == 3) && !context.appBloc.isAuthenticated) {
             context.router.push(
               const RegisterRoute(),
             );
@@ -164,11 +165,19 @@ class _BaseStudentBottomNavbarState extends State<BaseStudentBottomNavbar> {
             tabIndex: 1,
           ),
           CustomTabWidget(
+            // Тебе нужно добавить иконки в AssetsConstants или использовать временные
+            icon: AssetsConstants.message, // Замени на свою константу AssetsConstants.icChatInactive
+            activeIcon: AssetsConstants.activeMessage, // Замени на свою константу AssetsConstants.icChatActive
+            title: context.localized.message, // Или context.localized.chat
+            currentIndex: widget.tabController.index,
+            tabIndex: 2,
+          ),
+          CustomTabWidget(
             icon: AssetsConstants.icProfileInactive,
             activeIcon: AssetsConstants.icProfileActive,
             title: context.localized.profile,
             currentIndex: widget.tabController.index,
-            tabIndex: 2,
+            tabIndex: 3,
           ),
         ],
       ),

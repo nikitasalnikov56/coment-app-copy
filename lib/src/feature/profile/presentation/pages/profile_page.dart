@@ -353,13 +353,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                   )
                                 ],
                               ),
-                            ProfileRowButton(
-                              icon: AssetsConstants.message,
-                              title: context.localized.message,
-                              onTap: () {
-                                context.router.push(const MessageRoute());
-                              },
-                            ),
+                            if (isOwner) const Gap(12),
+                            // ProfileRowButton(
+                            //   icon: AssetsConstants.message,
+                            //   title: context.localized.message,
+                            //   onTap: () {
+                            //     context.router.push(const MessageRoute());
+                            //   },
+                            // ),
                             // : const SizedBox(),
                             const Gap(12),
 

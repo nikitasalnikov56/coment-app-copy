@@ -507,7 +507,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get payment => '支付';
 
   @override
-  String get message => '聊天';
+  String get message => '即时通讯应用';
 
   @override
   String get saved_cards => '已保存的卡';
@@ -553,4 +553,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get chatWithCompany => '与公司聊天';
+
+  @override
+  String get minCharacters => '至少9个字符';
 }

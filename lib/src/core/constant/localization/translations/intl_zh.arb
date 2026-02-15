@@ -164,7 +164,7 @@
   "sent": "发送",
   "companyAdd": "添加一家公司",
   "payment": "支付",
-  "message": "聊天",
+  "message": "即时通讯应用",
   "payment": "支付",
   "saved_cards": "已保存的卡",
   "add_new_card": "添加新卡",
@@ -180,5 +180,6 @@
   "error": "错误：",
   "noMessagesYet": "暂无消息",
   "writeAComment": "写评论...",
-  "chatWithCompany": "与公司聊天"
+  "chatWithCompany": "与公司聊天",
+  "minCharacters": "至少9个字符"
 }

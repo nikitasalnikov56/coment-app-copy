@@ -68,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final String _prefix = "+";
   final FocusNode _focusNode = FocusNode();
   Country? selectedCountry;
- UserRole selectedRole = UserRole.user;
+  UserRole selectedRole = UserRole.user;
 
   @override
   void initState() {
@@ -275,7 +275,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Gap(20),
                         Text(
                           context.localized.accountRegister, //accountRegister
                           style: AppTextStyles.fs26w700.copyWith(height: 1.25),
@@ -353,6 +352,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           context.localized.enterYourPhoneNumber,
                           style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                         ),
+
                         const Gap(8),
                         Row(
                           children: [
@@ -440,11 +440,18 @@ class _RegisterPageState extends State<RegisterPage> {
                               valueListenable: _passwordError,
                               hintText: context.localized.password,
                               onChanged: (value) {
+                                if (value.isEmpty) {
+                                  _passwordError.value =
+                                      context.localized.required_to_fill;
+                                } else if (value.length < 9) {
+                                  _passwordError.value =
+                                      context.localized.minCharacters;
+                                } else {
+                                  _passwordError.value = null;
+                                }
                                 checkAllowTapButton();
                               },
-                              validator: (String? value) {
-                                return null;
-                              },
+                              validator: null,
                             );
                           },
                         ),
@@ -465,11 +472,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: DropdownButton<UserRole>(
                               alignment: Alignment.center,
                               isExpanded: true,
-                              padding: const EdgeInsets.only(right: 12, left: 16),
+                              padding:
+                                  const EdgeInsets.only(right: 12, left: 16),
                               underline: const SizedBox(),
-                              menuWidth: MediaQuery.of(context).size.width / 0.8,
+                              menuWidth:
+                                  MediaQuery.of(context).size.width / 0.8,
                               items: [
-                                 DropdownMenuItem(
+                                DropdownMenuItem(
                                   value: UserRole.user,
                                   child: Text(context.localized.user,
                                       style: AppTextStyles.fs14w500
@@ -481,7 +490,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                       style: AppTextStyles.fs14w500
                                           .copyWith(height: 1.3)),
                                 ),
-                               
                               ],
                               onChanged: (value) {
                                 setState(() {

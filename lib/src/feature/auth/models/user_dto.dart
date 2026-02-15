@@ -29,6 +29,8 @@ class UserDTO with _$UserDTO {
     @JsonKey(name: 'device_type') String? deviceType,
     @JsonKey(name: 'refresh_token') String? refreshToken,
     @JsonKey(name: 'role') String? role,
+    @JsonKey(name: 'isOnline') @Default(false) bool isOnline,
+    @JsonKey(name: 'lastSeen') DateTime? lastSeen,
      // 👇 ДОБАВИЛ
     // @JsonKey(name: 'warningCount') int? warningCount,
   }) = _UserDTO;

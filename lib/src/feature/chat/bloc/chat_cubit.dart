@@ -12,16 +12,25 @@ class ChatCubit extends Cubit<ChatState> {
   final IChatRepository _repository;
   final int _companyId;
   final String _token;
-   late final StreamSubscription _messagesSubscription;
+  late final StreamSubscription _messagesSubscription;
 
-  ChatCubit(this._repository, this._companyId, this._token) : super(const ChatState.initial()) {
+  ChatCubit(this._repository, this._companyId, this._token)
+      : super(const ChatState.initial()) {
     _repository.connectToChat(_companyId, _token);
     _messagesSubscription = _listenToMessages();
   }
-    Stream<List<ChatMessageDTO>> get messagesStream => _repository.getMessagesStream(_companyId);
+  IChatRepository get repository => _repository;
+  Stream<List<ChatMessageDTO>> get messagesStream =>
+      _repository.getMessagesStream(_companyId);
+  List<ChatMessageDTO> get currentMessages => _repository.currentMessages;
+
+void checkConnection() {
+  // Вызываем метод репозитория для проверки/восстановления связи
+  _repository.ensureConnection();
+}
 
   StreamSubscription _listenToMessages() {
-   return _repository.getMessagesStream(_companyId).listen((messages) {
+    return _repository.getMessagesStream(_companyId).listen((messages) {
       emit(ChatState.loaded(messages));
     }, onError: (error) {
       emit(ChatState.error(error.toString()));
@@ -31,7 +40,7 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> sendMessage(String content) async {
     if (content.trim().isEmpty) return;
     try {
-      await _repository.sendMessage( content);
+      await _repository.sendMessage(content);
     } catch (e) {
       emit(ChatState.error(e.toString()));
     }

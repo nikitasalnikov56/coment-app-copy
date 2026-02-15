@@ -7,5 +7,10 @@ abstract class IChatRepository {
   Future<void> sendMessage(String content);
   Future<void> connectToChat(int conversationId, String token);
   Future<void> disconnect();
+  Future<void> ensureConnection();
     Future<List<ConversationDTO>> findConversationsForUser(String token);
+    // Stream<Map<String, dynamic>> get userStatusStream;
+    Stream<Map<int, Map<String, dynamic>>> get userStatusStream ;
+    List<ChatMessageDTO> get currentMessages;
+    Map<int, Map<String, dynamic>> get currentStatusCache;
 }

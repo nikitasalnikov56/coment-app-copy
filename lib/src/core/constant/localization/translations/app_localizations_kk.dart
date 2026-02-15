@@ -524,7 +524,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get payment => 'Төлем';
 
   @override
-  String get message => 'Чат';
+  String get message => 'Мессенджер';
 
   @override
   String get saved_cards => 'Сақталған карталар';
@@ -570,4 +570,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get chatWithCompany => 'Компаниямен чат';
+
+  @override
+  String get minCharacters => 'Кемінде 9 таңба';
 }

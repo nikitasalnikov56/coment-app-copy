@@ -72,6 +72,15 @@ class AppRouter extends RootStackRouter {
               ],
             ),
             AutoRoute(
+            page: BaseChatTab.page,
+            children: [
+              AutoRoute(
+                page: MessageRoute.page, 
+                initial: true
+              ), 
+            ],
+          ),
+            AutoRoute(
               page: BaseProfileTab.page,
               children: [
                 AutoRoute(
@@ -81,6 +90,7 @@ class AppRouter extends RootStackRouter {
                 ),
               ],
             ),
+          
           ],
         ),
 
@@ -106,7 +116,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: RaitingRoute.page),
         AutoRoute(page: LoadDocumentsRoute.page),
         AutoRoute(page: PaymentRoute.page),
-        AutoRoute(page: MessageRoute.page),
+        // AutoRoute(page: MessageRoute.page),
         //Catalog
         AutoRoute(page: SubcatalogRoute.page),
         AutoRoute(page: ProductListRoute.page),
@@ -144,3 +154,7 @@ class BaseProfilePage extends AutoRouter {
   const BaseProfilePage({super.key});
 }
 
+@RoutePage(name: 'BaseChatTab') // Имя для генератора
+class BaseChatPage extends AutoRouter {
+  const BaseChatPage({super.key});
+}

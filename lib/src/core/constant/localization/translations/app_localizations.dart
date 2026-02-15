@@ -1097,7 +1097,7 @@ abstract class AppLocalizations {
   /// No description provided for @message.
   ///
   /// In en, this message translates to:
-  /// **'Chat'**
+  /// **'Messenger'**
   String get message;
 
   /// No description provided for @saved_cards.
@@ -1189,6 +1189,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat with company'**
   String get chatWithCompany;
+
+  /// No description provided for @minCharacters.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum 9 characters'**
+  String get minCharacters;
 }
 
 class _AppLocalizationsDelegate

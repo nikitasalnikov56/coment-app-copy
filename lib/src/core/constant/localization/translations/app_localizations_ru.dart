@@ -523,7 +523,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get payment => 'Оплата';
 
   @override
-  String get message => 'Чат';
+  String get message => 'Мессенджер';
 
   @override
   String get saved_cards => 'Сохранённые карты';
@@ -569,4 +569,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get chatWithCompany => 'Чат с компанией';
+
+  @override
+  String get minCharacters => 'Минимум 9 символов';
 }

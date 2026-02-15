@@ -164,7 +164,7 @@
   "sent": "Отправлено",
   "companyAdd": "Добавить компанию",
   "payment": "Оплата",
-  "message": "Чат",
+  "message": "Мессенджер",
    "payment": "Оплата",
   "saved_cards": "Сохранённые карты",
   "add_new_card": "Добавить новую карту",
@@ -180,6 +180,8 @@
   "error": "Ошибка:",
   "noMessagesYet": "Сообщений пока нет",
   "writeAComment": "Напишите комментарий...",
-  "chatWithCompany": "Чат с компанией"
+  "chatWithCompany": "Чат с компанией",
+  "minCharacters": "Минимум 9 символов"
+
 
 }

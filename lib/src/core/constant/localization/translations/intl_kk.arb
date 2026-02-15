@@ -164,7 +164,7 @@
   "sent": "Жіберілді",
   "companyAdd": "Компания қосу",
   "payment": "Төлем",
-  "message": "Чат",
+  "message": "Мессенджер",
   "payment": "Төлем",
   "saved_cards": "Сақталған карталар",
   "add_new_card": "Жаңа карта қосу",
@@ -180,5 +180,6 @@
   "error": "Қате:",
   "noMessagesYet": "Әзірге хабарламалар жоқ",
   "writeAComment": "Пікір жазыңыз...",
-  "chatWithCompany": "Компаниямен чат"
+  "chatWithCompany": "Компаниямен чат",
+  "minCharacters": "Кемінде 9 таңба"
 }

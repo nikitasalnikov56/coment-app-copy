@@ -525,7 +525,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get payment => 'To\'lov';
 
   @override
-  String get message => 'Chat';
+  String get message => 'Messendjer';
 
   @override
   String get saved_cards => 'Saqlangan kartalar';
@@ -571,4 +571,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get chatWithCompany => 'Kompaniya bilan chat';
+
+  @override
+  String get minCharacters => 'Kamida 9 ta belgi';
 }

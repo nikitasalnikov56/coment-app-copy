@@ -267,6 +267,7 @@ class AssetsConstants {
   static const String companyAdd = 'assets/icons/add_company.svg';
   static const String payment = 'assets/icons/payment.svg';
   static const String message = 'assets/icons/message.svg';
+  static const String activeMessage = 'assets/icons/active_message.svg';
   static const String visa = 'assets/images/svg/visa.svg';
 
   // PNG
@@ -329,6 +330,7 @@ class AssetsConstants {
   static const String payme = 'assets/images/png/payme.png';
   static const String uzumBank = 'assets/images/png/uzum_bank.png';
   static const String click = 'assets/images/png/click.png';
+  static const String sendMessage = 'assets/images/png/send_message.png';
 
   // SVG (в папке assets/images/svg/)
   static const String image3Svg = 'assets/images/svg/image-3.svg';
@@ -1568,7 +1570,7 @@ abstract class AppLocalizations {
   /// No description provided for @message.
   ///
   /// In en, this message translates to:
-  /// **'Chat'**
+  /// **'Messenger'**
   String get message;
 
   /// No description provided for @saved_cards.
@@ -1660,6 +1662,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat with company'**
   String get chatWithCompany;
+
+  /// No description provided for @minCharacters.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum 9 characters'**
+  String get minCharacters;
 }
 
 class _AppLocalizationsDelegate
@@ -2230,7 +2238,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payment => 'Payment';
 
   @override
-  String get message => 'Chat';
+  String get message => 'Messenger';
 
   @override
   String get saved_cards => 'Saved cards';
@@ -2276,6 +2284,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatWithCompany => 'Chat with company';
+
+  @override
+  String get minCharacters => 'Minimum 9 characters';
 }
 
 
@@ -2808,7 +2819,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get payment => 'Төлем';
 
   @override
-  String get message => 'Чат';
+  String get message => 'Мессенджер';
 
   @override
   String get saved_cards => 'Сақталған карталар';
@@ -2854,6 +2865,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get chatWithCompany => 'Компаниямен чат';
+
+  @override
+  String get minCharacters => 'Кемінде 9 таңба';
 }
 
 
@@ -3385,7 +3399,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get payment => 'Оплата';
 
   @override
-  String get message => 'Чат';
+  String get message => 'Мессенджер';
 
   @override
   String get saved_cards => 'Сохранённые карты';
@@ -3431,6 +3445,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get chatWithCompany => 'Чат с компанией';
+
+  @override
+  String get minCharacters => 'Минимум 9 символов';
 }
 
 
@@ -3964,7 +3981,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get payment => 'To\'lov';
 
   @override
-  String get message => 'Chat';
+  String get message => 'Messendjer';
 
   @override
   String get saved_cards => 'Saqlangan kartalar';
@@ -4010,6 +4027,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get chatWithCompany => 'Kompaniya bilan chat';
+
+  @override
+  String get minCharacters => 'Kamida 9 ta belgi';
 }
 
 
@@ -4525,7 +4545,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get payment => '支付';
 
   @override
-  String get message => '聊天';
+  String get message => '即时通讯应用';
 
   @override
   String get saved_cards => '已保存的卡';
@@ -4571,6 +4591,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get chatWithCompany => '与公司聊天';
+
+  @override
+  String get minCharacters => '至少9个字符';
 }
 
 
@@ -4743,7 +4766,7 @@ lib\src\core\constant\localization\translations\intl_en.arb
   "sent": "Sent",
   "companyAdd": "Add a company",
   "payment": "Payment",
-  "message": "Chat",
+  "message": "Messenger",
   "payment": "Payment",
   "saved_cards": "Saved cards",
   "add_new_card": "Add new card",
@@ -4759,7 +4782,8 @@ lib\src\core\constant\localization\translations\intl_en.arb
   "error": "Error:",
   "noMessagesYet": "No messages yet",
 "writeAComment": "Write a comment...",
-"chatWithCompany": "Chat with company"
+"chatWithCompany": "Chat with company",
+ "minCharacters": "Minimum 9 characters"
 }
 
 
@@ -4931,7 +4955,7 @@ lib\src\core\constant\localization\translations\intl_kk.arb
   "sent": "Жіберілді",
   "companyAdd": "Компания қосу",
   "payment": "Төлем",
-  "message": "Чат",
+  "message": "Мессенджер",
   "payment": "Төлем",
   "saved_cards": "Сақталған карталар",
   "add_new_card": "Жаңа карта қосу",
@@ -4947,7 +4971,8 @@ lib\src\core\constant\localization\translations\intl_kk.arb
   "error": "Қате:",
   "noMessagesYet": "Әзірге хабарламалар жоқ",
   "writeAComment": "Пікір жазыңыз...",
-  "chatWithCompany": "Компаниямен чат"
+  "chatWithCompany": "Компаниямен чат",
+  "minCharacters": "Кемінде 9 таңба"
 }
 
 
@@ -5119,7 +5144,7 @@ lib\src\core\constant\localization\translations\intl_ru.arb
   "sent": "Отправлено",
   "companyAdd": "Добавить компанию",
   "payment": "Оплата",
-  "message": "Чат",
+  "message": "Мессенджер",
    "payment": "Оплата",
   "saved_cards": "Сохранённые карты",
   "add_new_card": "Добавить новую карту",
@@ -5135,7 +5160,9 @@ lib\src\core\constant\localization\translations\intl_ru.arb
   "error": "Ошибка:",
   "noMessagesYet": "Сообщений пока нет",
   "writeAComment": "Напишите комментарий...",
-  "chatWithCompany": "Чат с компанией"
+  "chatWithCompany": "Чат с компанией",
+  "minCharacters": "Минимум 9 символов"
+
 
 }
 
@@ -5307,7 +5334,7 @@ lib\src\core\constant\localization\translations\intl_uz.arb
   "sent": "Yuborildi",
   "companyAdd": "Kompaniya qo'shish",
   "payment": "To'lov",
-  "message": "Chat",
+  "message": "Messendjer",
   "payment": "To'lov",
   "saved_cards": "Saqlangan kartalar",
   "add_new_card": "Yangi karta qo'shish",
@@ -5323,7 +5350,8 @@ lib\src\core\constant\localization\translations\intl_uz.arb
   "error": "Xatolik:",
   "noMessagesYet": "Hozircha xabarlar yo‘q",
   "writeAComment": "Izoh yozing...",
-  "chatWithCompany": "Kompaniya bilan chat"
+  "chatWithCompany": "Kompaniya bilan chat",
+  "minCharacters": "Kamida 9 ta belgi"
 }
 
 
@@ -5495,7 +5523,7 @@ lib\src\core\constant\localization\translations\intl_zh.arb
   "sent": "发送",
   "companyAdd": "添加一家公司",
   "payment": "支付",
-  "message": "聊天",
+  "message": "即时通讯应用",
   "payment": "支付",
   "saved_cards": "已保存的卡",
   "add_new_card": "添加新卡",
@@ -5511,7 +5539,8 @@ lib\src\core\constant\localization\translations\intl_zh.arb
   "error": "错误：",
   "noMessagesYet": "暂无消息",
   "writeAComment": "写评论...",
-  "chatWithCompany": "与公司聊天"
+  "chatWithCompany": "与公司聊天",
+  "minCharacters": "至少9个字符"
 }
 
 
@@ -5681,12 +5710,12 @@ class RepositoryStorage implements IRepositoryStorage {
 
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
-        baseUrl: 'http://10.0.2.2:5000/api/v1/',
-        //  baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
+        // baseUrl: 'http://10.0.2.2:5000/api/v1/',
+         baseUrl: 'https://2f9e-94-158-58-248.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
-          baseUrl: 'http://10.0.2.2:5000/api/v1/',
-          // baseUrl: 'https://9860ff4fae4a.ngrok-free.app/api/v1/',
+          // baseUrl: 'http://10.0.2.2:5000/api/v1/',
+          baseUrl: 'https://2f9e-94-158-58-248.ngrok-free.app/api/v1/',
           // baseUrl: 'http://192.168.0.100:3001/api/v1/',
           interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,
@@ -6229,8 +6258,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 class $AppDatabaseManager {
-  final _$AppDatabase db;
-  $AppDatabaseManager(this.db);
+  final _$AppDatabase _db;
+  $AppDatabaseManager(this._db);
 }
 
 
@@ -6872,6 +6901,10 @@ class $AssetsImagesPngGen {
   AssetGenImage get profilePage =>
       const AssetGenImage('assets/images/png/profile_page.png');
 
+  /// File path: assets/images/png/send_message.png
+  AssetGenImage get sendMessage =>
+      const AssetGenImage('assets/images/png/send_message.png');
+
   /// File path: assets/images/png/slider.png
   AssetGenImage get slider =>
       const AssetGenImage('assets/images/png/slider.png');
@@ -6952,6 +6985,7 @@ class $AssetsImagesPngGen {
         productFavorite,
         productImage,
         profilePage,
+        sendMessage,
         slider,
         splashText,
         supportServiceBS,
@@ -11395,68 +11429,67 @@ class CustomValidatorTextfield extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: valueListenable,
       builder: (context, v, c) {
-        return SizedBox(
-          height: 44,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: TextFormField(
-                  readOnly: readOnly,
-                  onTap: onTap,
-                  autofocus: autofocus,
-                  autocorrect: false,
-                  focusNode: focusNode,
-                  obscureText: obscureText?.value ?? false,
-                  obscuringCharacter: '*',
-                  style: style,
-                  inputFormatters: inputFormatters,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: keyboardType,
-                  controller: controller,
-                  onChanged: onChanged,
-                  cursorHeight: 18,
-                  validator: validator,
-                  decoration: InputDecoration(
-                    helperText: helperText,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(12)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 1, color: AppColors.red2),
-                        borderRadius: BorderRadius.circular(12)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1, color: AppColors.borderTextField),
-                        borderRadius: BorderRadius.circular(12)),
-                    fillColor: v == null ? null : AppColors.muteRed,
-                    suffixIcon: obscureText != null
-                        ? PasswordEyeSuffixIcon(
-                            valueListenable: obscureText!,
-                            hasError: valueListenable.value != null,
-                          )
-                        : suffixIcon,
-                    hintText: hintText,
-                    hintStyle: AppTextStyles.fs14w500
-                        .copyWith(color: AppColors.base400, height: 1.55),
-                    errorStyle: const TextStyle(
-                      height: 0,
-                      fontSize: 0,
-                    ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 44,
+              child: TextFormField(
+                readOnly: readOnly,
+                onTap: onTap,
+                autofocus: autofocus,
+                autocorrect: false,
+                focusNode: focusNode,
+                obscureText: obscureText?.value ?? false,
+                obscuringCharacter: '*',
+                style: style,
+                inputFormatters: inputFormatters,
+                textAlignVertical: TextAlignVertical.center,
+                keyboardType: keyboardType,
+                controller: controller,
+                onChanged: onChanged,
+                cursorHeight: 18,
+                validator: validator,
+                decoration: InputDecoration(
+                  helperText: helperText,
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(12)),
+                  errorBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(width: 1, color: AppColors.red2),
+                      borderRadius: BorderRadius.circular(12)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          width: 1, color: AppColors.borderTextField),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: v == null ? null : AppColors.muteRed,
+                  suffixIcon: obscureText != null
+                      ? PasswordEyeSuffixIcon(
+                          valueListenable: obscureText!,
+                          hasError: valueListenable.value != null,
+                        )
+                      : suffixIcon,
+                  hintText: hintText,
+                  hintStyle: AppTextStyles.fs14w500
+                      .copyWith(color: AppColors.base400, height: 1.55),
+                  errorStyle: const TextStyle(
+                    height: 0,
+                    fontSize: 0,
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: ErrorTextWidget(
-                  text: valueListenable.value,
-                ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: ErrorTextWidget(
+                text: valueListenable.value,
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -11551,13 +11584,13 @@ BasicResponse _$BasicResponseFromJson(Map<String, dynamic> json) =>
       ok: json['ok'] as bool?,
     );
 
-// Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
-//     <String, dynamic>{
-//       'statusCode': instance.statusCode,
-//       'message': instance.message,
-//       'data': instance.data,
-//       'ok': instance.ok,
-//     };
+Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
+    <String, dynamic>{
+      'statusCode': instance.statusCode,
+      'message': instance.message,
+      'data': instance.data,
+      'ok': instance.ok,
+    };
 
 
 
@@ -13885,6 +13918,47 @@ class ImageUtil {
   }
 }
 
+
+
+lib\src\core\utils\jwt_parser.dart
+----------------------------------
+import 'dart:convert';
+import 'dart:typed_data';
+
+class JwtParser {
+  /// Парсит payload из JWT токена
+  /// Возвращает Map<String, dynamic> или null при ошибке
+  static Map<String, dynamic>? parsePayload(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return null;
+
+      final payloadPart = _base64UrlDecode(parts[1]);
+      final payloadString = utf8.decode(payloadPart);
+      return json.decode(payloadString) as Map<String, dynamic>;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Декодирует base64url в Uint8List (без использования библиотек)
+  static Uint8List _base64UrlDecode(String input) {
+    // base64url использует '-' вместо '+' и '_' вместо '/'
+    String normalized = input.replaceAll('-', '+').replaceAll('_', '/');
+
+    // Добавляем паддинг до кратности 4
+    switch (normalized.length % 4) {
+      case 2:
+        normalized += '==';
+        break;
+      case 3:
+        normalized += '=';
+        break;
+    }
+
+    return base64.decode(normalized);
+  }
+}
 
 
 lib\src\core\utils\persisted_entry.dart
@@ -20773,7 +20847,7 @@ class _BaseStudentState extends State<BaseStudent> with TickerProviderStateMixin
     super.initState();
 
     _tabController = TabController(
-      length: 3,
+      length: 4,
       vsync: this,
     );
   }
@@ -20793,6 +20867,7 @@ class _BaseStudentState extends State<BaseStudent> with TickerProviderStateMixin
         routes: const [
           BaseMainFeedTab(),
           BaseCatalogTab(),
+          BaseChatTab(),
           BaseProfileTab(),
         ],
         appBarBuilder: (context, tabsRouter) => switch (tabsRouter.activeIndex) {
@@ -20880,7 +20955,7 @@ class _BaseStudentBottomNavbarState extends State<BaseStudentBottomNavbar> {
         indicator: TabDotIndicator(),
         onTap: (value) {
           HapticFeedback.mediumImpact();
-          if (value == 2 && !context.appBloc.isAuthenticated) {
+          if (value == 3 && !context.appBloc.isAuthenticated) {
             context.router.push(
               const RegisterRoute(),
             );
@@ -20910,11 +20985,19 @@ class _BaseStudentBottomNavbarState extends State<BaseStudentBottomNavbar> {
             tabIndex: 1,
           ),
           CustomTabWidget(
+            // Тебе нужно добавить иконки в AssetsConstants или использовать временные
+            icon: AssetsConstants.message, // Замени на свою константу AssetsConstants.icChatInactive
+            activeIcon: AssetsConstants.activeMessage, // Замени на свою константу AssetsConstants.icChatActive
+            title: context.localized.message, // Или context.localized.chat
+            currentIndex: widget.tabController.index,
+            tabIndex: 2,
+          ),
+          CustomTabWidget(
             icon: AssetsConstants.icProfileInactive,
             activeIcon: AssetsConstants.icProfileActive,
             title: context.localized.profile,
             currentIndex: widget.tabController.index,
-            tabIndex: 2,
+            tabIndex: 3,
           ),
         ],
       ),
@@ -21482,9 +21565,11 @@ import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
+import 'package:gap/gap.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
+  final String? subTitle;
 
   final String? svg;
   final Color? color;
@@ -21494,9 +21579,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ShapeBorder? shape;
   final TextStyle? textStyle;
   final bool isBackButton;
+  final bool isOnline;
+  final TextStyle? subTitleStyle;
   const CustomAppBar({
     super.key,
     this.title,
+    this.subTitle,
     this.actions,
     this.onPressed,
     this.color,
@@ -21504,7 +21592,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.quarterTurns,
     this.shape,
     this.textStyle,
+    this.subTitleStyle,
     this.isBackButton = true,
+    this.isOnline = false,
   });
 
   @override
@@ -21524,9 +21614,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
       ),
       centerTitle: true,
-      title: title != null
-          ? Text(title!, style: textStyle ?? AppTextStyles.fs16w700.copyWith(color: AppColors.text))
-          : const SizedBox(),
+      title: Column(
+        children: [
+          title != null
+              ? Text(title!,
+                  style: textStyle ??
+                      AppTextStyles.fs16w700.copyWith(color: AppColors.text))
+              : const SizedBox(),
+          const Gap(2),
+          subTitle != null
+              ? Text(subTitle!, style: subTitleStyle)
+              : const SizedBox(),
+        ],
+      ),
       actions: actions,
       shape: shape,
     );
@@ -21737,6 +21837,15 @@ class AppRouter extends RootStackRouter {
               ],
             ),
             AutoRoute(
+            page: BaseChatTab.page,
+            children: [
+              AutoRoute(
+                page: ChatRoute.page, 
+                initial: true
+              ), 
+            ],
+          ),
+            AutoRoute(
               page: BaseProfileTab.page,
               children: [
                 AutoRoute(
@@ -21746,6 +21855,7 @@ class AppRouter extends RootStackRouter {
                 ),
               ],
             ),
+          
           ],
         ),
 
@@ -21809,7 +21919,10 @@ class BaseProfilePage extends AutoRouter {
   const BaseProfilePage({super.key});
 }
 
-
+@RoutePage(name: 'BaseChatTab') // Имя для генератора
+class BaseChatPage extends AutoRouter {
+  const BaseChatPage({super.key});
+}
 
 
 lib\src\feature\app\router\app_router.gr.dart
@@ -21870,6 +21983,22 @@ class BaseCatalogTab extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const BaseCatalogPage();
+    },
+  );
+}
+
+/// generated route for
+/// [BaseChatPage]
+class BaseChatTab extends PageRouteInfo<void> {
+  const BaseChatTab({List<PageRouteInfo>? children})
+    : super(BaseChatTab.name, initialChildren: children);
+
+  static const String name = 'BaseChatTab';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BaseChatPage();
     },
   );
 }
@@ -26745,6 +26874,7 @@ abstract class _ErrorState implements RegisterState {
 lib\src\feature\auth\data\auth_remote_ds.dart
 ---------------------------------------------
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
+import 'package:coment_app/src/core/utils/jwt_parser.dart';
 import 'package:coment_app/src/core/utils/talker_logger_util.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 
@@ -26765,8 +26895,8 @@ abstract interface class IAuthRemoteDS {
     String? deviceToken,
     String? deviceType,
     required String birthDate,
-     String? recaptchaToken,
-     required String role,
+    String? recaptchaToken,
+    required String role,
   });
 
   Future<String> forgotPassword({
@@ -26789,7 +26919,8 @@ abstract interface class IAuthRemoteDS {
     required String deviceType,
   });
 
-Future<Map<String, dynamic>> refreshToken(String refreshToken);
+  Future<Map<String, dynamic>> refreshToken(String refreshToken);
+  UserDTO updateUserFromToken(UserDTO user);
 }
 
 class AuthRemoteDSImpl implements IAuthRemoteDS {
@@ -26797,6 +26928,25 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     required this.restClient,
   });
   final IRestClient restClient;
+
+  /// Обновляет данные пользователя из JWT токена
+  @override
+  UserDTO updateUserFromToken(UserDTO user) {
+    if (user.accessToken == null || user.accessToken!.isEmpty) return user;
+
+    final payload = JwtParser.parsePayload(user.accessToken!);
+    if (payload == null) return user;
+
+    final userId = payload['sub'] as int?;
+    final role = payload['role'] as String?;
+    final email = payload['email'] as String?;
+
+    return user.copyWith(
+      id: userId ?? user.id,
+      role: role ?? user.role,
+      email: email ?? user.email,
+    );
+  }
 
   @override
   Future<UserDTO> login({
@@ -26818,8 +26968,10 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         },
       );
 
-      // final UserDTO user = UserDTO.fromJson(response['data'] as Map<String, dynamic>);
-      return UserDTO.fromJson(response);
+      final user = UserDTO.fromJson(response);
+
+      return updateUserFromToken(user);
+      // UserDTO.fromJson(response);
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#login - $e', e, st);
       rethrow;
@@ -26855,7 +27007,10 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         },
       );
 
-      return UserDTO.fromJson(response);
+      final user = UserDTO.fromJson(response);
+
+      return updateUserFromToken(user);
+      // return UserDTO.fromJson(response);
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#register - $e', e, st);
       rethrow;
@@ -26875,7 +27030,8 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         return payload;
       } else {
         throw WrongResponseTypeException(
-          message: '''Unexpected response body type: ${response.runtimeType}\n$response''',
+          message:
+              '''Unexpected response body type: ${response.runtimeType}\n$response''',
         );
       }
     } catch (e, st) {
@@ -26897,7 +27053,8 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         return payload;
       } else {
         throw WrongResponseTypeException(
-          message: '''Unexpected response body type: ${response.runtimeType}\n$response''',
+          message:
+              '''Unexpected response body type: ${response.runtimeType}\n$response''',
         );
       }
     } catch (e, st) {
@@ -26915,7 +27072,11 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     try {
       await restClient.post(
         '/reset/change-password',
-        body: {'password': password, 'password_confirmation': passwordConfirmation, 'token': token},
+        body: {
+          'password': password,
+          'password_confirmation': passwordConfirmation,
+          'token': token
+        },
       );
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#newPassword - $e', e, st);
@@ -26943,19 +27104,18 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
     }
   }
 
-@override
-Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
-  try {
-    final response = await restClient.post('auth/refresh', body: {
-      'refresh_token': refreshToken,
-    });
-    return response; // должно содержать {"access_token": "..."}
-  } catch (e, st) {
-    TalkerLoggerUtil.talker.error('#refreshToken - $e', e, st);
-    rethrow;
+  @override
+  Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
+    try {
+      final response = await restClient.post('auth/refresh', body: {
+        'refresh_token': refreshToken,
+      });
+      return response; // должно содержать {"access_token": "..."}
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#refreshToken - $e', e, st);
+      rethrow;
+    }
   }
-}
-
 }
 
 
@@ -27186,7 +27346,7 @@ lib\src\feature\auth\data\auth_repository.dart
 //     // 1. Читаем текущий токен
 //     final refreshToken = await _secureStorage.read(key: 'refresh_token');
 //     log('READ refresh_token: $refreshToken', name: 'REFRESH');
-    
+
 //     if (refreshToken == null) throw Exception('No refresh token');
 
 //     // 2. Делаем запрос (теперь ответ будет содержать новый refresh_token)
@@ -27203,9 +27363,9 @@ lib\src\feature\auth\data\auth_repository.dart
 //     final userStr = _authDao.user.value;
 //     if (userStr != null) {
 //       final userMap = jsonDecode(userStr) as Map<String, dynamic>;
-      
+
 //       userMap['access_token'] = response['access_token'];
-      
+
 //       // Если бэкенд не возвращает refresh_token внутри user, можно обновить его и тут для консистентности,
 //       // но главное - это secureStorage.
 //       if (newRefreshToken != null) {
@@ -27304,6 +27464,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:coment_app/src/core/utils/jwt_parser.dart';
 import 'package:coment_app/src/feature/auth/data/auth_remote_ds.dart';
 import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
@@ -27360,7 +27521,7 @@ abstract interface class IAuthRepository {
   Future<List<Map<String, dynamic>>> getForceUpdateVersion();
 
   Future sendDeviceToken();
-  
+
   Future<void> refreshAccessToken();
 }
 
@@ -27476,11 +27637,12 @@ class AuthRepositoryImpl implements IAuthRepository {
         recaptchaToken: recaptchaToken,
       );
       // Сохраняем refresh в secure storage
-      await _secureStorage.write(key: 'refresh_token', value: user.refreshToken);
-      
+      await _secureStorage.write(
+          key: 'refresh_token', value: user.refreshToken);
+
       // Сохраняем UserDTO в SharedPrefs
       await _authDao.user.setValue(jsonEncode(user.toJson()));
-      
+
       log('Login successful, user: $user', name: 'auth repo');
       return user;
     } catch (e) {
@@ -27494,7 +27656,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     // 1. Читаем текущий токен
     final refreshToken = await _secureStorage.read(key: 'refresh_token');
     log('READ refresh_token: $refreshToken', name: 'REFRESH');
-    
+
     if (refreshToken == null) throw Exception('No refresh token');
 
     // 2. Делаем запрос (теперь ответ содержит новый refresh_token)
@@ -27511,11 +27673,33 @@ class AuthRepositoryImpl implements IAuthRepository {
     final userStr = _authDao.user.value;
     if (userStr != null) {
       final userMap = jsonDecode(userStr) as Map<String, dynamic>;
-      
+      final newAccessToken = response['access_token'] as String?;
+      if (newAccessToken != null) {
+        userMap['access_token'] = newAccessToken;
+        // 🔥 ПАРСИМ НОВЫЙ ТОКЕН И ОБНОВЛЯЕМ ID И РОЛЬ
+        final payload = JwtParser.parsePayload(newAccessToken);
+        if (payload != null) {
+          final userId = payload['sub'] as int?;
+          final role = payload['role'] as String?;
+
+          if (userId != null && userId > 0) {
+            userMap['id'] = userId;
+          }
+          if (role != null) {
+            userMap['role'] = role;
+          }
+        }
+        if (newRefreshToken != null) {
+          userMap['refresh_token'] = newRefreshToken;
+        }
+
+        await _authDao.user.setValue(jsonEncode(userMap));
+      }
+
       userMap['access_token'] = response['access_token'];
-      
+
       if (newRefreshToken != null) {
-         userMap['refresh_token'] = newRefreshToken;
+        userMap['refresh_token'] = newRefreshToken;
       }
 
       await _authDao.user.setValue(jsonEncode(userMap));
@@ -27562,10 +27746,11 @@ class AuthRepositoryImpl implements IAuthRepository {
         recaptchaToken: recaptchaToken,
         role: role,
       );
-      
-      await _secureStorage.write(key: 'refresh_token', value: user.refreshToken);
+
+      await _secureStorage.write(
+          key: 'refresh_token', value: user.refreshToken);
       log('SAVED refresh_token: ${user.refreshToken}', name: 'AUTH');
-      
+
       await _authDao.user.setValue(jsonEncode(user.toJson()));
       return user;
     } catch (e) {
@@ -27606,6 +27791,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     }
   }
 }
+
 
 
 lib\src\feature\auth\database\auth_dao.dart
@@ -28437,6 +28623,8 @@ class UserDTO with _$UserDTO {
     @JsonKey(name: 'device_type') String? deviceType,
     @JsonKey(name: 'refresh_token') String? refreshToken,
     @JsonKey(name: 'role') String? role,
+    @JsonKey(name: 'isOnline') @Default(false) bool isOnline,
+    @JsonKey(name: 'lastSeen') DateTime? lastSeen,
      // 👇 ДОБАВИЛ
     // @JsonKey(name: 'warningCount') int? warningCount,
   }) = _UserDTO;
@@ -28500,6 +28688,10 @@ mixin _$UserDTO {
   String? get refreshToken => throw _privateConstructorUsedError;
   @JsonKey(name: 'role')
   String? get role => throw _privateConstructorUsedError;
+  @JsonKey(name: 'isOnline')
+  bool get isOnline => throw _privateConstructorUsedError;
+  @JsonKey(name: 'lastSeen')
+  DateTime? get lastSeen => throw _privateConstructorUsedError;
 
   /// Serializes this UserDTO to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -28531,7 +28723,9 @@ abstract class $UserDTOCopyWith<$Res> {
       @JsonKey(name: 'device_token') String? deviceToken,
       @JsonKey(name: 'device_type') String? deviceType,
       @JsonKey(name: 'refresh_token') String? refreshToken,
-      @JsonKey(name: 'role') String? role});
+      @JsonKey(name: 'role') String? role,
+      @JsonKey(name: 'isOnline') bool isOnline,
+      @JsonKey(name: 'lastSeen') DateTime? lastSeen});
 
   $CityDTOCopyWith<$Res>? get city;
   $LanguageDTOCopyWith<$Res>? get language;
@@ -28568,6 +28762,8 @@ class _$UserDTOCopyWithImpl<$Res, $Val extends UserDTO>
     Object? deviceType = freezed,
     Object? refreshToken = freezed,
     Object? role = freezed,
+    Object? isOnline = null,
+    Object? lastSeen = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -28634,6 +28830,14 @@ class _$UserDTOCopyWithImpl<$Res, $Val extends UserDTO>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String?,
+      isOnline: null == isOnline
+          ? _value.isOnline
+          : isOnline // ignore: cast_nullable_to_non_nullable
+              as bool,
+      lastSeen: freezed == lastSeen
+          ? _value.lastSeen
+          : lastSeen // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 
@@ -28689,7 +28893,9 @@ abstract class _$$UserDTOImplCopyWith<$Res> implements $UserDTOCopyWith<$Res> {
       @JsonKey(name: 'device_token') String? deviceToken,
       @JsonKey(name: 'device_type') String? deviceType,
       @JsonKey(name: 'refresh_token') String? refreshToken,
-      @JsonKey(name: 'role') String? role});
+      @JsonKey(name: 'role') String? role,
+      @JsonKey(name: 'isOnline') bool isOnline,
+      @JsonKey(name: 'lastSeen') DateTime? lastSeen});
 
   @override
   $CityDTOCopyWith<$Res>? get city;
@@ -28726,6 +28932,8 @@ class __$$UserDTOImplCopyWithImpl<$Res>
     Object? deviceType = freezed,
     Object? refreshToken = freezed,
     Object? role = freezed,
+    Object? isOnline = null,
+    Object? lastSeen = freezed,
   }) {
     return _then(_$UserDTOImpl(
       id: freezed == id
@@ -28792,6 +29000,14 @@ class __$$UserDTOImplCopyWithImpl<$Res>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String?,
+      isOnline: null == isOnline
+          ? _value.isOnline
+          : isOnline // ignore: cast_nullable_to_non_nullable
+              as bool,
+      lastSeen: freezed == lastSeen
+          ? _value.lastSeen
+          : lastSeen // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -28815,7 +29031,9 @@ class _$UserDTOImpl implements _UserDTO {
       @JsonKey(name: 'device_token') this.deviceToken,
       @JsonKey(name: 'device_type') this.deviceType,
       @JsonKey(name: 'refresh_token') this.refreshToken,
-      @JsonKey(name: 'role') this.role});
+      @JsonKey(name: 'role') this.role,
+      @JsonKey(name: 'isOnline') this.isOnline = false,
+      @JsonKey(name: 'lastSeen') this.lastSeen});
 
   factory _$UserDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDTOImplFromJson(json);
@@ -28865,10 +29083,16 @@ class _$UserDTOImpl implements _UserDTO {
   @override
   @JsonKey(name: 'role')
   final String? role;
+  @override
+  @JsonKey(name: 'isOnline')
+  final bool isOnline;
+  @override
+  @JsonKey(name: 'lastSeen')
+  final DateTime? lastSeen;
 
   @override
   String toString() {
-    return 'UserDTO(id: $id, name: $name, email: $email, phone: $phone, avatar: $avatar, city: $city, language: $language, rating: $rating, cityName: $cityName, createdAt: $createdAt, updatedAt: $updatedAt, accessToken: $accessToken, deviceToken: $deviceToken, deviceType: $deviceType, refreshToken: $refreshToken, role: $role)';
+    return 'UserDTO(id: $id, name: $name, email: $email, phone: $phone, avatar: $avatar, city: $city, language: $language, rating: $rating, cityName: $cityName, createdAt: $createdAt, updatedAt: $updatedAt, accessToken: $accessToken, deviceToken: $deviceToken, deviceType: $deviceType, refreshToken: $refreshToken, role: $role, isOnline: $isOnline, lastSeen: $lastSeen)';
   }
 
   @override
@@ -28899,7 +29123,11 @@ class _$UserDTOImpl implements _UserDTO {
                 other.deviceType == deviceType) &&
             (identical(other.refreshToken, refreshToken) ||
                 other.refreshToken == refreshToken) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.isOnline, isOnline) ||
+                other.isOnline == isOnline) &&
+            (identical(other.lastSeen, lastSeen) ||
+                other.lastSeen == lastSeen));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28921,7 +29149,9 @@ class _$UserDTOImpl implements _UserDTO {
       deviceToken,
       deviceType,
       refreshToken,
-      role);
+      role,
+      isOnline,
+      lastSeen);
 
   /// Create a copy of UserDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -28956,7 +29186,9 @@ abstract class _UserDTO implements UserDTO {
       @JsonKey(name: 'device_token') final String? deviceToken,
       @JsonKey(name: 'device_type') final String? deviceType,
       @JsonKey(name: 'refresh_token') final String? refreshToken,
-      @JsonKey(name: 'role') final String? role}) = _$UserDTOImpl;
+      @JsonKey(name: 'role') final String? role,
+      @JsonKey(name: 'isOnline') final bool isOnline,
+      @JsonKey(name: 'lastSeen') final DateTime? lastSeen}) = _$UserDTOImpl;
 
   factory _UserDTO.fromJson(Map<String, dynamic> json) = _$UserDTOImpl.fromJson;
 
@@ -29005,6 +29237,12 @@ abstract class _UserDTO implements UserDTO {
   @override
   @JsonKey(name: 'role')
   String? get role;
+  @override
+  @JsonKey(name: 'isOnline')
+  bool get isOnline;
+  @override
+  @JsonKey(name: 'lastSeen')
+  DateTime? get lastSeen;
 
   /// Create a copy of UserDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -29052,6 +29290,10 @@ _$UserDTOImpl _$$UserDTOImplFromJson(Map<String, dynamic> json) =>
       deviceType: json['device_type'] as String?,
       refreshToken: json['refresh_token'] as String?,
       role: json['role'] as String?,
+      isOnline: json['isOnline'] as bool? ?? false,
+      lastSeen: json['lastSeen'] == null
+          ? null
+          : DateTime.parse(json['lastSeen'] as String),
     );
 
 Map<String, dynamic> _$$UserDTOImplToJson(_$UserDTOImpl instance) =>
@@ -29072,6 +29314,8 @@ Map<String, dynamic> _$$UserDTOImplToJson(_$UserDTOImpl instance) =>
       'device_type': instance.deviceType,
       'refresh_token': instance.refreshToken,
       'role': instance.role,
+      'isOnline': instance.isOnline,
+      'lastSeen': instance.lastSeen?.toIso8601String(),
     };
 
 
@@ -30577,19 +30821,18 @@ class _LoginPageState extends State<LoginPage> {
                                 valueListenable: _passwordError,
                                 hintText: context.localized.password,
                                 onChanged: (value) {
+                                  if (value.isEmpty) {
+                                  _passwordError.value =
+                                      context.localized.required_to_fill;
+                                } else if (value.length < 9) {
+                                  _passwordError.value =
+                                      context.localized.minCharacters;
+                                } else {
+                                  _passwordError.value = null;
+                                }
                                   checkAllowTapButton();
                                 },
-                                validator: (String? value) {
-                                  return null;
-
-                                  // if (value == null || value.isEmpty) {
-                                  //   return _passwordError.value = 'Неверный пароль';
-                                  // }
-                                  // // if (value.length < 6) {
-                                  // //   return _passwordError.value = 'Минимальная длина пароля - 6';
-                                  // // }
-                                  // return _passwordError.value = null;
-                                },
+                                validator: null,
                               );
                             },
                           ),
@@ -31184,7 +31427,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final String _prefix = "+";
   final FocusNode _focusNode = FocusNode();
   Country? selectedCountry;
- UserRole selectedRole = UserRole.user;
+  UserRole selectedRole = UserRole.user;
 
   @override
   void initState() {
@@ -31391,7 +31634,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Gap(70),
                         Text(
                           context.localized.accountRegister, //accountRegister
                           style: AppTextStyles.fs26w700.copyWith(height: 1.25),
@@ -31469,6 +31711,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           context.localized.enterYourPhoneNumber,
                           style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                         ),
+
                         const Gap(8),
                         Row(
                           children: [
@@ -31556,11 +31799,18 @@ class _RegisterPageState extends State<RegisterPage> {
                               valueListenable: _passwordError,
                               hintText: context.localized.password,
                               onChanged: (value) {
+                                if (value.isEmpty) {
+                                  _passwordError.value =
+                                      context.localized.required_to_fill;
+                                } else if (value.length < 9) {
+                                  _passwordError.value =
+                                      context.localized.minCharacters;
+                                } else {
+                                  _passwordError.value = null;
+                                }
                                 checkAllowTapButton();
                               },
-                              validator: (String? value) {
-                                return null;
-                              },
+                              validator: null,
                             );
                           },
                         ),
@@ -31581,11 +31831,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: DropdownButton<UserRole>(
                               alignment: Alignment.center,
                               isExpanded: true,
-                              padding: const EdgeInsets.only(right: 12, left: 16),
+                              padding:
+                                  const EdgeInsets.only(right: 12, left: 16),
                               underline: const SizedBox(),
-                              menuWidth: MediaQuery.of(context).size.width / 0.8,
+                              menuWidth:
+                                  MediaQuery.of(context).size.width / 0.8,
                               items: [
-                                 DropdownMenuItem(
+                                DropdownMenuItem(
                                   value: UserRole.user,
                                   child: Text(context.localized.user,
                                       style: AppTextStyles.fs14w500
@@ -31597,7 +31849,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                       style: AppTextStyles.fs14w500
                                           .copyWith(height: 1.3)),
                                 ),
-                               
                               ],
                               onChanged: (value) {
                                 setState(() {
@@ -39252,10 +39503,10 @@ mixin _$ComplainDTO {
   int? get id => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
   String? get type =>
-      throw _privateConstructorUsedError; 
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: 'created_at')
   String? get createdAt =>
-      throw _privateConstructorUsedError; 
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: 'updated_at')
   String? get updatedAt => throw _privateConstructorUsedError;
 
@@ -39408,11 +39659,11 @@ class _$ComplainDTOImpl implements _ComplainDTO {
   final String? text;
   @override
   final String? type;
-
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
-
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'updated_at')
   final String? updatedAt;
@@ -39474,10 +39725,10 @@ abstract class _ComplainDTO implements ComplainDTO {
   @override
   String? get text;
   @override
-  String? get type; 
+  String? get type; // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'created_at')
-  String? get createdAt; 
+  String? get createdAt; // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'updated_at')
   String? get updatedAt;
@@ -44605,9 +44856,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               children: [
                 SvgPicture.asset(AssetsConstants.icLocation),
                 const Gap(6),
-                Text(
-                  data.address ?? '',
-                  style: AppTextStyles.fs14w500,
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/1.2),
+                  child: Text(
+                    data.address ?? '',
+                   maxLines: 2,
+                    style: AppTextStyles.fs14w500,
+                  ),
                 )
               ],
             ),
@@ -44674,39 +44929,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  // Widget _mapWidget(ProductDTO data) {
-  //   final address = data.address ?? '';
-  //   final cityName = data.city?.name ?? '';
-  //   final countryName = data.country?.name ?? '';
-
-  //   return GestureDetector(
-  //     onTap: () {
-  //       context.router.push(
-  //         MapRoute(
-  //           country: countryName,
-  //           city: cityName,
-  //           address: address,
-  //         ),
-  //       );
-  //     },
-  //     child: Container(
-  //       height: 120,
-  //       decoration: BoxDecoration(
-  //         color: AppColors.grey2,
-  //         borderRadius: BorderRadius.circular(12),
-  //       ),
-  //       child: Center(
-  //         child:
-  //         Text(
-  //           context.localized.showOnMap,
-  //           style: AppTextStyles.fs14w500.copyWith(
-  //             color: AppColors.mainColor,
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+ 
   Widget _mapWidget(ProductDTO data) {
     return GestureDetector(
       onTap: () {
@@ -50726,16 +50949,25 @@ class ChatCubit extends Cubit<ChatState> {
   final IChatRepository _repository;
   final int _companyId;
   final String _token;
-   late final StreamSubscription _messagesSubscription;
+  late final StreamSubscription _messagesSubscription;
 
-  ChatCubit(this._repository, this._companyId, this._token) : super(const ChatState.initial()) {
+  ChatCubit(this._repository, this._companyId, this._token)
+      : super(const ChatState.initial()) {
     _repository.connectToChat(_companyId, _token);
     _messagesSubscription = _listenToMessages();
   }
-    Stream<List<ChatMessageDTO>> get messagesStream => _repository.getMessagesStream(_companyId);
+  IChatRepository get repository => _repository;
+  Stream<List<ChatMessageDTO>> get messagesStream =>
+      _repository.getMessagesStream(_companyId);
+  List<ChatMessageDTO> get currentMessages => _repository.currentMessages;
+
+void checkConnection() {
+  // Вызываем метод репозитория для проверки/восстановления связи
+  _repository.ensureConnection();
+}
 
   StreamSubscription _listenToMessages() {
-   return _repository.getMessagesStream(_companyId).listen((messages) {
+    return _repository.getMessagesStream(_companyId).listen((messages) {
       emit(ChatState.loaded(messages));
     }, onError: (error) {
       emit(ChatState.error(error.toString()));
@@ -50745,7 +50977,7 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> sendMessage(String content) async {
     if (content.trim().isEmpty) return;
     try {
-      await _repository.sendMessage( content);
+      await _repository.sendMessage(content);
     } catch (e) {
       emit(ChatState.error(e.toString()));
     }
@@ -50768,6 +51000,7 @@ class ChatState with _$ChatState {
   const factory ChatState.loaded(List<ChatMessageDTO> messages) = _Loaded;
   const factory ChatState.error(String message) = _Error;
 }
+
 
 
 lib\src\feature\chat\bloc\chat_cubit.freezed.dart
@@ -52099,7 +52332,12 @@ abstract class IChatRepository {
   Future<void> sendMessage(String content);
   Future<void> connectToChat(int conversationId, String token);
   Future<void> disconnect();
+  Future<void> ensureConnection();
     Future<List<ConversationDTO>> findConversationsForUser(String token);
+    // Stream<Map<String, dynamic>> get userStatusStream;
+    Stream<Map<int, Map<String, dynamic>>> get userStatusStream ;
+    List<ChatMessageDTO> get currentMessages;
+    Map<int, Map<String, dynamic>> get currentStatusCache;
 }
 
 
@@ -52122,15 +52360,33 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class ChatRepositoryImpl implements IChatRepository {
   final IRestClient _restClient;
   String? _currentToken;
-
+  int? _currentConversationId;
+  int? _currentCompanyId;
 
   // Состояние соединения
   WebSocketChannel? _channel;
+  Timer? _pingTimer;
+
   // final StreamController<List<ChatMessageDTO>> _messagesController = StreamController.broadcast();
   final BehaviorSubject<List<ChatMessageDTO>> _messagesController =
       BehaviorSubject.seeded([]);
-  int? _currentConversationId;
-  int? _currentCompanyId;
+
+// 1. КЭШ СОСТОЯНИЙ: Ключ = ID юзера (int), Значение = Данные статуса
+  final Map<int, Map<String, dynamic>> _onlineUsersStatusCache = {};
+  Map<int, Map<String, dynamic>> get currentStatusCache =>
+      _onlineUsersStatusCache;
+
+// Добавь контроллер для статусов
+  final BehaviorSubject<Map<int, Map<String, dynamic>>> _userStatusController =
+      BehaviorSubject.seeded({});
+
+// Геттер стрима
+  @override
+  Stream<Map<int, Map<String, dynamic>>> get userStatusStream =>
+      _userStatusController.stream;
+
+// РЕАЛИЗАЦИЯ ГЕТТЕРА для сообщений (чтобы не было ошибки в Cubit)
+  List<ChatMessageDTO> get currentMessages => _messagesController.value;
 
   ChatRepositoryImpl(this._restClient);
 
@@ -52173,31 +52429,40 @@ class ChatRepositoryImpl implements IChatRepository {
     // Проверьте, что companyId — это число, а не строка
     print('companyId type: ${companyId.runtimeType}'); // должно быть int
     final conversationId = chatInfo['id'] as int;
-
-    // if (_channel != null) {
-    //   if (_currentConversationId == conversationId) return; // уже подключены
-    //   await disconnect();
-    // }
-
     _currentConversationId = conversationId;
+
     final uri = Uri(
-      scheme: kIsWeb ? 'wss' : 'ws',
-      host: kIsWeb ? 'localhost' : '10.0.2.2',
-      port: kIsWeb ? 443 : 5000,
+      // scheme: kIsWeb ? 'wss' : 'ws',
+      scheme: 'wss', // для ngrok
+      // host: kIsWeb ? 'localhost' : '10.0.2.2',
+      host: '2f9e-94-158-58-248.ngrok-free.app', // для ngrok
+      // port: kIsWeb ? 443 : 5000, // для ngrok порт убираем
       path: '/chat',
       queryParameters: {'token': token},
     );
 
+    if (_channel != null) {
+      await _channel!.sink.close();
+    }
+
     try {
-      _channel = IOWebSocketChannel.connect(uri.toString());
+      _channel = IOWebSocketChannel.connect(
+        uri.toString(),
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+        },
+        pingInterval: const Duration(seconds: 5),
+      );
       _channel!.stream.listen(
         _handleMessage,
         onError: (error) {
           logger.error('WebSocket error', error: error);
           _messagesController.addError(error);
+          _stopPing();
         },
         onDone: () {
           logger.info('WebSocket connection closed');
+          _stopPing();
           _channel = null;
         },
       );
@@ -52207,6 +52472,8 @@ class ChatRepositoryImpl implements IChatRepository {
         'event': 'join',
         'data': {'conversationId': conversationId}
       });
+      _startPing();
+      print("✅ CHAT CONNECTED SUCCESSFULLY");
     } catch (e) {
       logger.error('Failed to connect to chat', error: e);
       _messagesController.addError(e);
@@ -52215,12 +52482,17 @@ class ChatRepositoryImpl implements IChatRepository {
 
   void _handleMessage(dynamic data) {
     try {
+      print(
+          "WS RAW DATA: $data"); // Логируем всё, чтобы видеть приходят ли ивенты
+
       final message = jsonDecode(data as String);
       final event = message['event'];
 
       switch (event) {
         case 'message.new':
           final msgData = message['data'];
+          // Важно: проверяем на null
+          if (msgData == null) return;
           final sender = UserDTO.fromJson(msgData['sender']);
           final newMessage = ChatMessageDTO(
             id: msgData['id'],
@@ -52232,6 +52504,33 @@ class ChatRepositoryImpl implements IChatRepository {
           final current = _messagesController.value;
           _messagesController.add([newMessage, ...current]);
           break;
+        // 👇👇👇 ДОБАВЬ ВОТ ЭТОТ БЛОК 👇👇👇
+        case 'user.status':
+          print("🔥 WS STATUS EVENT RECEIVED: $message"); // Для отладки
+          final statusData = message['data'];
+          if (statusData != null) {
+            // 1. Приводим типы жестко
+            final int userId = int.parse(statusData['userId'].toString());
+            final bool isOnline = statusData['isOnline'] == true;
+            final String? lastSeen = statusData['lastSeen'];
+
+            // 2. Обновляем локальный кэш
+            _onlineUsersStatusCache[userId] = {
+              'userId': userId,
+              'isOnline': isOnline,
+              'lastSeen': lastSeen
+            };
+
+            print("✅ UPDATING STREAM FOR USER $userId -> $isOnline");
+
+            // 3. !!! ГЛАВНОЕ ИСПРАВЛЕНИЕ !!!
+            // Создаем НОВУЮ Map, иначе StreamBuilder не увидит изменений
+            final newMap =
+                Map<int, Map<String, dynamic>>.from(_onlineUsersStatusCache);
+            _userStatusController.add(newMap);
+          }
+          break;
+        // 👆👆👆 КОНЕЦ БЛОКА 👆👆👆
         case 'joined':
           if (_currentCompanyId != null && _currentToken != null) {
             _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
@@ -52253,22 +52552,68 @@ class ChatRepositoryImpl implements IChatRepository {
 
   @override
   Future<void> sendMessage(String content) async {
+    if (content.trim().isEmpty) return;
+    if (_channel == null || _channel!.closeCode != null) {
+      print("⚠️ Connection lost. Reconnecting before sending...");
+      await ensureConnection(); // Пробуем восстановить связь
+    }
+
     if (_channel == null || _currentConversationId == null) {
       throw Exception('Not connected to any conversation');
     }
-    _sendJson({
-      'event': 'message.send',
-      'data': {
-        'conversationId': _currentConversationId,
-        'content': content.trim()
-      },
-    });
+    try {
+      _sendJson({
+        'event': 'message.send',
+        'data': {
+          'conversationId': _currentConversationId,
+          'content': content.trim()
+        },
+      });
+    } catch (e) {
+      print("❌ Error sending message. Retrying connection...");
+      await ensureConnection();
+      _sendJson({
+        'event': 'message.send',
+        'data': {
+          'conversationId': _currentConversationId,
+          'content': content.trim()
+        },
+      });
+    }
+  }
+
+  // Метод для восстановления связи (использует сохраненные token и companyId)
+  @override
+  Future<void> ensureConnection() async {
+    if (_currentCompanyId != null && _currentToken != null) {
+      await connectToChat(_currentCompanyId!, _currentToken!);
+    }
   }
 
   void _sendJson(Map<String, dynamic> data) {
     if (_channel != null) {
       _channel!.sink.add(jsonEncode(data));
     }
+  }
+
+// --- PING / PONG (Сердцебиение) ---
+  // Каждые 30 секунд шлем пустой пакет, чтобы Nginx/Router не закрывал канал
+  void _startPing() {
+    _stopPing();
+    _pingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (_channel != null) {
+        // Отправляем что-то, что сервер просто проигнорирует, но соединение останется активным
+        // Если у тебя на бэке нет обработчика 'ping', это нормально, главное что данные прошли
+        try {
+          _sendJson({'event': 'ping', 'data': {}});
+        } catch (_) {}
+      }
+    });
+  }
+
+  void _stopPing() {
+    _pingTimer?.cancel();
+    _pingTimer = null;
   }
 
   @override
@@ -52286,18 +52631,67 @@ class ChatRepositoryImpl implements IChatRepository {
   //   disconnect();
   // }
 
-  // В ChatRepositoryImpl
+  // @override
+  // Future<List<ConversationDTO>> findConversationsForUser(String token) async {
+  //   // Мы явно указываем динамический тип для ответа, так как структура может меняться
+  //   final dynamic response = await _restClient.get(
+  //     'conversations',
+  //     headers: {'Authorization': 'Bearer $token'},
+  //   );
+
+  //   print('BACKEND RESPONSE: $response');
+
+  //   List<dynamic> rawList;
+
+  //   // 1. Если это Map и содержит ключ 'data' (стандартный оберт NestJS)
+  //   if (response is Map && response.containsKey('data')) {
+  //     rawList = response['data'] as List<dynamic>;
+  //   }
+  //   // 2. Если это уже список (прямой ответ .map из NestJS)
+  //   else if (response is List) {
+  //     rawList = response;
+  //   }
+  //   // 3. На случай непредвиденной структуры
+  //   else {
+  //     rawList = [];
+  //   }
+
+  //   return rawList
+  //       .map((e) => ConversationDTO.fromJson(e as Map<String, dynamic>))
+  //       .toList();
+  // }
   @override
   Future<List<ConversationDTO>> findConversationsForUser(String token) async {
-   
-
-    final response = await _restClient.get(
+    final dynamic response = await _restClient.get(
       'conversations',
       headers: {'Authorization': 'Bearer $token'},
     );
-    final items = (response['data'] as List?) ?? [];
-    return items
-        .map((e) => ConversationDTO.fromJson(e as Map<String, dynamic>))
+
+    List<dynamic> rawList = [];
+    if (response is Map<String, dynamic> && response.containsKey('data')) {
+      rawList = response['data'] as List<dynamic>;
+    } else if (response is List) {
+      rawList = response;
+    }
+
+    return rawList
+        .map((e) {
+          if (e is Map<String, dynamic>) {
+            try {
+              return ConversationDTO.fromJson(e);
+            } catch (error) {
+              print('PARSING ERROR in ConversationDTO: $error');
+              return ConversationDTO(
+                id: -1,
+              ); // Исправлено: добавили participants
+            }
+          } else {
+            return ConversationDTO(
+              id: -1,
+            ); // Исправлено: добавили participants
+          }
+        })
+        .where((dto) => dto.id != -1)
         .toList();
   }
 }
@@ -52644,34 +53038,65 @@ class ConversationDTO {
   final int id;
   final String? title;
   final ChatMessageDTO? lastMessage;
-  final List<UserDTO> participants;
+  final DateTime? lastMessageDate;
+  final UserDTO? partner;
+  final int? companyId;
 
   ConversationDTO({
     required this.id,
     this.title,
     this.lastMessage,
-    required this.participants,
+    this.lastMessageDate,
+     this.partner,
+     this.companyId,
   });
 
   factory ConversationDTO.fromJson(Map<String, dynamic> json) {
+    final lastMessageRaw = json['lastMessage'];
+    ChatMessageDTO? parsedMessage;
+
+    if (lastMessageRaw is Map<String, dynamic>) {
+      parsedMessage = ChatMessageDTO.fromJson(lastMessageRaw);
+    } else if (lastMessageRaw is String) {
+      // Создаем "заглушку" сообщения из строки
+      parsedMessage = ChatMessageDTO(
+        id: 0,
+        content: lastMessageRaw,
+        createdAt: json['lastMessageDate'] != null
+            ? DateTime.parse(json['lastMessageDate'] as String)
+            : DateTime.now(),
+        // Исправлено: добавляем обязательного отправителя
+        sender: const UserDTO(
+          id: 0,
+          email: '',
+          name: 'System', // Или любое дефолтное имя
+        ),
+      );
+    }
+
     return ConversationDTO(
       id: json['id'] as int? ?? 0,
       title: json['title'] as String?,
-      lastMessage: json['lastMessage'] != null
-          ? ChatMessageDTO.fromJson(json['lastMessage'] as Map<String, dynamic>)
+      lastMessage: parsedMessage,
+      lastMessageDate: json['lastMessageDate'] != null 
+          ? DateTime.tryParse(json['lastMessageDate']) 
           : null,
-      participants: (json['participants'] as List?)
-              ?.map((e) => UserDTO.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
+      companyId: json['companyId'],
+      // Парсим партнера, если он есть
+      partner: json['partner'] != null 
+          ? UserDTO.fromJson(json['partner']) 
+          : null,
     );
   }
 }
 
 
+
 lib\src\feature\chat\presentation\chat_page.dart
 ------------------------------------------------
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
@@ -52681,6 +53106,7 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:coment_app/src/feature/chat/ui/widgets/date_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52717,15 +53143,44 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
   }
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _textController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+// 4. Слушаем, когда приложение "просыпается"
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      log("📱 APP RESUMED: Reconnecting socket...");
+      // Дергаем репозиторий, чтобы он проверил связь
+      // Так как репозиторий в кубите, можно сделать так:
+      final cubit = context.read<ChatCubit>();
+      // Если у репозитория есть метод connect(), вызови его.
+      // Если он приватный, можно просто вызвать какой-то метод кубита, который инициирует проверку.
+      // Но самый простой способ, если ты сделал Шаг 1 (enableReconnection) - библиотека сама попробует.
+      // Для надежности можно сделать публичный метод reconnect() в кубите:
+      cubit.checkConnection(); // <-- Реализуй этот метод в Cubit (см. ниже)
+    }
+  }
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 
   @override
@@ -52741,9 +53196,9 @@ class _ChatPageState extends State<ChatPage> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: CustomAppBar(
-            title: widget.companyName,
-           
+          appBar: StatusUserWidget(
+            widget: widget,
+            currentUser: widget.currentUser,
           ),
           body: Column(
             children: [
@@ -52779,13 +53234,38 @@ class _ChatPageState extends State<ChatPage> {
                         final message = messages[index];
                         final isOwnMessage =
                             message.sender.id == widget.currentUser.id;
-                        return _buildMessageBubble(message, isOwnMessage);
+                        bool showDateHeader = false;
+                        final currentMsgDate = message.createdAt.toLocal();
+                        if (index == messages.length - 1) {
+                          showDateHeader = true;
+                        } else {
+                          final nextMessage = messages[index + 1];
+
+                          final prevMsgDate = nextMessage.createdAt.toLocal();
+
+                          if (!isSameDay(currentMsgDate, prevMsgDate)) {
+                            showDateHeader = true;
+                          }
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (showDateHeader) DateChip(date: currentMsgDate),
+                            _buildMessageBubble(message, isOwnMessage),
+                          ],
+                        );
                       },
                     );
                   },
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
               _buildInputArea(),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         );
@@ -52909,15 +53389,21 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
           const Gap(8),
-          FloatingActionButton(
-            backgroundColor: AppColors.mainColor,
-            mini: true,
-            onPressed: _sendMessage,
-            child: SvgPicture.asset(
-              AssetsConstants.icSend,
-              color: Colors.white,
-              width: 20,
-              height: 20,
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.mainColor,
+              borderRadius: BorderRadius.circular(50)
+            ),
+            child: IconButton(
+              onPressed: _sendMessage,
+              padding: const EdgeInsets.only(left: 3, bottom: 3),
+              icon: Image.asset(
+                AssetsConstants.sendMessage,
+                fit: BoxFit.cover,
+                width: 25,
+                height: 25,
+                color: AppColors.btnGrey,
+              ),
             ),
           ),
         ],
@@ -52934,6 +53420,120 @@ class _ChatPageState extends State<ChatPage> {
   }
 }
 
+class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
+  const StatusUserWidget({
+    super.key,
+    required this.widget,
+    required this.currentUser,
+  });
+
+  final ChatPage widget;
+  final UserDTO currentUser;
+
+  @override
+  State<StatusUserWidget> createState() => _StatusUserWidgetState();
+
+  @override
+  Size get preferredSize => const Size(double.infinity, kToolbarHeight);
+}
+
+class _StatusUserWidgetState extends State<StatusUserWidget> {
+  // Форматирование даты
+  String _formatDate(DateTime? time) {
+    if (time == null) return 'недавно';
+    final localTime = time.toLocal();
+    final now = DateTime.now();
+    final diff = now.difference(localTime);
+
+    if (diff.inMinutes < 1) return 'только что';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} мин. назад';
+    if (diff.inHours < 24) {
+      return 'сегодня в ${localTime.hour.toString().padLeft(2, '0')}:${localTime.minute.toString().padLeft(2, '0')}';
+    }
+    return '${localTime.day}.${localTime.month}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 1. БЕРЕМ КУБИТ
+    final chatCubit = context.read<ChatCubit>();
+
+    // 2. БЕРЕМ РЕПОЗИТОРИЙ ИЗ КУБИТА (Тот самый, где живет активный Сокет!)
+    final activeRepo = chatCubit.repository;
+
+    return BlocBuilder<ChatCubit, ChatState>(
+      builder: (context, state) {
+        UserDTO? targetUser;
+        final messages = chatCubit.currentMessages;
+
+        if (messages.isNotEmpty) {
+          try {
+            targetUser = messages
+                .firstWhere((m) => m.sender.id != widget.currentUser.id)
+                .sender;
+          } catch (_) {}
+        }
+
+        if (targetUser == null) {
+          return CustomAppBar(
+            title: widget.widget.companyName,
+            subTitle: '...',
+          );
+        }
+
+        final nonNullTargetUser = targetUser;
+        final int targetId = int.tryParse(nonNullTargetUser.id.toString()) ?? 0;
+
+        // 3. СЛУШАЕМ СТРИМ АКТИВНОГО РЕПОЗИТОРИЯ
+        return StreamBuilder<Map<int, Map<String, dynamic>>>(
+          stream: activeRepo.userStatusStream,
+          // Используем кэш для мгновенного отображения при перерисовке
+          initialData: activeRepo.currentStatusCache,
+          builder: (context, snapshot) {
+            final allStatuses = snapshot.data ?? {};
+
+            // ПРИНТ ДЛЯ ПРОВЕРКИ (Увидишь в консоли при смене статуса)
+            if (snapshot.hasData) {
+              log(
+                  "UI STREAM UPDATE: Keys available: ${allStatuses.keys.toList()} looking for $targetId");
+            }
+
+            final userStatusFromWs = allStatuses[targetId];
+            bool isOnline;
+            DateTime? lastSeenDate;
+
+            if (userStatusFromWs != null) {
+              // Данные из сокета
+              isOnline = userStatusFromWs['isOnline'] == true;
+              if (userStatusFromWs['lastSeen'] != null) {
+                lastSeenDate =
+                    DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
+              }
+            } else {
+              // Данные из истории (по умолчанию)
+              isOnline = nonNullTargetUser.isOnline;
+              lastSeenDate = nonNullTargetUser.lastSeen;
+            }
+
+            return CustomAppBar(
+              isOnline: isOnline,
+              title: nonNullTargetUser.name ?? widget.widget.companyName,
+              subTitle:
+                  isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
+                  textStyle: AppTextStyles.fs18w700 ,
+                  subTitleStyle:  AppTextStyles.fs12w400.copyWith(
+                        color: isOnline
+                            ? AppColors.green
+                            : AppColors.greyTextColor,
+                      ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
 
 
 lib\src\feature\chat\presentation\widgets\chat_list_item.dart
@@ -52942,6 +53542,7 @@ lib\src\feature\chat\presentation\widgets\chat_list_item.dart
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
+// import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:flutter/material.dart';
 
@@ -52959,45 +53560,58 @@ class ChatListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     // Берём НЕ текущего пользователя, а другого участника
     final currentUser = context.repository.authRepository.user!;
-    final currentUserId = currentUser.id;
-    final otherUser = conversation.participants.firstWhere(
-      (user) => user.id != currentUserId,
-      orElse: () => conversation.participants.first,
-    );
+    final displayName = conversation.title!.isNotEmpty
+        ? conversation.title
+        : (conversation.partner?.name ?? 'Неизвестный');
     // Определяем название чата
     String chatTitle;
     if (currentUser.role == 'owner') {
       // Владелец видит имя пользователя
-      chatTitle = otherUser.name ?? 'Пользователь';
+      chatTitle = displayName ?? 'Пользователь';
     } else {
-      // Пользователь видит название компании
-      // Извлекаем ID компании из title "company-497"
-      final match =
-          RegExp(r'company-(\d+)').firstMatch(conversation.title ?? '');
-      if (match != null) {
-        // Здесь можно сделать маппинг ID → название, но пока используем имя владельца
-        chatTitle = otherUser.name ?? 'Компания';
-      } else {
-        chatTitle = otherUser.name ?? 'Чат';
-      }
+      // Пытаемся достать ID из заголовка или используем имя
+      final companyIdFromTitle = _extractCompanyId(conversation.title);
+      chatTitle = companyIdFromTitle != null
+          ? 'Компания #$companyIdFromTitle'
+          : (displayName ?? 'Чат');
     }
 
     return ListTile(
-      leading:
-          CircleAvatar(child: Text(otherUser.name?.substring(0, 1) ?? '?')),
-      title: Text(chatTitle),
-      subtitle: Text(conversation.lastMessage?.content ?? ''),
+      leading: CircleAvatar(
+        child: Text(
+          (displayName != null && displayName.isNotEmpty)
+              ? displayName[0].toUpperCase()
+              : '?',
+        ),
+      ),
+      title: Text(displayName ?? 'Чат'),
+      subtitle: Text(
+        conversation.lastMessage?.content ?? 'Нет сообщений',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: conversation.lastMessage?.createdAt != null
           ? Text(
               '${conversation.lastMessage!.createdAt.hour}:${conversation.lastMessage!.createdAt.minute}')
           : null,
-      onTap: (){
-        final companyId = _extractCompanyId(conversation.title);
-        if (companyId == null) return;
-          context.router.push(
+      onTap: () {
+       // 1. Пытаемся взять ID напрямую из нового поля в DTO
+        // 2. Если его там нет (для старых записей), пытаемся вытащить из заголовка
+        final companyId = conversation.companyId ?? _extractCompanyId(conversation.title);
+        
+        if (companyId == null) {
+          // Если мы здесь, значит это личный чат без привязки к компании
+          // Можно либо выдать ошибку, либо реализовать переход в ChatRoute по другому параметру
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Ошибка: ID компании не найден')),
+          );
+          return;
+        }
+
+        context.router.push(
           ChatRoute(
             companyId: companyId,
-            companyName: chatTitle, // ← правильное название
+            companyName: chatTitle,
             currentUser: currentUser,
             accessToken: currentUser.accessToken!,
           ),
@@ -53005,9 +53619,67 @@ class ChatListItem extends StatelessWidget {
       },
     );
   }
+
   int? _extractCompanyId(String? title) {
     final match = RegExp(r'company-(\d+)').firstMatch(title ?? '');
     return match != null ? int.parse(match.group(1)!) : null;
+  }
+}
+
+
+
+lib\src\feature\chat\ui\widgets\date_chip.dart
+----------------------------------------------
+import 'package:coment_app/src/core/theme/resources.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+class DateChip extends StatelessWidget {
+  const DateChip({super.key, required this.date});
+
+  final DateTime date;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Expanded(
+          child: Divider(
+            color: AppColors.borderColor,
+            thickness: 2,
+            indent: 15,
+            endIndent: 10,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.grey[400]?.withValues(alpha: 0.6),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                DateFormat('d MMMM').format(date),
+                style: AppTextStyles.fs12w500.copyWith(
+                  color: AppColors.black,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Divider(
+            color: AppColors.borderColor,
+            thickness: 2,
+            indent: 10,
+            endIndent: 15,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -74324,7 +74996,7 @@ class SavedPaymentCardResponse with _$SavedPaymentCardResponse {
     @JsonKey(name: 'expYear') required String expYear,
     @JsonKey(name: 'isDefault') required bool isDefault,
     @JsonKey(name: 'createdAt') required String createdAt, // если backend возвращает
-     @JsonKey(name: 'card_holder_name') required String cardHolderName,
+     @JsonKey(name: 'cardHolderName') required String cardHolderName,
   }) = _SavedPaymentCardResponse;
 
   factory SavedPaymentCardResponse.fromJson(Map<String, dynamic> json) 
@@ -74374,7 +75046,7 @@ mixin _$SavedPaymentCardResponse {
   @JsonKey(name: 'createdAt')
   String get createdAt =>
       throw _privateConstructorUsedError; // если backend возвращает
-  @JsonKey(name: 'card_holder_name')
+  @JsonKey(name: 'cardHolderName')
   String get cardHolderName => throw _privateConstructorUsedError;
 
   /// Serializes this SavedPaymentCardResponse to a JSON map.
@@ -74401,7 +75073,7 @@ abstract class $SavedPaymentCardResponseCopyWith<$Res> {
       @JsonKey(name: 'expYear') String expYear,
       @JsonKey(name: 'isDefault') bool isDefault,
       @JsonKey(name: 'createdAt') String createdAt,
-      @JsonKey(name: 'card_holder_name') String cardHolderName});
+      @JsonKey(name: 'cardHolderName') String cardHolderName});
 }
 
 /// @nodoc
@@ -74483,7 +75155,7 @@ abstract class _$$SavedPaymentCardResponseImplCopyWith<$Res>
       @JsonKey(name: 'expYear') String expYear,
       @JsonKey(name: 'isDefault') bool isDefault,
       @JsonKey(name: 'createdAt') String createdAt,
-      @JsonKey(name: 'card_holder_name') String cardHolderName});
+      @JsonKey(name: 'cardHolderName') String cardHolderName});
 }
 
 /// @nodoc
@@ -74558,7 +75230,7 @@ class _$SavedPaymentCardResponseImpl implements _SavedPaymentCardResponse {
       @JsonKey(name: 'expYear') required this.expYear,
       @JsonKey(name: 'isDefault') required this.isDefault,
       @JsonKey(name: 'createdAt') required this.createdAt,
-      @JsonKey(name: 'card_holder_name') required this.cardHolderName});
+      @JsonKey(name: 'cardHolderName') required this.cardHolderName});
 
   factory _$SavedPaymentCardResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$SavedPaymentCardResponseImplFromJson(json);
@@ -74586,7 +75258,7 @@ class _$SavedPaymentCardResponseImpl implements _SavedPaymentCardResponse {
   final String createdAt;
 // если backend возвращает
   @override
-  @JsonKey(name: 'card_holder_name')
+  @JsonKey(name: 'cardHolderName')
   final String cardHolderName;
 
   @override
@@ -74644,7 +75316,7 @@ abstract class _SavedPaymentCardResponse implements SavedPaymentCardResponse {
       @JsonKey(name: 'expYear') required final String expYear,
       @JsonKey(name: 'isDefault') required final bool isDefault,
       @JsonKey(name: 'createdAt') required final String createdAt,
-      @JsonKey(name: 'card_holder_name')
+      @JsonKey(name: 'cardHolderName')
       required final String cardHolderName}) = _$SavedPaymentCardResponseImpl;
 
   factory _SavedPaymentCardResponse.fromJson(Map<String, dynamic> json) =
@@ -74672,7 +75344,7 @@ abstract class _SavedPaymentCardResponse implements SavedPaymentCardResponse {
   @JsonKey(name: 'createdAt')
   String get createdAt; // если backend возвращает
   @override
-  @JsonKey(name: 'card_holder_name')
+  @JsonKey(name: 'cardHolderName')
   String get cardHolderName;
 
   /// Create a copy of SavedPaymentCardResponse
@@ -74705,7 +75377,7 @@ _$SavedPaymentCardResponseImpl _$$SavedPaymentCardResponseImplFromJson(
       expYear: json['expYear'] as String,
       isDefault: json['isDefault'] as bool,
       createdAt: json['createdAt'] as String,
-      cardHolderName: json['card_holder_name'] as String,
+      cardHolderName: json['cardHolderName'] as String,
     );
 
 Map<String, dynamic> _$$SavedPaymentCardResponseImplToJson(
@@ -74718,7 +75390,7 @@ Map<String, dynamic> _$$SavedPaymentCardResponseImplToJson(
       'expYear': instance.expYear,
       'isDefault': instance.isDefault,
       'createdAt': instance.createdAt,
-      'card_holder_name': instance.cardHolderName,
+      'cardHolderName': instance.cardHolderName,
     };
 
 
@@ -75614,7 +76286,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     onPressed: () {
                       birthDateController.text =
                           tempDate.toIso8601String().split('T')[0];
-                                          if (context.mounted) {
+                      if (context.mounted) {
                         setState(() {});
                       }
                       Navigator.pop(context);
@@ -76005,8 +76677,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   valueListenable: _passwordError,
                                   hintText: context.localized.enterThePassword,
                                   onChanged: (value) {
+                                    if (value.isEmpty) {
+                                      _passwordError.value =
+                                          context.localized.required_to_fill;
+                                    } else if (value.length < 9) {
+                                      _passwordError.value =
+                                          context.localized.minCharacters;
+                                    } else {
+                                      _passwordError.value = null;
+                                    }
                                     checkAllowTapButton();
                                   },
+                                  validator: null,
                                 );
                               },
                             ),
@@ -76841,7 +77523,6 @@ import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textf
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/chat/bloc/conversations_cubit.dart';
-import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
 import 'package:coment_app/src/feature/chat/presentation/widgets/chat_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76909,23 +77590,7 @@ class _MessagePageState extends State<MessagePage> {
                   final conv = conversations[index];
                   return ChatListItem(
                     conversation: conv,
-                    // onTap: () {
-                    //   final match =
-                    //       RegExp(r'company-(\d+)').firstMatch(conv.title ?? '');
-                    //   final companyId =
-                    //       match != null ? int.parse(match.group(1)!) : null;
-                    //   if (companyId != null) {
-                    //     context.router.push(
-                    //       ChatRoute(
-                    //         companyId: companyId,
-                    //         currentUser:
-                    //             context.repository.authRepository.user!,
-                    //         accessToken: context
-                    //             .repository.authRepository.user!.accessToken!,
-                    //       ),
-                    //     );
-                    //   }
-                    // },
+
                   );
                 },
               );
@@ -76936,24 +77601,7 @@ class _MessagePageState extends State<MessagePage> {
       },
     );
   }
-  //  // Вспомогательный метод для извлечения companyId из чата
-  // int? _extractCompanyId(ConversationDTO conv) {
-  //   // Если title = "company-497", извлекаем 497
-  //   if (conv.title?.startsWith('company-') ?? false) {
-  //     final idStr = conv.title!.split('-').last;
-  //     return int.tryParse(idStr);
-  //   }
-  //   // Или ищем владельца среди участников
-  //   final owner = conv.participants.firstWhere(
-  //     (user) => user.role == 'owner',
-  //     orElse: () => conv.participants.firstWhere(
-  //       (user) => user.id != context.repository.authRepository.currentUser?.id,
-  //       orElse: () => conv.participants[0],
-  //     ),
-  //   );
-  //   // Но лучше хранить companyId отдельно в ConversationDTO
-  //   return null;
-  // }
+  
 }
 
 class MessageList extends StatelessWidget {
@@ -76979,23 +77627,23 @@ import 'package:coment_app/src/feature/profile/presentation/widgets/add_payment_
 import 'package:coment_app/src/feature/profile/presentation/widgets/make_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:payment_card/payment_card.dart';
+// import 'package:payment_card/payment_card.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/profile/bloc/payment_cubit.dart';
 
 extension BrandToCardNetwork on String {
-  CardNetwork toCardNetwork() {
-    switch (this) {
-      case 'visa':
-        return CardNetwork.visa;
-      case 'mastercard':
-        return CardNetwork.mastercard;
-      // Другие бренды → CardNetwork.other (т.к. нет unionpay/humo/uzcard в пакете)
-      default:
-        return CardNetwork.other;
-    }
-  }
+  // CardNetwork toCardNetwork() {
+  //   switch (this) {
+  //     case 'visa':
+  //       return CardNetwork.visa;
+  //     case 'mastercard':
+  //       return CardNetwork.mastercard;
+  //     // Другие бренды → CardNetwork.other (т.к. нет unionpay/humo/uzcard в пакете)
+  //     default:
+  //       return CardNetwork.other;
+  //   }
+  // }
 
   Color getCardColor() {
     switch (this) {
@@ -77123,8 +77771,6 @@ class _PaymentViewState extends State<_PaymentView> {
 
 lib\src\feature\profile\presentation\pages\profile_page.dart
 ------------------------------------------------------------
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:coment_app/src/core/constant/constants.dart';
@@ -77204,7 +77850,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Toaster.showErrorTopShortToast(context, message);
               },
               loading: () {
-                context.loaderOverlay.show();
+                // context.loaderOverlay.show();
                 _refreshController.resetNoData();
               },
               exited: (message) {
@@ -77215,7 +77861,6 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               loaded: (userDTO, _) {
                 selectedLanguageId = userDTO.language?.id;
-                log(selectedLanguageId.toString());
                 setState(() {});
               },
               orElse: () {
@@ -77232,16 +77877,24 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               orElse: () {
                 return const Center(
-                  child: Text("Or else"),
+                  child: Text("Ошибка загрузки"),
                 );
               },
               loaded: (userDTO, verificationStatus) {
+                print(userDTO.role); // что выводит?
+                print(userDTO.role == 'owner');
+
+                final userRole = userDTO.role?.toLowerCase().trim() ?? '';
+                final isOwner = userRole == 'owner';
                 return SmartRefresher(
                   header: const RefreshClassicHeader(),
                   controller: _refreshController,
                   onRefresh: () async {
-                    BlocProvider.of<ProfileBLoC>(context)
-                        .add(const ProfileEvent.getProfile());
+                    final bloc = BlocProvider.of<ProfileBLoC>(context);
+
+                    bloc.add(const ProfileEvent.getProfile());
+                    bloc.add(const ProfileEvent.getVerificationStatus());
+                    BlocProvider.of<DictionaryCubit>(context).getDictionary();
                     _refreshController.refreshCompleted();
                   },
                   child: CustomScrollView(
@@ -77443,8 +78096,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                             ),
                             const Gap(12),
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
+                            if (isOwner)
+                              Column(
+                                spacing: 12,
+                                children: [
+                                  ProfileRowButton(
                                     icon: AssetsConstants.documentsAdd,
                                     title: context.localized.loadDocuments,
                                     onTap: () {
@@ -77452,41 +78108,33 @@ class _ProfilePageState extends State<ProfilePage> {
                                         const LoadDocumentsRoute(),
                                       );
                                     },
-                                  )
-                                : const SizedBox(),
-                            const Gap(12),
-
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
+                                  ),
+                                  ProfileRowButton(
                                     icon: AssetsConstants.companyAdd,
                                     title: context.localized.companyAdd,
                                     onTap: () {
                                       context.router
                                           .push(const SelectCategoriesRoute());
                                     },
-                                  )
-                                : const SizedBox(),
-                            const Gap(12),
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
+                                  ),
+                                  ProfileRowButton(
                                     icon: AssetsConstants.payment,
                                     title: context.localized.payment,
                                     onTap: () {
                                       context.router.push(const PaymentRoute());
                                     },
                                   )
-                                : const SizedBox(),
-                            const Gap(12),
-
-                            userDTO.role == 'owner'
-                                ? ProfileRowButton(
-                                    icon: AssetsConstants.message,
-                                    title: context.localized.message,
-                                    onTap: () {
-                                      context.router.push(const MessageRoute());
-                                    },
-                                  )
-                                : const SizedBox(),
+                                ],
+                              ),
+                            if (isOwner) const Gap(12),
+                            ProfileRowButton(
+                              icon: AssetsConstants.message,
+                              title: context.localized.message,
+                              onTap: () {
+                                context.router.push(const MessageRoute());
+                              },
+                            ),
+                            // : const SizedBox(),
                             const Gap(12),
 
                             ///
@@ -81633,4 +82281,4 @@ class _SignInPage extends StatelessWidget {
 
 
 
-=== Всего файлов: 367 ===
+=== Всего файлов: 369 ===
