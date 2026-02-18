@@ -5711,11 +5711,11 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         // baseUrl: 'http://10.0.2.2:5000/api/v1/',
-         baseUrl: 'https://2f9e-94-158-58-248.ngrok-free.app/api/v1/',
+         baseUrl: 'https://abca-94-158-58-248.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           // baseUrl: 'http://10.0.2.2:5000/api/v1/',
-          baseUrl: 'https://2f9e-94-158-58-248.ngrok-free.app/api/v1/',
+          baseUrl: 'https://abca-94-158-58-248.ngrok-free.app/api/v1/',
           // baseUrl: 'http://192.168.0.100:3001/api/v1/',
           interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,
@@ -6348,6 +6348,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Frame.svg
   SvgGenImage get frame => const SvgGenImage('assets/icons/Frame.svg');
 
+  /// File path: assets/icons/active_message.svg
+  SvgGenImage get activeMessage =>
+      const SvgGenImage('assets/icons/active_message.svg');
+
   /// File path: assets/icons/add-purple.svg
   SvgGenImage get addPurple => const SvgGenImage('assets/icons/add-purple.svg');
 
@@ -6590,6 +6594,7 @@ class $AssetsIconsGen {
   List<SvgGenImage> get values => [
         frame2,
         frame,
+        activeMessage,
         addPurple,
         add,
         addCompany,
@@ -20955,7 +20960,7 @@ class _BaseStudentBottomNavbarState extends State<BaseStudentBottomNavbar> {
         indicator: TabDotIndicator(),
         onTap: (value) {
           HapticFeedback.mediumImpact();
-          if (value == 3 && !context.appBloc.isAuthenticated) {
+          if ((value == 2 || value == 3) && !context.appBloc.isAuthenticated) {
             context.router.push(
               const RegisterRoute(),
             );
@@ -21519,7 +21524,13 @@ class CustomTabWidget extends StatelessWidget {
       text: title,
       iconMargin: const EdgeInsets.only(bottom: 8),
       icon: SvgPicture.asset(
-        tabIndex == currentIndex ? activeIcon : icon,
+        icon,
+        // tabIndex == currentIndex ? activeIcon :
+        colorFilter: ColorFilter.mode(
+            tabIndex == currentIndex
+                ? AppColors.mainColor
+                : AppColors.greyTextColor,
+            BlendMode.srcIn),
       ),
     );
   }
@@ -21581,6 +21592,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isBackButton;
   final bool isOnline;
   final TextStyle? subTitleStyle;
+  final bool btnBack;
   const CustomAppBar({
     super.key,
     this.title,
@@ -21595,13 +21607,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.subTitleStyle,
     this.isBackButton = true,
     this.isOnline = false,
+    this.btnBack = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: 57,
-      leading: IconButton(
+      leading: !btnBack ? IconButton(
         padding: EdgeInsets.zero,
         onPressed: () {
           context.router.maybePop();
@@ -21612,7 +21625,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             : Container(
                 width: 74,
               ),
-      ),
+      ) : null,
       centerTitle: true,
       title: Column(
         children: [
@@ -21840,7 +21853,7 @@ class AppRouter extends RootStackRouter {
             page: BaseChatTab.page,
             children: [
               AutoRoute(
-                page: ChatRoute.page, 
+                page: MessageRoute.page, 
                 initial: true
               ), 
             ],
@@ -21881,7 +21894,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: RaitingRoute.page),
         AutoRoute(page: LoadDocumentsRoute.page),
         AutoRoute(page: PaymentRoute.page),
-        AutoRoute(page: MessageRoute.page),
+        // AutoRoute(page: MessageRoute.page),
         //Catalog
         AutoRoute(page: SubcatalogRoute.page),
         AutoRoute(page: ProductListRoute.page),
@@ -50937,6 +50950,7 @@ lib\src\feature\chat\bloc\chat_cubit.dart
 -----------------------------------------
 // lib/src/feature/chat/bloc/chat_cubit.dart
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
@@ -50951,6 +50965,8 @@ class ChatCubit extends Cubit<ChatState> {
   final String _token;
   late final StreamSubscription _messagesSubscription;
 
+  int get conversationId => _companyId;
+
   ChatCubit(this._repository, this._companyId, this._token)
       : super(const ChatState.initial()) {
     _repository.connectToChat(_companyId, _token);
@@ -50959,16 +50975,70 @@ class ChatCubit extends Cubit<ChatState> {
   IChatRepository get repository => _repository;
   Stream<List<ChatMessageDTO>> get messagesStream =>
       _repository.getMessagesStream(_companyId);
-  List<ChatMessageDTO> get currentMessages => _repository.currentMessages;
+  // List<ChatMessageDTO> get currentMessages => _repository.currentMessages;
+  List<ChatMessageDTO> get currentMessages => state.maybeMap(
+        loaded: (s) => s.messages,
+        orElse: () => _repository.currentMessages,
+      );
 
-void checkConnection() {
-  // Вызываем метод репозитория для проверки/восстановления связи
-  _repository.ensureConnection();
-}
+  Set<int> get selectedIds => state.maybeMap(
+        loaded: (s) => s.selectedIds,
+        orElse: () => {},
+      );
+
+  ChatMessageDTO? get replyMessage => state.maybeMap(
+        loaded: (s) => s.replyMessage,
+        orElse: () => null,
+      );
+// ---------------------------------------
+  // === ЛОГИКА ВЫДЕЛЕНИЯ ===
+  void toggleSelection(int messageId) {
+    state.mapOrNull(loaded: (state) {
+      final newSet = Set<int>.from(state.selectedIds);
+      if (newSet.contains(messageId)) {
+        newSet.remove(messageId);
+      } else {
+        newSet.add(messageId);
+      }
+      emit(state.copyWith(selectedIds: newSet));
+    });
+  }
+
+  void clearSelection() {
+    state.mapOrNull(loaded: (state) {
+      emit(state.copyWith(selectedIds: {}, replyMessage: null));
+    });
+  }
+
+  // === ЛОГИКА ОТВЕТА ===
+  void setReplyMessage(ChatMessageDTO message) {
+    state.mapOrNull(loaded: (state) {
+      // Сбрасываем выделение и устанавливаем ответ
+      emit(state.copyWith(selectedIds: {}, replyMessage: message));
+    });
+  }
+
+  void cancelReply() {
+    state.mapOrNull(loaded: (state) {
+      emit(state.copyWith(replyMessage: null));
+    });
+  }
+  // -------------------------------------
+
+  void checkConnection() {
+    // Вызываем метод репозитория для проверки/восстановления связи
+    _repository.ensureConnection();
+  }
 
   StreamSubscription _listenToMessages() {
     return _repository.getMessagesStream(_companyId).listen((messages) {
-      emit(ChatState.loaded(messages));
+      final currentSelected = selectedIds;
+      final currentReply = replyMessage;
+      emit(ChatState.loaded(
+        messages,
+        selectedIds: currentSelected,
+        replyMessage: currentReply,
+      ));
     }, onError: (error) {
       emit(ChatState.error(error.toString()));
     });
@@ -50976,8 +51046,11 @@ void checkConnection() {
 
   Future<void> sendMessage(String content) async {
     if (content.trim().isEmpty) return;
+    final replyToId = replyMessage?.id;
+    // state.mapOrNull(loaded: (s) => replyToId = s.replyMessage?.id);
     try {
-      await _repository.sendMessage(content);
+      await _repository.sendMessage(content, replyToId: replyToId);
+      cancelReply();
     } catch (e) {
       emit(ChatState.error(e.toString()));
     }
@@ -50987,9 +51060,53 @@ void checkConnection() {
   @override
   Future<void> close() {
     _messagesSubscription.cancel(); // Отписываемся от стрима
-    _repository.disconnect(); // Закрываем WebSocket
+    // _repository.disconnect(); // Закрываем WebSocket
+    _repository.leaveChat(); // Закрываем WebSocket
     // ⚠️ НЕ вызываем _repository.dispose() здесь, если репозиторий используется где-то ещё!
     return super.close();
+  }
+
+  // === УДАЛЕНИЕ ===
+  void deleteSelectedMessages() {
+    state.mapOrNull(loaded: (state) {
+      if (state.selectedIds.isEmpty) return;
+      // Вызываем метод репозитория
+      _repository.deleteMessages(state.selectedIds.toList());
+      // Очищаем выделение сразу
+      clearSelection();
+    });
+  }
+
+// В ChatCubit (lib/src/feature/chat/bloc/chat_cubit.dart)
+
+  Future<void> forwardSelectedMessages(int targetConversationId) async {
+    state.mapOrNull(loaded: (s) async {
+      if (s.selectedIds.isEmpty) return;
+
+      // Собираем текст всех выделенных сообщений
+      final messagesToForward = s.messages
+          .where((m) => s.selectedIds.contains(m.id))
+          .toList()
+        ..sort((a, b) =>
+            a.createdAt.compareTo(b.createdAt)); // Сортируем по времени
+
+      for (final msg in messagesToForward) {
+        try {
+          // Отправляем в репозиторий, но указываем ID другого чата
+          // (Нужно убедиться, что sendMessage в репозитории принимает conversationId)
+          await _repository.sendMessage(
+            msg.content,
+            targetConversationId: targetConversationId,
+            // Здесь можно добавить флаг 'isForwarded: true', если бэкенд поддерживает
+          );
+          await Future.delayed(const Duration(milliseconds: 100));
+        } catch (e) {
+          log("Error forwarding message ${msg.id}: $e");
+        }
+      }
+
+      clearSelection();
+    });
   }
 }
 
@@ -50997,7 +51114,11 @@ void checkConnection() {
 class ChatState with _$ChatState {
   const factory ChatState.initial() = _Initial;
   const factory ChatState.loading() = _Loading;
-  const factory ChatState.loaded(List<ChatMessageDTO> messages) = _Loaded;
+  const factory ChatState.loaded(
+    List<ChatMessageDTO> messages, {
+    @Default({}) Set<int> selectedIds,
+    ChatMessageDTO? replyMessage,
+  }) = _Loaded;
   const factory ChatState.error(String message) = _Error;
 }
 
@@ -51027,7 +51148,9 @@ mixin _$ChatState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(List<ChatMessageDTO> messages,
+            Set<int> selectedIds, ChatMessageDTO? replyMessage)
+        loaded,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -51035,7 +51158,9 @@ mixin _$ChatState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -51043,7 +51168,9 @@ mixin _$ChatState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -51138,7 +51265,9 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(List<ChatMessageDTO> messages,
+            Set<int> selectedIds, ChatMessageDTO? replyMessage)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -51149,7 +51278,9 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -51160,7 +51291,9 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -51255,7 +51388,9 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(List<ChatMessageDTO> messages,
+            Set<int> selectedIds, ChatMessageDTO? replyMessage)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -51266,7 +51401,9 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -51277,7 +51414,9 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -51335,7 +51474,12 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ChatMessageDTO> messages});
+  $Res call(
+      {List<ChatMessageDTO> messages,
+      Set<int> selectedIds,
+      ChatMessageDTO? replyMessage});
+
+  $ChatMessageDTOCopyWith<$Res>? get replyMessage;
 }
 
 /// @nodoc
@@ -51352,21 +51496,47 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? messages = null,
+    Object? selectedIds = null,
+    Object? replyMessage = freezed,
   }) {
     return _then(_$LoadedImpl(
       null == messages
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<ChatMessageDTO>,
+      selectedIds: null == selectedIds
+          ? _value._selectedIds
+          : selectedIds // ignore: cast_nullable_to_non_nullable
+              as Set<int>,
+      replyMessage: freezed == replyMessage
+          ? _value.replyMessage
+          : replyMessage // ignore: cast_nullable_to_non_nullable
+              as ChatMessageDTO?,
     ));
+  }
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatMessageDTOCopyWith<$Res>? get replyMessage {
+    if (_value.replyMessage == null) {
+      return null;
+    }
+
+    return $ChatMessageDTOCopyWith<$Res>(_value.replyMessage!, (value) {
+      return _then(_value.copyWith(replyMessage: value));
+    });
   }
 }
 
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(final List<ChatMessageDTO> messages)
-      : _messages = messages;
+  const _$LoadedImpl(final List<ChatMessageDTO> messages,
+      {final Set<int> selectedIds = const {}, this.replyMessage})
+      : _messages = messages,
+        _selectedIds = selectedIds;
 
   final List<ChatMessageDTO> _messages;
   @override
@@ -51376,9 +51546,21 @@ class _$LoadedImpl implements _Loaded {
     return EqualUnmodifiableListView(_messages);
   }
 
+  final Set<int> _selectedIds;
+  @override
+  @JsonKey()
+  Set<int> get selectedIds {
+    if (_selectedIds is EqualUnmodifiableSetView) return _selectedIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_selectedIds);
+  }
+
+  @override
+  final ChatMessageDTO? replyMessage;
+
   @override
   String toString() {
-    return 'ChatState.loaded(messages: $messages)';
+    return 'ChatState.loaded(messages: $messages, selectedIds: $selectedIds, replyMessage: $replyMessage)';
   }
 
   @override
@@ -51386,12 +51568,19 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            const DeepCollectionEquality().equals(other._messages, _messages));
+            const DeepCollectionEquality().equals(other._messages, _messages) &&
+            const DeepCollectionEquality()
+                .equals(other._selectedIds, _selectedIds) &&
+            (identical(other.replyMessage, replyMessage) ||
+                other.replyMessage == replyMessage));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_messages));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_messages),
+      const DeepCollectionEquality().hash(_selectedIds),
+      replyMessage);
 
   /// Create a copy of ChatState
   /// with the given fields replaced by the non-null parameter values.
@@ -51406,10 +51595,12 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(List<ChatMessageDTO> messages,
+            Set<int> selectedIds, ChatMessageDTO? replyMessage)
+        loaded,
     required TResult Function(String message) error,
   }) {
-    return loaded(messages);
+    return loaded(messages, selectedIds, replyMessage);
   }
 
   @override
@@ -51417,10 +51608,12 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(messages);
+    return loaded?.call(messages, selectedIds, replyMessage);
   }
 
   @override
@@ -51428,12 +51621,14 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(messages);
+      return loaded(messages, selectedIds, replyMessage);
     }
     return orElse();
   }
@@ -51477,9 +51672,13 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements ChatState {
-  const factory _Loaded(final List<ChatMessageDTO> messages) = _$LoadedImpl;
+  const factory _Loaded(final List<ChatMessageDTO> messages,
+      {final Set<int> selectedIds,
+      final ChatMessageDTO? replyMessage}) = _$LoadedImpl;
 
   List<ChatMessageDTO> get messages;
+  Set<int> get selectedIds;
+  ChatMessageDTO? get replyMessage;
 
   /// Create a copy of ChatState
   /// with the given fields replaced by the non-null parameter values.
@@ -51558,7 +51757,9 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatMessageDTO> messages) loaded,
+    required TResult Function(List<ChatMessageDTO> messages,
+            Set<int> selectedIds, ChatMessageDTO? replyMessage)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -51569,7 +51770,9 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatMessageDTO> messages)? loaded,
+    TResult? Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -51580,7 +51783,9 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatMessageDTO> messages)? loaded,
+    TResult Function(List<ChatMessageDTO> messages, Set<int> selectedIds,
+            ChatMessageDTO? replyMessage)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -52329,7 +52534,7 @@ import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 
 abstract class IChatRepository {
   Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId);
-  Future<void> sendMessage(String content);
+  Future<void> sendMessage(String content, {int? replyToId, int? targetConversationId});
   Future<void> connectToChat(int conversationId, String token);
   Future<void> disconnect();
   Future<void> ensureConnection();
@@ -52338,12 +52543,16 @@ abstract class IChatRepository {
     Stream<Map<int, Map<String, dynamic>>> get userStatusStream ;
     List<ChatMessageDTO> get currentMessages;
     Map<int, Map<String, dynamic>> get currentStatusCache;
+    void deleteMessages(List<int> ids);
+    void leaveChat();
 }
 
 
 lib\src\feature\chat\data\chat_repository_impl.dart
 ---------------------------------------------------
 // lib/src/feature/chat/data/chat_repository_impl.dart
+import 'dart:developer';
+
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
@@ -52362,6 +52571,7 @@ class ChatRepositoryImpl implements IChatRepository {
   String? _currentToken;
   int? _currentConversationId;
   int? _currentCompanyId;
+  int? _currentUserId;
 
   // Состояние соединения
   WebSocketChannel? _channel;
@@ -52387,6 +52597,7 @@ class ChatRepositoryImpl implements IChatRepository {
 
 // РЕАЛИЗАЦИЯ ГЕТТЕРА для сообщений (чтобы не было ошибки в Cubit)
   List<ChatMessageDTO> get currentMessages => _messagesController.value;
+  int? _loadingConversationId;
 
   ChatRepositoryImpl(this._restClient);
 
@@ -52394,6 +52605,43 @@ class ChatRepositoryImpl implements IChatRepository {
   Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId) {
     return _messagesController.stream;
   }
+  // @override
+  // Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId) {
+  //   // Мы фильтруем поток: если данные в контроллере относятся к другому ID,
+  //   // отдаем пустой список или фильтруем.
+  //   return _messagesController.stream.map((messages) {
+  //     if (messages.isEmpty) return [];
+
+  //     // Если первое сообщение в списке из другого чата — значит это "грязные" данные
+  //     if (messages.first.conversationId != _currentConversationId) {
+  //       return [];
+  //     }
+  //     return messages;
+  //   });
+  // }
+
+  // Future<List<ChatMessageDTO>> _loadHistory(int companyId, String token) async {
+  //   try {
+  //     final response = await _restClient.get(
+  //       'conversations/$companyId/messages',
+  //       headers: {'Authorization': 'Bearer $token'},
+  //     );
+  //     final items = (response['items'] as List?) ?? [];
+  //     final list = <ChatMessageDTO>[];
+  //     for (var item in items) {
+  //       try {
+  //         list.add(ChatMessageDTO.fromJson(item as Map<String, dynamic>));
+  //       } catch (e, stack) {
+  //         logger.error('Failed to parse message', error: e, stackTrace: stack);
+  //         // Пропускаем битое сообщение
+  //       }
+  //     }
+  //     return list;
+  //   } catch (e) {
+  //     logger.error('Load history failed', error: e);
+  //     return [];
+  //   }
+  // }
 
   Future<List<ChatMessageDTO>> _loadHistory(int companyId, String token) async {
     try {
@@ -52401,110 +52649,165 @@ class ChatRepositoryImpl implements IChatRepository {
         'conversations/$companyId/messages',
         headers: {'Authorization': 'Bearer $token'},
       );
+
+      // ВАЖНО: Твой бэкенд в этом же запросе (или в соседнем) должен отдавать инфо о юзерах.
+      // Если в сообщениях есть поле sender, берем статус оттуда для инициализации.
       final items = (response['items'] as List?) ?? [];
       final list = <ChatMessageDTO>[];
+
       for (var item in items) {
-        try {
-          list.add(ChatMessageDTO.fromJson(item as Map<String, dynamic>));
-        } catch (e, stack) {
-          logger.error('Failed to parse message', error: e, stackTrace: stack);
-          // Пропускаем битое сообщение
+        final dto = ChatMessageDTO.fromJson(item as Map<String, dynamic>);
+        list.add(dto);
+
+        // Инициализируем статус из последнего сообщения собеседника
+        if (dto.sender != null && dto.sender.id != null && dto.sender.id != _currentUserId) {
+          // Нужно знать ID текущего юзера
+          _updateUserStatusInCache(dto.sender);
         }
       }
       return list;
     } catch (e) {
-      logger.error('Load history failed', error: e);
       return [];
     }
   }
 
+  void _updateUserStatusInCache(UserDTO user) {
+    final userId = user.id;
+    if (userId == null) return; // Защита от null
+    
+    _onlineUsersStatusCache[user.id!] = {
+      'userId': user.id,
+      'isOnline': user.isOnline,
+      'lastSeen': user.lastSeen,
+    };
+    _userStatusController.add(Map.from(_onlineUsersStatusCache));
+  }
+
   @override
   Future<void> connectToChat(int companyId, String token) async {
-    _currentToken = token;
-    _currentCompanyId = companyId;
-    final chatInfo = await _restClient.get(
-      'conversations/by-company/$companyId',
-      headers: {'Authorization': 'Bearer $token'},
-    );
-    // Проверьте, что companyId — это число, а не строка
-    print('companyId type: ${companyId.runtimeType}'); // должно быть int
-    final conversationId = chatInfo['id'] as int;
-    _currentConversationId = conversationId;
-
-    final uri = Uri(
-      // scheme: kIsWeb ? 'wss' : 'ws',
-      scheme: 'wss', // для ngrok
-      // host: kIsWeb ? 'localhost' : '10.0.2.2',
-      host: '2f9e-94-158-58-248.ngrok-free.app', // для ngrok
-      // port: kIsWeb ? 443 : 5000, // для ngrok порт убираем
-      path: '/chat',
-      queryParameters: {'token': token},
-    );
-
-    if (_channel != null) {
-      await _channel!.sink.close();
-    }
+    _currentConversationId = null; //
+    _loadingConversationId = null; //
+    _messagesController.add([]);
 
     try {
-      _channel = IOWebSocketChannel.connect(
-        uri.toString(),
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-        },
-        pingInterval: const Duration(seconds: 5),
+      _currentToken = token;
+      _currentCompanyId = companyId;
+      final chatInfo = await _restClient.get(
+        'conversations/by-company/$companyId',
+        headers: {'Authorization': 'Bearer $token'},
+        // Проверьте, что companyId — это число, а не строка
       );
-      _channel!.stream.listen(
-        _handleMessage,
-        onError: (error) {
-          logger.error('WebSocket error', error: error);
-          _messagesController.addError(error);
-          _stopPing();
-        },
-        onDone: () {
-          logger.info('WebSocket connection closed');
-          _stopPing();
-          _channel = null;
-        },
+      log('companyId type: ${companyId.runtimeType}'); // должно быть int
+      final conversationId = chatInfo['id'] as int;
+      _loadingConversationId = conversationId;
+      _currentConversationId = conversationId;
+      // 3. УЗНАЕМ КТО МЫ (чтобы отличать себя от собеседника для статусов)
+      // Обычно ID юзера можно достать из токена или отдельного запроса profile
+      final profile = await _restClient
+          .get('auth/profile', headers: {'Authorization': 'Bearer $token'});
+      _currentUserId = profile['id'] as int;
+
+      final uri = Uri(
+        // scheme: kIsWeb ? 'wss' : 'ws',
+        scheme: 'wss', // для ngrok
+        // host: kIsWeb ? 'localhost' : '10.0.2.2',
+        host: 'abca-94-158-58-248.ngrok-free.app', // для ngrok
+        // port: kIsWeb ? 443 : 5000, // для ngrok порт убираем
+        path: '/chat',
+        queryParameters: {'token': token},
       );
 
-      // Присоединяемся к чату
-      _sendJson({
-        'event': 'join',
-        'data': {'conversationId': conversationId}
-      });
-      _startPing();
-      print("✅ CHAT CONNECTED SUCCESSFULLY");
+      if (_channel != null) {
+        await _channel!.sink.close();
+      }
+
+      try {
+        _channel = IOWebSocketChannel.connect(
+          uri.toString(),
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+          pingInterval: const Duration(seconds: 5),
+        );
+        _channel!.stream.listen(
+          _handleMessage,
+          onError: (error) {
+            logger.error('WebSocket error', error: error);
+            _messagesController.addError(error);
+            _stopPing();
+          },
+          onDone: () {
+            logger.info('WebSocket connection closed');
+            _stopPing();
+            _channel = null;
+          },
+        );
+
+        // Присоединяемся к чату
+        _sendJson({
+          'event': 'join',
+          'data': {'conversationId': _currentConversationId}
+        });
+        _startPing();
+        log("✅ CHAT CONNECTED SUCCESSFULLY");
+      } catch (e) {
+        logger.error('Failed to connect to chat', error: e);
+        _messagesController.addError(e);
+      }
     } catch (e) {
-      logger.error('Failed to connect to chat', error: e);
-      _messagesController.addError(e);
+      logger.error('Failed to connect', error: e);
+      rethrow;
     }
   }
 
   void _handleMessage(dynamic data) {
     try {
-      print(
-          "WS RAW DATA: $data"); // Логируем всё, чтобы видеть приходят ли ивенты
+      log("WS RAW DATA: $data"); // Логируем всё, чтобы видеть приходят ли ивенты
 
       final message = jsonDecode(data as String);
       final event = message['event'];
-
+      final msgData = message['data'];
       switch (event) {
         case 'message.new':
-          final msgData = message['data'];
           // Важно: проверяем на null
           if (msgData == null) return;
-          final sender = UserDTO.fromJson(msgData['sender']);
-          final newMessage = ChatMessageDTO(
-            id: msgData['id'],
-            content: msgData['content'],
-            createdAt: DateTime.parse(msgData['createdAt']),
-            sender: sender,
-            conversationId: msgData['conversationId'],
-          );
+          // final sender = UserDTO.fromJson(msgData['sender']);
+          // Извлекаем ID чата из пришедшего сообщения
+          final int incomingChatId = msgData['conversationId'] as int;
+
+          // Если это сообщение из другого чата (например, которое мы только что переслали),
+          // мы просто игнорируем его и не добавляем в текущий стрим
+          if (_currentConversationId == null ||
+              incomingChatId != _currentConversationId) {
+            log("ℹ️ Ignored message from another chat: $incomingChatId");
+            return;
+          }
+          // -----------------------------------
+          final newMessage =
+              ChatMessageDTO.fromJson(msgData as Map<String, dynamic>);
           final current = _messagesController.value;
           _messagesController.add([newMessage, ...current]);
           break;
-        // 👇👇👇 ДОБАВЬ ВОТ ЭТОТ БЛОК 👇👇👇
+        case 'messages.deleted':
+          final deletedData = message['data'];
+          if (deletedData != null) {
+            final List<int> deletedIds =
+                List<int>.from(deletedData['messageIds']);
+
+            // Получаем текущий список сообщений
+            final currentMessages = _messagesController.value;
+
+            // Фильтруем: оставляем только те, которых НЕТ в списке на удаление
+            final updatedMessages = currentMessages.where((msg) {
+              return !deletedIds.contains(msg.id);
+            }).toList();
+
+            // Отправляем обновленный список в поток — UI обновится сам!
+            _messagesController.add(updatedMessages);
+            print("✅ Messages removed from stream: $deletedIds");
+          }
+          break;
+
         case 'user.status':
           print("🔥 WS STATUS EVENT RECEIVED: $message"); // Для отладки
           final statusData = message['data'];
@@ -52530,15 +52833,34 @@ class ChatRepositoryImpl implements IChatRepository {
             _userStatusController.add(newMap);
           }
           break;
-        // 👆👆👆 КОНЕЦ БЛОКА 👆👆👆
+
         case 'joined':
+          // // final joinedConvId = msgData?['conversationId'] as int?;
+
+          // if (_currentCompanyId != null && _currentToken != null) {
+          //   _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
+          //     _messagesController.add(history);
+          //   }).catchError((e) {
+          //     logger.error('Failed to load history', error: e);
+          //   });
+          // }
+          log("✅ JOINED event received. Loading history for company $_currentCompanyId...");
+
+          // Важно: Сохраняем ID чата на момент начала загрузки
+          // final loadingChatId = _currentConversationId;
+
           if (_currentCompanyId != null && _currentToken != null) {
             _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
-              _messagesController.add(history);
-            }).catchError((e) {
-              logger.error('Failed to load history', error: e);
+              // ПРОВЕРКА: Если пока грузилась история, юзер уже нажал "назад"
+              // или перешел в другой чат, не пушим эти сообщения в стрим!
+              if (_currentConversationId == _loadingConversationId) {
+                _messagesController.add(history);
+              } else {
+                log("⚠️ History loaded but user already switched chat. Discarding.");
+              }
             });
           }
+
           break;
         case 'error':
           _messagesController
@@ -52551,7 +52873,16 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   @override
-  Future<void> sendMessage(String content) async {
+  void leaveChat() {
+    _currentConversationId = null;
+    _loadingConversationId = null;
+    _messagesController.add([]); // Чистим стрим при выходе
+    log("Вышли из чата, ID сброшен");
+  }
+
+  @override
+  Future<void> sendMessage(String content,
+      {int? replyToId, int? targetConversationId}) async {
     if (content.trim().isEmpty) return;
     if (_channel == null || _channel!.closeCode != null) {
       print("⚠️ Connection lost. Reconnecting before sending...");
@@ -52561,22 +52892,29 @@ class ChatRepositoryImpl implements IChatRepository {
     if (_channel == null || _currentConversationId == null) {
       throw Exception('Not connected to any conversation');
     }
+    final int finalConversationId =
+        targetConversationId ?? _currentConversationId!;
     try {
       _sendJson({
         'event': 'message.send',
         'data': {
-          'conversationId': _currentConversationId,
-          'content': content.trim()
+          // 'conversationId': _currentConversationId,
+          'conversationId': finalConversationId,
+          'content': content.trim(),
+          if (replyToId != null) 'replyToId': replyToId,
         },
       });
+      log('Sending message to Chat #$finalConversationId');
     } catch (e) {
-      print("❌ Error sending message. Retrying connection...");
+      log("❌ Error sending message. Retrying connection...");
       await ensureConnection();
       _sendJson({
         'event': 'message.send',
         'data': {
-          'conversationId': _currentConversationId,
-          'content': content.trim()
+          // 'conversationId': _currentConversationId,
+          'conversationId': finalConversationId,
+          'content': content.trim(),
+          if (replyToId != null) 'replyToId': replyToId,
         },
       });
     }
@@ -52625,41 +52963,6 @@ class ChatRepositoryImpl implements IChatRepository {
     }
   }
 
-  // // Опционально: закрыть стрим при уничтожении
-  // void dispose() {
-  //   _messagesController.close();
-  //   disconnect();
-  // }
-
-  // @override
-  // Future<List<ConversationDTO>> findConversationsForUser(String token) async {
-  //   // Мы явно указываем динамический тип для ответа, так как структура может меняться
-  //   final dynamic response = await _restClient.get(
-  //     'conversations',
-  //     headers: {'Authorization': 'Bearer $token'},
-  //   );
-
-  //   print('BACKEND RESPONSE: $response');
-
-  //   List<dynamic> rawList;
-
-  //   // 1. Если это Map и содержит ключ 'data' (стандартный оберт NestJS)
-  //   if (response is Map && response.containsKey('data')) {
-  //     rawList = response['data'] as List<dynamic>;
-  //   }
-  //   // 2. Если это уже список (прямой ответ .map из NestJS)
-  //   else if (response is List) {
-  //     rawList = response;
-  //   }
-  //   // 3. На случай непредвиденной структуры
-  //   else {
-  //     rawList = [];
-  //   }
-
-  //   return rawList
-  //       .map((e) => ConversationDTO.fromJson(e as Map<String, dynamic>))
-  //       .toList();
-  // }
   @override
   Future<List<ConversationDTO>> findConversationsForUser(String token) async {
     final dynamic response = await _restClient.get(
@@ -52694,6 +52997,19 @@ class ChatRepositoryImpl implements IChatRepository {
         .where((dto) => dto.id != -1)
         .toList();
   }
+
+  @override
+  void deleteMessages(List<int> ids) {
+    if (_currentConversationId == null) return;
+
+    _sendJson({
+      'event': 'message.delete', // Должно совпадать с @SubscribeMessage на бэке
+      'data': {
+        'conversationId': _currentConversationId,
+        'messageIds': ids,
+      },
+    });
+  }
 }
 
 
@@ -52716,6 +53032,7 @@ class ChatMessageDTO with _$ChatMessageDTO {
     required DateTime createdAt,
     required UserDTO sender,
      int? conversationId,
+     ChatMessageDTO? replyTo,
   }) = _ChatMessageDTO;
 
   factory ChatMessageDTO.fromJson(Map<String, dynamic> json) =>
@@ -52754,6 +53071,7 @@ mixin _$ChatMessageDTO {
   DateTime get createdAt => throw _privateConstructorUsedError;
   UserDTO get sender => throw _privateConstructorUsedError;
   int? get conversationId => throw _privateConstructorUsedError;
+  ChatMessageDTO? get replyTo => throw _privateConstructorUsedError;
 
   /// Serializes this ChatMessageDTO to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52776,9 +53094,11 @@ abstract class $ChatMessageDTOCopyWith<$Res> {
       String content,
       DateTime createdAt,
       UserDTO sender,
-      int? conversationId});
+      int? conversationId,
+      ChatMessageDTO? replyTo});
 
   $UserDTOCopyWith<$Res> get sender;
+  $ChatMessageDTOCopyWith<$Res>? get replyTo;
 }
 
 /// @nodoc
@@ -52801,6 +53121,7 @@ class _$ChatMessageDTOCopyWithImpl<$Res, $Val extends ChatMessageDTO>
     Object? createdAt = null,
     Object? sender = null,
     Object? conversationId = freezed,
+    Object? replyTo = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -52823,6 +53144,10 @@ class _$ChatMessageDTOCopyWithImpl<$Res, $Val extends ChatMessageDTO>
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
               as int?,
+      replyTo: freezed == replyTo
+          ? _value.replyTo
+          : replyTo // ignore: cast_nullable_to_non_nullable
+              as ChatMessageDTO?,
     ) as $Val);
   }
 
@@ -52833,6 +53158,20 @@ class _$ChatMessageDTOCopyWithImpl<$Res, $Val extends ChatMessageDTO>
   $UserDTOCopyWith<$Res> get sender {
     return $UserDTOCopyWith<$Res>(_value.sender, (value) {
       return _then(_value.copyWith(sender: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ChatMessageDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatMessageDTOCopyWith<$Res>? get replyTo {
+    if (_value.replyTo == null) {
+      return null;
+    }
+
+    return $ChatMessageDTOCopyWith<$Res>(_value.replyTo!, (value) {
+      return _then(_value.copyWith(replyTo: value) as $Val);
     });
   }
 }
@@ -52850,10 +53189,13 @@ abstract class _$$ChatMessageDTOImplCopyWith<$Res>
       String content,
       DateTime createdAt,
       UserDTO sender,
-      int? conversationId});
+      int? conversationId,
+      ChatMessageDTO? replyTo});
 
   @override
   $UserDTOCopyWith<$Res> get sender;
+  @override
+  $ChatMessageDTOCopyWith<$Res>? get replyTo;
 }
 
 /// @nodoc
@@ -52874,6 +53216,7 @@ class __$$ChatMessageDTOImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? sender = null,
     Object? conversationId = freezed,
+    Object? replyTo = freezed,
   }) {
     return _then(_$ChatMessageDTOImpl(
       id: null == id
@@ -52896,6 +53239,10 @@ class __$$ChatMessageDTOImplCopyWithImpl<$Res>
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
               as int?,
+      replyTo: freezed == replyTo
+          ? _value.replyTo
+          : replyTo // ignore: cast_nullable_to_non_nullable
+              as ChatMessageDTO?,
     ));
   }
 }
@@ -52908,7 +53255,8 @@ class _$ChatMessageDTOImpl implements _ChatMessageDTO {
       required this.content,
       required this.createdAt,
       required this.sender,
-      this.conversationId});
+      this.conversationId,
+      this.replyTo});
 
   factory _$ChatMessageDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatMessageDTOImplFromJson(json);
@@ -52923,10 +53271,12 @@ class _$ChatMessageDTOImpl implements _ChatMessageDTO {
   final UserDTO sender;
   @override
   final int? conversationId;
+  @override
+  final ChatMessageDTO? replyTo;
 
   @override
   String toString() {
-    return 'ChatMessageDTO(id: $id, content: $content, createdAt: $createdAt, sender: $sender, conversationId: $conversationId)';
+    return 'ChatMessageDTO(id: $id, content: $content, createdAt: $createdAt, sender: $sender, conversationId: $conversationId, replyTo: $replyTo)';
   }
 
   @override
@@ -52940,13 +53290,14 @@ class _$ChatMessageDTOImpl implements _ChatMessageDTO {
                 other.createdAt == createdAt) &&
             (identical(other.sender, sender) || other.sender == sender) &&
             (identical(other.conversationId, conversationId) ||
-                other.conversationId == conversationId));
+                other.conversationId == conversationId) &&
+            (identical(other.replyTo, replyTo) || other.replyTo == replyTo));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, content, createdAt, sender, conversationId);
+  int get hashCode => Object.hash(
+      runtimeType, id, content, createdAt, sender, conversationId, replyTo);
 
   /// Create a copy of ChatMessageDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -52971,7 +53322,8 @@ abstract class _ChatMessageDTO implements ChatMessageDTO {
       required final String content,
       required final DateTime createdAt,
       required final UserDTO sender,
-      final int? conversationId}) = _$ChatMessageDTOImpl;
+      final int? conversationId,
+      final ChatMessageDTO? replyTo}) = _$ChatMessageDTOImpl;
 
   factory _ChatMessageDTO.fromJson(Map<String, dynamic> json) =
       _$ChatMessageDTOImpl.fromJson;
@@ -52986,6 +53338,8 @@ abstract class _ChatMessageDTO implements ChatMessageDTO {
   UserDTO get sender;
   @override
   int? get conversationId;
+  @override
+  ChatMessageDTO? get replyTo;
 
   /// Create a copy of ChatMessageDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -53014,6 +53368,9 @@ _$ChatMessageDTOImpl _$$ChatMessageDTOImplFromJson(Map<String, dynamic> json) =>
       createdAt: DateTime.parse(json['createdAt'] as String),
       sender: UserDTO.fromJson(json['sender'] as Map<String, dynamic>),
       conversationId: (json['conversationId'] as num?)?.toInt(),
+      replyTo: json['replyTo'] == null
+          ? null
+          : ChatMessageDTO.fromJson(json['replyTo'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ChatMessageDTOImplToJson(
@@ -53024,6 +53381,7 @@ Map<String, dynamic> _$$ChatMessageDTOImplToJson(
       'createdAt': instance.createdAt.toIso8601String(),
       'sender': instance.sender,
       'conversationId': instance.conversationId,
+      'replyTo': instance.replyTo,
     };
 
 
@@ -53106,8 +53464,10 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:coment_app/src/feature/chat/ui/widgets/date_chip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -53146,15 +53506,18 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
 class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+late ChatCubit _cubit;
 
   @override
   void initState() {
+    _cubit = context.read<ChatCubit>();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
+   _cubit.close();
     WidgetsBinding.instance.removeObserver(this);
     _textController.dispose();
     _scrollController.dispose();
@@ -53195,11 +53558,69 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
         );
       },
       builder: (context, state) {
+        final cubit = context.read<ChatCubit>();
+        final isSelectionMode = cubit.selectedIds.isNotEmpty;
         return Scaffold(
-          appBar: StatusUserWidget(
-            widget: widget,
-            currentUser: widget.currentUser,
-          ),
+          // persistentFooterButtons:
+          //     isSelectionMode && cubit.selectedIds.length == 1
+          //         ? [
+          //             ElevatedButton(
+          //               onPressed: () {
+          //                 final msgId = cubit.selectedIds.first;
+          //                 final msg = cubit.currentMessages
+          //                     .firstWhere((e) => e.id == msgId);
+          //                 cubit.setReplyMessage(msg);
+          //               },
+          //               child: const Icon(Icons.reply),
+          //             ),
+          //           ]
+          //         : null,
+          appBar: isSelectionMode
+              ? AppBar(
+                  leading: IconButton(
+                    onPressed: cubit.clearSelection,
+                    icon: const Icon(
+                      Icons.close,
+                    ),
+                  ),
+                  title: Text('${cubit.selectedIds.length}'),
+                  actions: [
+                    // if (cubit.selectedIds.length == 1)
+                    //   IconButton(
+                    //     onPressed: () {
+                    //       final msgId = cubit.selectedIds.first;
+                    //       final msg = cubit.currentMessages
+                    //           .firstWhere((e) => e.id == msgId);
+                    //       cubit.setReplyMessage(msg);
+                    //     },
+                    //     icon: const Icon(Icons.reply),
+                    //   ),
+                    IconButton(
+                      onPressed: () async {
+                        final selectedMsgs = cubit.currentMessages
+                            .where((m) => cubit.selectedIds.contains(m.id))
+                            .map((m) => m.content)
+                            .join('\n');
+                        await Clipboard.setData(
+                            ClipboardData(text: selectedMsgs));
+                        cubit.clearSelection();
+                        Toaster.showTopShortToast(context,
+                            message: 'Скопировано');
+                      },
+                      icon: const Icon(Icons.copy),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        cubit.deleteSelectedMessages();
+                      },
+                      icon: const Icon(Icons.delete_outline),
+                    )
+                  ],
+                )
+              : StatusUserWidget(
+                  widget: widget,
+                  currentUser: widget.currentUser,
+                ),
           body: Column(
             children: [
               Expanded(
@@ -53262,7 +53683,32 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               const SizedBox(
                 height: 10,
               ),
-              _buildInputArea(),
+              AnimatedSize(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  switchInCurve: Curves.easeIn,
+                  switchOutCurve: Curves.easeOut,
+                  // Красивая анимация выезда снизу + прозрачность
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SizeTransition(
+                        sizeFactor: animation,
+                        axisAlignment: -1.0, // Выезжает снизу
+                        child: child,
+                      ),
+                    );
+                  },
+                  // ЕСЛИ ВЫДЕЛЕНО -> ПОКАЗЫВАЕМ МЕНЮ, ИНАЧЕ -> ПОЛЕ ВВОДА
+                  child: isSelectionMode
+                      ? _buildSelectionMenu(cubit, context)
+                      : _buildInputArea(cubit),
+                ),
+              ),
+              // _buildInputArea(cubit),
               const SizedBox(
                 height: 20,
               ),
@@ -53273,88 +53719,10 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: isOwnMessage ? 60 : 16,
-        right: isOwnMessage ? 16 : 60,
-        top: 8,
-        bottom: 8,
-      ),
-      child: Row(
-        mainAxisAlignment:
-            isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: [
-          if (!isOwnMessage)
-            Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.grey,
-              ),
-              child: message.sender.avatar != null
-                  ? CircleAvatar(
-                      backgroundImage: NetworkImage(message.sender.avatar!),
-                      radius: 16,
-                    )
-                  : const Icon(
-                      Icons.person,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-            ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 8,
-              ),
-              margin: EdgeInsets.only(
-                left: !isOwnMessage ? 8 : 0,
-                right: isOwnMessage ? 8 : 0,
-              ),
-              decoration: BoxDecoration(
-                color: isOwnMessage
-                    ? AppColors.mainColor
-                    : AppColors.backgroundInputGrey,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Text(
-                message.content,
-                style: AppTextStyles.fs14w400.copyWith(
-                  color: isOwnMessage ? Colors.white : AppColors.text,
-                ),
-              ),
-            ),
-          ),
-          if (isOwnMessage)
-            Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.mainColor,
-              ),
-              child: widget.currentUser.avatar != null
-                  ? CircleAvatar(
-                      backgroundImage: NetworkImage(widget.currentUser.avatar!),
-                      radius: 16,
-                    )
-                  : const Icon(
-                      Icons.person,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInputArea() {
+  Widget _buildSelectionMenu(ChatCubit cubit, BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8),
+      key: const ValueKey('selectionMenu'), // <--- ВАЖНО ДЛЯ АНИМАЦИИ
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -53366,44 +53734,339 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
         ],
       ),
       child: Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceAround, // Равномерно распределяем
         children: [
-          Expanded(
-            child: TextField(
-              controller: _textController,
-              decoration: InputDecoration(
-                hintText: context.localized.writeAComment,
-                hintStyle: AppTextStyles.fs14w400.copyWith(
-                  color: AppColors.greyTextColor,
+          // Кнопка ОТВЕТИТЬ (показываем только если выбрано 1 сообщение)
+          if (cubit.selectedIds.length == 1)
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(0),
+                  backgroundColor: AppColors.backgroundColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
                 ),
-                filled: true,
-                fillColor: AppColors.backgroundInputGrey,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                onPressed: () {
+                  final msgId = cubit.selectedIds.first;
+                  final msg =
+                      cubit.currentMessages.firstWhere((e) => e.id == msgId);
+                  cubit.setReplyMessage(msg);
+                },
+                child: Text("Ответить",
+                    style: AppTextStyles.fs14w500
+                        .copyWith(color: AppColors.greyTextColor2)
+                    // TextStyle(color: AppColors.greyTextColor2),
+                    ),
               ),
-              textInputAction: TextInputAction.send,
-              onSubmitted: (_) => _sendMessage(),
+            ),
+          const SizedBox(width: 18),
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.backgroundColor,
+                padding: const EdgeInsets.all(0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              onPressed: () => _showForwardSheet(context, cubit),
+              child: Text(
+                'Переслать',
+                style: AppTextStyles.fs14w500
+                    .copyWith(color: AppColors.greyTextColor2),
+              ),
             ),
           ),
-          const Gap(8),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: AppColors.mainColor,
-              borderRadius: BorderRadius.circular(50)
-            ),
-            child: IconButton(
-              onPressed: _sendMessage,
-              padding: const EdgeInsets.only(left: 3, bottom: 3),
-              icon: Image.asset(
-                AssetsConstants.sendMessage,
-                fit: BoxFit.cover,
-                width: 25,
-                height: 25,
-                color: AppColors.btnGrey,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
+    // 1. Получаем доступ к кубиту и состоянию
+    final cubit = context.read<ChatCubit>();
+    final isSelected = cubit.selectedIds.contains(message.id);
+    final isSelectionMode = cubit.selectedIds.isNotEmpty;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onLongPress: () {
+        cubit.toggleSelection(message.id);
+        HapticFeedback.mediumImpact();
+      },
+      onTap: () {
+        if (isSelectionMode) {
+          cubit.toggleSelection(message.id);
+        }
+      },
+      child: Container(
+        color: isSelected
+            ? AppColors.mainColor.withValues(alpha: 0.1)
+            : Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: isOwnMessage ? 60 : 16,
+            right: isOwnMessage ? 16 : 60,
+            top: 8,
+            bottom: 8,
+          ),
+          child: Row(
+            mainAxisAlignment:
+                isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: isSelectionMode ? 32 : 0,
+                curve: Curves.easeInOut,
+                child: isSelectionMode
+                    ? Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: isSelected
+                                  ? AppColors.mainColor
+                                  : AppColors.grey969696,
+                              width: 2),
+                          color: isSelected
+                              ? AppColors.mainColor
+                              : Colors.transparent,
+                        ),
+                        child: isSelected
+                            ? const Icon(
+                                Icons.check,
+                                size: 16,
+                                color: Colors.white,
+                              )
+                            : null,
+                      )
+                    : null,
               ),
+              if (!isOwnMessage)
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.grey,
+                  ),
+                  child: message.sender.avatar != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(message.sender.avatar!),
+                          radius: 16,
+                        )
+                      : const Icon(
+                          Icons.person,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                ),
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  margin: EdgeInsets.only(
+                    left: !isOwnMessage ? 8 : 0,
+                    right: isOwnMessage ? 8 : 0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isOwnMessage
+                        ? AppColors.mainColor
+                        : AppColors.backgroundInputGrey,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (message.replyTo != null)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 6),
+                          padding:
+                              const EdgeInsets.only(left: 8, top: 2, bottom: 2),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              left: BorderSide(
+                                color: isOwnMessage
+                                    ? Colors.white70
+                                    : AppColors.mainColor,
+                                width: 3,
+                              ),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                message.replyTo!.sender.name ?? 'User',
+                                style: AppTextStyles.fs12w700.copyWith(
+                                  color: isOwnMessage
+                                      ? Colors.white
+                                      : AppColors.mainColor,
+                                ),
+                              ),
+                              Text(
+                                message.replyTo!.content,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.fs12w400.copyWith(
+                                  color: isOwnMessage
+                                      ? Colors.white70
+                                      : Colors.black54,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      Text(
+                        message.content,
+                        style: AppTextStyles.fs14w400.copyWith(
+                          color: isOwnMessage ? Colors.white : AppColors.text,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (isOwnMessage)
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.mainColor,
+                  ),
+                  child: widget.currentUser.avatar != null
+                      ? CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(widget.currentUser.avatar!),
+                          radius: 16,
+                        )
+                      : const Icon(
+                          Icons.person,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInputArea(ChatCubit cubit) {
+    return Container(
+      key: const ValueKey('inputArea'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (cubit.replyMessage != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5F5F5),
+                border: Border(top: BorderSide(color: Colors.grey, width: 0.5)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.reply,
+                    color: AppColors.mainColor,
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Ответ пользователю ${cubit.replyMessage!.sender.name}',
+                          style: AppTextStyles.fs12w500.copyWith(
+                            color: AppColors.mainColor,
+                            fontSize: 10,
+                          ),
+                        ),
+                        Text(
+                          cubit.replyMessage!.content,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.fs12w500.copyWith(
+                            fontSize: 13,
+                            color: AppColors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      cubit.cancelReply();
+                    },
+                    icon: const Icon(Icons.close, size: 20),
+                  ),
+                ],
+              ),
+            ),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(
+                      hintText: context.localized.writeAComment,
+                      hintStyle: AppTextStyles.fs14w400.copyWith(
+                        color: AppColors.greyTextColor,
+                      ),
+                      filled: true,
+                      fillColor: AppColors.backgroundInputGrey,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                    ),
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: (_) => _sendMessage(),
+                  ),
+                ),
+                const Gap(8),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: AppColors.mainColor,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: IconButton(
+                    onPressed: _sendMessage,
+                    padding: const EdgeInsets.only(left: 3, bottom: 3),
+                    icon: Image.asset(
+                      AssetsConstants.sendMessage,
+                      fit: BoxFit.cover,
+                      width: 25,
+                      height: 25,
+                      color: AppColors.btnGrey,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -53417,6 +54080,142 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
     context.read<ChatCubit>().sendMessage(text);
     _textController.clear();
+  }
+
+  void _showForwardSheet(BuildContext context, ChatCubit cubit) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return DraggableScrollableSheet(
+            initialChildSize: 0.7,
+            minChildSize: 0.5,
+            maxChildSize: 0.95,
+            expand: false,
+            builder: (context, scrollController) {
+              return Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.black12),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Переслать в...',
+                          style: AppTextStyles.fs16w700.copyWith(
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  // список чатов
+                  Expanded(
+                    child: FutureBuilder<List<ConversationDTO>>(
+                      // Используем метод из вашего репозитория
+                      future: cubit.repository
+                          .findConversationsForUser(widget.accessToken),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                              child:
+                                  Text("Ошибка загрузки: ${snapshot.error}"));
+                        }
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Center(
+                              child: Text("Нет доступных чатов"));
+                        }
+                        final conversations = snapshot.data!;
+                        return Flexible(
+                          child: ListView.separated(
+                            controller: scrollController,
+                            itemCount: conversations.length,
+                            separatorBuilder: (_, __) =>
+                                const Divider(height: 1),
+                            itemBuilder: (context, index) {
+                              final chat = conversations[index];
+                           
+                              if (chat.id == cubit.conversationId) {
+                                return const SizedBox.shrink();
+                              }
+                              final userData = chat.partner;
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: AppColors.mainColor
+                                      .withValues(alpha: 0.1),
+                                  backgroundImage: userData?.avatar != null
+                                      ? NetworkImage("${userData?.avatar}")
+                                      : null,
+                                  child: userData?.avatar == null
+                                      ? const Icon(
+                                          Icons.person,
+                                          color: AppColors.mainColor,
+                                        )
+                                      : null,
+                                ),
+                                title: Text(
+                                  "${chat.partner?.name}",
+                                  style: AppTextStyles.fs14w500,
+                                ),
+                                subtitle: Text(
+                                  userData?.isOnline == true ? 'В сети': 'Офлайн',
+                                  style: TextStyle(
+                                    color:  userData?.isOnline == true
+                                        ? AppColors.green
+                                        : Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                onTap: () async {
+                                  // Тут логика: либо отправляем через текущий кубит,
+                                  // либо (что правильнее) вызываем метод репозитория напрямую
+                                  final selectedContent = cubit.currentMessages
+                                      .where((m) =>
+                                          cubit.selectedIds.contains(m.id))
+                                      .map((m) => m.content)
+                                      .join('\n');
+
+                                  // Закрываем шторку
+                                  Navigator.pop(context);
+
+                                  // Показываем лоадер или тост
+                                  Toaster.showTopShortToast(context,
+                                      message: 'Пересылаем...');
+
+                                  // Отправка (упрощенно)
+                                  await cubit.forwardSelectedMessages(chat.id);
+
+                                  // cubit.clearSelection();
+                                  if (mounted) {
+                                    Toaster.showTopShortToast(context,
+                                        message: 'Отправлено');
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            });
+      },
+    );
   }
 }
 
@@ -53494,8 +54293,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
 
             // ПРИНТ ДЛЯ ПРОВЕРКИ (Увидишь в консоли при смене статуса)
             if (snapshot.hasData) {
-              log(
-                  "UI STREAM UPDATE: Keys available: ${allStatuses.keys.toList()} looking for $targetId");
+              log("UI STREAM UPDATE: Keys available: ${allStatuses.keys.toList()} looking for $targetId");
             }
 
             final userStatusFromWs = allStatuses[targetId];
@@ -53520,12 +54318,10 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
               title: nonNullTargetUser.name ?? widget.widget.companyName,
               subTitle:
                   isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
-                  textStyle: AppTextStyles.fs18w700 ,
-                  subTitleStyle:  AppTextStyles.fs12w400.copyWith(
-                        color: isOnline
-                            ? AppColors.green
-                            : AppColors.greyTextColor,
-                      ),
+              textStyle: AppTextStyles.fs18w700,
+              subTitleStyle: AppTextStyles.fs12w400.copyWith(
+                color: isOnline ? AppColors.green : AppColors.greyTextColor,
+              ),
             );
           },
         );
@@ -77563,15 +78359,19 @@ class _MessagePageState extends State<MessagePage> {
       builder: (context, state) {
         return Scaffold(
           appBar: CustomAppBar(
+            btnBack: true,
             actions: [
-              const Expanded(flex: 2, child: SizedBox()),
+              // const Expanded(flex:  1, child: SizedBox()),
               Expanded(
-                flex: 8,
-                child: CustomTextField(
-                  hintText: context.localized.search,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+                  child: CustomTextField(
+                    contentPadding:const  EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    hintText: context.localized.search,
+                  ),
                 ),
               ),
-              const Expanded(flex: 1, child: SizedBox()),
+              // const Expanded(flex: 1, child: SizedBox()),
             ],
           ),
           body: state.maybeWhen(
@@ -78127,13 +78927,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               ),
                             if (isOwner) const Gap(12),
-                            ProfileRowButton(
-                              icon: AssetsConstants.message,
-                              title: context.localized.message,
-                              onTap: () {
-                                context.router.push(const MessageRoute());
-                              },
-                            ),
+                            // ProfileRowButton(
+                            //   icon: AssetsConstants.message,
+                            //   title: context.localized.message,
+                            //   onTap: () {
+                            //     context.router.push(const MessageRoute());
+                            //   },
+                            // ),
                             // : const SizedBox(),
                             const Gap(12),
 

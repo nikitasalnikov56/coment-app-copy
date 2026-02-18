@@ -44,15 +44,19 @@ class _MessagePageState extends State<MessagePage> {
       builder: (context, state) {
         return Scaffold(
           appBar: CustomAppBar(
+            btnBack: true,
             actions: [
-              const Expanded(flex: 2, child: SizedBox()),
+              // const Expanded(flex:  1, child: SizedBox()),
               Expanded(
-                flex: 8,
-                child: CustomTextField(
-                  hintText: context.localized.search,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+                  child: CustomTextField(
+                    contentPadding:const  EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    hintText: context.localized.search,
+                  ),
                 ),
               ),
-              const Expanded(flex: 1, child: SizedBox()),
+              // const Expanded(flex: 1, child: SizedBox()),
             ],
           ),
           body: state.maybeWhen(

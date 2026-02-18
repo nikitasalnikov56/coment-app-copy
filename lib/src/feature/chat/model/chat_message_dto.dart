@@ -14,6 +14,7 @@ class ChatMessageDTO with _$ChatMessageDTO {
     required DateTime createdAt,
     required UserDTO sender,
      int? conversationId,
+     ChatMessageDTO? replyTo,
   }) = _ChatMessageDTO;
 
   factory ChatMessageDTO.fromJson(Map<String, dynamic> json) =>

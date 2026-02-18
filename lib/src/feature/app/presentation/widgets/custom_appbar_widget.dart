@@ -19,6 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isBackButton;
   final bool isOnline;
   final TextStyle? subTitleStyle;
+  final bool btnBack;
   const CustomAppBar({
     super.key,
     this.title,
@@ -33,13 +34,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.subTitleStyle,
     this.isBackButton = true,
     this.isOnline = false,
+    this.btnBack = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: 57,
-      leading: IconButton(
+      leading: !btnBack ? IconButton(
         padding: EdgeInsets.zero,
         onPressed: () {
           context.router.maybePop();
@@ -50,7 +52,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             : Container(
                 width: 74,
               ),
-      ),
+      ) : null,
       centerTitle: true,
       title: Column(
         children: [

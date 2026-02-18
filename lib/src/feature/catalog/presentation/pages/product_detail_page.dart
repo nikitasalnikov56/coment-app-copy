@@ -890,7 +890,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       onPressed: () {
         context.router.push(
           ChatRoute(
-            companyId: data.id ?? 0,
+            conversationId: data.id ?? 0,
             companyName: data.name ?? '',
             accessToken: accessToken ?? '',
             currentUser: currentUser,

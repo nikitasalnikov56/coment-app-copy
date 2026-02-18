@@ -70,12 +70,13 @@ class ChatListItem extends StatelessWidget {
 
         context.router.push(
           ChatRoute(
-            companyId: companyId,
+            conversationId: conversation.id,
             companyName: chatTitle,
             currentUser: currentUser,
             accessToken: currentUser.accessToken!,
           ),
         );
+       
       },
     );
   }
