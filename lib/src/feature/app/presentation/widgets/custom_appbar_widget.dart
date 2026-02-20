@@ -14,6 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int? quarterTurns;
   final List<Widget>? actions;
   final void Function()? onPressed;
+  final bool? onBack;
   final ShapeBorder? shape;
   final TextStyle? textStyle;
   final bool isBackButton;
@@ -35,6 +36,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isBackButton = true,
     this.isOnline = false,
     this.btnBack = false,
+    this.onBack = false ,
+
   });
 
   @override
@@ -44,7 +47,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: !btnBack ? IconButton(
         padding: EdgeInsets.zero,
         onPressed: () {
-          context.router.maybePop();
+           context.router.maybePop();
         },
         splashRadius: 21,
         icon: isBackButton

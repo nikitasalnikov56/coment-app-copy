@@ -15,7 +15,6 @@ import 'package:coment_app/src/feature/chat/ui/widgets/date_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 @RoutePage()
@@ -27,12 +26,15 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     required this.companyName,
     required this.currentUser,
     required this.accessToken,
+    required this.targetUser,
+    
   });
-final int conversationId;
+  final int conversationId;
   // final int companyId;
   final String companyName;
   final String accessToken;
   final UserDTO currentUser;
+  final UserDTO targetUser;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -54,7 +56,7 @@ final int conversationId;
 class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-late ChatCubit _cubit;
+  late ChatCubit _cubit;
 
   @override
   void initState() {
@@ -65,7 +67,7 @@ late ChatCubit _cubit;
 
   @override
   void dispose() {
-   _cubit.close();
+    _cubit.close();
     WidgetsBinding.instance.removeObserver(this);
     _textController.dispose();
     _scrollController.dispose();
@@ -119,16 +121,6 @@ late ChatCubit _cubit;
                   ),
                   title: Text('${cubit.selectedIds.length}'),
                   actions: [
-                    // if (cubit.selectedIds.length == 1)
-                    //   IconButton(
-                    //     onPressed: () {
-                    //       final msgId = cubit.selectedIds.first;
-                    //       final msg = cubit.currentMessages
-                    //           .firstWhere((e) => e.id == msgId);
-                    //       cubit.setReplyMessage(msg);
-                    //     },
-                    //     icon: const Icon(Icons.reply),
-                    //   ),
                     IconButton(
                       onPressed: () async {
                         final selectedMsgs = cubit.currentMessages
@@ -580,6 +572,7 @@ late ChatCubit _cubit;
                           horizontal: 16, vertical: 12),
                     ),
                     textInputAction: TextInputAction.send,
+                    onTap: () => context.repository.chatRepository.ensureConnection(),
                     onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
@@ -613,6 +606,20 @@ late ChatCubit _cubit;
     if (text.isEmpty) return;
 
     context.read<ChatCubit>().sendMessage(text);
+    // final newMessage = 
+    ChatMessageDTO(
+      id: 0,
+      content: text,
+      createdAt: DateTime.now(),
+      sender: widget.currentUser,
+      conversationId: widget.conversationId,
+    );
+
+    // context.read<ConversationsCubit>().updateConversationLastMessage(
+    //       conversationId: widget.conversationId,
+    //       message: newMessage,
+    //     );
+
     _textController.clear();
   }
 
@@ -681,7 +688,7 @@ late ChatCubit _cubit;
                                 const Divider(height: 1),
                             itemBuilder: (context, index) {
                               final chat = conversations[index];
-                           
+
                               if (chat.id == cubit.conversationId) {
                                 return const SizedBox.shrink();
                               }
@@ -705,22 +712,24 @@ late ChatCubit _cubit;
                                   style: AppTextStyles.fs14w500,
                                 ),
                                 subtitle: Text(
-                                  userData?.isOnline == true ? 'В сети': 'Офлайн',
+                                  userData?.isOnline == true
+                                      ? 'В сети'
+                                      : 'Офлайн',
                                   style: TextStyle(
-                                    color:  userData?.isOnline == true
+                                    color: userData?.isOnline == true
                                         ? AppColors.green
                                         : Colors.grey,
                                     fontSize: 12,
                                   ),
                                 ),
                                 onTap: () async {
-                                  // Тут логика: либо отправляем через текущий кубит,
-                                  // либо (что правильнее) вызываем метод репозитория напрямую
-                                  final selectedContent = cubit.currentMessages
-                                      .where((m) =>
-                                          cubit.selectedIds.contains(m.id))
-                                      .map((m) => m.content)
-                                      .join('\n');
+                                  // // Тут логика: либо отправляем через текущий кубит,
+                                  // // либо (что правильнее) вызываем метод репозитория напрямую
+                                  // final selectedContent = cubit.currentMessages
+                                  //     .where((m) =>
+                                  //         cubit.selectedIds.contains(m.id))
+                                  //     .map((m) => m.content)
+                                  //     .join('\n');
 
                                   // Закрываем шторку
                                   Navigator.pop(context);
@@ -770,6 +779,7 @@ class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
 }
 
+
 class _StatusUserWidgetState extends State<StatusUserWidget> {
   // Форматирование даты
   String _formatDate(DateTime? time) {
@@ -788,76 +798,54 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. БЕРЕМ КУБИТ
     final chatCubit = context.read<ChatCubit>();
-
-    // 2. БЕРЕМ РЕПОЗИТОРИЙ ИЗ КУБИТА (Тот самый, где живет активный Сокет!)
     final activeRepo = chatCubit.repository;
+    
+    // БЕРЕМ СОБЕСЕДНИКА ИЗ ПАРАМЕТРОВ ВИДЖЕТА!
+    final targetUser = widget.widget.targetUser;
 
-    return BlocBuilder<ChatCubit, ChatState>(
-      builder: (context, state) {
-        UserDTO? targetUser;
-        final messages = chatCubit.currentMessages;
+    // Если собеседника нет (групповой чат или баг), просто выводим название
+    // ignore: unnecessary_null_comparison
+    if (targetUser == null) {
+      return CustomAppBar(
+        title: widget.widget.companyName,
+        subTitle: '...',
+      );
+    }
 
-        if (messages.isNotEmpty) {
-          try {
-            targetUser = messages
-                .firstWhere((m) => m.sender.id != widget.currentUser.id)
-                .sender;
-          } catch (_) {}
+    final int targetId = int.tryParse(targetUser.id.toString()) ?? 0;
+
+    // ТОЛЬКО STREAM BUILDER
+    return StreamBuilder<Map<int, Map<String, dynamic>>>(
+      stream: activeRepo.userStatusStream,
+      initialData: activeRepo.currentStatusCache,
+      builder: (context, snapshot) {
+        final allStatuses = snapshot.data ?? {};
+        final userStatusFromWs = allStatuses[targetId];
+        
+        bool isOnline;
+        DateTime? lastSeenDate;
+
+        if (userStatusFromWs != null) {
+          // Если пришел ивент по сокету
+          isOnline = userStatusFromWs['isOnline'] == true;
+          if (userStatusFromWs['lastSeen'] != null) {
+            lastSeenDate = DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
+          }
+        } else {
+          // Фолбэк на исторические данные из профиля
+          isOnline = targetUser.isOnline;
+          lastSeenDate = targetUser.lastSeen;
         }
 
-        if (targetUser == null) {
-          return CustomAppBar(
-            title: widget.widget.companyName,
-            subTitle: '...',
-          );
-        }
-
-        final nonNullTargetUser = targetUser;
-        final int targetId = int.tryParse(nonNullTargetUser.id.toString()) ?? 0;
-
-        // 3. СЛУШАЕМ СТРИМ АКТИВНОГО РЕПОЗИТОРИЯ
-        return StreamBuilder<Map<int, Map<String, dynamic>>>(
-          stream: activeRepo.userStatusStream,
-          // Используем кэш для мгновенного отображения при перерисовке
-          initialData: activeRepo.currentStatusCache,
-          builder: (context, snapshot) {
-            final allStatuses = snapshot.data ?? {};
-
-            // ПРИНТ ДЛЯ ПРОВЕРКИ (Увидишь в консоли при смене статуса)
-            if (snapshot.hasData) {
-              log("UI STREAM UPDATE: Keys available: ${allStatuses.keys.toList()} looking for $targetId");
-            }
-
-            final userStatusFromWs = allStatuses[targetId];
-            bool isOnline;
-            DateTime? lastSeenDate;
-
-            if (userStatusFromWs != null) {
-              // Данные из сокета
-              isOnline = userStatusFromWs['isOnline'] == true;
-              if (userStatusFromWs['lastSeen'] != null) {
-                lastSeenDate =
-                    DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
-              }
-            } else {
-              // Данные из истории (по умолчанию)
-              isOnline = nonNullTargetUser.isOnline;
-              lastSeenDate = nonNullTargetUser.lastSeen;
-            }
-
-            return CustomAppBar(
-              isOnline: isOnline,
-              title: nonNullTargetUser.name ?? widget.widget.companyName,
-              subTitle:
-                  isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
-              textStyle: AppTextStyles.fs18w700,
-              subTitleStyle: AppTextStyles.fs12w400.copyWith(
-                color: isOnline ? AppColors.green : AppColors.greyTextColor,
-              ),
-            );
-          },
+        return CustomAppBar(
+          isOnline: isOnline,
+          title: targetUser.name ?? widget.widget.companyName,
+          subTitle: isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
+          textStyle: AppTextStyles.fs18w700,
+          subTitleStyle: AppTextStyles.fs12w400.copyWith(
+            color: isOnline ? AppColors.green : AppColors.greyTextColor,
+          ),
         );
       },
     );

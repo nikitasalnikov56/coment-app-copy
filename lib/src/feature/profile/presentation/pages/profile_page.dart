@@ -108,8 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               },
               loaded: (userDTO, verificationStatus) {
-                print(userDTO.role); // что выводит?
-                print(userDTO.role == 'owner');
+
 
                 final userRole = userDTO.role?.toLowerCase().trim() ?? '';
                 final isOwner = userRole == 'owner';

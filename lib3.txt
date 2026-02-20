@@ -21587,6 +21587,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int? quarterTurns;
   final List<Widget>? actions;
   final void Function()? onPressed;
+  final bool? onBack;
   final ShapeBorder? shape;
   final TextStyle? textStyle;
   final bool isBackButton;
@@ -21608,6 +21609,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isBackButton = true,
     this.isOnline = false,
     this.btnBack = false,
+    this.onBack = false ,
+
   });
 
   @override
@@ -21617,7 +21620,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: !btnBack ? IconButton(
         padding: EdgeInsets.zero,
         onPressed: () {
-          context.router.maybePop();
+           context.router.maybePop();
         },
         splashRadius: 21,
         icon: isBackButton
@@ -22069,7 +22072,7 @@ class CatalogRoute extends PageRouteInfo<void> {
 class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     Key? key,
-    required int companyId,
+    required int conversationId,
     required String companyName,
     required UserDTO currentUser,
     required String accessToken,
@@ -22078,7 +22081,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
          ChatRoute.name,
          args: ChatRouteArgs(
            key: key,
-           companyId: companyId,
+           conversationId: conversationId,
            companyName: companyName,
            currentUser: currentUser,
            accessToken: accessToken,
@@ -22095,7 +22098,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
       return WrappedRoute(
         child: ChatPage(
           key: args.key,
-          companyId: args.companyId,
+          conversationId: args.conversationId,
           companyName: args.companyName,
           currentUser: args.currentUser,
           accessToken: args.accessToken,
@@ -22108,7 +22111,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
 class ChatRouteArgs {
   const ChatRouteArgs({
     this.key,
-    required this.companyId,
+    required this.conversationId,
     required this.companyName,
     required this.currentUser,
     required this.accessToken,
@@ -22116,7 +22119,7 @@ class ChatRouteArgs {
 
   final Key? key;
 
-  final int companyId;
+  final int conversationId;
 
   final String companyName;
 
@@ -22126,7 +22129,7 @@ class ChatRouteArgs {
 
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, companyId: $companyId, companyName: $companyName, currentUser: $currentUser, accessToken: $accessToken}';
+    return 'ChatRouteArgs{key: $key, conversationId: $conversationId, companyName: $companyName, currentUser: $currentUser, accessToken: $accessToken}';
   }
 }
 
@@ -45046,7 +45049,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       onPressed: () {
         context.router.push(
           ChatRoute(
-            companyId: data.id ?? 0,
+            conversationId: data.id ?? 0,
             companyName: data.name ?? '',
             accessToken: accessToken ?? '',
             currentUser: currentUser,
@@ -50961,21 +50964,21 @@ part 'chat_cubit.freezed.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   final IChatRepository _repository;
-  final int _companyId;
+  final int conversationId;
   final String _token;
+
   late final StreamSubscription _messagesSubscription;
 
-  int get conversationId => _companyId;
+  // int get conversationId => _companyId;
 
-  ChatCubit(this._repository, this._companyId, this._token)
+  ChatCubit(this._repository, this.conversationId, this._token)
       : super(const ChatState.initial()) {
-    _repository.connectToChat(_companyId, _token);
+    _repository.connectToChat(conversationId, _token);
     _messagesSubscription = _listenToMessages();
   }
   IChatRepository get repository => _repository;
   Stream<List<ChatMessageDTO>> get messagesStream =>
-      _repository.getMessagesStream(_companyId);
-  // List<ChatMessageDTO> get currentMessages => _repository.currentMessages;
+      _repository.getMessagesStream(conversationId);
   List<ChatMessageDTO> get currentMessages => state.maybeMap(
         loaded: (s) => s.messages,
         orElse: () => _repository.currentMessages,
@@ -51031,7 +51034,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   StreamSubscription _listenToMessages() {
-    return _repository.getMessagesStream(_companyId).listen((messages) {
+    return _repository.getMessagesStream(conversationId).listen((messages) {
       final currentSelected = selectedIds;
       final currentReply = replyMessage;
       emit(ChatState.loaded(
@@ -51851,17 +51854,18 @@ lib\src\feature\chat\bloc\conversations_cubit.dart
 --------------------------------------------------
 // lib/src/feature/chat/cubit/conversations_cubit.dart
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
+import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'conversations_cubit.freezed.dart';
 
-
 class ConversationsCubit extends Cubit<ConversationsState> {
   final IChatRepository _repository;
 
-  ConversationsCubit(this._repository) : super(const ConversationsState.initial());
+  ConversationsCubit(this._repository)
+      : super(const ConversationsState.initial());
 
   Future<void> loadConversations(String token) async {
     emit(const ConversationsState.loading());
@@ -51872,6 +51876,27 @@ class ConversationsCubit extends Cubit<ConversationsState> {
       emit(ConversationsState.error(e.toString()));
     }
   }
+
+  // void updateConversationLastMessage({
+  //   required int conversationId,
+  //   required ChatMessageDTO message,
+  // }) {
+  //   final currentState = state;
+
+  //   if (currentState is _Loaded) {
+  //     final updatedList = currentState.conversations.map((conversation) {
+  //       if (conversation.id == conversationId) {
+  //         return conversation.copyWith(
+  //           lastMessage: message,
+  //           lastMessageDate: message.createdAt,
+  //         );
+  //       }
+  //       return conversation;
+  //     }).toList();
+
+  //     emit(ConversationsState.loaded(updatedList));
+  //   }
+  // }
 }
 
 // lib/src/feature/chat/cubit/conversations_state.dart
@@ -51879,9 +51904,11 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 class ConversationsState with _$ConversationsState {
   const factory ConversationsState.initial() = _Initial;
   const factory ConversationsState.loading() = _Loading;
-  const factory ConversationsState.loaded(List<ConversationDTO> conversations) = _Loaded;
+  const factory ConversationsState.loaded(List<ConversationDTO> conversations) =
+      _Loaded;
   const factory ConversationsState.error(String message) = _Error;
 }
+
 
 
 lib\src\feature\chat\bloc\conversations_cubit.freezed.dart
@@ -52605,68 +52632,20 @@ class ChatRepositoryImpl implements IChatRepository {
   Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId) {
     return _messagesController.stream;
   }
-  // @override
-  // Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId) {
-  //   // Мы фильтруем поток: если данные в контроллере относятся к другому ID,
-  //   // отдаем пустой список или фильтруем.
-  //   return _messagesController.stream.map((messages) {
-  //     if (messages.isEmpty) return [];
 
-  //     // Если первое сообщение в списке из другого чата — значит это "грязные" данные
-  //     if (messages.first.conversationId != _currentConversationId) {
-  //       return [];
-  //     }
-  //     return messages;
-  //   });
-  // }
-
-  // Future<List<ChatMessageDTO>> _loadHistory(int companyId, String token) async {
-  //   try {
-  //     final response = await _restClient.get(
-  //       'conversations/$companyId/messages',
-  //       headers: {'Authorization': 'Bearer $token'},
-  //     );
-  //     final items = (response['items'] as List?) ?? [];
-  //     final list = <ChatMessageDTO>[];
-  //     for (var item in items) {
-  //       try {
-  //         list.add(ChatMessageDTO.fromJson(item as Map<String, dynamic>));
-  //       } catch (e, stack) {
-  //         logger.error('Failed to parse message', error: e, stackTrace: stack);
-  //         // Пропускаем битое сообщение
-  //       }
-  //     }
-  //     return list;
-  //   } catch (e) {
-  //     logger.error('Load history failed', error: e);
-  //     return [];
-  //   }
-  // }
-
-  Future<List<ChatMessageDTO>> _loadHistory(int companyId, String token) async {
+  Future<List<ChatMessageDTO>> _loadHistory(
+      int conversationId, String token) async {
     try {
       final response = await _restClient.get(
-        'conversations/$companyId/messages',
+        'conversations/$conversationId/messages',
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      // ВАЖНО: Твой бэкенд в этом же запросе (или в соседнем) должен отдавать инфо о юзерах.
-      // Если в сообщениях есть поле sender, берем статус оттуда для инициализации.
+      // Твоя логика парсинга...
       final items = (response['items'] as List?) ?? [];
-      final list = <ChatMessageDTO>[];
-
-      for (var item in items) {
-        final dto = ChatMessageDTO.fromJson(item as Map<String, dynamic>);
-        list.add(dto);
-
-        // Инициализируем статус из последнего сообщения собеседника
-        if (dto.sender != null && dto.sender.id != null && dto.sender.id != _currentUserId) {
-          // Нужно знать ID текущего юзера
-          _updateUserStatusInCache(dto.sender);
-        }
-      }
-      return list;
+      return items.map((e) => ChatMessageDTO.fromJson(e)).toList();
     } catch (e) {
+      log("⚠️ [ChatRepo] Ошибка бэкенда при загрузке истории: $e");
       return [];
     }
   }
@@ -52674,7 +52653,7 @@ class ChatRepositoryImpl implements IChatRepository {
   void _updateUserStatusInCache(UserDTO user) {
     final userId = user.id;
     if (userId == null) return; // Защита от null
-    
+
     _onlineUsersStatusCache[user.id!] = {
       'userId': user.id,
       'isOnline': user.isOnline,
@@ -52684,192 +52663,164 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   @override
-  Future<void> connectToChat(int companyId, String token) async {
-    _currentConversationId = null; //
-    _loadingConversationId = null; //
-    _messagesController.add([]);
+  Future<void> connectToChat(int conversationId, String token) async {
+    _currentConversationId = conversationId; // Теперь это РЕАЛЬНЫЙ ID чата
+    _currentToken = token;
+    _messagesController.add([]); // Очищаем экран перед загрузкой
 
     try {
-      _currentToken = token;
-      _currentCompanyId = companyId;
-      final chatInfo = await _restClient.get(
-        'conversations/by-company/$companyId',
-        headers: {'Authorization': 'Bearer $token'},
-        // Проверьте, что companyId — это число, а не строка
-      );
-      log('companyId type: ${companyId.runtimeType}'); // должно быть int
-      final conversationId = chatInfo['id'] as int;
-      _loadingConversationId = conversationId;
-      _currentConversationId = conversationId;
-      // 3. УЗНАЕМ КТО МЫ (чтобы отличать себя от собеседника для статусов)
-      // Обычно ID юзера можно достать из токена или отдельного запроса profile
-      final profile = await _restClient
-          .get('auth/profile', headers: {'Authorization': 'Bearer $token'});
-      _currentUserId = profile['id'] as int;
-
-      final uri = Uri(
-        // scheme: kIsWeb ? 'wss' : 'ws',
-        scheme: 'wss', // для ngrok
-        // host: kIsWeb ? 'localhost' : '10.0.2.2',
-        host: 'abca-94-158-58-248.ngrok-free.app', // для ngrok
-        // port: kIsWeb ? 443 : 5000, // для ngrok порт убираем
-        path: '/chat',
-        queryParameters: {'token': token},
-      );
-
-      if (_channel != null) {
-        await _channel!.sink.close();
+      // 1. Получаем профиль, если его нет (нужно для определения отправителя)
+      if (_currentUserId == null) {
+        final profile = await _restClient
+            .get('auth/profile', headers: {'Authorization': 'Bearer $token'});
+        _currentUserId = profile['id'] as int;
       }
+      // 2. Сразу подключаем сокет
+      await _establishSocketConnection(token);
 
-      try {
-        _channel = IOWebSocketChannel.connect(
-          uri.toString(),
-          headers: {
-            'ngrok-skip-browser-warning': 'true',
-          },
-          pingInterval: const Duration(seconds: 5),
-        );
-        _channel!.stream.listen(
-          _handleMessage,
-          onError: (error) {
-            logger.error('WebSocket error', error: error);
-            _messagesController.addError(error);
-            _stopPing();
-          },
-          onDone: () {
-            logger.info('WebSocket connection closed');
-            _stopPing();
-            _channel = null;
-          },
-        );
+      // 3. Подписываемся на комнату чата
+      _sendJson({
+        'event': 'join',
+        'data': {'conversationId': conversationId}
+      });
+      _startPing();
 
-        // Присоединяемся к чату
-        _sendJson({
-          'event': 'join',
-          'data': {'conversationId': _currentConversationId}
-        });
-        _startPing();
-        log("✅ CHAT CONNECTED SUCCESSFULLY");
-      } catch (e) {
-        logger.error('Failed to connect to chat', error: e);
-        _messagesController.addError(e);
-      }
+      // 4. Загружаем историю сообщений напрямую по ID чата
+      final history = await _loadHistory(conversationId, token);
+      _messagesController.add(history);
+
+      log("✅ [ChatRepo] Connected to chat ID: $conversationId");
     } catch (e) {
-      logger.error('Failed to connect', error: e);
-      rethrow;
+      log("❌ [ChatRepo] Connection error: $e");
+      _messagesController.addError(e);
+      rethrow; // Чтобы Cubit увидел ошибку
     }
+  }
+
+  Future<void> _establishSocketConnection(String token) async {
+    if (_channel != null) {
+      await _channel!.sink.close();
+      _channel = null;
+    }
+
+    final uri = Uri(
+      scheme: 'wss',
+      host: 'abca-94-158-58-248.ngrok-free.app',
+      path: '/chat',
+      queryParameters: {'token': token},
+    );
+
+    _channel = IOWebSocketChannel.connect(
+      uri.toString(),
+      headers: {'ngrok-skip-browser-warning': 'true'},
+      pingInterval: const Duration(seconds: 5),
+    );
+
+    _channel!.stream.listen(
+      _handleMessage,
+      onError: (e) => log("❌ WS Error: $e"),
+      onDone: () => log("ℹ️ WS Connection Closed"),
+    );
   }
 
   void _handleMessage(dynamic data) {
     try {
-      log("WS RAW DATA: $data"); // Логируем всё, чтобы видеть приходят ли ивенты
+      // log("WS RAW DATA: $data"); // Можно раскомментить для отладки
 
       final message = jsonDecode(data as String);
       final event = message['event'];
       final msgData = message['data'];
-      switch (event) {
-        case 'message.new':
-          // Важно: проверяем на null
-          if (msgData == null) return;
-          // final sender = UserDTO.fromJson(msgData['sender']);
-          // Извлекаем ID чата из пришедшего сообщения
-          final int incomingChatId = msgData['conversationId'] as int;
 
-          // Если это сообщение из другого чата (например, которое мы только что переслали),
-          // мы просто игнорируем его и не добавляем в текущий стрим
+      // --- ИСПРАВЛЕННЫЙ ФИЛЬТР ---
+      if (event == 'message.new' || event == 'messages.deleted') {
+        final int? incomingId = msgData['conversationId'] as int?;
+
+        // 1. Если это НОВОЕ сообщение, ID чата обязан быть и совпадать
+        if (event == 'message.new') {
           if (_currentConversationId == null ||
-              incomingChatId != _currentConversationId) {
-            log("ℹ️ Ignored message from another chat: $incomingChatId");
+              incomingId != _currentConversationId) {
+            // log("ℹ️ Ignored NEW message for conversation: $incomingId");
             return;
           }
-          // -----------------------------------
+        }
+
+        // 2. Если это УДАЛЕНИЕ, ID чата может не прийти (null).
+        // Если он пришел - проверяем. Если null - пропускаем (доверяем, что это наши сообщения).
+        if (event == 'messages.deleted') {
+          if (incomingId != null && incomingId != _currentConversationId) {
+            log("ℹ️ Ignored DELETE event for another conversation: $incomingId");
+            return;
+          }
+        }
+      }
+      // ---------------------------
+
+      switch (event) {
+        case 'message.new':
           final newMessage =
               ChatMessageDTO.fromJson(msgData as Map<String, dynamic>);
           final current = _messagesController.value;
           _messagesController.add([newMessage, ...current]);
           break;
+
         case 'messages.deleted':
-          final deletedData = message['data'];
-          if (deletedData != null) {
+          final deletedData = msgData; // msgData уже есть data из json
+          if (deletedData != null && deletedData['messageIds'] != null) {
             final List<int> deletedIds =
                 List<int>.from(deletedData['messageIds']);
 
-            // Получаем текущий список сообщений
+            // Получаем текущий список
             final currentMessages = _messagesController.value;
 
-            // Фильтруем: оставляем только те, которых НЕТ в списке на удаление
-            final updatedMessages = currentMessages.where((msg) {
-              return !deletedIds.contains(msg.id);
-            }).toList();
+            // Проверяем, есть ли вообще у нас сообщения с такими ID, чтобы зря не эмитить
+            // (Это защита от удаления сообщений из чужих чатов, если id уникальны)
+            final bool hasChanges =
+                currentMessages.any((msg) => deletedIds.contains(msg.id));
 
-            // Отправляем обновленный список в поток — UI обновится сам!
-            _messagesController.add(updatedMessages);
-            print("✅ Messages removed from stream: $deletedIds");
+            if (hasChanges) {
+              final updatedMessages = currentMessages.where((msg) {
+                return !deletedIds.contains(msg.id);
+              }).toList();
+
+              _messagesController.add(updatedMessages);
+              log("🗑️ [ChatRepo] Удалены сообщения: $deletedIds");
+            }
           }
           break;
 
         case 'user.status':
-          print("🔥 WS STATUS EVENT RECEIVED: $message"); // Для отладки
-          final statusData = message['data'];
-          if (statusData != null) {
-            // 1. Приводим типы жестко
-            final int userId = int.parse(statusData['userId'].toString());
-            final bool isOnline = statusData['isOnline'] == true;
-            final String? lastSeen = statusData['lastSeen'];
-
-            // 2. Обновляем локальный кэш
-            _onlineUsersStatusCache[userId] = {
-              'userId': userId,
-              'isOnline': isOnline,
-              'lastSeen': lastSeen
-            };
-
-            print("✅ UPDATING STREAM FOR USER $userId -> $isOnline");
-
-            // 3. !!! ГЛАВНОЕ ИСПРАВЛЕНИЕ !!!
-            // Создаем НОВУЮ Map, иначе StreamBuilder не увидит изменений
-            final newMap =
-                Map<int, Map<String, dynamic>>.from(_onlineUsersStatusCache);
-            _userStatusController.add(newMap);
-          }
+          _updateStatusFromSocket(msgData);
           break;
 
         case 'joined':
-          // // final joinedConvId = msgData?['conversationId'] as int?;
-
-          // if (_currentCompanyId != null && _currentToken != null) {
-          //   _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
-          //     _messagesController.add(history);
-          //   }).catchError((e) {
-          //     logger.error('Failed to load history', error: e);
-          //   });
-          // }
-          log("✅ JOINED event received. Loading history for company $_currentCompanyId...");
-
-          // Важно: Сохраняем ID чата на момент начала загрузки
-          // final loadingChatId = _currentConversationId;
-
-          if (_currentCompanyId != null && _currentToken != null) {
-            _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
-              // ПРОВЕРКА: Если пока грузилась история, юзер уже нажал "назад"
-              // или перешел в другой чат, не пушим эти сообщения в стрим!
-              if (_currentConversationId == _loadingConversationId) {
-                _messagesController.add(history);
-              } else {
-                log("⚠️ History loaded but user already switched chat. Discarding.");
-              }
-            });
-          }
-
+          // Логика joined (если нужна)
           break;
+
         case 'error':
-          _messagesController
-              .addError(message['data']?.toString() ?? 'Unknown error');
+          log("❌ WS Error event: ${message['data']}");
           break;
       }
     } catch (e) {
-      logger.error('Error handling WebSocket message', error: e);
+      log("❌ Error handling WebSocket message: $e");
     }
+  }
+
+  
+
+  void _updateStatusFromSocket(dynamic statusData) {
+    if (statusData == null) return;
+    final int? userId = int.tryParse(statusData['userId'].toString());
+    if (userId == null) return;
+
+    _onlineUsersStatusCache[userId] = {
+      'userId': userId,
+      'isOnline': statusData['isOnline'] == true,
+      'lastSeen': statusData['lastSeen']?.toString(),
+    };
+
+    // Эмитим копию мапы, чтобы StreamBuilder увидел изменения
+    _userStatusController
+        .add(Map<int, Map<String, dynamic>>.from(_onlineUsersStatusCache));
   }
 
   @override
@@ -52977,25 +52928,31 @@ class ChatRepositoryImpl implements IChatRepository {
       rawList = response;
     }
 
-    return rawList
+    final conversations = rawList
         .map((e) {
           if (e is Map<String, dynamic>) {
             try {
-              return ConversationDTO.fromJson(e);
+              final dto = ConversationDTO.fromJson(e);
+
+              // === ВОТ ТУТ МЫ ИСПОЛЬЗУЕМ ЭТОТ МЕТОД ===
+              // Если у чата есть партнер, сохраняем его статус в кэш сразу
+              if (dto.partner != null) {
+                _updateUserStatusInCache(dto.partner!);
+              }
+              // =======================================
+
+              return dto;
             } catch (error) {
               print('PARSING ERROR in ConversationDTO: $error');
-              return ConversationDTO(
-                id: -1,
-              ); // Исправлено: добавили participants
+              return ConversationDTO(id: -1);
             }
-          } else {
-            return ConversationDTO(
-              id: -1,
-            ); // Исправлено: добавили participants
           }
+          return ConversationDTO(id: -1);
         })
         .where((dto) => dto.id != -1)
         .toList();
+
+    return conversations;
   }
 
   @override
@@ -53388,65 +53345,486 @@ Map<String, dynamic> _$$ChatMessageDTOImplToJson(
 
 lib\src\feature\chat\model\conversation_dto.dart
 ------------------------------------------------
-// lib/src/feature/chat/model/conversation_dto.dart
+// // lib/src/feature/chat/model/conversation_dto.dart
+// import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+// import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+
+// class ConversationDTO {
+//   final int id;
+//   final String? title;
+//   final ChatMessageDTO? lastMessage;
+//   final DateTime? lastMessageDate;
+//   final UserDTO? partner;
+//   final int? companyId;
+
+//   ConversationDTO({
+//     required this.id,
+//     this.title,
+//     this.lastMessage,
+//     this.lastMessageDate,
+//      this.partner,
+//      this.companyId,
+//   });
+
+//   factory ConversationDTO.fromJson(Map<String, dynamic> json) {
+//     final lastMessageRaw = json['lastMessage'];
+//     ChatMessageDTO? parsedMessage;
+
+//     if (lastMessageRaw is Map<String, dynamic>) {
+//       parsedMessage = ChatMessageDTO.fromJson(lastMessageRaw);
+//     } else if (lastMessageRaw is String) {
+//       // Создаем "заглушку" сообщения из строки
+//       parsedMessage = ChatMessageDTO(
+//         id: 0,
+//         content: lastMessageRaw,
+//         createdAt: json['lastMessageDate'] != null
+//             ? DateTime.parse(json['lastMessageDate'] as String)
+//             : DateTime.now(),
+//         // Исправлено: добавляем обязательного отправителя
+//         sender: const UserDTO(
+//           id: 0,
+//           email: '',
+//           name: 'System', // Или любое дефолтное имя
+//         ),
+//       );
+//     }
+
+//     return ConversationDTO(
+//       id: json['id'] as int? ?? 0,
+//       title: json['title'] as String?,
+//       lastMessage: parsedMessage,
+//       lastMessageDate: json['lastMessageDate'] != null 
+//           ? DateTime.tryParse(json['lastMessageDate']) 
+//           : null,
+//       companyId: json['companyId'],
+//       // Парсим партнера, если он есть
+//       partner: json['partner'] != null 
+//           ? UserDTO.fromJson(json['partner']) 
+//           : null,
+//     );
+//   }
+// }
+
+
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ConversationDTO {
-  final int id;
-  final String? title;
-  final ChatMessageDTO? lastMessage;
-  final DateTime? lastMessageDate;
-  final UserDTO? partner;
-  final int? companyId;
+part 'conversation_dto.freezed.dart';
+part 'conversation_dto.g.dart';
 
-  ConversationDTO({
-    required this.id,
-    this.title,
-    this.lastMessage,
-    this.lastMessageDate,
-     this.partner,
-     this.companyId,
-  });
+// @freezed
+// class ConversationDTO with _$ConversationDTO {
+//   const factory ConversationDTO({
+//     required int id,
+//     String? title,
+//     ChatMessageDTO? lastMessage,
+//     DateTime? lastMessageDate,
+//     UserDTO? partner,
+//     int? companyId,
+//   }) = _ConversationDTO;
 
-  factory ConversationDTO.fromJson(Map<String, dynamic> json) {
-    final lastMessageRaw = json['lastMessage'];
-    ChatMessageDTO? parsedMessage;
+//   factory ConversationDTO.fromJson(Map<String, dynamic> json) =>
+//       _$ConversationDTOFromJson(json);
+// }
+@freezed
+class ConversationDTO with _$ConversationDTO {
 
-    if (lastMessageRaw is Map<String, dynamic>) {
-      parsedMessage = ChatMessageDTO.fromJson(lastMessageRaw);
-    } else if (lastMessageRaw is String) {
-      // Создаем "заглушку" сообщения из строки
-      parsedMessage = ChatMessageDTO(
-        id: 0,
-        content: lastMessageRaw,
-        createdAt: json['lastMessageDate'] != null
-            ? DateTime.parse(json['lastMessageDate'] as String)
-            : DateTime.now(),
-        // Исправлено: добавляем обязательного отправителя
-        sender: const UserDTO(
-          id: 0,
-          email: '',
-          name: 'System', // Или любое дефолтное имя
-        ),
-      );
+  const factory ConversationDTO({
+    required int id,
+    String? title,
+    // ignore: invalid_annotation_target
+    @JsonKey(fromJson: _chatMessageFromJson) ChatMessageDTO? lastMessage,
+    DateTime? lastMessageDate,
+    // ignore: invalid_annotation_target
+    @JsonKey(fromJson: _userFromJson) UserDTO? partner,
+    int? companyId,
+  }) = _ConversationDTO;
+
+  factory ConversationDTO.fromJson(Map<String, dynamic> json) =>
+      _$ConversationDTOFromJson(json);
+}
+
+// Кастомный парсер для lastMessage
+ChatMessageDTO? _chatMessageFromJson(dynamic json) {
+  if (json == null) return null;
+  if (json is Map<String, dynamic>) {
+    return ChatMessageDTO.fromJson(json);
+  } else if (json is String) {
+    // Создаём "заглушку" для строкового lastMessage
+    return ChatMessageDTO(
+      id: 0,
+      content: json,
+      createdAt: DateTime.now(),
+      sender: const UserDTO(id: 0, email: '', name: 'System'),
+    );
+  }
+  return null;
+}
+
+// Кастомный парсер для partner
+UserDTO? _userFromJson(dynamic json) {
+  if (json == null) return null;
+  if (json is Map<String, dynamic>) return UserDTO.fromJson(json);
+  return null;
+}
+
+
+
+lib\src\feature\chat\model\conversation_dto.freezed.dart
+--------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'conversation_dto.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+ConversationDTO _$ConversationDTOFromJson(Map<String, dynamic> json) {
+  return _ConversationDTO.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ConversationDTO {
+  int get id => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _chatMessageFromJson)
+  ChatMessageDTO? get lastMessage => throw _privateConstructorUsedError;
+  DateTime? get lastMessageDate => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _userFromJson)
+  UserDTO? get partner => throw _privateConstructorUsedError;
+  int? get companyId => throw _privateConstructorUsedError;
+
+  /// Serializes this ConversationDTO to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ConversationDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ConversationDTOCopyWith<ConversationDTO> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ConversationDTOCopyWith<$Res> {
+  factory $ConversationDTOCopyWith(
+          ConversationDTO value, $Res Function(ConversationDTO) then) =
+      _$ConversationDTOCopyWithImpl<$Res, ConversationDTO>;
+  @useResult
+  $Res call(
+      {int id,
+      String? title,
+      @JsonKey(fromJson: _chatMessageFromJson) ChatMessageDTO? lastMessage,
+      DateTime? lastMessageDate,
+      @JsonKey(fromJson: _userFromJson) UserDTO? partner,
+      int? companyId});
+
+  $ChatMessageDTOCopyWith<$Res>? get lastMessage;
+  $UserDTOCopyWith<$Res>? get partner;
+}
+
+/// @nodoc
+class _$ConversationDTOCopyWithImpl<$Res, $Val extends ConversationDTO>
+    implements $ConversationDTOCopyWith<$Res> {
+  _$ConversationDTOCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ConversationDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = freezed,
+    Object? lastMessage = freezed,
+    Object? lastMessageDate = freezed,
+    Object? partner = freezed,
+    Object? companyId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastMessage: freezed == lastMessage
+          ? _value.lastMessage
+          : lastMessage // ignore: cast_nullable_to_non_nullable
+              as ChatMessageDTO?,
+      lastMessageDate: freezed == lastMessageDate
+          ? _value.lastMessageDate
+          : lastMessageDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      partner: freezed == partner
+          ? _value.partner
+          : partner // ignore: cast_nullable_to_non_nullable
+              as UserDTO?,
+      companyId: freezed == companyId
+          ? _value.companyId
+          : companyId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+
+  /// Create a copy of ConversationDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatMessageDTOCopyWith<$Res>? get lastMessage {
+    if (_value.lastMessage == null) {
+      return null;
     }
 
-    return ConversationDTO(
-      id: json['id'] as int? ?? 0,
-      title: json['title'] as String?,
-      lastMessage: parsedMessage,
-      lastMessageDate: json['lastMessageDate'] != null 
-          ? DateTime.tryParse(json['lastMessageDate']) 
-          : null,
-      companyId: json['companyId'],
-      // Парсим партнера, если он есть
-      partner: json['partner'] != null 
-          ? UserDTO.fromJson(json['partner']) 
-          : null,
+    return $ChatMessageDTOCopyWith<$Res>(_value.lastMessage!, (value) {
+      return _then(_value.copyWith(lastMessage: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ConversationDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserDTOCopyWith<$Res>? get partner {
+    if (_value.partner == null) {
+      return null;
+    }
+
+    return $UserDTOCopyWith<$Res>(_value.partner!, (value) {
+      return _then(_value.copyWith(partner: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ConversationDTOImplCopyWith<$Res>
+    implements $ConversationDTOCopyWith<$Res> {
+  factory _$$ConversationDTOImplCopyWith(_$ConversationDTOImpl value,
+          $Res Function(_$ConversationDTOImpl) then) =
+      __$$ConversationDTOImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      String? title,
+      @JsonKey(fromJson: _chatMessageFromJson) ChatMessageDTO? lastMessage,
+      DateTime? lastMessageDate,
+      @JsonKey(fromJson: _userFromJson) UserDTO? partner,
+      int? companyId});
+
+  @override
+  $ChatMessageDTOCopyWith<$Res>? get lastMessage;
+  @override
+  $UserDTOCopyWith<$Res>? get partner;
+}
+
+/// @nodoc
+class __$$ConversationDTOImplCopyWithImpl<$Res>
+    extends _$ConversationDTOCopyWithImpl<$Res, _$ConversationDTOImpl>
+    implements _$$ConversationDTOImplCopyWith<$Res> {
+  __$$ConversationDTOImplCopyWithImpl(
+      _$ConversationDTOImpl _value, $Res Function(_$ConversationDTOImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ConversationDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = freezed,
+    Object? lastMessage = freezed,
+    Object? lastMessageDate = freezed,
+    Object? partner = freezed,
+    Object? companyId = freezed,
+  }) {
+    return _then(_$ConversationDTOImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastMessage: freezed == lastMessage
+          ? _value.lastMessage
+          : lastMessage // ignore: cast_nullable_to_non_nullable
+              as ChatMessageDTO?,
+      lastMessageDate: freezed == lastMessageDate
+          ? _value.lastMessageDate
+          : lastMessageDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      partner: freezed == partner
+          ? _value.partner
+          : partner // ignore: cast_nullable_to_non_nullable
+              as UserDTO?,
+      companyId: freezed == companyId
+          ? _value.companyId
+          : companyId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ConversationDTOImpl implements _ConversationDTO {
+  const _$ConversationDTOImpl(
+      {required this.id,
+      this.title,
+      @JsonKey(fromJson: _chatMessageFromJson) this.lastMessage,
+      this.lastMessageDate,
+      @JsonKey(fromJson: _userFromJson) this.partner,
+      this.companyId});
+
+  factory _$ConversationDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ConversationDTOImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final String? title;
+  @override
+  @JsonKey(fromJson: _chatMessageFromJson)
+  final ChatMessageDTO? lastMessage;
+  @override
+  final DateTime? lastMessageDate;
+  @override
+  @JsonKey(fromJson: _userFromJson)
+  final UserDTO? partner;
+  @override
+  final int? companyId;
+
+  @override
+  String toString() {
+    return 'ConversationDTO(id: $id, title: $title, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, partner: $partner, companyId: $companyId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ConversationDTOImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.lastMessage, lastMessage) ||
+                other.lastMessage == lastMessage) &&
+            (identical(other.lastMessageDate, lastMessageDate) ||
+                other.lastMessageDate == lastMessageDate) &&
+            (identical(other.partner, partner) || other.partner == partner) &&
+            (identical(other.companyId, companyId) ||
+                other.companyId == companyId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, id, title, lastMessage, lastMessageDate, partner, companyId);
+
+  /// Create a copy of ConversationDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ConversationDTOImplCopyWith<_$ConversationDTOImpl> get copyWith =>
+      __$$ConversationDTOImplCopyWithImpl<_$ConversationDTOImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ConversationDTOImplToJson(
+      this,
     );
   }
 }
+
+abstract class _ConversationDTO implements ConversationDTO {
+  const factory _ConversationDTO(
+      {required final int id,
+      final String? title,
+      @JsonKey(fromJson: _chatMessageFromJson)
+      final ChatMessageDTO? lastMessage,
+      final DateTime? lastMessageDate,
+      @JsonKey(fromJson: _userFromJson) final UserDTO? partner,
+      final int? companyId}) = _$ConversationDTOImpl;
+
+  factory _ConversationDTO.fromJson(Map<String, dynamic> json) =
+      _$ConversationDTOImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  String? get title;
+  @override
+  @JsonKey(fromJson: _chatMessageFromJson)
+  ChatMessageDTO? get lastMessage;
+  @override
+  DateTime? get lastMessageDate;
+  @override
+  @JsonKey(fromJson: _userFromJson)
+  UserDTO? get partner;
+  @override
+  int? get companyId;
+
+  /// Create a copy of ConversationDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ConversationDTOImplCopyWith<_$ConversationDTOImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
+lib\src\feature\chat\model\conversation_dto.g.dart
+--------------------------------------------------
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'conversation_dto.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$ConversationDTOImpl _$$ConversationDTOImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ConversationDTOImpl(
+      id: (json['id'] as num).toInt(),
+      title: json['title'] as String?,
+      lastMessage: _chatMessageFromJson(json['lastMessage']),
+      lastMessageDate: json['lastMessageDate'] == null
+          ? null
+          : DateTime.parse(json['lastMessageDate'] as String),
+      partner: _userFromJson(json['partner']),
+      companyId: (json['companyId'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$ConversationDTOImplToJson(
+        _$ConversationDTOImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'lastMessage': instance.lastMessage,
+      'lastMessageDate': instance.lastMessageDate?.toIso8601String(),
+      'partner': instance.partner,
+      'companyId': instance.companyId,
+    };
 
 
 
@@ -53463,26 +53841,27 @@ import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
+import 'package:coment_app/src/feature/chat/bloc/conversations_cubit.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:coment_app/src/feature/chat/ui/widgets/date_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 @RoutePage()
 class ChatPage extends StatefulWidget implements AutoRouteWrapper {
   const ChatPage({
     super.key,
-    required this.companyId,
+    required this.conversationId,
+    // required this.companyId,
     required this.companyName,
     required this.currentUser,
     required this.accessToken,
   });
-
-  final int companyId;
+  final int conversationId;
+  // final int companyId;
   final String companyName;
   final String accessToken;
   final UserDTO currentUser;
@@ -53495,7 +53874,8 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     return BlocProvider(
       create: (context) => ChatCubit(
         context.repository.chatRepository,
-        companyId,
+        // companyId,
+        conversationId,
         accessToken,
       ),
       child: this,
@@ -53506,7 +53886,7 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
 class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-late ChatCubit _cubit;
+  late ChatCubit _cubit;
 
   @override
   void initState() {
@@ -53517,7 +53897,7 @@ late ChatCubit _cubit;
 
   @override
   void dispose() {
-   _cubit.close();
+    _cubit.close();
     WidgetsBinding.instance.removeObserver(this);
     _textController.dispose();
     _scrollController.dispose();
@@ -53561,20 +53941,6 @@ late ChatCubit _cubit;
         final cubit = context.read<ChatCubit>();
         final isSelectionMode = cubit.selectedIds.isNotEmpty;
         return Scaffold(
-          // persistentFooterButtons:
-          //     isSelectionMode && cubit.selectedIds.length == 1
-          //         ? [
-          //             ElevatedButton(
-          //               onPressed: () {
-          //                 final msgId = cubit.selectedIds.first;
-          //                 final msg = cubit.currentMessages
-          //                     .firstWhere((e) => e.id == msgId);
-          //                 cubit.setReplyMessage(msg);
-          //               },
-          //               child: const Icon(Icons.reply),
-          //             ),
-          //           ]
-          //         : null,
           appBar: isSelectionMode
               ? AppBar(
                   leading: IconButton(
@@ -53585,16 +53951,6 @@ late ChatCubit _cubit;
                   ),
                   title: Text('${cubit.selectedIds.length}'),
                   actions: [
-                    // if (cubit.selectedIds.length == 1)
-                    //   IconButton(
-                    //     onPressed: () {
-                    //       final msgId = cubit.selectedIds.first;
-                    //       final msg = cubit.currentMessages
-                    //           .firstWhere((e) => e.id == msgId);
-                    //       cubit.setReplyMessage(msg);
-                    //     },
-                    //     icon: const Icon(Icons.reply),
-                    //   ),
                     IconButton(
                       onPressed: () async {
                         final selectedMsgs = cubit.currentMessages
@@ -54079,6 +54435,20 @@ late ChatCubit _cubit;
     if (text.isEmpty) return;
 
     context.read<ChatCubit>().sendMessage(text);
+    // final newMessage = 
+    ChatMessageDTO(
+      id: 0,
+      content: text,
+      createdAt: DateTime.now(),
+      sender: widget.currentUser,
+      conversationId: widget.conversationId,
+    );
+
+    // context.read<ConversationsCubit>().updateConversationLastMessage(
+    //       conversationId: widget.conversationId,
+    //       message: newMessage,
+    //     );
+
     _textController.clear();
   }
 
@@ -54147,7 +54517,7 @@ late ChatCubit _cubit;
                                 const Divider(height: 1),
                             itemBuilder: (context, index) {
                               final chat = conversations[index];
-                           
+
                               if (chat.id == cubit.conversationId) {
                                 return const SizedBox.shrink();
                               }
@@ -54171,22 +54541,24 @@ late ChatCubit _cubit;
                                   style: AppTextStyles.fs14w500,
                                 ),
                                 subtitle: Text(
-                                  userData?.isOnline == true ? 'В сети': 'Офлайн',
+                                  userData?.isOnline == true
+                                      ? 'В сети'
+                                      : 'Офлайн',
                                   style: TextStyle(
-                                    color:  userData?.isOnline == true
+                                    color: userData?.isOnline == true
                                         ? AppColors.green
                                         : Colors.grey,
                                     fontSize: 12,
                                   ),
                                 ),
                                 onTap: () async {
-                                  // Тут логика: либо отправляем через текущий кубит,
-                                  // либо (что правильнее) вызываем метод репозитория напрямую
-                                  final selectedContent = cubit.currentMessages
-                                      .where((m) =>
-                                          cubit.selectedIds.contains(m.id))
-                                      .map((m) => m.content)
-                                      .join('\n');
+                                  // // Тут логика: либо отправляем через текущий кубит,
+                                  // // либо (что правильнее) вызываем метод репозитория напрямую
+                                  // final selectedContent = cubit.currentMessages
+                                  //     .where((m) =>
+                                  //         cubit.selectedIds.contains(m.id))
+                                  //     .map((m) => m.content)
+                                  //     .join('\n');
 
                                   // Закрываем шторку
                                   Navigator.pop(context);
@@ -54272,7 +54644,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
                 .sender;
           } catch (_) {}
         }
-
+log('Targert user : ${targetUser}');
         if (targetUser == null) {
           return CustomAppBar(
             title: widget.widget.companyName,
@@ -54336,19 +54708,22 @@ lib\src\feature\chat\presentation\widgets\chat_list_item.dart
 -------------------------------------------------------------
 // lib/src/feature/chat/presentation/widgets/chat_list_item.dart
 import 'package:auto_route/auto_route.dart';
+import 'package:coment_app/src/core/constant/constants.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
+import 'package:coment_app/src/feature/chat/bloc/conversations_cubit.dart';
 // import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatListItem extends StatelessWidget {
   final ConversationDTO conversation;
-  // final VoidCallback onTap;
+  final VoidCallback onTap;
 
   const ChatListItem({
     required this.conversation,
-    // required this.onTap,
+    required this.onTap,
     super.key,
   });
 
@@ -54373,11 +54748,20 @@ class ChatListItem extends StatelessWidget {
     }
 
     return ListTile(
-      leading: CircleAvatar(
-        child: Text(
-          (displayName != null && displayName.isNotEmpty)
-              ? displayName[0].toUpperCase()
-              : '?',
+      leading: Container(
+        height: 90,
+        width: 90,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: const Color(0xFF7573F3), width: 3),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(
+              conversation.partner?.avatar != null
+                  ? '${conversation.partner?.avatar}'
+                  : NOT_FOUND_IMAGE,
+            ),
+          ),
         ),
       ),
       title: Text(displayName ?? 'Чат'),
@@ -54390,11 +54774,12 @@ class ChatListItem extends StatelessWidget {
           ? Text(
               '${conversation.lastMessage!.createdAt.hour}:${conversation.lastMessage!.createdAt.minute}')
           : null,
-      onTap: () {
-       // 1. Пытаемся взять ID напрямую из нового поля в DTO
+      onTap: ()  {
+        // 1. Пытаемся взять ID напрямую из нового поля в DTO
         // 2. Если его там нет (для старых записей), пытаемся вытащить из заголовка
-        final companyId = conversation.companyId ?? _extractCompanyId(conversation.title);
-        
+        final companyId =
+            conversation.companyId ?? _extractCompanyId(conversation.title);
+
         if (companyId == null) {
           // Если мы здесь, значит это личный чат без привязки к компании
           // Можно либо выдать ошибку, либо реализовать переход в ChatRoute по другому параметру
@@ -54404,14 +54789,16 @@ class ChatListItem extends StatelessWidget {
           return;
         }
 
-        context.router.push(
+      context.router.push(
           ChatRoute(
-            companyId: companyId,
+            conversationId: conversation.id,
             companyName: chatTitle,
             currentUser: currentUser,
             accessToken: currentUser.accessToken!,
           ),
         );
+        
+        onTap();
       },
     );
   }
@@ -78347,6 +78734,33 @@ class MessagePage extends StatefulWidget implements AutoRouteWrapper {
 }
 
 class _MessagePageState extends State<MessagePage> {
+  String searchQuery = '';
+
+  late final TextEditingController searchController;
+  late final FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  void _clearSearch() {
+    setState(() {
+      searchController.clear();
+      searchQuery = '';
+      focusNode.unfocus();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ConversationsCubit, ConversationsState>(
@@ -78364,10 +78778,19 @@ class _MessagePageState extends State<MessagePage> {
               // const Expanded(flex:  1, child: SizedBox()),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
                   child: CustomTextField(
-                    contentPadding:const  EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    focusNode: focusNode,
+                    controller: searchController,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                     hintText: context.localized.search,
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value.toLowerCase();
+                      });
+                    },
                   ),
                 ),
               ),
@@ -78381,16 +78804,33 @@ class _MessagePageState extends State<MessagePage> {
             initial: () => const Center(child: CircularProgressIndicator()),
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (conversations) {
-              if (conversations.isEmpty) {
-                return const Center(child: Text('Нет сообщений'));
+              final filteredConversations = conversations.where((conv) {
+                // Ищем по заголовку (title) или по имени партнера (если есть)
+                final title = conv.title?.toLowerCase() ?? '';
+                final partnerName = conv.partner?.name?.toLowerCase() ?? '';
+
+                return title.contains(searchQuery) ||
+                    partnerName.contains(searchQuery);
+              }).toList();
+              // if (conversations.isEmpty) {
+              //   return const Center(child: Text('Нет сообщений'));
+              // }
+              if (filteredConversations.isEmpty) {
+                return Center(
+                  child: Text(
+                    searchQuery.isEmpty ? 'Нет сообщений' : 'Ничего не найдено',
+                  ),
+                );
               }
               return ListView.builder(
-                itemCount: conversations.length,
+                // itemCount: conversations.length,
+                itemCount: filteredConversations.length,
                 itemBuilder: (context, index) {
-                  final conv = conversations[index];
+                  // final conv = conversations[index];
+                  final conv = filteredConversations[index];
                   return ChatListItem(
                     conversation: conv,
-
+                   onTap: _clearSearch,
                   );
                 },
               );
@@ -78401,21 +78841,8 @@ class _MessagePageState extends State<MessagePage> {
       },
     );
   }
-  
 }
 
-class MessageList extends StatelessWidget {
-  const MessageList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ConversationsCubit, ConversationsState>(
-      builder: (context, state) {
-        return const Placeholder();
-      },
-    );
-  }
-}
 
 
 
@@ -78681,8 +79108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               },
               loaded: (userDTO, verificationStatus) {
-                print(userDTO.role); // что выводит?
-                print(userDTO.role == 'owner');
+
 
                 final userRole = userDTO.role?.toLowerCase().trim() ?? '';
                 final isOwner = userRole == 'owner';
@@ -83081,4 +83507,4 @@ class _SignInPage extends StatelessWidget {
 
 
 
-=== Всего файлов: 369 ===
+=== Всего файлов: 371 ===

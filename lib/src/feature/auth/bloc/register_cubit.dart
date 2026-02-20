@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:coment_app/src/feature/app/logic/notification_service.dart';
 import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:flutter/foundation.dart';
@@ -67,10 +69,14 @@ class RegisterCubit extends Cubit<RegisterState> {
       if (isClosed) return;
       if (!kIsWeb) {
         final notificationService = NotificationService();
-        await notificationService.getDeviceToken(authDao: _authDao);
-        final deviceToken = _authDao.deviceToken.value;
+        // await notificationService.getDeviceToken(authDao: _authDao);
+        // final deviceToken = _authDao.deviceToken.value;
+        // 1. Сначала принудительно получаем СВЕЖИЙ токен от Firebase
+        final deviceToken =
+            await notificationService.getDeviceToken(authDao: _authDao);
         if (deviceToken != null) {
           await _repository.sendDeviceToken();
+          log('Device token sent to backend: $deviceToken');
         }
       }
       emit(RegisterState.loaded(user: data));

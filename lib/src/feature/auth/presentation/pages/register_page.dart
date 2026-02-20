@@ -236,7 +236,36 @@ class _RegisterPageState extends State<RegisterPage> {
             loading: () => context.loaderOverlay.show(),
             error: (message) {
               context.loaderOverlay.hide();
-              Toaster.showErrorTopShortToast(context, message);
+// Логика подмены системного сообщения на человеческое
+              String userFriendlyMessage = message;
+
+              if (message.contains('already exists') ||
+                  message.contains('409')) {
+                userFriendlyMessage =
+                    "Пользователь с такими данными уже зарегистрирован";
+              } else if (message.contains('invalid-email')) {
+                userFriendlyMessage = "Некорректный формат email";
+              } else if (message.contains('network-request-failed')) {
+                userFriendlyMessage = "Проверьте соединение с интернетом";
+              }
+
+              // 2. Распределяем ошибку: под поле или в общий тост
+              if (message.contains("email")) {
+                // Ошибка связана с почтой (существует или неверный формат)
+                _emailError.value = userFriendlyMessage;
+              } else if (message.contains("phone")) {
+                // Ошибка связана с телефоном
+                _phoneError.value = userFriendlyMessage;
+              } else {
+                // Если ошибка общая (интернет, сервер упал и т.д.), показываем тостер
+                Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+              }
+
+// Опционально: подсветить конкретное поле красным
+              if (message.contains('email')) {
+                _emailError.value = "Этот email уже занят";
+              }
+
               Future<void>.delayed(
                 const Duration(milliseconds: 300),
               ).whenComplete(

@@ -6,10 +6,10 @@ import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:coment_app/src/core/utils/refined_logger.dart';
+// import 'package:coment_app/src/core/utils/refined_logger.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+// import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -18,19 +18,19 @@ class ChatRepositoryImpl implements IChatRepository {
   final IRestClient _restClient;
   String? _currentToken;
   int? _currentConversationId;
-  int? _currentCompanyId;
   int? _currentUserId;
+  bool _isReconnecting = false;
 
   // Состояние соединения
   WebSocketChannel? _channel;
   Timer? _pingTimer;
 
-  // final StreamController<List<ChatMessageDTO>> _messagesController = StreamController.broadcast();
   final BehaviorSubject<List<ChatMessageDTO>> _messagesController =
       BehaviorSubject.seeded([]);
 
 // 1. КЭШ СОСТОЯНИЙ: Ключ = ID юзера (int), Значение = Данные статуса
   final Map<int, Map<String, dynamic>> _onlineUsersStatusCache = {};
+  @override
   Map<int, Map<String, dynamic>> get currentStatusCache =>
       _onlineUsersStatusCache;
 
@@ -44,8 +44,18 @@ class ChatRepositoryImpl implements IChatRepository {
       _userStatusController.stream;
 
 // РЕАЛИЗАЦИЯ ГЕТТЕРА для сообщений (чтобы не было ошибки в Cubit)
+  @override
   List<ChatMessageDTO> get currentMessages => _messagesController.value;
-  int? _loadingConversationId;
+  int? loadingConversationId;
+
+  // 1. Добавляем контроллер для уведомления об обновлении списка бесед
+  final PublishSubject<void> _conversationsUpdateController =
+      PublishSubject<void>();
+
+// 2. Добавляем геттер для этого стрима
+  @override
+  Stream<void> get conversationsUpdateStream =>
+      _conversationsUpdateController.stream;
 
   ChatRepositoryImpl(this._restClient);
 
@@ -53,43 +63,6 @@ class ChatRepositoryImpl implements IChatRepository {
   Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId) {
     return _messagesController.stream;
   }
-  // @override
-  // Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId) {
-  //   // Мы фильтруем поток: если данные в контроллере относятся к другому ID,
-  //   // отдаем пустой список или фильтруем.
-  //   return _messagesController.stream.map((messages) {
-  //     if (messages.isEmpty) return [];
-
-  //     // Если первое сообщение в списке из другого чата — значит это "грязные" данные
-  //     if (messages.first.conversationId != _currentConversationId) {
-  //       return [];
-  //     }
-  //     return messages;
-  //   });
-  // }
-
-  // Future<List<ChatMessageDTO>> _loadHistory(int companyId, String token) async {
-  //   try {
-  //     final response = await _restClient.get(
-  //       'conversations/$companyId/messages',
-  //       headers: {'Authorization': 'Bearer $token'},
-  //     );
-  //     final items = (response['items'] as List?) ?? [];
-  //     final list = <ChatMessageDTO>[];
-  //     for (var item in items) {
-  //       try {
-  //         list.add(ChatMessageDTO.fromJson(item as Map<String, dynamic>));
-  //       } catch (e, stack) {
-  //         logger.error('Failed to parse message', error: e, stackTrace: stack);
-  //         // Пропускаем битое сообщение
-  //       }
-  //     }
-  //     return list;
-  //   } catch (e) {
-  //     logger.error('Load history failed', error: e);
-  //     return [];
-  //   }
-  // }
 
   Future<List<ChatMessageDTO>> _loadHistory(
       int conversationId, String token) async {
@@ -104,8 +77,6 @@ class ChatRepositoryImpl implements IChatRepository {
       return items.map((e) => ChatMessageDTO.fromJson(e)).toList();
     } catch (e) {
       log("⚠️ [ChatRepo] Ошибка бэкенда при загрузке истории: $e");
-      // Возвращаем пустой список вместо проброса ошибки,
-      // чтобы сокеты продолжили работать
       return [];
     }
   }
@@ -176,100 +147,15 @@ class ChatRepositoryImpl implements IChatRepository {
       pingInterval: const Duration(seconds: 5),
     );
 
-    _channel!.stream.listen(
-      _handleMessage,
-      onError: (e) => log("❌ WS Error: $e"),
-      onDone: () => log("ℹ️ WS Connection Closed"),
-    );
+    _channel!.stream.listen(_handleMessage, onError: (e) {
+      log("❌ WS Error: $e");
+      scheduleReconnect();
+    }, onDone: () {
+      log("ℹ️ WS Connection Closed");
+      scheduleReconnect();
+    });
   }
 
-  // void _handleMessage(dynamic data) {
-  //   try {
-  //     log("WS RAW DATA: $data"); // Логируем всё, чтобы видеть приходят ли ивенты
-
-  //     final message = jsonDecode(data as String);
-  //     final event = message['event'];
-  //     final msgData = message['data'];
-
-  //     // ЖЕСТКИЙ ФИЛЬТР: Если это сообщение не для текущего открытого чата - В ИГНОР
-  //     if (event == 'message.new' || event == 'messages.deleted') {
-  //       final int? incomingId = msgData['conversationId'] as int?;
-  //       if (_currentConversationId == null ||
-  //           incomingId != _currentConversationId) {
-  //         log("ℹ️ Ignored message for conversation: $incomingId (current: $_currentConversationId)");
-  //         return;
-  //       }
-  //     }
-  //     switch (event) {
-  //       case 'message.new':
-  //         final newMessage =
-  //             ChatMessageDTO.fromJson(msgData as Map<String, dynamic>);
-  //         final current = _messagesController.value;
-  //         _messagesController.add([newMessage, ...current]);
-  //         break;
-  //       case 'messages.deleted':
-  //         final deletedData = message['data'];
-  //         if (deletedData != null) {
-  //           final List<int> deletedIds =
-  //               List<int>.from(deletedData['messageIds']);
-
-  //           // Получаем текущий список сообщений
-  //           final currentMessages = _messagesController.value;
-
-  //           // Фильтруем: оставляем только те, которых НЕТ в списке на удаление
-  //           final updatedMessages = currentMessages.where((msg) {
-  //             return !deletedIds.contains(msg.id);
-  //           }).toList();
-
-  //           // Отправляем обновленный список в поток — UI обновится сам!
-  //           _messagesController.add(updatedMessages);
-  //           log("✅ Messages removed from stream: $deletedIds");
-  //         }
-
-  //         break;
-
-  //       case 'user.status':
-  //         _updateStatusFromSocket(msgData);
-  //         break;
-
-  //       // case 'joined':
-  //       //   // // final joinedConvId = msgData?['conversationId'] as int?;
-
-  //       //   // if (_currentCompanyId != null && _currentToken != null) {
-  //       //   //   _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
-  //       //   //     _messagesController.add(history);
-  //       //   //   }).catchError((e) {
-  //       //   //     logger.error('Failed to load history', error: e);
-  //       //   //   });
-  //       //   // }
-  //       //   log("✅ JOINED event received. Loading history for company $_currentCompanyId...");
-
-  //       //   // Важно: Сохраняем ID чата на момент начала загрузки
-  //       //   // final loadingChatId = _currentConversationId;
-
-  //       //   if (_currentCompanyId != null && _currentToken != null) {
-  //       //     _loadHistory(_currentCompanyId!, _currentToken!).then((history) {
-  //       //       // ПРОВЕРКА: Если пока грузилась история, юзер уже нажал "назад"
-  //       //       // или перешел в другой чат, не пушим эти сообщения в стрим!
-  //       //       if (_currentConversationId == _loadingConversationId) {
-  //       //         _messagesController.add(history);
-  //       //       } else {
-  //       //         log("⚠️ History loaded but user already switched chat. Discarding.");
-  //       //       }
-  //       //     });
-  //       //   }
-
-  //       //   break;
-
-  //       case 'error':
-  //         _messagesController
-  //             .addError(message['data']?.toString() ?? 'Unknown error');
-  //         break;
-  //     }
-  //   } catch (e) {
-  //     logger.error('Error handling WebSocket message', error: e);
-  //   }
-  // }
   void _handleMessage(dynamic data) {
     try {
       // log("WS RAW DATA: $data"); // Можно раскомментить для отладки
@@ -277,6 +163,8 @@ class ChatRepositoryImpl implements IChatRepository {
       final message = jsonDecode(data as String);
       final event = message['event'];
       final msgData = message['data'];
+
+      log("📥 WS EVENT: $event | DATA: $msgData");
 
       // --- ИСПРАВЛЕННЫЙ ФИЛЬТР ---
       if (event == 'message.new' || event == 'messages.deleted') {
@@ -308,6 +196,7 @@ class ChatRepositoryImpl implements IChatRepository {
               ChatMessageDTO.fromJson(msgData as Map<String, dynamic>);
           final current = _messagesController.value;
           _messagesController.add([newMessage, ...current]);
+          _conversationsUpdateController.add(null);
           break;
 
         case 'messages.deleted':
@@ -334,6 +223,25 @@ class ChatRepositoryImpl implements IChatRepository {
             }
           }
           break;
+        case 'users.online_list':
+          final List<dynamic> onlineIds = msgData['onlineIds'] ?? [];
+          log("🌐 Получен список пользователей онлайн: $onlineIds");
+
+          for (var id in onlineIds) {
+            final int? userId = int.tryParse(id.toString());
+            if (userId != null) {
+              _onlineUsersStatusCache[userId] = {
+                'userId': userId,
+                'isOnline': true,
+                'lastSeen': DateTime.now()
+                    .toIso8601String(), // Раз он в списке, значит онлайн сейчас
+              };
+            }
+          }
+          // Уведомляем UI о массовом обновлении статусов
+          _userStatusController.add(
+              Map<int, Map<String, dynamic>>.from(_onlineUsersStatusCache));
+          break;
 
         case 'user.status':
           _updateStatusFromSocket(msgData);
@@ -352,10 +260,18 @@ class ChatRepositoryImpl implements IChatRepository {
     }
   }
 
+
   void _updateStatusFromSocket(dynamic statusData) {
     if (statusData == null) return;
-    final int? userId = int.tryParse(statusData['userId'].toString());
-    if (userId == null) return;
+
+    // Проверяем типы данных!
+    final rawId = statusData['userId'];
+    final int? userId = rawId is int ? rawId : int.tryParse(rawId.toString());
+
+    if (userId == null) {
+      log("⚠️ [ChatRepo] Не удалось распарсить userId: $rawId");
+      return;
+    }
 
     _onlineUsersStatusCache[userId] = {
       'userId': userId,
@@ -363,7 +279,9 @@ class ChatRepositoryImpl implements IChatRepository {
       'lastSeen': statusData['lastSeen']?.toString(),
     };
 
-    // Эмитим копию мапы, чтобы StreamBuilder увидел изменения
+    log("✅ Статус юзера $userId обновлен: ${statusData['isOnline']}");
+
+    // ВАЖНО: создаем НОВУЮ мапу, чтобы StreamBuilder "проснулся"
     _userStatusController
         .add(Map<int, Map<String, dynamic>>.from(_onlineUsersStatusCache));
   }
@@ -371,8 +289,10 @@ class ChatRepositoryImpl implements IChatRepository {
   @override
   void leaveChat() {
     _currentConversationId = null;
-    _loadingConversationId = null;
+    loadingConversationId = null;
     _messagesController.add([]); // Чистим стрим при выходе
+    // ВАЖНО: Закрываем сокет, чтобы бэк получил disconnect
+    disconnect();
     log("Вышли из чата, ID сброшен");
   }
 
@@ -419,8 +339,18 @@ class ChatRepositoryImpl implements IChatRepository {
   // Метод для восстановления связи (использует сохраненные token и companyId)
   @override
   Future<void> ensureConnection() async {
-    if (_currentCompanyId != null && _currentToken != null) {
-      await connectToChat(_currentCompanyId!, _currentToken!);
+    if ((_channel == null || _channel!.closeCode != null) &&
+        _currentConversationId != null &&
+        _currentToken != null) {
+      // await connectToChat(_currentCompanyId!, _currentToken!);
+      await _establishSocketConnection(_currentToken!);
+      // После коннекта ОБЯЗАТЕЛЬНО переподписываемся на комнату
+      _sendJson({
+        'event': 'join',
+        'data': {'conversationId': _currentConversationId}
+      });
+
+      _startPing();
     }
   }
 
@@ -510,6 +440,33 @@ class ChatRepositoryImpl implements IChatRepository {
         'conversationId': _currentConversationId,
         'messageIds': ids,
       },
+    });
+  }
+
+  @override
+  void scheduleReconnect() {
+    _stopPing();
+
+    // Если пользователь ВЫШЕЛ из чата (_currentConversationId == null),
+    // мы НЕ будем пытаться переподключиться. Экономим батарею и ресурсы.
+    if (_isReconnecting || _currentConversationId == null) return;
+    _isReconnecting = true;
+    Timer(const Duration(seconds: 3), () async {
+      // Если пока ждали таймер, пользователь закрыл чат — отменяем
+      if (_currentConversationId == null) {
+        _isReconnecting = false;
+        log("🔄 [ChatRepo] Фоновое переподключение...");
+        // ensureConnection();
+        return;
+      }
+      try {
+        await ensureConnection();
+        log("✅ [ChatRepo] Reconnected successfully");
+      } catch (e) {
+        log("❌ [ChatRepo] Reconnect failed, trying again...");
+      } finally {
+        _isReconnecting = false;
+      }
     });
   }
 }

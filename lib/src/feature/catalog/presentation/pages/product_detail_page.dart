@@ -714,10 +714,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 SvgPicture.asset(AssetsConstants.icLocation),
                 const Gap(6),
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/1.2),
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width / 1.2),
                   child: Text(
                     data.address ?? '',
-                   maxLines: 2,
+                    maxLines: 2,
                     style: AppTextStyles.fs14w500,
                   ),
                 )
@@ -786,7 +787,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
- 
   Widget _mapWidget(ProductDTO data) {
     return GestureDetector(
       onTap: () {
@@ -888,12 +888,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return FloatingActionButton(
       backgroundColor: AppColors.mainColor,
       onPressed: () {
+        final target = UserDTO(
+          id: data.ownerId, // Берем ID владельца из данных страницы
+          name: data.name, // Или data.ownerName, если есть
+          avatar: data.image,
+        );
+
         context.router.push(
           ChatRoute(
             conversationId: data.id ?? 0,
             companyName: data.name ?? '',
             accessToken: accessToken ?? '',
             currentUser: currentUser,
+            targetUser: target,
           ),
         );
       },

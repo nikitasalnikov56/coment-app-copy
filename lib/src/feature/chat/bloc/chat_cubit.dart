@@ -26,7 +26,6 @@ class ChatCubit extends Cubit<ChatState> {
   IChatRepository get repository => _repository;
   Stream<List<ChatMessageDTO>> get messagesStream =>
       _repository.getMessagesStream(conversationId);
-  // List<ChatMessageDTO> get currentMessages => _repository.currentMessages;
   List<ChatMessageDTO> get currentMessages => state.maybeMap(
         loaded: (s) => s.messages,
         orElse: () => _repository.currentMessages,
