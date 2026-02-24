@@ -98,25 +98,32 @@ import 'package:coment_app/src/feature/app/logic/app_runner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 late final WebViewController controller;
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   await dotenv.load(fileName: '.env');
-
-// ✅ Инициализация controller
-  controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(const Color.fromARGB(0, 0, 0, 0));
+  final supabaseKey = dotenv.get('ANON_KEY');
 
   final key = dotenv.get('RECAPTCHA_SITE_KEY');
-  RecaptchaHandler.instance.setupSiteKey(dataSiteKey: key);
 
   runZonedGuarded(
-    () => const AppRunner().initializeAndRun(),
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await Supabase.initialize(
+        url: 'https://djauryivkhshlpvnbiax.supabase.co',
+        anonKey: supabaseKey,
+      );
+      // ✅ Инициализация controller
+      controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(const Color.fromARGB(0, 0, 0, 0));
+      RecaptchaHandler.instance.setupSiteKey(dataSiteKey: key);
+
+      const AppRunner().initializeAndRun();
+    },
     logger.logZoneError,
   );
 }
@@ -5620,6 +5627,8 @@ import 'package:coment_app/src/feature/catalog/data/catalog_remote_ds.dart';
 import 'package:coment_app/src/feature/catalog/data/catalog_repository.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository_impl.dart';
+import 'package:coment_app/src/feature/chat/data/voice_recorder_repository.dart';
+import 'package:coment_app/src/feature/chat/data/voice_recorder_repository_impl.dart';
 import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
 import 'package:coment_app/src/feature/profile/data/payment_repository.dart';
 import 'package:coment_app/src/feature/settings/data/app_settings_datasource.dart';
@@ -5664,6 +5673,7 @@ abstract class IRepositoryStorage {
 
 
   IChatRepository get chatRepository;
+  IVoiceRepository get voiceRepository;
 
   void close();
 }
@@ -5791,6 +5801,8 @@ class RepositoryStorage implements IRepositoryStorage {
 
   @override
   IChatRepository get chatRepository => ChatRepositoryImpl(restClient);
+@override
+  IVoiceRepository get voiceRepository => VoiceRepositoryImpl();
 
 }
 
@@ -11411,6 +11423,10 @@ class CustomValidatorTextfield extends StatelessWidget {
     this.focusNode,
     this.style = AppTextStyles.fs16w400h1_6,
     this.helperText,
+    this.height,
+    this.focusedBorder,
+    this.enabledBorder,
+    this.prefixIconWidget,
   });
 
   final TextEditingController? controller;
@@ -11428,6 +11444,10 @@ class CustomValidatorTextfield extends StatelessWidget {
   final FocusNode? focusNode;
   final TextStyle? style;
   final String? helperText;
+  final double? height;
+  final InputBorder? focusedBorder;
+  final InputBorder? enabledBorder;
+  final Widget? prefixIconWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -11441,6 +11461,7 @@ class CustomValidatorTextfield extends StatelessWidget {
             SizedBox(
               height: 44,
               child: TextFormField(
+                
                 readOnly: readOnly,
                 onTap: onTap,
                 autofocus: autofocus,
@@ -11458,7 +11479,7 @@ class CustomValidatorTextfield extends StatelessWidget {
                 validator: validator,
                 decoration: InputDecoration(
                   helperText: helperText,
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: focusedBorder ?? OutlineInputBorder(
                       borderSide: const BorderSide(
                         width: 1,
                       ),
@@ -11467,11 +11488,12 @@ class CustomValidatorTextfield extends StatelessWidget {
                       borderSide:
                           const BorderSide(width: 1, color: AppColors.red2),
                       borderRadius: BorderRadius.circular(12)),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: enabledBorder ?? OutlineInputBorder(
                       borderSide: const BorderSide(
                           width: 1, color: AppColors.borderTextField),
                       borderRadius: BorderRadius.circular(12)),
                   fillColor: v == null ? null : AppColors.muteRed,
+                  prefixIcon: prefixIconWidget ,
                   suffixIcon: obscureText != null
                       ? PasswordEyeSuffixIcon(
                           valueListenable: obscureText!,
@@ -22076,6 +22098,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
     required String companyName,
     required UserDTO currentUser,
     required String accessToken,
+    required UserDTO targetUser,
     List<PageRouteInfo>? children,
   }) : super(
          ChatRoute.name,
@@ -22085,6 +22108,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
            companyName: companyName,
            currentUser: currentUser,
            accessToken: accessToken,
+           targetUser: targetUser,
          ),
          initialChildren: children,
        );
@@ -22102,6 +22126,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
           companyName: args.companyName,
           currentUser: args.currentUser,
           accessToken: args.accessToken,
+          targetUser: args.targetUser,
         ),
       );
     },
@@ -22115,6 +22140,7 @@ class ChatRouteArgs {
     required this.companyName,
     required this.currentUser,
     required this.accessToken,
+    required this.targetUser,
   });
 
   final Key? key;
@@ -22127,9 +22153,11 @@ class ChatRouteArgs {
 
   final String accessToken;
 
+  final UserDTO targetUser;
+
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, conversationId: $conversationId, companyName: $companyName, currentUser: $currentUser, accessToken: $accessToken}';
+    return 'ChatRouteArgs{key: $key, conversationId: $conversationId, companyName: $companyName, currentUser: $currentUser, accessToken: $accessToken, targetUser: $targetUser}';
   }
 }
 
@@ -26111,6 +26139,8 @@ abstract class _ErrorState implements PasswordRecoveryState {
 
 lib\src\feature\auth\bloc\register_cubit.dart
 ---------------------------------------------
+import 'dart:developer';
+
 import 'package:coment_app/src/feature/app/logic/notification_service.dart';
 import 'package:coment_app/src/feature/auth/database/auth_dao.dart';
 import 'package:flutter/foundation.dart';
@@ -26180,10 +26210,14 @@ class RegisterCubit extends Cubit<RegisterState> {
       if (isClosed) return;
       if (!kIsWeb) {
         final notificationService = NotificationService();
-        await notificationService.getDeviceToken(authDao: _authDao);
-        final deviceToken = _authDao.deviceToken.value;
+        // await notificationService.getDeviceToken(authDao: _authDao);
+        // final deviceToken = _authDao.deviceToken.value;
+        // 1. Сначала принудительно получаем СВЕЖИЙ токен от Firebase
+        final deviceToken =
+            await notificationService.getDeviceToken(authDao: _authDao);
         if (deviceToken != null) {
           await _repository.sendDeviceToken();
+          log('Device token sent to backend: $deviceToken');
         }
       }
       emit(RegisterState.loaded(user: data));
@@ -31376,7 +31410,6 @@ lib\src\feature\auth\presentation\pages\register_page.dart
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/auth/models/user_role.dart';
 import 'package:flutter/cupertino.dart';
@@ -31611,7 +31644,82 @@ class _RegisterPageState extends State<RegisterPage> {
             loading: () => context.loaderOverlay.show(),
             error: (message) {
               context.loaderOverlay.hide();
-              Toaster.showErrorTopShortToast(context, message);
+// Логика подмены системного сообщения на человеческое
+//               String userFriendlyMessage = message;
+//               bool isPhoneConflict = message.contains('UQ_phoneNumber') ||
+//                   message.toLowerCase().contains('phone');
+//               bool isEmailConflict = message.contains('UQ_email') ||
+//                   message.toLowerCase().contains('email');
+//               bool isAlreadyExists =
+//                   message.contains('already exists') || message.contains('409');
+
+//               if (isPhoneConflict) {
+//                 userFriendlyMessage = "Этот номер телефона уже используется";
+//                 _phoneError.value = userFriendlyMessage;
+//               } else if (isEmailConflict) {
+//                 userFriendlyMessage = "Этот email уже зарегистрирован";
+//                 _emailError.value = userFriendlyMessage;
+//               } else if (isAlreadyExists) {
+//                 userFriendlyMessage =
+//                     "Пользователь с такими данными уже существует";
+//                 // Если сервер не уточнил что именно, показываем общую ошибку
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               } else if (message.contains('network-request-failed')) {
+//                 userFriendlyMessage = "Проверьте соединение с интернетом";
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               } else {
+//                 // Для всех остальных системных ошибок
+//                 userFriendlyMessage = "Ошибка сервера. Попробуйте позже";
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               }
+
+//               // 2. Распределяем ошибку: под поле или в общий тост
+//               if (message.contains("email")) {
+//                 // Ошибка связана с почтой (существует или неверный формат)
+//                 _emailError.value = userFriendlyMessage;
+//               } else if (message.contains("phone")) {
+//                 // Ошибка связана с телефоном
+//                 _phoneError.value = userFriendlyMessage;
+//               } else {
+//                 // Если ошибка общая (интернет, сервер упал и т.д.), показываем тостер
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               }
+
+// // Опционально: подсветить конкретное поле красным
+//               if (message.contains('email')) {
+//                 _emailError.value = "Этот email уже занят";
+//               }
+// 1. Обнуляем старые ошибки
+              _emailError.value = null;
+              _phoneError.value = null;
+
+              // 2. Пытаемся достать массив конфликтов из ошибки бэкенда
+              // message у тебя обычно приходит как строка, но в ней может лежать JSON из catch
+              // Если твой RestClient прокидывает statusCode 409, данные обычно лежат в объекте исключения
+
+              final msg = message.toLowerCase();
+
+              // Проверка по тексту (на всякий случай, если структура ответа изменится)
+              if (msg.contains('email')) {
+                _emailError.value = "Этот email уже зарегистрирован";
+              }
+
+              if (msg.contains('phone')) {
+                _phoneError.value = "Этот номер телефона уже занят";
+              }
+
+              // 3. ПРИНУДИТЕЛЬНАЯ ВАЛИДАЦИЯ
+              // Это тот самый «пинок», который заставит поля перекраситься в красный
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_formKey.currentState != null) {
+                  _formKey.currentState!.validate();
+                }
+              });
+
+              // Если ошибок в полях нет, но ошибка пришла — покажем тост
+              if (_emailError.value == null && _phoneError.value == null) {
+                Toaster.showErrorTopShortToast(context, message);
+              }
               Future<void>.delayed(
                 const Duration(milliseconds: 300),
               ).whenComplete(
@@ -31677,12 +31785,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                             validator: (String? value) {
                               return null;
-
-                              // if (value == null || value.isEmpty) {
-                              //   return _surnameNameError.value = 'Обязательно к заполнению';
-                              // }
-
-                              // return _surnameNameError.value = null;
                             },
                           ),
                         ),
@@ -31729,77 +31831,129 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
 
                         const Gap(8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomTextField(
-                                height: 44,
-                                obscureText: false,
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        width: 1,
-                                        color: AppColors.borderTextField),
-                                    borderRadius: BorderRadius.circular(12)),
-                                prefixIconWidget: Padding(
-                                  padding: const EdgeInsets.only(left: 18.0),
-                                  child: DropdownButton<Country>(
-                                    value: selectedCountry,
-                                    borderRadius: BorderRadius.circular(12),
-                                    items: countries.map((country) {
-                                      return DropdownMenuItem<Country>(
+                        CustomValidatorTextfield(
+                          controller: phoneController,
+                          valueListenable:
+                              _phoneError, // Убедитесь, что это именно этот нотификатор
+                          hintText: selectedCountry!.mask.replaceAll('#', '_'),
+                          keyboardType: TextInputType.phone,
+                          prefixIconWidget: Padding(
+                            padding: const EdgeInsets.only(left: 18.0),
+                            child: DropdownButton<Country>(
+                              value: selectedCountry,
+                              underline: const SizedBox(),
+                              items: countries
+                                  .map((country) => DropdownMenuItem(
                                         value: country,
                                         child: Text(
                                             '${country.name} ${country.code}'),
-                                      );
-                                    }).toList(),
-                                    onChanged: (Country? newCountry) {
-                                      if (newCountry != null) {
-                                        setState(() {
-                                          selectedCountry = newCountry;
-                                          phoneController.clear();
-                                        });
-                                      }
-                                    },
-                                    dropdownColor: Colors.white,
-                                    underline: const SizedBox(),
-                                  ),
-                                ),
-                                controller: phoneController,
-                                inputFormatters: [
-                                  MaskTextInputFormatter(
-                                    mask: selectedCountry!.mask,
-                                    filter: {"#": RegExp(r'[0-9]')},
-                                  ),
-                                ],
-                                keyboardType: TextInputType.phone,
-                                hintText:
-                                    selectedCountry!.mask.replaceAll('#', '_'),
-                                onChanged: (value) {
-                                  checkAllowTapButton();
-                                },
-                                validator: (String? value) {
-                                  if (value == null || value.isEmpty) {
-                                    return _phoneError.value =
-                                        context.localized.required_to_fill;
-                                  }
-                                  String unmasked =
-                                      value.replaceAll(RegExp(r'[^0-9]'), '');
-                                  if (unmasked.length !=
-                                      selectedCountry!.digitLength) {
-                                    // return _phoneError.value =
-                                    //     context.localized.incorrectNumberFormat;
-                                  }
-                                  return _phoneError.value = null;
-                                },
-                              ),
+                                      ))
+                                  .toList(),
+                              onChanged: (Country? newCountry) {
+                                if (newCountry != null) {
+                                  setState(() {
+                                    selectedCountry = newCountry;
+                                    phoneController.clear();
+                                    _phoneError.value =
+                                        null; // Сбрасываем ошибку при смене страны
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          inputFormatters: [
+                            MaskTextInputFormatter(
+                              mask: selectedCountry!.mask,
+                              filter: {"#": RegExp(r'[0-9]')},
                             ),
                           ],
+                          onChanged: (value) {
+                            if (_phoneError.value != null) {
+                              _phoneError.value =
+                                  null; // Убираем ошибку при вводе
+                            }
+                            checkAllowTapButton();
+                          },
+                          validator: (value) => _phoneError
+                              .value, // Привязываем валидатор к нотификатору
                         ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: CustomValidatorTextfield(
+                        //               valueListenable: _phoneError,
+                        //               // height: 44,
+                        //               obscureText: ValueNotifier(false),
+                        //               focusedBorder: OutlineInputBorder(
+                        //                   borderSide: const BorderSide(
+                        //                     width: 1,
+                        //                   ),
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(12)),
+                        //               enabledBorder: OutlineInputBorder(
+                        //                   borderSide: const BorderSide(
+                        //                       width: 1,
+                        //                       color: AppColors.borderTextField),
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(12)),
+                        //               prefixIconWidget: Padding(
+                        //                 padding:
+                        //                     const EdgeInsets.only(left: 18.0),
+                        //                 child: DropdownButton<Country>(
+                        //                   value: selectedCountry,
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(12),
+                        //                   items: countries.map((country) {
+                        //                     return DropdownMenuItem<Country>(
+                        //                       value: country,
+                        //                       child: Text(
+                        //                           '${country.name} ${country.code}'),
+                        //                     );
+                        //                   }).toList(),
+                        //                   onChanged: (Country? newCountry) {
+                        //                     if (newCountry != null) {
+                        //                       setState(() {
+                        //                         selectedCountry = newCountry;
+                        //                         phoneController.clear();
+                        //                       });
+                        //                     }
+                        //                   },
+                        //                   dropdownColor: Colors.white,
+                        //                   underline: const SizedBox(),
+                        //                 ),
+                        //               ),
+                        //               controller: phoneController,
+                        //               inputFormatters: [
+                        //                 MaskTextInputFormatter(
+                        //                   mask: selectedCountry!.mask,
+                        //                   filter: {"#": RegExp(r'[0-9]')},
+                        //                 ),
+                        //               ],
+                        //               keyboardType: TextInputType.phone,
+                        //               hintText: selectedCountry!.mask
+                        //                   .replaceAll('#', '_'),
+                        //               onChanged: (value) {
+                        //                 checkAllowTapButton();
+                        //               },
+                        //               validator: (String? value) {
+                        //                 if (value == null || value.isEmpty) {
+                        //                   return _phoneError.value = context
+                        //                       .localized.required_to_fill;
+                        //                 }
+                        //                 String unmasked = value.replaceAll(
+                        //                     RegExp(r'[^0-9]'), '');
+                        //                 if (unmasked.length !=
+                        //                     selectedCountry!.digitLength) {
+                        //                   // return _phoneError.value =
+                        //                   //     context.localized.incorrectNumberFormat;
+                        //                 }
+                        //                 return _phoneError.value = null;
+                        //               },
+                        //             ),
+                        //     ),
+                        //   ],
+                        // ),
+
                         const Gap(16),
                         Text(
                           '${context.localized.enterThePassword} (${context.localized.helperText})',
@@ -44873,10 +45027,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 SvgPicture.asset(AssetsConstants.icLocation),
                 const Gap(6),
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/1.2),
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width / 1.2),
                   child: Text(
                     data.address ?? '',
-                   maxLines: 2,
+                    maxLines: 2,
                     style: AppTextStyles.fs14w500,
                   ),
                 )
@@ -44945,7 +45100,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
- 
   Widget _mapWidget(ProductDTO data) {
     return GestureDetector(
       onTap: () {
@@ -45047,12 +45201,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return FloatingActionButton(
       backgroundColor: AppColors.mainColor,
       onPressed: () {
+        final target = UserDTO(
+          id: data.ownerId, // Берем ID владельца из данных страницы
+          name: data.name, // Или data.ownerName, если есть
+          avatar: data.image,
+        );
+
         context.router.push(
           ChatRoute(
             conversationId: data.id ?? 0,
             companyName: data.name ?? '',
             accessToken: accessToken ?? '',
             currentUser: currentUser,
+            targetUser: target,
           ),
         );
       },
@@ -51059,6 +51220,28 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  // === НОВЫЙ МЕТОД ДЛЯ АУДИО ===
+  Future<void> sendVoiceMessage(String url) async {
+    // Получаем ID сообщения, на которое отвечаем (если есть)
+    final replyToId = replyMessage?.id;
+    
+    try {
+      // Вызываем обновленный метод репозитория.
+      // Текст оставляем пустым, а url передаем в voiceUrl.
+      await _repository.sendMessage(
+        "", 
+        replyToId: replyToId, 
+        voiceUrl: url,
+      );
+      
+      // Сбрасываем состояние ответа после успешной отправки
+      cancelReply(); 
+    } catch (e) {
+      log("Ошибка отправки голосового сообщения: $e");
+      emit(ChatState.error(e.toString()));
+    }
+  }
+
   // 🔥 КЛЮЧЕВОЙ МОМЕНТ: ЗАКРЫВАЕМ ВСЁ ПРИ УНИЧТОЖЕНИИ CUBIT
   @override
   Future<void> close() {
@@ -51852,9 +52035,7 @@ abstract class _Error implements ChatState {
 
 lib\src\feature\chat\bloc\conversations_cubit.dart
 --------------------------------------------------
-// lib/src/feature/chat/cubit/conversations_cubit.dart
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
-import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -51877,29 +52058,10 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     }
   }
 
-  // void updateConversationLastMessage({
-  //   required int conversationId,
-  //   required ChatMessageDTO message,
-  // }) {
-  //   final currentState = state;
 
-  //   if (currentState is _Loaded) {
-  //     final updatedList = currentState.conversations.map((conversation) {
-  //       if (conversation.id == conversationId) {
-  //         return conversation.copyWith(
-  //           lastMessage: message,
-  //           lastMessageDate: message.createdAt,
-  //         );
-  //       }
-  //       return conversation;
-  //     }).toList();
-
-  //     emit(ConversationsState.loaded(updatedList));
-  //   }
-  // }
 }
 
-// lib/src/feature/chat/cubit/conversations_state.dart
+
 @freezed
 class ConversationsState with _$ConversationsState {
   const factory ConversationsState.initial() = _Initial;
@@ -52553,6 +52715,882 @@ abstract class _Error implements ConversationsState {
 
 
 
+lib\src\feature\chat\bloc\voice_recorder_cubit.dart
+---------------------------------------------------
+import 'package:coment_app/src/feature/chat/data/voice_recorder_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'voice_recorder_cubit.freezed.dart';
+
+class VoiceRecorderCubit extends Cubit<VoiceRecorderState> {
+  final IVoiceRepository _repository;
+
+  VoiceRecorderCubit(this._repository)
+      : super(const VoiceRecorderState.initial());
+
+  Future<void> start() async {
+    try {
+      await _repository.startRecording();
+      emit(VoiceRecorderState.recording(startTime: DateTime.now()));
+    } catch (e) {
+      emit(VoiceRecorderState.error(e.toString()));
+    }
+  }
+
+  Future<void> stopAndSend() async {
+    emit(const VoiceRecorderState.uploading());
+    try {
+      final url = await _repository.stopAndUpload();
+      if (url != null) {
+        emit(VoiceRecorderState.success(url));
+      } else {
+        emit(const VoiceRecorderState.initial());
+      }
+    } catch (e) {
+      emit(VoiceRecorderState.error(e.toString()));
+    }
+  }
+
+  void reset() => emit(const VoiceRecorderState.initial());
+}
+
+@freezed
+class VoiceRecorderState with _$VoiceRecorderState {
+  const factory VoiceRecorderState.initial() = _Initial;
+  const factory VoiceRecorderState.recording({required DateTime startTime}) =
+      _Recording;
+  const factory VoiceRecorderState.uploading() = _Uploading;
+  const factory VoiceRecorderState.success(String url) = _Success;
+  const factory VoiceRecorderState.error(String message) = _Error;
+}
+
+
+
+lib\src\feature\chat\bloc\voice_recorder_cubit.freezed.dart
+-----------------------------------------------------------
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'voice_recorder_cubit.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$VoiceRecorderState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(DateTime startTime) recording,
+    required TResult Function() uploading,
+    required TResult Function(String url) success,
+    required TResult Function(String message) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(DateTime startTime)? recording,
+    TResult? Function()? uploading,
+    TResult? Function(String url)? success,
+    TResult? Function(String message)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(DateTime startTime)? recording,
+    TResult Function()? uploading,
+    TResult Function(String url)? success,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Recording value) recording,
+    required TResult Function(_Uploading value) uploading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Error value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Recording value)? recording,
+    TResult? Function(_Uploading value)? uploading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Error value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Recording value)? recording,
+    TResult Function(_Uploading value)? uploading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VoiceRecorderStateCopyWith<$Res> {
+  factory $VoiceRecorderStateCopyWith(
+          VoiceRecorderState value, $Res Function(VoiceRecorderState) then) =
+      _$VoiceRecorderStateCopyWithImpl<$Res, VoiceRecorderState>;
+}
+
+/// @nodoc
+class _$VoiceRecorderStateCopyWithImpl<$Res, $Val extends VoiceRecorderState>
+    implements $VoiceRecorderStateCopyWith<$Res> {
+  _$VoiceRecorderStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$VoiceRecorderStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
+
+  @override
+  String toString() {
+    return 'VoiceRecorderState.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(DateTime startTime) recording,
+    required TResult Function() uploading,
+    required TResult Function(String url) success,
+    required TResult Function(String message) error,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(DateTime startTime)? recording,
+    TResult? Function()? uploading,
+    TResult? Function(String url)? success,
+    TResult? Function(String message)? error,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(DateTime startTime)? recording,
+    TResult Function()? uploading,
+    TResult Function(String url)? success,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Recording value) recording,
+    required TResult Function(_Uploading value) uploading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Error value) error,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Recording value)? recording,
+    TResult? Function(_Uploading value)? uploading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Error value)? error,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Recording value)? recording,
+    TResult Function(_Uploading value)? uploading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Initial implements VoiceRecorderState {
+  const factory _Initial() = _$InitialImpl;
+}
+
+/// @nodoc
+abstract class _$$RecordingImplCopyWith<$Res> {
+  factory _$$RecordingImplCopyWith(
+          _$RecordingImpl value, $Res Function(_$RecordingImpl) then) =
+      __$$RecordingImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({DateTime startTime});
+}
+
+/// @nodoc
+class __$$RecordingImplCopyWithImpl<$Res>
+    extends _$VoiceRecorderStateCopyWithImpl<$Res, _$RecordingImpl>
+    implements _$$RecordingImplCopyWith<$Res> {
+  __$$RecordingImplCopyWithImpl(
+      _$RecordingImpl _value, $Res Function(_$RecordingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? startTime = null,
+  }) {
+    return _then(_$RecordingImpl(
+      startTime: null == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$RecordingImpl implements _Recording {
+  const _$RecordingImpl({required this.startTime});
+
+  @override
+  final DateTime startTime;
+
+  @override
+  String toString() {
+    return 'VoiceRecorderState.recording(startTime: $startTime)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RecordingImpl &&
+            (identical(other.startTime, startTime) ||
+                other.startTime == startTime));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, startTime);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RecordingImplCopyWith<_$RecordingImpl> get copyWith =>
+      __$$RecordingImplCopyWithImpl<_$RecordingImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(DateTime startTime) recording,
+    required TResult Function() uploading,
+    required TResult Function(String url) success,
+    required TResult Function(String message) error,
+  }) {
+    return recording(startTime);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(DateTime startTime)? recording,
+    TResult? Function()? uploading,
+    TResult? Function(String url)? success,
+    TResult? Function(String message)? error,
+  }) {
+    return recording?.call(startTime);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(DateTime startTime)? recording,
+    TResult Function()? uploading,
+    TResult Function(String url)? success,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (recording != null) {
+      return recording(startTime);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Recording value) recording,
+    required TResult Function(_Uploading value) uploading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Error value) error,
+  }) {
+    return recording(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Recording value)? recording,
+    TResult? Function(_Uploading value)? uploading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Error value)? error,
+  }) {
+    return recording?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Recording value)? recording,
+    TResult Function(_Uploading value)? uploading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (recording != null) {
+      return recording(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Recording implements VoiceRecorderState {
+  const factory _Recording({required final DateTime startTime}) =
+      _$RecordingImpl;
+
+  DateTime get startTime;
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RecordingImplCopyWith<_$RecordingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UploadingImplCopyWith<$Res> {
+  factory _$$UploadingImplCopyWith(
+          _$UploadingImpl value, $Res Function(_$UploadingImpl) then) =
+      __$$UploadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$UploadingImplCopyWithImpl<$Res>
+    extends _$VoiceRecorderStateCopyWithImpl<$Res, _$UploadingImpl>
+    implements _$$UploadingImplCopyWith<$Res> {
+  __$$UploadingImplCopyWithImpl(
+      _$UploadingImpl _value, $Res Function(_$UploadingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$UploadingImpl implements _Uploading {
+  const _$UploadingImpl();
+
+  @override
+  String toString() {
+    return 'VoiceRecorderState.uploading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$UploadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(DateTime startTime) recording,
+    required TResult Function() uploading,
+    required TResult Function(String url) success,
+    required TResult Function(String message) error,
+  }) {
+    return uploading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(DateTime startTime)? recording,
+    TResult? Function()? uploading,
+    TResult? Function(String url)? success,
+    TResult? Function(String message)? error,
+  }) {
+    return uploading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(DateTime startTime)? recording,
+    TResult Function()? uploading,
+    TResult Function(String url)? success,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (uploading != null) {
+      return uploading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Recording value) recording,
+    required TResult Function(_Uploading value) uploading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Error value) error,
+  }) {
+    return uploading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Recording value)? recording,
+    TResult? Function(_Uploading value)? uploading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Error value)? error,
+  }) {
+    return uploading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Recording value)? recording,
+    TResult Function(_Uploading value)? uploading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (uploading != null) {
+      return uploading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Uploading implements VoiceRecorderState {
+  const factory _Uploading() = _$UploadingImpl;
+}
+
+/// @nodoc
+abstract class _$$SuccessImplCopyWith<$Res> {
+  factory _$$SuccessImplCopyWith(
+          _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
+      __$$SuccessImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String url});
+}
+
+/// @nodoc
+class __$$SuccessImplCopyWithImpl<$Res>
+    extends _$VoiceRecorderStateCopyWithImpl<$Res, _$SuccessImpl>
+    implements _$$SuccessImplCopyWith<$Res> {
+  __$$SuccessImplCopyWithImpl(
+      _$SuccessImpl _value, $Res Function(_$SuccessImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? url = null,
+  }) {
+    return _then(_$SuccessImpl(
+      null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SuccessImpl implements _Success {
+  const _$SuccessImpl(this.url);
+
+  @override
+  final String url;
+
+  @override
+  String toString() {
+    return 'VoiceRecorderState.success(url: $url)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SuccessImpl &&
+            (identical(other.url, url) || other.url == url));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, url);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      __$$SuccessImplCopyWithImpl<_$SuccessImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(DateTime startTime) recording,
+    required TResult Function() uploading,
+    required TResult Function(String url) success,
+    required TResult Function(String message) error,
+  }) {
+    return success(url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(DateTime startTime)? recording,
+    TResult? Function()? uploading,
+    TResult? Function(String url)? success,
+    TResult? Function(String message)? error,
+  }) {
+    return success?.call(url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(DateTime startTime)? recording,
+    TResult Function()? uploading,
+    TResult Function(String url)? success,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(url);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Recording value) recording,
+    required TResult Function(_Uploading value) uploading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Error value) error,
+  }) {
+    return success(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Recording value)? recording,
+    TResult? Function(_Uploading value)? uploading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Error value)? error,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Recording value)? recording,
+    TResult Function(_Uploading value)? uploading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Success implements VoiceRecorderState {
+  const factory _Success(final String url) = _$SuccessImpl;
+
+  String get url;
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ErrorImplCopyWith<$Res> {
+  factory _$$ErrorImplCopyWith(
+          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
+      __$$ErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
+}
+
+/// @nodoc
+class __$$ErrorImplCopyWithImpl<$Res>
+    extends _$VoiceRecorderStateCopyWithImpl<$Res, _$ErrorImpl>
+    implements _$$ErrorImplCopyWith<$Res> {
+  __$$ErrorImplCopyWithImpl(
+      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$ErrorImpl(
+      null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ErrorImpl implements _Error {
+  const _$ErrorImpl(this.message);
+
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'VoiceRecorderState.error(message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorImpl &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(DateTime startTime) recording,
+    required TResult Function() uploading,
+    required TResult Function(String url) success,
+    required TResult Function(String message) error,
+  }) {
+    return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(DateTime startTime)? recording,
+    TResult? Function()? uploading,
+    TResult? Function(String url)? success,
+    TResult? Function(String message)? error,
+  }) {
+    return error?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(DateTime startTime)? recording,
+    TResult Function()? uploading,
+    TResult Function(String url)? success,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Recording value) recording,
+    required TResult Function(_Uploading value) uploading,
+    required TResult Function(_Success value) success,
+    required TResult Function(_Error value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Recording value)? recording,
+    TResult? Function(_Uploading value)? uploading,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_Error value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Recording value)? recording,
+    TResult Function(_Uploading value)? uploading,
+    TResult Function(_Success value)? success,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Error implements VoiceRecorderState {
+  const factory _Error(final String message) = _$ErrorImpl;
+
+  String get message;
+
+  /// Create a copy of VoiceRecorderState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+
+
 lib\src\feature\chat\data\chat_repository.dart
 ----------------------------------------------
 // lib/src/feature/chat/data/chat_repository.dart
@@ -52561,18 +53599,26 @@ import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 
 abstract class IChatRepository {
   Stream<List<ChatMessageDTO>> getMessagesStream(int conversationId);
-  Future<void> sendMessage(String content, {int? replyToId, int? targetConversationId});
+  Future<void> sendMessage(
+    String content, {
+    int? replyToId,
+    int? targetConversationId,
+    String? voiceUrl,
+  });
   Future<void> connectToChat(int conversationId, String token);
   Future<void> disconnect();
   Future<void> ensureConnection();
-    Future<List<ConversationDTO>> findConversationsForUser(String token);
-    // Stream<Map<String, dynamic>> get userStatusStream;
-    Stream<Map<int, Map<String, dynamic>>> get userStatusStream ;
-    List<ChatMessageDTO> get currentMessages;
-    Map<int, Map<String, dynamic>> get currentStatusCache;
-    void deleteMessages(List<int> ids);
-    void leaveChat();
+  Future<List<ConversationDTO>> findConversationsForUser(String token);
+  // Stream<Map<String, dynamic>> get userStatusStream;
+  Stream<Map<int, Map<String, dynamic>>> get userStatusStream;
+  Stream<void> get conversationsUpdateStream;
+  List<ChatMessageDTO> get currentMessages;
+  Map<int, Map<String, dynamic>> get currentStatusCache;
+  void deleteMessages(List<int> ids);
+  void leaveChat();
+  void scheduleReconnect();
 }
+
 
 
 lib\src\feature\chat\data\chat_repository_impl.dart
@@ -52585,10 +53631,10 @@ import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:coment_app/src/core/utils/refined_logger.dart';
+// import 'package:coment_app/src/core/utils/refined_logger.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+// import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -52597,19 +53643,19 @@ class ChatRepositoryImpl implements IChatRepository {
   final IRestClient _restClient;
   String? _currentToken;
   int? _currentConversationId;
-  int? _currentCompanyId;
   int? _currentUserId;
+  bool _isReconnecting = false;
 
   // Состояние соединения
   WebSocketChannel? _channel;
   Timer? _pingTimer;
 
-  // final StreamController<List<ChatMessageDTO>> _messagesController = StreamController.broadcast();
   final BehaviorSubject<List<ChatMessageDTO>> _messagesController =
       BehaviorSubject.seeded([]);
 
 // 1. КЭШ СОСТОЯНИЙ: Ключ = ID юзера (int), Значение = Данные статуса
   final Map<int, Map<String, dynamic>> _onlineUsersStatusCache = {};
+  @override
   Map<int, Map<String, dynamic>> get currentStatusCache =>
       _onlineUsersStatusCache;
 
@@ -52623,8 +53669,18 @@ class ChatRepositoryImpl implements IChatRepository {
       _userStatusController.stream;
 
 // РЕАЛИЗАЦИЯ ГЕТТЕРА для сообщений (чтобы не было ошибки в Cubit)
+  @override
   List<ChatMessageDTO> get currentMessages => _messagesController.value;
-  int? _loadingConversationId;
+  int? loadingConversationId;
+
+  // 1. Добавляем контроллер для уведомления об обновлении списка бесед
+  final PublishSubject<void> _conversationsUpdateController =
+      PublishSubject<void>();
+
+// 2. Добавляем геттер для этого стрима
+  @override
+  Stream<void> get conversationsUpdateStream =>
+      _conversationsUpdateController.stream;
 
   ChatRepositoryImpl(this._restClient);
 
@@ -52716,11 +53772,13 @@ class ChatRepositoryImpl implements IChatRepository {
       pingInterval: const Duration(seconds: 5),
     );
 
-    _channel!.stream.listen(
-      _handleMessage,
-      onError: (e) => log("❌ WS Error: $e"),
-      onDone: () => log("ℹ️ WS Connection Closed"),
-    );
+    _channel!.stream.listen(_handleMessage, onError: (e) {
+      log("❌ WS Error: $e");
+      scheduleReconnect();
+    }, onDone: () {
+      log("ℹ️ WS Connection Closed");
+      scheduleReconnect();
+    });
   }
 
   void _handleMessage(dynamic data) {
@@ -52730,6 +53788,8 @@ class ChatRepositoryImpl implements IChatRepository {
       final message = jsonDecode(data as String);
       final event = message['event'];
       final msgData = message['data'];
+
+      log("📥 WS EVENT: $event | DATA: $msgData");
 
       // --- ИСПРАВЛЕННЫЙ ФИЛЬТР ---
       if (event == 'message.new' || event == 'messages.deleted') {
@@ -52761,6 +53821,7 @@ class ChatRepositoryImpl implements IChatRepository {
               ChatMessageDTO.fromJson(msgData as Map<String, dynamic>);
           final current = _messagesController.value;
           _messagesController.add([newMessage, ...current]);
+          _conversationsUpdateController.add(null);
           break;
 
         case 'messages.deleted':
@@ -52787,6 +53848,25 @@ class ChatRepositoryImpl implements IChatRepository {
             }
           }
           break;
+        case 'users.online_list':
+          final List<dynamic> onlineIds = msgData['onlineIds'] ?? [];
+          log("🌐 Получен список пользователей онлайн: $onlineIds");
+
+          for (var id in onlineIds) {
+            final int? userId = int.tryParse(id.toString());
+            if (userId != null) {
+              _onlineUsersStatusCache[userId] = {
+                'userId': userId,
+                'isOnline': true,
+                'lastSeen': DateTime.now()
+                    .toIso8601String(), // Раз он в списке, значит онлайн сейчас
+              };
+            }
+          }
+          // Уведомляем UI о массовом обновлении статусов
+          _userStatusController.add(
+              Map<int, Map<String, dynamic>>.from(_onlineUsersStatusCache));
+          break;
 
         case 'user.status':
           _updateStatusFromSocket(msgData);
@@ -52805,12 +53885,17 @@ class ChatRepositoryImpl implements IChatRepository {
     }
   }
 
-  
-
   void _updateStatusFromSocket(dynamic statusData) {
     if (statusData == null) return;
-    final int? userId = int.tryParse(statusData['userId'].toString());
-    if (userId == null) return;
+
+    // Проверяем типы данных!
+    final rawId = statusData['userId'];
+    final int? userId = rawId is int ? rawId : int.tryParse(rawId.toString());
+
+    if (userId == null) {
+      log("⚠️ [ChatRepo] Не удалось распарсить userId: $rawId");
+      return;
+    }
 
     _onlineUsersStatusCache[userId] = {
       'userId': userId,
@@ -52818,7 +53903,9 @@ class ChatRepositoryImpl implements IChatRepository {
       'lastSeen': statusData['lastSeen']?.toString(),
     };
 
-    // Эмитим копию мапы, чтобы StreamBuilder увидел изменения
+    log("✅ Статус юзера $userId обновлен: ${statusData['isOnline']}");
+
+    // ВАЖНО: создаем НОВУЮ мапу, чтобы StreamBuilder "проснулся"
     _userStatusController
         .add(Map<int, Map<String, dynamic>>.from(_onlineUsersStatusCache));
   }
@@ -52826,17 +53913,23 @@ class ChatRepositoryImpl implements IChatRepository {
   @override
   void leaveChat() {
     _currentConversationId = null;
-    _loadingConversationId = null;
+    loadingConversationId = null;
     _messagesController.add([]); // Чистим стрим при выходе
+    // ВАЖНО: Закрываем сокет, чтобы бэк получил disconnect
+    disconnect();
     log("Вышли из чата, ID сброшен");
   }
 
   @override
-  Future<void> sendMessage(String content,
-      {int? replyToId, int? targetConversationId}) async {
-    if (content.trim().isEmpty) return;
+  Future<void> sendMessage(
+    String content, {
+    int? replyToId,
+    int? targetConversationId,
+    String? voiceUrl,
+  }) async {
+    if (content.trim().isEmpty && voiceUrl == null) return;
     if (_channel == null || _channel!.closeCode != null) {
-      print("⚠️ Connection lost. Reconnecting before sending...");
+      log("⚠️ Connection lost. Reconnecting before sending...");
       await ensureConnection(); // Пробуем восстановить связь
     }
 
@@ -52853,6 +53946,7 @@ class ChatRepositoryImpl implements IChatRepository {
           'conversationId': finalConversationId,
           'content': content.trim(),
           if (replyToId != null) 'replyToId': replyToId,
+          if (voiceUrl != null) 'voiceUrl': voiceUrl,
         },
       });
       log('Sending message to Chat #$finalConversationId');
@@ -52866,6 +53960,7 @@ class ChatRepositoryImpl implements IChatRepository {
           'conversationId': finalConversationId,
           'content': content.trim(),
           if (replyToId != null) 'replyToId': replyToId,
+          if (voiceUrl != null) 'voiceUrl': voiceUrl,
         },
       });
     }
@@ -52874,8 +53969,18 @@ class ChatRepositoryImpl implements IChatRepository {
   // Метод для восстановления связи (использует сохраненные token и companyId)
   @override
   Future<void> ensureConnection() async {
-    if (_currentCompanyId != null && _currentToken != null) {
-      await connectToChat(_currentCompanyId!, _currentToken!);
+    if ((_channel == null || _channel!.closeCode != null) &&
+        _currentConversationId != null &&
+        _currentToken != null) {
+      // await connectToChat(_currentCompanyId!, _currentToken!);
+      await _establishSocketConnection(_currentToken!);
+      // После коннекта ОБЯЗАТЕЛЬНО переподписываемся на комнату
+      _sendJson({
+        'event': 'join',
+        'data': {'conversationId': _currentConversationId}
+      });
+
+      _startPing();
     }
   }
 
@@ -52967,8 +54072,88 @@ class ChatRepositoryImpl implements IChatRepository {
       },
     });
   }
+
+  @override
+  void scheduleReconnect() {
+    _stopPing();
+
+    // Если пользователь ВЫШЕЛ из чата (_currentConversationId == null),
+    // мы НЕ будем пытаться переподключиться. Экономим батарею и ресурсы.
+    if (_isReconnecting || _currentConversationId == null) return;
+    _isReconnecting = true;
+    Timer(const Duration(seconds: 3), () async {
+      // Если пока ждали таймер, пользователь закрыл чат — отменяем
+      if (_currentConversationId == null) {
+        _isReconnecting = false;
+        log("🔄 [ChatRepo] Фоновое переподключение...");
+        // ensureConnection();
+        return;
+      }
+      try {
+        await ensureConnection();
+        log("✅ [ChatRepo] Reconnected successfully");
+      } catch (e) {
+        log("❌ [ChatRepo] Reconnect failed, trying again...");
+      } finally {
+        _isReconnecting = false;
+      }
+    });
+  }
 }
 
+
+
+lib\src\feature\chat\data\voice_recorder_repository.dart
+--------------------------------------------------------
+
+
+
+abstract class IVoiceRepository {
+  Future<void> startRecording();
+  Future<String?> stopAndUpload();
+}
+
+
+
+
+lib\src\feature\chat\data\voice_recorder_repository_impl.dart
+-------------------------------------------------------------
+import 'dart:io';
+
+import 'package:coment_app/src/feature/chat/data/voice_recorder_repository.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class VoiceRepositoryImpl implements IVoiceRepository {
+  final AudioRecorder _recorder = AudioRecorder();
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  @override
+  Future<void> startRecording() async {
+    if (await _recorder.hasPermission()) {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      
+      await _recorder.start(const RecordConfig(), path: path);
+    }
+  }
+
+  @override
+  Future<String?> stopAndUpload() async {
+    final path = await _recorder.stop();
+    if (path == null) return null;
+
+    final file = File(path);
+    final fileName = 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    
+    // Загрузка в бакет 'voice_messages'
+    await _supabase.storage.from('voice_messages').upload(fileName, file);
+    
+    // Получаем публичную ссылку
+    return _supabase.storage.from('voice_messages').getPublicUrl(fileName);
+  }
+}
 
 
 lib\src\feature\chat\model\chat_message_dto.dart
@@ -52988,6 +54173,7 @@ class ChatMessageDTO with _$ChatMessageDTO {
     required String content,
     required DateTime createdAt,
     required UserDTO sender,
+    String? voiceUrl,
      int? conversationId,
      ChatMessageDTO? replyTo,
   }) = _ChatMessageDTO;
@@ -53027,6 +54213,7 @@ mixin _$ChatMessageDTO {
   String get content => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   UserDTO get sender => throw _privateConstructorUsedError;
+  String? get voiceUrl => throw _privateConstructorUsedError;
   int? get conversationId => throw _privateConstructorUsedError;
   ChatMessageDTO? get replyTo => throw _privateConstructorUsedError;
 
@@ -53051,6 +54238,7 @@ abstract class $ChatMessageDTOCopyWith<$Res> {
       String content,
       DateTime createdAt,
       UserDTO sender,
+      String? voiceUrl,
       int? conversationId,
       ChatMessageDTO? replyTo});
 
@@ -53077,6 +54265,7 @@ class _$ChatMessageDTOCopyWithImpl<$Res, $Val extends ChatMessageDTO>
     Object? content = null,
     Object? createdAt = null,
     Object? sender = null,
+    Object? voiceUrl = freezed,
     Object? conversationId = freezed,
     Object? replyTo = freezed,
   }) {
@@ -53097,6 +54286,10 @@ class _$ChatMessageDTOCopyWithImpl<$Res, $Val extends ChatMessageDTO>
           ? _value.sender
           : sender // ignore: cast_nullable_to_non_nullable
               as UserDTO,
+      voiceUrl: freezed == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       conversationId: freezed == conversationId
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
@@ -53146,6 +54339,7 @@ abstract class _$$ChatMessageDTOImplCopyWith<$Res>
       String content,
       DateTime createdAt,
       UserDTO sender,
+      String? voiceUrl,
       int? conversationId,
       ChatMessageDTO? replyTo});
 
@@ -53172,6 +54366,7 @@ class __$$ChatMessageDTOImplCopyWithImpl<$Res>
     Object? content = null,
     Object? createdAt = null,
     Object? sender = null,
+    Object? voiceUrl = freezed,
     Object? conversationId = freezed,
     Object? replyTo = freezed,
   }) {
@@ -53192,6 +54387,10 @@ class __$$ChatMessageDTOImplCopyWithImpl<$Res>
           ? _value.sender
           : sender // ignore: cast_nullable_to_non_nullable
               as UserDTO,
+      voiceUrl: freezed == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       conversationId: freezed == conversationId
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
@@ -53212,6 +54411,7 @@ class _$ChatMessageDTOImpl implements _ChatMessageDTO {
       required this.content,
       required this.createdAt,
       required this.sender,
+      this.voiceUrl,
       this.conversationId,
       this.replyTo});
 
@@ -53227,13 +54427,15 @@ class _$ChatMessageDTOImpl implements _ChatMessageDTO {
   @override
   final UserDTO sender;
   @override
+  final String? voiceUrl;
+  @override
   final int? conversationId;
   @override
   final ChatMessageDTO? replyTo;
 
   @override
   String toString() {
-    return 'ChatMessageDTO(id: $id, content: $content, createdAt: $createdAt, sender: $sender, conversationId: $conversationId, replyTo: $replyTo)';
+    return 'ChatMessageDTO(id: $id, content: $content, createdAt: $createdAt, sender: $sender, voiceUrl: $voiceUrl, conversationId: $conversationId, replyTo: $replyTo)';
   }
 
   @override
@@ -53246,6 +54448,8 @@ class _$ChatMessageDTOImpl implements _ChatMessageDTO {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.sender, sender) || other.sender == sender) &&
+            (identical(other.voiceUrl, voiceUrl) ||
+                other.voiceUrl == voiceUrl) &&
             (identical(other.conversationId, conversationId) ||
                 other.conversationId == conversationId) &&
             (identical(other.replyTo, replyTo) || other.replyTo == replyTo));
@@ -53253,8 +54457,8 @@ class _$ChatMessageDTOImpl implements _ChatMessageDTO {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, content, createdAt, sender, conversationId, replyTo);
+  int get hashCode => Object.hash(runtimeType, id, content, createdAt, sender,
+      voiceUrl, conversationId, replyTo);
 
   /// Create a copy of ChatMessageDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -53279,6 +54483,7 @@ abstract class _ChatMessageDTO implements ChatMessageDTO {
       required final String content,
       required final DateTime createdAt,
       required final UserDTO sender,
+      final String? voiceUrl,
       final int? conversationId,
       final ChatMessageDTO? replyTo}) = _$ChatMessageDTOImpl;
 
@@ -53293,6 +54498,8 @@ abstract class _ChatMessageDTO implements ChatMessageDTO {
   DateTime get createdAt;
   @override
   UserDTO get sender;
+  @override
+  String? get voiceUrl;
   @override
   int? get conversationId;
   @override
@@ -53324,6 +54531,7 @@ _$ChatMessageDTOImpl _$$ChatMessageDTOImplFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       sender: UserDTO.fromJson(json['sender'] as Map<String, dynamic>),
+      voiceUrl: json['voiceUrl'] as String?,
       conversationId: (json['conversationId'] as num?)?.toInt(),
       replyTo: json['replyTo'] == null
           ? null
@@ -53337,6 +54545,7 @@ Map<String, dynamic> _$$ChatMessageDTOImplToJson(
       'content': instance.content,
       'createdAt': instance.createdAt.toIso8601String(),
       'sender': instance.sender,
+      'voiceUrl': instance.voiceUrl,
       'conversationId': instance.conversationId,
       'replyTo': instance.replyTo,
     };
@@ -53496,10 +54705,12 @@ ConversationDTO _$ConversationDTOFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ConversationDTO {
   int get id => throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
+  String? get title =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(fromJson: _chatMessageFromJson)
   ChatMessageDTO? get lastMessage => throw _privateConstructorUsedError;
-  DateTime? get lastMessageDate => throw _privateConstructorUsedError;
+  DateTime? get lastMessageDate =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(fromJson: _userFromJson)
   UserDTO? get partner => throw _privateConstructorUsedError;
   int? get companyId => throw _privateConstructorUsedError;
@@ -53700,11 +54911,13 @@ class _$ConversationDTOImpl implements _ConversationDTO {
   final int id;
   @override
   final String? title;
+// ignore: invalid_annotation_target
   @override
   @JsonKey(fromJson: _chatMessageFromJson)
   final ChatMessageDTO? lastMessage;
   @override
   final DateTime? lastMessageDate;
+// ignore: invalid_annotation_target
   @override
   @JsonKey(fromJson: _userFromJson)
   final UserDTO? partner;
@@ -53770,12 +54983,12 @@ abstract class _ConversationDTO implements ConversationDTO {
   @override
   int get id;
   @override
-  String? get title;
+  String? get title; // ignore: invalid_annotation_target
   @override
   @JsonKey(fromJson: _chatMessageFromJson)
   ChatMessageDTO? get lastMessage;
   @override
-  DateTime? get lastMessageDate;
+  DateTime? get lastMessageDate; // ignore: invalid_annotation_target
   @override
   @JsonKey(fromJson: _userFromJson)
   UserDTO? get partner;
@@ -53841,7 +55054,7 @@ import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
-import 'package:coment_app/src/feature/chat/bloc/conversations_cubit.dart';
+import 'package:coment_app/src/feature/chat/bloc/voice_recorder_cubit.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:coment_app/src/feature/chat/ui/widgets/date_chip.dart';
@@ -53849,6 +55062,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 
 @RoutePage()
 class ChatPage extends StatefulWidget implements AutoRouteWrapper {
@@ -53859,12 +55073,14 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     required this.companyName,
     required this.currentUser,
     required this.accessToken,
+    required this.targetUser,
   });
   final int conversationId;
   // final int companyId;
   final String companyName;
   final String accessToken;
   final UserDTO currentUser;
+  final UserDTO targetUser;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -54140,181 +55356,384 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
-    // 1. Получаем доступ к кубиту и состоянию
-    final cubit = context.read<ChatCubit>();
-    final isSelected = cubit.selectedIds.contains(message.id);
-    final isSelectionMode = cubit.selectedIds.isNotEmpty;
+  // Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
+  //   // 1. Получаем доступ к кубиту и состоянию
+  //   final cubit = context.read<ChatCubit>();
+  //   final isSelected = cubit.selectedIds.contains(message.id);
+  //   final isSelectionMode = cubit.selectedIds.isNotEmpty;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onLongPress: () {
+  //   return GestureDetector(
+  //     behavior: HitTestBehavior.translucent,
+  //     onLongPress: () {
+  //       cubit.toggleSelection(message.id);
+  //       HapticFeedback.mediumImpact();
+  //     },
+  //     onTap: () {
+  //       if (isSelectionMode) {
+  //         cubit.toggleSelection(message.id);
+  //       }
+  //     },
+  //     child: Container(
+  //       color: isSelected
+  //           ? AppColors.mainColor.withValues(alpha: 0.1)
+  //           : Colors.transparent,
+  //       child: Padding(
+  //         padding: EdgeInsets.only(
+  //           left: isOwnMessage ? 60 : 16,
+  //           right: isOwnMessage ? 16 : 60,
+  //           top: 8,
+  //           bottom: 8,
+  //         ),
+  //         child: Row(
+  //           mainAxisAlignment:
+  //               isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+  //           children: [
+  //             AnimatedContainer(
+  //               duration: const Duration(milliseconds: 200),
+  //               width: isSelectionMode ? 32 : 0,
+  //               curve: Curves.easeInOut,
+  //               child: isSelectionMode
+  //                   ? Container(
+  //                       margin: const EdgeInsets.only(right: 10),
+  //                       width: 22,
+  //                       height: 22,
+  //                       decoration: BoxDecoration(
+  //                         shape: BoxShape.circle,
+  //                         border: Border.all(
+  //                             color: isSelected
+  //                                 ? AppColors.mainColor
+  //                                 : AppColors.grey969696,
+  //                             width: 2),
+  //                         color: isSelected
+  //                             ? AppColors.mainColor
+  //                             : Colors.transparent,
+  //                       ),
+  //                       child: isSelected
+  //                           ? const Icon(
+  //                               Icons.check,
+  //                               size: 16,
+  //                               color: Colors.white,
+  //                             )
+  //                           : null,
+  //                     )
+  //                   : null,
+  //             ),
+  //             if (!isOwnMessage)
+  //               Container(
+  //                 width: 32,
+  //                 height: 32,
+  //                 decoration: const BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   color: AppColors.grey,
+  //                 ),
+  //                 child: message.sender.avatar != null
+  //                     ? CircleAvatar(
+  //                         backgroundImage: NetworkImage(message.sender.avatar!),
+  //                         radius: 16,
+  //                       )
+  //                     : const Icon(
+  //                         Icons.person,
+  //                         size: 16,
+  //                         color: Colors.white,
+  //                       ),
+  //               ),
+  //             Flexible(
+  //               child: Container(
+  //                 padding: const EdgeInsets.symmetric(
+  //                   horizontal: 12,
+  //                   vertical: 8,
+  //                 ),
+  //                 margin: EdgeInsets.only(
+  //                   left: !isOwnMessage ? 8 : 0,
+  //                   right: isOwnMessage ? 8 : 0,
+  //                 ),
+  //                 decoration: BoxDecoration(
+  //                   color: isOwnMessage
+  //                       ? AppColors.mainColor
+  //                       : AppColors.backgroundInputGrey,
+  //                   borderRadius: BorderRadius.circular(18),
+  //                 ),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     if (message.replyTo != null)
+  //                       Container(
+  //                         margin: const EdgeInsets.only(bottom: 6),
+  //                         padding:
+  //                             const EdgeInsets.only(left: 8, top: 2, bottom: 2),
+  //                         decoration: BoxDecoration(
+  //                           border: Border(
+  //                             left: BorderSide(
+  //                               color: isOwnMessage
+  //                                   ? Colors.white70
+  //                                   : AppColors.mainColor,
+  //                               width: 3,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text(
+  //                               message.replyTo!.sender.name ?? 'User',
+  //                               style: AppTextStyles.fs12w700.copyWith(
+  //                                 color: isOwnMessage
+  //                                     ? Colors.white
+  //                                     : AppColors.mainColor,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               message.replyTo!.content,
+  //                               maxLines: 1,
+  //                               overflow: TextOverflow.ellipsis,
+  //                               style: AppTextStyles.fs12w400.copyWith(
+  //                                 color: isOwnMessage
+  //                                     ? Colors.white70
+  //                                     : Colors.black54,
+  //                               ),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     Text(
+  //                       message.content,
+  //                       style: AppTextStyles.fs14w400.copyWith(
+  //                         color: isOwnMessage ? Colors.white : AppColors.text,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             if (isOwnMessage)
+  //               Container(
+  //                 width: 32,
+  //                 height: 32,
+  //                 decoration: const BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   color: AppColors.mainColor,
+  //                 ),
+  //                 child: widget.currentUser.avatar != null
+  //                     ? CircleAvatar(
+  //                         backgroundImage:
+  //                             NetworkImage(widget.currentUser.avatar!),
+  //                         radius: 16,
+  //                       )
+  //                     : const Icon(
+  //                         Icons.person,
+  //                         size: 16,
+  //                         color: Colors.white,
+  //                       ),
+  //               ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
+  // 1. Получаем доступ к кубиту и состоянию
+  final cubit = context.read<ChatCubit>();
+  final isSelected = cubit.selectedIds.contains(message.id);
+  final isSelectionMode = cubit.selectedIds.isNotEmpty;
+
+  return GestureDetector(
+    behavior: HitTestBehavior.translucent,
+    onLongPress: () {
+      cubit.toggleSelection(message.id);
+      HapticFeedback.mediumImpact();
+    },
+    onTap: () {
+      if (isSelectionMode) {
         cubit.toggleSelection(message.id);
-        HapticFeedback.mediumImpact();
-      },
-      onTap: () {
-        if (isSelectionMode) {
-          cubit.toggleSelection(message.id);
-        }
-      },
-      child: Container(
-        color: isSelected
-            ? AppColors.mainColor.withValues(alpha: 0.1)
-            : Colors.transparent,
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: isOwnMessage ? 60 : 16,
-            right: isOwnMessage ? 16 : 60,
-            top: 8,
-            bottom: 8,
-          ),
-          child: Row(
-            mainAxisAlignment:
-                isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: isSelectionMode ? 32 : 0,
-                curve: Curves.easeInOut,
-                child: isSelectionMode
-                    ? Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: isSelected
-                                  ? AppColors.mainColor
-                                  : AppColors.grey969696,
-                              width: 2),
-                          color: isSelected
-                              ? AppColors.mainColor
-                              : Colors.transparent,
-                        ),
-                        child: isSelected
-                            ? const Icon(
-                                Icons.check,
-                                size: 16,
-                                color: Colors.white,
-                              )
-                            : null,
-                      )
-                    : null,
-              ),
-              if (!isOwnMessage)
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.grey,
-                  ),
-                  child: message.sender.avatar != null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(message.sender.avatar!),
-                          radius: 16,
-                        )
-                      : const Icon(
-                          Icons.person,
-                          size: 16,
-                          color: Colors.white,
-                        ),
+      }
+    },
+    child: Container(
+      color: isSelected
+          ? AppColors.mainColor.withValues(alpha: 0.1)
+          : Colors.transparent,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: isOwnMessage ? 60 : 16,
+          right: isOwnMessage ? 16 : 60,
+          top: 8,
+          bottom: 8,
+        ),
+        child: Row(
+          mainAxisAlignment:
+              isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: isSelectionMode ? 32 : 0,
+              curve: Curves.easeInOut,
+              child: isSelectionMode
+                  ? Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: isSelected
+                                ? AppColors.mainColor
+                                : AppColors.grey969696,
+                            width: 2),
+                        color: isSelected
+                            ? AppColors.mainColor
+                            : Colors.transparent,
+                      ),
+                      child: isSelected
+                          ? const Icon(
+                              Icons.check,
+                              size: 16,
+                              color: Colors.white,
+                            )
+                          : null,
+                    )
+                  : null,
+            ),
+            if (!isOwnMessage)
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.grey,
                 ),
-              Flexible(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  margin: EdgeInsets.only(
-                    left: !isOwnMessage ? 8 : 0,
-                    right: isOwnMessage ? 8 : 0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isOwnMessage
-                        ? AppColors.mainColor
-                        : AppColors.backgroundInputGrey,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (message.replyTo != null)
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 6),
-                          padding:
-                              const EdgeInsets.only(left: 8, top: 2, bottom: 2),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              left: BorderSide(
-                                color: isOwnMessage
-                                    ? Colors.white70
-                                    : AppColors.mainColor,
-                                width: 3,
-                              ),
+                child: message.sender.avatar != null
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(message.sender.avatar!),
+                        radius: 16,
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+              ),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                margin: EdgeInsets.only(
+                  left: !isOwnMessage ? 8 : 0,
+                  right: isOwnMessage ? 8 : 0,
+                ),
+                decoration: BoxDecoration(
+                  color: isOwnMessage
+                      ? AppColors.mainColor
+                      : AppColors.backgroundInputGrey,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Чтобы баббл не растягивался
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // --- БЛОК РЕПЛАЯ (Тот самый контейнер) ---
+                    if (message.replyTo != null)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 6),
+                        padding: const EdgeInsets.only(left: 8, top: 2, bottom: 2),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              color: isOwnMessage
+                                  ? Colors.white70
+                                  : AppColors.mainColor,
+                              width: 3,
                             ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                message.replyTo!.sender.name ?? 'User',
-                                style: AppTextStyles.fs12w700.copyWith(
-                                  color: isOwnMessage
-                                      ? Colors.white
-                                      : AppColors.mainColor,
-                                ),
-                              ),
-                              Text(
-                                message.replyTo!.content,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.fs12w400.copyWith(
-                                  color: isOwnMessage
-                                      ? Colors.white70
-                                      : Colors.black54,
-                                ),
-                              )
-                            ],
-                          ),
                         ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              message.replyTo!.sender.name ?? 'User',
+                              style: AppTextStyles.fs12w700.copyWith(
+                                color: isOwnMessage
+                                    ? Colors.white
+                                    : AppColors.mainColor,
+                              ),
+                            ),
+                            Text(
+                              message.replyTo!.content,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.fs12w400.copyWith(
+                                color: isOwnMessage
+                                    ? Colors.white70
+                                    : Colors.black54,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    
+                    // --- ЛОГИКА ОТОБРАЖЕНИЯ: ГОЛОСОВОЕ ИЛИ ТЕКСТ ---
+                    if (message.voiceUrl != null && message.voiceUrl!.isNotEmpty)
+                      // Рисуем плеер
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: VoiceMessageView(
+                          controller: VoiceController(
+                            audioSrc: message.voiceUrl!,
+                            maxDuration: const Duration(seconds: 10),
+                            isFile: false,
+                            onComplete: () {},
+                            onPause: () {},
+                            onPlaying: () {},
+                          ),
+                          activeSliderColor: isOwnMessage ? Colors.white : AppColors.mainColor,
+                          circlesColor: isOwnMessage ? Colors.white : AppColors.mainColor,
+                          counterTextStyle: TextStyle(
+                            color: isOwnMessage ? Colors.white : Colors.black,
+                            fontSize: 11,
+                          ),
+                          innerPadding: 4,
+                          cornerRadius: 12,
+                        ),
+                      )
+                    else
+                      // Рисуем обычный текст
                       Text(
                         message.content,
                         style: AppTextStyles.fs14w400.copyWith(
                           color: isOwnMessage ? Colors.white : AppColors.text,
                         ),
                       ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
-              if (isOwnMessage)
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.mainColor,
-                  ),
-                  child: widget.currentUser.avatar != null
-                      ? CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(widget.currentUser.avatar!),
-                          radius: 16,
-                        )
-                      : const Icon(
-                          Icons.person,
-                          size: 16,
-                          color: Colors.white,
-                        ),
+            ),
+            if (isOwnMessage)
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.mainColor,
                 ),
-            ],
-          ),
+                child: widget.currentUser.avatar != null
+                    ? CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(widget.currentUser.avatar!),
+                        radius: 16,
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+              ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildInputArea(ChatCubit cubit) {
     return Container(
@@ -54388,6 +55807,15 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                   child: TextField(
                     controller: _textController,
                     decoration: InputDecoration(
+                      prefixIcon: IconButton(
+                        color: AppColors.greyTextColor,
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () {
+                          // вставить код прикрепления файлов
+                        },
+                        icon: const Icon(Icons.attach_file_rounded),
+                      ),
+                      suffixIcon: const VoiceRecorderButton(),
                       hintText: context.localized.writeAComment,
                       hintStyle: AppTextStyles.fs14w400.copyWith(
                         color: AppColors.greyTextColor,
@@ -54402,6 +55830,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           horizontal: 16, vertical: 12),
                     ),
                     textInputAction: TextInputAction.send,
+                    onTap: () =>
+                        context.repository.chatRepository.ensureConnection(),
                     onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
@@ -54435,7 +55865,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     if (text.isEmpty) return;
 
     context.read<ChatCubit>().sendMessage(text);
-    // final newMessage = 
+    // final newMessage =
     ChatMessageDTO(
       id: 0,
       content: text,
@@ -54591,6 +56021,53 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   }
 }
 
+class VoiceRecorderButton extends StatelessWidget {
+  const VoiceRecorderButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => VoiceRecorderCubit(context.repository.voiceRepository),
+      child: BlocConsumer<VoiceRecorderCubit, VoiceRecorderState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            success: (url) {
+              // Обращаемся напрямую к ChatCubit, который живет выше по дереву виджетов
+              context.read<ChatCubit>().sendVoiceMessage(url);
+              
+              // Сбрасываем кнопку обратно в состояние микрофона через метод кубита
+              context.read<VoiceRecorderCubit>().reset();
+            },
+            error: (msg) => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(msg))),
+            orElse: () {},
+          );
+        },
+        builder: (context, state) {
+          return state.maybeWhen(
+            recording: (_) => IconButton(
+              icon: const Icon(Icons.stop_circle, color: Colors.red),
+              onPressed: () => context.read<VoiceRecorderCubit>().stopAndSend(),
+            ),
+            uploading: () => const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            orElse: () => IconButton(
+              color: AppColors.black,
+              onPressed: () => context.read<VoiceRecorderCubit>().start(),
+              icon: const Icon(Icons.mic_none_rounded),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
   const StatusUserWidget({
     super.key,
@@ -54626,76 +56103,55 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. БЕРЕМ КУБИТ
     final chatCubit = context.read<ChatCubit>();
-
-    // 2. БЕРЕМ РЕПОЗИТОРИЙ ИЗ КУБИТА (Тот самый, где живет активный Сокет!)
     final activeRepo = chatCubit.repository;
 
-    return BlocBuilder<ChatCubit, ChatState>(
-      builder: (context, state) {
-        UserDTO? targetUser;
-        final messages = chatCubit.currentMessages;
+    // БЕРЕМ СОБЕСЕДНИКА ИЗ ПАРАМЕТРОВ ВИДЖЕТА!
+    final targetUser = widget.widget.targetUser;
 
-        if (messages.isNotEmpty) {
-          try {
-            targetUser = messages
-                .firstWhere((m) => m.sender.id != widget.currentUser.id)
-                .sender;
-          } catch (_) {}
+    // Если собеседника нет (групповой чат или баг), просто выводим название
+    // ignore: unnecessary_null_comparison
+    if (targetUser == null) {
+      return CustomAppBar(
+        title: widget.widget.companyName,
+        subTitle: '...',
+      );
+    }
+
+    final int targetId = int.tryParse(targetUser.id.toString()) ?? 0;
+
+    // ТОЛЬКО STREAM BUILDER
+    return StreamBuilder<Map<int, Map<String, dynamic>>>(
+      stream: activeRepo.userStatusStream,
+      initialData: activeRepo.currentStatusCache,
+      builder: (context, snapshot) {
+        final allStatuses = snapshot.data ?? {};
+        final userStatusFromWs = allStatuses[targetId];
+
+        bool isOnline;
+        DateTime? lastSeenDate;
+
+        if (userStatusFromWs != null) {
+          // Если пришел ивент по сокету
+          isOnline = userStatusFromWs['isOnline'] == true;
+          if (userStatusFromWs['lastSeen'] != null) {
+            lastSeenDate =
+                DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
+          }
+        } else {
+          // Фолбэк на исторические данные из профиля
+          isOnline = targetUser.isOnline;
+          lastSeenDate = targetUser.lastSeen;
         }
-log('Targert user : ${targetUser}');
-        if (targetUser == null) {
-          return CustomAppBar(
-            title: widget.widget.companyName,
-            subTitle: '...',
-          );
-        }
 
-        final nonNullTargetUser = targetUser;
-        final int targetId = int.tryParse(nonNullTargetUser.id.toString()) ?? 0;
-
-        // 3. СЛУШАЕМ СТРИМ АКТИВНОГО РЕПОЗИТОРИЯ
-        return StreamBuilder<Map<int, Map<String, dynamic>>>(
-          stream: activeRepo.userStatusStream,
-          // Используем кэш для мгновенного отображения при перерисовке
-          initialData: activeRepo.currentStatusCache,
-          builder: (context, snapshot) {
-            final allStatuses = snapshot.data ?? {};
-
-            // ПРИНТ ДЛЯ ПРОВЕРКИ (Увидишь в консоли при смене статуса)
-            if (snapshot.hasData) {
-              log("UI STREAM UPDATE: Keys available: ${allStatuses.keys.toList()} looking for $targetId");
-            }
-
-            final userStatusFromWs = allStatuses[targetId];
-            bool isOnline;
-            DateTime? lastSeenDate;
-
-            if (userStatusFromWs != null) {
-              // Данные из сокета
-              isOnline = userStatusFromWs['isOnline'] == true;
-              if (userStatusFromWs['lastSeen'] != null) {
-                lastSeenDate =
-                    DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
-              }
-            } else {
-              // Данные из истории (по умолчанию)
-              isOnline = nonNullTargetUser.isOnline;
-              lastSeenDate = nonNullTargetUser.lastSeen;
-            }
-
-            return CustomAppBar(
-              isOnline: isOnline,
-              title: nonNullTargetUser.name ?? widget.widget.companyName,
-              subTitle:
-                  isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
-              textStyle: AppTextStyles.fs18w700,
-              subTitleStyle: AppTextStyles.fs12w400.copyWith(
-                color: isOnline ? AppColors.green : AppColors.greyTextColor,
-              ),
-            );
-          },
+        return CustomAppBar(
+          isOnline: isOnline,
+          title: targetUser.name ?? widget.widget.companyName,
+          subTitle: isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
+          textStyle: AppTextStyles.fs18w700,
+          subTitleStyle: AppTextStyles.fs12w400.copyWith(
+            color: isOnline ? AppColors.green : AppColors.greyTextColor,
+          ),
         );
       },
     );
@@ -54703,19 +56159,23 @@ log('Targert user : ${targetUser}');
 }
 
 
+//  IconButton(
+//             color: AppColors.black,
+//             padding: const EdgeInsets.all(0),
+//             onPressed: () {
+//               //вставить код записи
+//             },
+//             icon: const Icon(
+//               Icons.mic_none_rounded,
+//             ),
+//           );
+
 
 lib\src\feature\chat\presentation\widgets\chat_list_item.dart
 -------------------------------------------------------------
-// lib/src/feature/chat/presentation/widgets/chat_list_item.dart
-import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/constants.dart';
-import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
-import 'package:coment_app/src/feature/app/router/app_router.dart';
-import 'package:coment_app/src/feature/chat/bloc/conversations_cubit.dart';
-// import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatListItem extends StatelessWidget {
   final ConversationDTO conversation;
@@ -54729,24 +56189,10 @@ class ChatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Берём НЕ текущего пользователя, а другого участника
-    final currentUser = context.repository.authRepository.user!;
-    final displayName = conversation.title!.isNotEmpty
-        ? conversation.title
-        : (conversation.partner?.name ?? 'Неизвестный');
-    // Определяем название чата
-    String chatTitle;
-    if (currentUser.role == 'owner') {
-      // Владелец видит имя пользователя
-      chatTitle = displayName ?? 'Пользователь';
-    } else {
-      // Пытаемся достать ID из заголовка или используем имя
-      final companyIdFromTitle = _extractCompanyId(conversation.title);
-      chatTitle = companyIdFromTitle != null
-          ? 'Компания #$companyIdFromTitle'
-          : (displayName ?? 'Чат');
-    }
-
+    final String nameToDisplay =
+        (conversation.title != null && conversation.title!.isNotEmpty)
+            ? conversation.title!
+            : (conversation.partner?.name ?? 'Неизвестный');
     return ListTile(
       leading: Container(
         height: 90,
@@ -54764,7 +56210,7 @@ class ChatListItem extends StatelessWidget {
           ),
         ),
       ),
-      title: Text(displayName ?? 'Чат'),
+      title: Text(nameToDisplay),
       subtitle: Text(
         conversation.lastMessage?.content ?? 'Нет сообщений',
         maxLines: 1,
@@ -54774,38 +56220,10 @@ class ChatListItem extends StatelessWidget {
           ? Text(
               '${conversation.lastMessage!.createdAt.hour}:${conversation.lastMessage!.createdAt.minute}')
           : null,
-      onTap: ()  {
-        // 1. Пытаемся взять ID напрямую из нового поля в DTO
-        // 2. Если его там нет (для старых записей), пытаемся вытащить из заголовка
-        final companyId =
-            conversation.companyId ?? _extractCompanyId(conversation.title);
-
-        if (companyId == null) {
-          // Если мы здесь, значит это личный чат без привязки к компании
-          // Можно либо выдать ошибку, либо реализовать переход в ChatRoute по другому параметру
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Ошибка: ID компании не найден')),
-          );
-          return;
-        }
-
-      context.router.push(
-          ChatRoute(
-            conversationId: conversation.id,
-            companyName: chatTitle,
-            currentUser: currentUser,
-            accessToken: currentUser.accessToken!,
-          ),
-        );
-        
+      onTap: () {
         onTap();
       },
     );
-  }
-
-  int? _extractCompanyId(String? title) {
-    final match = RegExp(r'company-(\d+)').firstMatch(title ?? '');
-    return match != null ? int.parse(match.group(1)!) : null;
   }
 }
 
@@ -78700,11 +80118,14 @@ class SendButtonWidget extends StatelessWidget {
 
 lib\src\feature\profile\presentation\pages\message_page.dart
 ------------------------------------------------------------
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
 import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
+import 'package:coment_app/src/feature/app/router/app_router.dart';
 import 'package:coment_app/src/feature/chat/bloc/conversations_cubit.dart';
 import 'package:coment_app/src/feature/chat/presentation/widgets/chat_list_item.dart';
 import 'package:flutter/material.dart';
@@ -78735,6 +80156,7 @@ class MessagePage extends StatefulWidget implements AutoRouteWrapper {
 
 class _MessagePageState extends State<MessagePage> {
   String searchQuery = '';
+  StreamSubscription? _conversationsSubscription;
 
   late final TextEditingController searchController;
   late final FocusNode focusNode;
@@ -78743,11 +80165,24 @@ class _MessagePageState extends State<MessagePage> {
   void initState() {
     super.initState();
     searchController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final chatRepo = context.repository.chatRepository;
+      final token = context.repository.authRepository.user?.accessToken;
+      if (token != null) {
+        _conversationsSubscription =
+            chatRepo.conversationsUpdateStream.listen((_) {
+          if (mounted) {
+            context.read<ConversationsCubit>().loadConversations(token);
+          }
+        });
+      }
+    });
     focusNode = FocusNode();
   }
 
   @override
   void dispose() {
+    _conversationsSubscription?.cancel();
     searchController.dispose();
     focusNode.dispose();
     super.dispose();
@@ -78759,6 +80194,11 @@ class _MessagePageState extends State<MessagePage> {
       searchQuery = '';
       focusNode.unfocus();
     });
+  }
+
+  int? _extractCompanyId(String? title) {
+    final match = RegExp(r'company-(\d+)').firstMatch(title ?? '');
+    return match != null ? int.parse(match.group(1)!) : null;
   }
 
   @override
@@ -78781,6 +80221,7 @@ class _MessagePageState extends State<MessagePage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
                   child: CustomTextField(
+                    prefixIconWidget: const Icon(Icons.search),
                     focusNode: focusNode,
                     controller: searchController,
                     contentPadding:
@@ -78804,6 +80245,13 @@ class _MessagePageState extends State<MessagePage> {
             initial: () => const Center(child: CircularProgressIndicator()),
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (conversations) {
+              // 1. Достаем текущего пользователя из репозитория
+              final currentUser = context.repository.authRepository.user;
+
+              if (currentUser == null) {
+                return const Center(child: Text('Ошибка авторизации'));
+              }
+
               final filteredConversations = conversations.where((conv) {
                 // Ищем по заголовку (title) или по имени партнера (если есть)
                 final title = conv.title?.toLowerCase() ?? '';
@@ -78828,9 +80276,48 @@ class _MessagePageState extends State<MessagePage> {
                 itemBuilder: (context, index) {
                   // final conv = conversations[index];
                   final conv = filteredConversations[index];
+                  // 2. Логика определения названия чата (перенесена из ChatListItem)
+                  final displayName =
+                      conv.title != null && conv.title!.isNotEmpty
+                          ? conv.title
+                          : (conv.partner?.name ?? 'Неизвестный');
+
+                  String chatTitle;
+                  if (currentUser.role == 'owner') {
+                    chatTitle = displayName ?? 'Пользователь';
+                  } else {
+                    final companyId = _extractCompanyId(conv.title);
+                    chatTitle = companyId != null
+                        ? 'Компания #$companyId'
+                        : (displayName ?? 'Чат');
+                  }
                   return ChatListItem(
                     conversation: conv,
-                   onTap: _clearSearch,
+                    onTap: () async {
+                      _clearSearch();
+                      // Ждем, пока пользователь выйдет из чата
+                      await context.router.push(
+                        ChatRoute(
+                          conversationId: conv.id,
+                          companyName: chatTitle,
+                          currentUser: currentUser,
+                          accessToken: currentUser.accessToken!,
+                          targetUser: conv.partner!,
+                        ),
+                      );
+                      // Когда вернулись — обновляем список
+                      if (mounted) {
+                        final token =
+                            // ignore: use_build_context_synchronously
+                            context.repository.authRepository.user?.accessToken;
+                        if (token != null) {
+                          // ignore: use_build_context_synchronously
+                          context
+                              .read<ConversationsCubit>()
+                              .loadConversations(token);
+                        }
+                      }
+                    },
                   );
                 },
               );
@@ -78842,7 +80329,6 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 }
-
 
 
 
@@ -83507,4 +84993,4 @@ class _SignInPage extends StatelessWidget {
 
 
 
-=== Всего файлов: 371 ===
+=== Всего файлов: 375 ===

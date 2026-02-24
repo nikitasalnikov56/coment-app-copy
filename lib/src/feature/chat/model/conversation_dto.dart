@@ -98,13 +98,42 @@ class ConversationDTO with _$ConversationDTO {
       _$ConversationDTOFromJson(json);
 }
 
+// // Кастомный парсер для lastMessage
+// ChatMessageDTO? _chatMessageFromJson(dynamic json) {
+//   if (json == null) return null;
+//   if (json is Map<String, dynamic>) {
+//     return ChatMessageDTO.fromJson(json);
+//   } else if (json is String) {
+//     // Создаём "заглушку" для строкового lastMessage
+//     return ChatMessageDTO(
+//       id: 0,
+//       content: json,
+//       createdAt: DateTime.now(),
+//       sender: const UserDTO(id: 0, email: '', name: 'System'),
+//     );
+//   }
+//   return null;
+// }
+
+// // Кастомный парсер для partner
+// UserDTO? _userFromJson(dynamic json) {
+//   if (json == null) return null;
+//   if (json is Map<String, dynamic>) return UserDTO.fromJson(json);
+//   return null;
+// }
 // Кастомный парсер для lastMessage
 ChatMessageDTO? _chatMessageFromJson(dynamic json) {
   if (json == null) return null;
-  if (json is Map<String, dynamic>) {
-    return ChatMessageDTO.fromJson(json);
-  } else if (json is String) {
-    // Создаём "заглушку" для строкового lastMessage
+  
+  if (json is Map) {
+    // Важно: приводим к Map<String, dynamic> явно перед передачей
+    final map = Map<String, dynamic>.from(json);
+    // Проверяем, не пустой ли объект пришел
+    if (map.isEmpty) return null;
+    return ChatMessageDTO.fromJson(map);
+  } 
+  
+  if (json is String) {
     return ChatMessageDTO(
       id: 0,
       content: json,
@@ -118,6 +147,11 @@ ChatMessageDTO? _chatMessageFromJson(dynamic json) {
 // Кастомный парсер для partner
 UserDTO? _userFromJson(dynamic json) {
   if (json == null) return null;
-  if (json is Map<String, dynamic>) return UserDTO.fromJson(json);
+  
+  if (json is Map) {
+    final map = Map<String, dynamic>.from(json);
+    if (map.isEmpty) return null;
+    return UserDTO.fromJson(map);
+  }
   return null;
 }

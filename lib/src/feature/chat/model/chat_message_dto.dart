@@ -13,6 +13,7 @@ class ChatMessageDTO with _$ChatMessageDTO {
     required String content,
     required DateTime createdAt,
     required UserDTO sender,
+    String? voiceUrl,
      int? conversationId,
      ChatMessageDTO? replyTo,
   }) = _ChatMessageDTO;

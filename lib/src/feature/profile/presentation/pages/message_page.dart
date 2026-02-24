@@ -101,6 +101,7 @@ class _MessagePageState extends State<MessagePage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
                   child: CustomTextField(
+                    prefixIconWidget: const Icon(Icons.search),
                     focusNode: focusNode,
                     controller: searchController,
                     contentPadding:
@@ -139,9 +140,7 @@ class _MessagePageState extends State<MessagePage> {
                 return title.contains(searchQuery) ||
                     partnerName.contains(searchQuery);
               }).toList();
-              // if (conversations.isEmpty) {
-              //   return const Center(child: Text('Нет сообщений'));
-              // }
+
               if (filteredConversations.isEmpty) {
                 return Center(
                   child: Text(

@@ -9,6 +9,7 @@ import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
+import 'package:coment_app/src/feature/chat/bloc/voice_recorder_cubit.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:coment_app/src/feature/chat/ui/widgets/date_chip.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 
 @RoutePage()
 class ChatPage extends StatefulWidget implements AutoRouteWrapper {
@@ -27,7 +29,6 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     required this.currentUser,
     required this.accessToken,
     required this.targetUser,
-    
   });
   final int conversationId;
   // final int companyId;
@@ -310,6 +311,181 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 
+  // Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
+  //   // 1. Получаем доступ к кубиту и состоянию
+  //   final cubit = context.read<ChatCubit>();
+  //   final isSelected = cubit.selectedIds.contains(message.id);
+  //   final isSelectionMode = cubit.selectedIds.isNotEmpty;
+
+  //   return GestureDetector(
+  //     behavior: HitTestBehavior.translucent,
+  //     onLongPress: () {
+  //       cubit.toggleSelection(message.id);
+  //       HapticFeedback.mediumImpact();
+  //     },
+  //     onTap: () {
+  //       if (isSelectionMode) {
+  //         cubit.toggleSelection(message.id);
+  //       }
+  //     },
+  //     child: Container(
+  //       color: isSelected
+  //           ? AppColors.mainColor.withValues(alpha: 0.1)
+  //           : Colors.transparent,
+  //       child: Padding(
+  //         padding: EdgeInsets.only(
+  //           left: isOwnMessage ? 60 : 16,
+  //           right: isOwnMessage ? 16 : 60,
+  //           top: 8,
+  //           bottom: 8,
+  //         ),
+  //         child: Row(
+  //           mainAxisAlignment:
+  //               isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+  //           children: [
+  //             AnimatedContainer(
+  //               duration: const Duration(milliseconds: 200),
+  //               width: isSelectionMode ? 32 : 0,
+  //               curve: Curves.easeInOut,
+  //               child: isSelectionMode
+  //                   ? Container(
+  //                       margin: const EdgeInsets.only(right: 10),
+  //                       width: 22,
+  //                       height: 22,
+  //                       decoration: BoxDecoration(
+  //                         shape: BoxShape.circle,
+  //                         border: Border.all(
+  //                             color: isSelected
+  //                                 ? AppColors.mainColor
+  //                                 : AppColors.grey969696,
+  //                             width: 2),
+  //                         color: isSelected
+  //                             ? AppColors.mainColor
+  //                             : Colors.transparent,
+  //                       ),
+  //                       child: isSelected
+  //                           ? const Icon(
+  //                               Icons.check,
+  //                               size: 16,
+  //                               color: Colors.white,
+  //                             )
+  //                           : null,
+  //                     )
+  //                   : null,
+  //             ),
+  //             if (!isOwnMessage)
+  //               Container(
+  //                 width: 32,
+  //                 height: 32,
+  //                 decoration: const BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   color: AppColors.grey,
+  //                 ),
+  //                 child: message.sender.avatar != null
+  //                     ? CircleAvatar(
+  //                         backgroundImage: NetworkImage(message.sender.avatar!),
+  //                         radius: 16,
+  //                       )
+  //                     : const Icon(
+  //                         Icons.person,
+  //                         size: 16,
+  //                         color: Colors.white,
+  //                       ),
+  //               ),
+  //             Flexible(
+  //               child: Container(
+  //                 padding: const EdgeInsets.symmetric(
+  //                   horizontal: 12,
+  //                   vertical: 8,
+  //                 ),
+  //                 margin: EdgeInsets.only(
+  //                   left: !isOwnMessage ? 8 : 0,
+  //                   right: isOwnMessage ? 8 : 0,
+  //                 ),
+  //                 decoration: BoxDecoration(
+  //                   color: isOwnMessage
+  //                       ? AppColors.mainColor
+  //                       : AppColors.backgroundInputGrey,
+  //                   borderRadius: BorderRadius.circular(18),
+  //                 ),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     if (message.replyTo != null)
+  //                       Container(
+  //                         margin: const EdgeInsets.only(bottom: 6),
+  //                         padding:
+  //                             const EdgeInsets.only(left: 8, top: 2, bottom: 2),
+  //                         decoration: BoxDecoration(
+  //                           border: Border(
+  //                             left: BorderSide(
+  //                               color: isOwnMessage
+  //                                   ? Colors.white70
+  //                                   : AppColors.mainColor,
+  //                               width: 3,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text(
+  //                               message.replyTo!.sender.name ?? 'User',
+  //                               style: AppTextStyles.fs12w700.copyWith(
+  //                                 color: isOwnMessage
+  //                                     ? Colors.white
+  //                                     : AppColors.mainColor,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               message.replyTo!.content,
+  //                               maxLines: 1,
+  //                               overflow: TextOverflow.ellipsis,
+  //                               style: AppTextStyles.fs12w400.copyWith(
+  //                                 color: isOwnMessage
+  //                                     ? Colors.white70
+  //                                     : Colors.black54,
+  //                               ),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     Text(
+  //                       message.content,
+  //                       style: AppTextStyles.fs14w400.copyWith(
+  //                         color: isOwnMessage ? Colors.white : AppColors.text,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             if (isOwnMessage)
+  //               Container(
+  //                 width: 32,
+  //                 height: 32,
+  //                 decoration: const BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   color: AppColors.mainColor,
+  //                 ),
+  //                 child: widget.currentUser.avatar != null
+  //                     ? CircleAvatar(
+  //                         backgroundImage:
+  //                             NetworkImage(widget.currentUser.avatar!),
+  //                         radius: 16,
+  //                       )
+  //                     : const Icon(
+  //                         Icons.person,
+  //                         size: 16,
+  //                         color: Colors.white,
+  //                       ),
+  //               ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
     // 1. Получаем доступ к кубиту и состоянию
     final cubit = context.read<ChatCubit>();
@@ -408,8 +584,11 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Column(
+                    mainAxisSize:
+                        MainAxisSize.min, // Чтобы баббл не растягивался
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // --- БЛОК РЕПЛАЯ (Тот самый контейнер) ---
                       if (message.replyTo != null)
                         Container(
                           margin: const EdgeInsets.only(bottom: 6),
@@ -449,12 +628,69 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             ],
                           ),
                         ),
-                      Text(
-                        message.content,
-                        style: AppTextStyles.fs14w400.copyWith(
-                          color: isOwnMessage ? Colors.white : AppColors.text,
+
+                      // --- ЛОГИКА ОТОБРАЖЕНИЯ: ГОЛОСОВОЕ ИЛИ ТЕКСТ ---
+                      if (message.voiceUrl != null &&
+                          message.voiceUrl!.isNotEmpty)
+                        // Рисуем плеер
+                        Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: VoiceMessageView(
+                            backgroundColor: isOwnMessage
+                                ? AppColors.mainColor
+                                : AppColors.backgroundInputGrey,
+                            controller: VoiceController(
+                              audioSrc: message.voiceUrl!,
+                              maxDuration: const Duration(seconds: 10),
+                              isFile: false,
+                              onComplete: () {},
+                              onPause: () {},
+                              onPlaying: () {},
+                            ),
+                            activeSliderColor: isOwnMessage
+                                ? AppColors.white
+                                : AppColors.black,
+                            circlesColor: isOwnMessage
+                                ? AppColors.mainColor
+                                : AppColors.white,
+                            circlesTextStyle: AppTextStyles.fs12w400.copyWith(
+                              fontSize: 11,
+                              color: isOwnMessage
+                                  ? AppColors.white
+                                  : AppColors.black,
+                            ),
+                            playIcon: Icon(
+                              Icons.play_arrow_rounded,
+                              color: isOwnMessage
+                                  ? AppColors.white
+                                  : AppColors.black,
+                            ),
+                            playPauseButtonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                color: isOwnMessage
+                                    ? AppColors.backgroundColor2
+                                    : AppColors.black,
+                              ),
+                            ),
+                            counterTextStyle: TextStyle(
+                              color: isOwnMessage
+                                  ? AppColors.mainColor
+                                  : AppColors.black,
+                              fontSize: 11,
+                            ),
+                            innerPadding: 2,
+                            cornerRadius: 12,
+                          ),
+                        )
+                      else
+                        // Рисуем обычный текст
+                        Text(
+                          message.content,
+                          style: AppTextStyles.fs14w400.copyWith(
+                            color: isOwnMessage ? Colors.white : AppColors.text,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -558,6 +794,15 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                   child: TextField(
                     controller: _textController,
                     decoration: InputDecoration(
+                      prefixIcon: IconButton(
+                        color: AppColors.greyTextColor,
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () {
+                          // вставить код прикрепления файлов
+                        },
+                        icon: const Icon(Icons.attach_file_rounded),
+                      ),
+                      suffixIcon: const VoiceRecorderButton(),
                       hintText: context.localized.writeAComment,
                       hintStyle: AppTextStyles.fs14w400.copyWith(
                         color: AppColors.greyTextColor,
@@ -572,7 +817,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           horizontal: 16, vertical: 12),
                     ),
                     textInputAction: TextInputAction.send,
-                    onTap: () => context.repository.chatRepository.ensureConnection(),
+                    onTap: () =>
+                        context.repository.chatRepository.ensureConnection(),
                     onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
@@ -606,7 +852,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     if (text.isEmpty) return;
 
     context.read<ChatCubit>().sendMessage(text);
-    // final newMessage = 
+    // final newMessage =
     ChatMessageDTO(
       id: 0,
       content: text,
@@ -762,6 +1008,54 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   }
 }
 
+class VoiceRecorderButton extends StatelessWidget {
+  const VoiceRecorderButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          VoiceRecorderCubit(context.repository.voiceRepository),
+      child: BlocConsumer<VoiceRecorderCubit, VoiceRecorderState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            success: (url) {
+              // Обращаемся напрямую к ChatCubit, который живет выше по дереву виджетов
+              context.read<ChatCubit>().sendVoiceMessage(url);
+
+              // Сбрасываем кнопку обратно в состояние микрофона через метод кубита
+              context.read<VoiceRecorderCubit>().reset();
+            },
+            error: (msg) => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(msg))),
+            orElse: () {},
+          );
+        },
+        builder: (context, state) {
+          return state.maybeWhen(
+            recording: (_) => IconButton(
+              icon: const Icon(Icons.stop_circle, color: Colors.red),
+              onPressed: () => context.read<VoiceRecorderCubit>().stopAndSend(),
+            ),
+            uploading: () => const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            orElse: () => IconButton(
+              color: AppColors.black,
+              onPressed: () => context.read<VoiceRecorderCubit>().start(),
+              icon: const Icon(Icons.mic_none_rounded),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
   const StatusUserWidget({
     super.key,
@@ -778,7 +1072,6 @@ class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
 }
-
 
 class _StatusUserWidgetState extends State<StatusUserWidget> {
   // Форматирование даты
@@ -800,7 +1093,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
   Widget build(BuildContext context) {
     final chatCubit = context.read<ChatCubit>();
     final activeRepo = chatCubit.repository;
-    
+
     // БЕРЕМ СОБЕСЕДНИКА ИЗ ПАРАМЕТРОВ ВИДЖЕТА!
     final targetUser = widget.widget.targetUser;
 
@@ -822,7 +1115,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
       builder: (context, snapshot) {
         final allStatuses = snapshot.data ?? {};
         final userStatusFromWs = allStatuses[targetId];
-        
+
         bool isOnline;
         DateTime? lastSeenDate;
 
@@ -830,7 +1123,8 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
           // Если пришел ивент по сокету
           isOnline = userStatusFromWs['isOnline'] == true;
           if (userStatusFromWs['lastSeen'] != null) {
-            lastSeenDate = DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
+            lastSeenDate =
+                DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
           }
         } else {
           // Фолбэк на исторические данные из профиля
@@ -851,3 +1145,15 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
     );
   }
 }
+
+
+//  IconButton(
+//             color: AppColors.black,
+//             padding: const EdgeInsets.all(0),
+//             onPressed: () {
+//               //вставить код записи
+//             },
+//             icon: const Icon(
+//               Icons.mic_none_rounded,
+//             ),
+//           );

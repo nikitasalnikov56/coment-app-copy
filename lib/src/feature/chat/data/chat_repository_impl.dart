@@ -260,7 +260,6 @@ class ChatRepositoryImpl implements IChatRepository {
     }
   }
 
-
   void _updateStatusFromSocket(dynamic statusData) {
     if (statusData == null) return;
 
@@ -297,11 +296,15 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   @override
-  Future<void> sendMessage(String content,
-      {int? replyToId, int? targetConversationId}) async {
-    if (content.trim().isEmpty) return;
+  Future<void> sendMessage(
+    String content, {
+    int? replyToId,
+    int? targetConversationId,
+    String? voiceUrl,
+  }) async {
+    if (content.trim().isEmpty && voiceUrl == null) return;
     if (_channel == null || _channel!.closeCode != null) {
-      print("⚠️ Connection lost. Reconnecting before sending...");
+      log("⚠️ Connection lost. Reconnecting before sending...");
       await ensureConnection(); // Пробуем восстановить связь
     }
 
@@ -318,6 +321,7 @@ class ChatRepositoryImpl implements IChatRepository {
           'conversationId': finalConversationId,
           'content': content.trim(),
           if (replyToId != null) 'replyToId': replyToId,
+          if (voiceUrl != null) 'voiceUrl': voiceUrl,
         },
       });
       log('Sending message to Chat #$finalConversationId');
@@ -331,6 +335,7 @@ class ChatRepositoryImpl implements IChatRepository {
           'conversationId': finalConversationId,
           'content': content.trim(),
           if (replyToId != null) 'replyToId': replyToId,
+          if (voiceUrl != null) 'voiceUrl': voiceUrl,
         },
       });
     }

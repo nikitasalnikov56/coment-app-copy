@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:coment_app/src/core/presentation/widgets/textfields/custom_textfield.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/auth/models/user_role.dart';
 import 'package:flutter/cupertino.dart';
@@ -237,35 +236,81 @@ class _RegisterPageState extends State<RegisterPage> {
             error: (message) {
               context.loaderOverlay.hide();
 // Логика подмены системного сообщения на человеческое
-              String userFriendlyMessage = message;
+//               String userFriendlyMessage = message;
+//               bool isPhoneConflict = message.contains('UQ_phoneNumber') ||
+//                   message.toLowerCase().contains('phone');
+//               bool isEmailConflict = message.contains('UQ_email') ||
+//                   message.toLowerCase().contains('email');
+//               bool isAlreadyExists =
+//                   message.contains('already exists') || message.contains('409');
 
-              if (message.contains('already exists') ||
-                  message.contains('409')) {
-                userFriendlyMessage =
-                    "Пользователь с такими данными уже зарегистрирован";
-              } else if (message.contains('invalid-email')) {
-                userFriendlyMessage = "Некорректный формат email";
-              } else if (message.contains('network-request-failed')) {
-                userFriendlyMessage = "Проверьте соединение с интернетом";
+//               if (isPhoneConflict) {
+//                 userFriendlyMessage = "Этот номер телефона уже используется";
+//                 _phoneError.value = userFriendlyMessage;
+//               } else if (isEmailConflict) {
+//                 userFriendlyMessage = "Этот email уже зарегистрирован";
+//                 _emailError.value = userFriendlyMessage;
+//               } else if (isAlreadyExists) {
+//                 userFriendlyMessage =
+//                     "Пользователь с такими данными уже существует";
+//                 // Если сервер не уточнил что именно, показываем общую ошибку
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               } else if (message.contains('network-request-failed')) {
+//                 userFriendlyMessage = "Проверьте соединение с интернетом";
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               } else {
+//                 // Для всех остальных системных ошибок
+//                 userFriendlyMessage = "Ошибка сервера. Попробуйте позже";
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               }
+
+//               // 2. Распределяем ошибку: под поле или в общий тост
+//               if (message.contains("email")) {
+//                 // Ошибка связана с почтой (существует или неверный формат)
+//                 _emailError.value = userFriendlyMessage;
+//               } else if (message.contains("phone")) {
+//                 // Ошибка связана с телефоном
+//                 _phoneError.value = userFriendlyMessage;
+//               } else {
+//                 // Если ошибка общая (интернет, сервер упал и т.д.), показываем тостер
+//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+//               }
+
+// // Опционально: подсветить конкретное поле красным
+//               if (message.contains('email')) {
+//                 _emailError.value = "Этот email уже занят";
+//               }
+// 1. Обнуляем старые ошибки
+              _emailError.value = null;
+              _phoneError.value = null;
+
+              // 2. Пытаемся достать массив конфликтов из ошибки бэкенда
+              // message у тебя обычно приходит как строка, но в ней может лежать JSON из catch
+              // Если твой RestClient прокидывает statusCode 409, данные обычно лежат в объекте исключения
+
+              final msg = message.toLowerCase();
+
+              // Проверка по тексту (на всякий случай, если структура ответа изменится)
+              if (msg.contains('email')) {
+                _emailError.value = "Этот email уже зарегистрирован";
               }
 
-              // 2. Распределяем ошибку: под поле или в общий тост
-              if (message.contains("email")) {
-                // Ошибка связана с почтой (существует или неверный формат)
-                _emailError.value = userFriendlyMessage;
-              } else if (message.contains("phone")) {
-                // Ошибка связана с телефоном
-                _phoneError.value = userFriendlyMessage;
-              } else {
-                // Если ошибка общая (интернет, сервер упал и т.д.), показываем тостер
-                Toaster.showErrorTopShortToast(context, userFriendlyMessage);
+              if (msg.contains('phone')) {
+                _phoneError.value = "Этот номер телефона уже занят";
               }
 
-// Опционально: подсветить конкретное поле красным
-              if (message.contains('email')) {
-                _emailError.value = "Этот email уже занят";
-              }
+              // 3. ПРИНУДИТЕЛЬНАЯ ВАЛИДАЦИЯ
+              // Это тот самый «пинок», который заставит поля перекраситься в красный
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_formKey.currentState != null) {
+                  _formKey.currentState!.validate();
+                }
+              });
 
+              // Если ошибок в полях нет, но ошибка пришла — покажем тост
+              if (_emailError.value == null && _phoneError.value == null) {
+                Toaster.showErrorTopShortToast(context, message);
+              }
               Future<void>.delayed(
                 const Duration(milliseconds: 300),
               ).whenComplete(
@@ -331,12 +376,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                             validator: (String? value) {
                               return null;
-
-                              // if (value == null || value.isEmpty) {
-                              //   return _surnameNameError.value = 'Обязательно к заполнению';
-                              // }
-
-                              // return _surnameNameError.value = null;
                             },
                           ),
                         ),
@@ -383,77 +422,129 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
 
                         const Gap(8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomTextField(
-                                height: 44,
-                                obscureText: false,
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        width: 1,
-                                        color: AppColors.borderTextField),
-                                    borderRadius: BorderRadius.circular(12)),
-                                prefixIconWidget: Padding(
-                                  padding: const EdgeInsets.only(left: 18.0),
-                                  child: DropdownButton<Country>(
-                                    value: selectedCountry,
-                                    borderRadius: BorderRadius.circular(12),
-                                    items: countries.map((country) {
-                                      return DropdownMenuItem<Country>(
+                        CustomValidatorTextfield(
+                          controller: phoneController,
+                          valueListenable:
+                              _phoneError, // Убедитесь, что это именно этот нотификатор
+                          hintText: selectedCountry!.mask.replaceAll('#', '_'),
+                          keyboardType: TextInputType.phone,
+                          prefixIconWidget: Padding(
+                            padding: const EdgeInsets.only(left: 18.0),
+                            child: DropdownButton<Country>(
+                              value: selectedCountry,
+                              underline: const SizedBox(),
+                              items: countries
+                                  .map((country) => DropdownMenuItem(
                                         value: country,
                                         child: Text(
                                             '${country.name} ${country.code}'),
-                                      );
-                                    }).toList(),
-                                    onChanged: (Country? newCountry) {
-                                      if (newCountry != null) {
-                                        setState(() {
-                                          selectedCountry = newCountry;
-                                          phoneController.clear();
-                                        });
-                                      }
-                                    },
-                                    dropdownColor: Colors.white,
-                                    underline: const SizedBox(),
-                                  ),
-                                ),
-                                controller: phoneController,
-                                inputFormatters: [
-                                  MaskTextInputFormatter(
-                                    mask: selectedCountry!.mask,
-                                    filter: {"#": RegExp(r'[0-9]')},
-                                  ),
-                                ],
-                                keyboardType: TextInputType.phone,
-                                hintText:
-                                    selectedCountry!.mask.replaceAll('#', '_'),
-                                onChanged: (value) {
-                                  checkAllowTapButton();
-                                },
-                                validator: (String? value) {
-                                  if (value == null || value.isEmpty) {
-                                    return _phoneError.value =
-                                        context.localized.required_to_fill;
-                                  }
-                                  String unmasked =
-                                      value.replaceAll(RegExp(r'[^0-9]'), '');
-                                  if (unmasked.length !=
-                                      selectedCountry!.digitLength) {
-                                    // return _phoneError.value =
-                                    //     context.localized.incorrectNumberFormat;
-                                  }
-                                  return _phoneError.value = null;
-                                },
-                              ),
+                                      ))
+                                  .toList(),
+                              onChanged: (Country? newCountry) {
+                                if (newCountry != null) {
+                                  setState(() {
+                                    selectedCountry = newCountry;
+                                    phoneController.clear();
+                                    _phoneError.value =
+                                        null; // Сбрасываем ошибку при смене страны
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          inputFormatters: [
+                            MaskTextInputFormatter(
+                              mask: selectedCountry!.mask,
+                              filter: {"#": RegExp(r'[0-9]')},
                             ),
                           ],
+                          onChanged: (value) {
+                            if (_phoneError.value != null) {
+                              _phoneError.value =
+                                  null; // Убираем ошибку при вводе
+                            }
+                            checkAllowTapButton();
+                          },
+                          validator: (value) => _phoneError
+                              .value, // Привязываем валидатор к нотификатору
                         ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: CustomValidatorTextfield(
+                        //               valueListenable: _phoneError,
+                        //               // height: 44,
+                        //               obscureText: ValueNotifier(false),
+                        //               focusedBorder: OutlineInputBorder(
+                        //                   borderSide: const BorderSide(
+                        //                     width: 1,
+                        //                   ),
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(12)),
+                        //               enabledBorder: OutlineInputBorder(
+                        //                   borderSide: const BorderSide(
+                        //                       width: 1,
+                        //                       color: AppColors.borderTextField),
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(12)),
+                        //               prefixIconWidget: Padding(
+                        //                 padding:
+                        //                     const EdgeInsets.only(left: 18.0),
+                        //                 child: DropdownButton<Country>(
+                        //                   value: selectedCountry,
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(12),
+                        //                   items: countries.map((country) {
+                        //                     return DropdownMenuItem<Country>(
+                        //                       value: country,
+                        //                       child: Text(
+                        //                           '${country.name} ${country.code}'),
+                        //                     );
+                        //                   }).toList(),
+                        //                   onChanged: (Country? newCountry) {
+                        //                     if (newCountry != null) {
+                        //                       setState(() {
+                        //                         selectedCountry = newCountry;
+                        //                         phoneController.clear();
+                        //                       });
+                        //                     }
+                        //                   },
+                        //                   dropdownColor: Colors.white,
+                        //                   underline: const SizedBox(),
+                        //                 ),
+                        //               ),
+                        //               controller: phoneController,
+                        //               inputFormatters: [
+                        //                 MaskTextInputFormatter(
+                        //                   mask: selectedCountry!.mask,
+                        //                   filter: {"#": RegExp(r'[0-9]')},
+                        //                 ),
+                        //               ],
+                        //               keyboardType: TextInputType.phone,
+                        //               hintText: selectedCountry!.mask
+                        //                   .replaceAll('#', '_'),
+                        //               onChanged: (value) {
+                        //                 checkAllowTapButton();
+                        //               },
+                        //               validator: (String? value) {
+                        //                 if (value == null || value.isEmpty) {
+                        //                   return _phoneError.value = context
+                        //                       .localized.required_to_fill;
+                        //                 }
+                        //                 String unmasked = value.replaceAll(
+                        //                     RegExp(r'[^0-9]'), '');
+                        //                 if (unmasked.length !=
+                        //                     selectedCountry!.digitLength) {
+                        //                   // return _phoneError.value =
+                        //                   //     context.localized.incorrectNumberFormat;
+                        //                 }
+                        //                 return _phoneError.value = null;
+                        //               },
+                        //             ),
+                        //     ),
+                        //   ],
+                        // ),
+
                         const Gap(16),
                         Text(
                           '${context.localized.enterThePassword} (${context.localized.helperText})',

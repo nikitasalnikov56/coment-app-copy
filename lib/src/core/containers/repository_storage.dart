@@ -2,6 +2,8 @@ import 'package:coment_app/src/feature/catalog/data/catalog_remote_ds.dart';
 import 'package:coment_app/src/feature/catalog/data/catalog_repository.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository_impl.dart';
+import 'package:coment_app/src/feature/chat/data/voice_recorder_repository.dart';
+import 'package:coment_app/src/feature/chat/data/voice_recorder_repository_impl.dart';
 import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
 import 'package:coment_app/src/feature/profile/data/payment_repository.dart';
 import 'package:coment_app/src/feature/settings/data/app_settings_datasource.dart';
@@ -46,6 +48,7 @@ abstract class IRepositoryStorage {
 
 
   IChatRepository get chatRepository;
+  IVoiceRepository get voiceRepository;
 
   void close();
 }
@@ -173,5 +176,7 @@ class RepositoryStorage implements IRepositoryStorage {
 
   @override
   IChatRepository get chatRepository => ChatRepositoryImpl(restClient);
+@override
+  IVoiceRepository get voiceRepository => VoiceRepositoryImpl();
 
 }

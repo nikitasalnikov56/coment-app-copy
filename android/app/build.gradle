@@ -36,14 +36,16 @@ if (flutterVersionName == null) {
 android {
     compileSdkVersion 35
     namespace = "com.thousand.comentt"
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
+    kotlinOptions {
+        jvmTarget = "17" // Добавь эту строку, чтобы Kotlin не ругался на версию Java
+    }
     defaultConfig {
         minSdkVersion 24
         targetSdkVersion 35
@@ -90,6 +92,31 @@ flutter {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    // coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     implementation 'com.google.firebase:firebase-messaging:23.4.1'
+}
+
+configurations.all {
+    resolutionStrategy {
+        // Форсим версию 2.19.1 для всего старого ExoPlayer (com.google.android.exoplayer)
+        force 'com.google.android.exoplayer:exoplayer-core:2.19.1'
+        force 'com.google.android.exoplayer:exoplayer-common:2.19.1'
+        force 'com.google.android.exoplayer:exoplayer-ui:2.19.1'
+        force 'com.google.android.exoplayer:exoplayer-hls:2.19.1'
+        force 'com.google.android.exoplayer:exoplayer-dash:2.19.1'
+        force 'com.google.android.exoplayer:exoplayer-rtsp:2.19.1'
+        
+        // Форсим версию 1.5.1 для нового Media3 (androidx.media3)
+        // Эти библиотеки часто конфликтуют со старым ExoPlayer
+        force 'androidx.media3:media3-exoplayer:1.5.1'
+        force 'androidx.media3:media3-exoplayer-hls:1.5.1'
+        force 'androidx.media3:media3-exoplayer-dash:1.5.1'
+        force 'androidx.media3:media3-exoplayer-rtsp:1.5.1'
+        force 'androidx.media3:media3-ui:1.5.1'
+        force 'androidx.media3:media3-common:1.5.1'
+        force 'androidx.media3:media3-datasource:1.5.1'
+        force 'androidx.media3:media3-decoder:1.5.1'
+        force 'androidx.media3:media3-extractor:1.5.1'
+    }
 }

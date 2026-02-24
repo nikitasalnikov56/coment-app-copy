@@ -22,6 +22,10 @@ class CustomValidatorTextfield extends StatelessWidget {
     this.focusNode,
     this.style = AppTextStyles.fs16w400h1_6,
     this.helperText,
+    this.height,
+    this.focusedBorder,
+    this.enabledBorder,
+    this.prefixIconWidget,
   });
 
   final TextEditingController? controller;
@@ -39,6 +43,10 @@ class CustomValidatorTextfield extends StatelessWidget {
   final FocusNode? focusNode;
   final TextStyle? style;
   final String? helperText;
+  final double? height;
+  final InputBorder? focusedBorder;
+  final InputBorder? enabledBorder;
+  final Widget? prefixIconWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +60,7 @@ class CustomValidatorTextfield extends StatelessWidget {
             SizedBox(
               height: 44,
               child: TextFormField(
+                
                 readOnly: readOnly,
                 onTap: onTap,
                 autofocus: autofocus,
@@ -69,7 +78,7 @@ class CustomValidatorTextfield extends StatelessWidget {
                 validator: validator,
                 decoration: InputDecoration(
                   helperText: helperText,
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: focusedBorder ?? OutlineInputBorder(
                       borderSide: const BorderSide(
                         width: 1,
                       ),
@@ -78,11 +87,12 @@ class CustomValidatorTextfield extends StatelessWidget {
                       borderSide:
                           const BorderSide(width: 1, color: AppColors.red2),
                       borderRadius: BorderRadius.circular(12)),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: enabledBorder ?? OutlineInputBorder(
                       borderSide: const BorderSide(
                           width: 1, color: AppColors.borderTextField),
                       borderRadius: BorderRadius.circular(12)),
                   fillColor: v == null ? null : AppColors.muteRed,
+                  prefixIcon: prefixIconWidget ,
                   suffixIcon: obscureText != null
                       ? PasswordEyeSuffixIcon(
                           valueListenable: obscureText!,
