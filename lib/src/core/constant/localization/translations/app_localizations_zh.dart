@@ -556,4 +556,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get minCharacters => '至少9个字符';
+
+  @override
+  String get incorrectLogin => '登录名错误';
+
+  @override
+  String get birthDate => '出生日期';
+
+  @override
+  String get confirm => '确认';
+
+  @override
+  String get emailAlreadyRegistered => '该电子邮件已被注册';
+
+  @override
+  String get phoneAlreadyTaken => '该电话号码已被占用';
+
+  @override
+  String get usernameAlreadyTaken => '该用户名已被占用';
+
+  @override
+  String get success => '成功';
+
+  @override
+  String get enterYourUsername => '输入用户名';
+
+  @override
+  String get usernameRequired => '用户名为必填项';
 }

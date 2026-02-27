@@ -181,7 +181,17 @@
   "noMessagesYet": "Сообщений пока нет",
   "writeAComment": "Напишите комментарий...",
   "chatWithCompany": "Чат с компанией",
-  "minCharacters": "Минимум 9 символов"
+  "minCharacters": "Минимум 9 символов",
+  "incorrectLogin": "Неверный логин",
+  "birthDate": "Дата рождения",
+  "cancel": "Отменить",
+  "confirm": "Подтвердить",
+  "emailAlreadyRegistered": "Этот email уже зарегистрирован",
+  "phoneAlreadyTaken": "Этот номер телефона уже занят",
+  "usernameAlreadyTaken": "Этот username уже занят",
+  "success": "Успешно",
+  "enterYourUsername": "Введите Имя пользователя",
+  "usernameRequired": "Поле Имя пользователя обязательно для заполнения"
 
 
 }

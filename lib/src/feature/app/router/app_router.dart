@@ -22,6 +22,7 @@ import 'package:coment_app/src/feature/main/model/product_dto.dart';
 import 'package:coment_app/src/feature/profile/presentation/pages/load_documents_page.dart';
 import 'package:coment_app/src/feature/profile/presentation/pages/message_page.dart';
 import 'package:coment_app/src/feature/profile/presentation/pages/payment_page.dart';
+import 'package:coment_app/src/feature/profile/presentation/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:coment_app/src/feature/app/presentation/pages/launcher.dart';
 import 'package:coment_app/src/feature/app/presentation/pages/temp_page.dart';
@@ -112,6 +113,7 @@ class AppRouter extends RootStackRouter {
         /// Profile
         AutoRoute(page: ProfileRoute.page),
         AutoRoute(page: EditProfileRoute.page),
+        AutoRoute(page: SettingsRoute.page),
         AutoRoute(page: ReviewHistoryRoute.page),
         AutoRoute(page: RaitingRoute.page),
         AutoRoute(page: LoadDocumentsRoute.page),

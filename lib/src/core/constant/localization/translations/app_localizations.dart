@@ -1195,6 +1195,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Minimum 9 characters'**
   String get minCharacters;
+
+  /// No description provided for @incorrectLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect login'**
+  String get incorrectLogin;
+
+  /// No description provided for @birthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth date'**
+  String get birthDate;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @emailAlreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered'**
+  String get emailAlreadyRegistered;
+
+  /// No description provided for @phoneAlreadyTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone number is already taken'**
+  String get phoneAlreadyTaken;
+
+  /// No description provided for @usernameAlreadyTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'This username is already taken'**
+  String get usernameAlreadyTaken;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
+
+  /// No description provided for @enterYourUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter username'**
+  String get enterYourUsername;
+
+  /// No description provided for @usernameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Username field is required'**
+  String get usernameRequired;
 }
 
 class _AppLocalizationsDelegate

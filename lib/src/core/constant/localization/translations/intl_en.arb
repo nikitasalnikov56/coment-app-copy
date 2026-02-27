@@ -181,5 +181,15 @@
   "noMessagesYet": "No messages yet",
 "writeAComment": "Write a comment...",
 "chatWithCompany": "Chat with company",
- "minCharacters": "Minimum 9 characters"
+ "minCharacters": "Minimum 9 characters",
+ "incorrectLogin": "Incorrect login",
+  "birthDate": "Birth date",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "emailAlreadyRegistered": "This email is already registered",
+  "phoneAlreadyTaken": "This phone number is already taken",
+  "usernameAlreadyTaken": "This username is already taken",
+  "success": "Success",
+  "enterYourUsername": "Enter username",
+  "usernameRequired": "Username field is required"
 }

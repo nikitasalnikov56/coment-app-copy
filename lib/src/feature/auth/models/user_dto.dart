@@ -6,21 +6,20 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
-
 @freezed
 class UserDTO with _$UserDTO {
   const factory UserDTO({
     @JsonKey(defaultValue: -1) int? id,
     @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'username') String? username,
+    @JsonKey(name: 'displayName') String? displayName,
+    @JsonKey(name: 'showRealName', defaultValue: false) bool? showRealName,
     String? email,
-    @JsonKey(name: 'phoneNumber')
-    String? phone,
-    @JsonKey(name: 'avatar_url')
-    String? avatar,
+    @JsonKey(name: 'phoneNumber') String? phone,
+    @JsonKey(name: 'avatar_url') String? avatar,
     CityDTO? city,
     LanguageDTO? language,
-    @JsonKey(defaultValue: 0)
-    int? rating,
+    @JsonKey(defaultValue: 0) int? rating,
     @JsonKey(name: 'city_name') String? cityName,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
@@ -31,10 +30,9 @@ class UserDTO with _$UserDTO {
     @JsonKey(name: 'role') String? role,
     @JsonKey(name: 'isOnline') @Default(false) bool isOnline,
     @JsonKey(name: 'lastSeen') DateTime? lastSeen,
-     // 👇 ДОБАВИЛ
+    // 👇 ДОБАВИЛ
     // @JsonKey(name: 'warningCount') int? warningCount,
   }) = _UserDTO;
-  factory UserDTO.fromJson(Map<String, dynamic> json) => _$UserDTOFromJson(json);
+  factory UserDTO.fromJson(Map<String, dynamic> json) =>
+      _$UserDTOFromJson(json);
 }
-
-

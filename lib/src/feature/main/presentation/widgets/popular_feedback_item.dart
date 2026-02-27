@@ -22,6 +22,17 @@ class PopularFeedbackItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String displayName = '';
+    final user = data.user;
+    if (user != null) {
+      if (user.showRealName == true && user.username!.isNotEmpty) {
+        displayName = user.username ?? 'Имя пользователя не установлено';
+      } else{
+        displayName = (user.name != null && user.name!.isNotEmpty) 
+        ? user.name! :   'Неизвестный пользователь';
+      }
+    }
+ 
     return Container(
       width: 330,
       margin: const EdgeInsets.only(right: 10),
@@ -63,7 +74,7 @@ class PopularFeedbackItem extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data.user?.name ?? '',
+                                 user?.showRealName == true ? '@$displayName' : displayName,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppTextStyles.fs14w600
                                       .copyWith(height: 1.2),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:coment_app/src/core/rest_client/rest_client.dart';
@@ -41,17 +42,19 @@ abstract interface class IProfileRepository {
     XFile? avatar,
   });
 
-  Future<List<String>> uploadDocuments(List<File> files,
-      // {required int companyId}
-      );
+  Future<List<String>> uploadDocuments(
+    List<File> files,
+    // {required int companyId}
+  );
 
-Future<List<ProductDTO>> getMyCompanies();
+  Future<List<ProductDTO>> getMyCompanies();
   Future<VerificationResponse> createVerificationRequest({
     required int companyId,
     required List<String> documentUrls,
   });
 
-Future<VerificationStatus> getVerificationStatus();
+  Future<VerificationStatus> getVerificationStatus();
+  Future<UserDTO> updateSettings({bool? showRealName});
 }
 
 class ProfileRepositoryImpl implements IProfileRepository {
@@ -203,9 +206,10 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
-  Future<List<String>> uploadDocuments(List<File> files,
-      // {required int companyId}
-      ) async {
+  Future<List<String>> uploadDocuments(
+    List<File> files,
+    // {required int companyId}
+  ) async {
     try {
       return await _remoteDS.uploadDocuments(
         files,
@@ -227,8 +231,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
     }
   }
 
-
-@override
+  @override
   Future<List<ProductDTO>> getMyCompanies() async {
     try {
       return await _remoteDS.getMyCompanies();
@@ -273,9 +276,40 @@ class ProfileRepositoryImpl implements IProfileRepository {
     }
   }
 
+  @override
+  Future<VerificationStatus> getVerificationStatus() async {
+    final response = await _remoteDS.getVerificationStatus();
+    return response;
+  }
+
+
+
 @override
-Future<VerificationStatus> getVerificationStatus() async {
-  final response = await _remoteDS.getVerificationStatus();
-  return response;
+Future<UserDTO> updateSettings({bool? showRealName}) async {
+  try {
+    final updatedUser = await _remoteDS.updateSettings(showRealName: showRealName);
+    
+    // ✅ ИСПРАВЛЕНИЕ: Сериализуем объект UserDTO в JSON-строку
+    final userJsonString = jsonEncode(updatedUser.toJson());
+    await _authDao.user.setValue(userJsonString);
+    
+    return updatedUser;
+  } on CustomBackendException catch (e) {
+    if (e.statusCode == 401) {
+      try {
+        await _authRepository.refreshAccessToken();
+        final updatedUser = await _remoteDS.updateSettings(showRealName: showRealName);
+        
+        // Повторяем здесь
+        await _authDao.user.setValue(jsonEncode(updatedUser.toJson()));
+        
+        return updatedUser;
+      } catch (refreshError) {
+        await _authRepository.clearUser();
+        rethrow;
+      }
+    }
+    rethrow;
+  }
 }
 }

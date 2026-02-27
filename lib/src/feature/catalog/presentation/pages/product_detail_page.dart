@@ -230,6 +230,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: getFeedbackItemCount(false, feedback),
       itemBuilder: (context, index) {
+        String displayName = '';
+        final user = feedback[index].user;
+
+        if (user != null) {
+          if (user.showRealName == true) {
+            displayName = user.username ?? 'Имя пользователя не установлено';
+          } else {
+            displayName = (user.name != null && user.name!.isNotEmpty)
+                ? user.name!
+                : 'Неизвестный пользователь';
+          }
+        }
         return BlocListener<LikeCommentCubit, LikeCommentState>(
           listener: (context, state) {
             state.maybeWhen(
@@ -307,7 +319,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(feedback[index].user?.name ?? '',
+                                  Text(user?.showRealName == true ? '@$displayName': displayName,
                                       style: AppTextStyles.fs14w600.copyWith(
                                           color: const Color(0xff605b5b),
                                           height: 1.3)),

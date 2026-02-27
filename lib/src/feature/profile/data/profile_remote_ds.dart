@@ -56,6 +56,7 @@ abstract interface class IProfileRemoteDS {
   });
 
   Future<VerificationStatus> getVerificationStatus();
+  Future<UserDTO> updateSettings({bool? showRealName});
 }
 
 class ProfileRemoteDSImpl implements IProfileRemoteDS {
@@ -304,4 +305,27 @@ class ProfileRemoteDSImpl implements IProfileRemoteDS {
       rethrow;
     }
   }
+
+
+@override
+Future<UserDTO> updateSettings({bool? showRealName}) async {
+  try {
+    final Map<String, dynamic> body = {
+      if (showRealName != null) 'showRealName': showRealName,
+    };
+
+    final response = await restClient.post(
+      'auth/edit',
+      body: body,
+    );
+
+    // Теперь мы видим, что RestClient уже вернул содержимое "data"
+    // Поэтому просто парсим пришедшую мапу
+    return UserDTO.fromJson(response); 
+    
+  } catch (e, st) {
+    TalkerLoggerUtil.talker.error('#updateSettings error', e, st);
+    rethrow;
+  }
+}
 }

@@ -49,7 +49,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get camera => 'Камера';
 
   @override
-  String get cancel => 'Отмена';
+  String get cancel => 'Отменить';
 
   @override
   String get catalog => 'Каталог';
@@ -572,4 +572,32 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get minCharacters => 'Минимум 9 символов';
+
+  @override
+  String get incorrectLogin => 'Неверный логин';
+
+  @override
+  String get birthDate => 'Дата рождения';
+
+  @override
+  String get confirm => 'Подтвердить';
+
+  @override
+  String get emailAlreadyRegistered => 'Этот email уже зарегистрирован';
+
+  @override
+  String get phoneAlreadyTaken => 'Этот номер телефона уже занят';
+
+  @override
+  String get usernameAlreadyTaken => 'Этот username уже занят';
+
+  @override
+  String get success => 'Успешно';
+
+  @override
+  String get enterYourUsername => 'Введите Имя пользователя';
+
+  @override
+  String get usernameRequired =>
+      'Поле Имя пользователя обязательно для заполнения';
 }

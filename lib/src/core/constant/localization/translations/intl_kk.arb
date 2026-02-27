@@ -181,5 +181,15 @@
   "noMessagesYet": "Әзірге хабарламалар жоқ",
   "writeAComment": "Пікір жазыңыз...",
   "chatWithCompany": "Компаниямен чат",
-  "minCharacters": "Кемінде 9 таңба"
+  "minCharacters": "Кемінде 9 таңба",
+   "incorrectLogin": "Қате логин",
+  "birthDate": "Туған күн",
+  "cancel": "Бас тарту",
+  "confirm": "Растау",
+  "emailAlreadyRegistered": "Бұл электрондық пошта бұрыннан тіркелген",
+  "phoneAlreadyTaken": "Бұл телефон нөмірі бұрыннан алынған",
+  "usernameAlreadyTaken": "Бұл пайдаланушы аты бұрыннан алынған",
+  "success": "Сәтті",
+  "enterYourUsername": "Пайдаланушы атын енгізіңіз",
+  "usernameRequired": "Пайдаланушы атын толтыру міндетті"
 }

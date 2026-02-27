@@ -75,6 +75,33 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     return false;
   }
+
+Future<void> updateShowRealName(bool value) async {
+    // Сохраняем предыдущее состояние на случай ошибки
+    final prevState = state;
+
+    try {
+     
+      final result = await _repository.updateSettings(showRealName: value);
+
+      if (isClosed) return;
+
+      // Эмитим новое состояние с обновленным юзером
+      emit(ProfileState.loaded(userDTO: result));
+    } catch (e) {
+      if (isClosed) return;
+      
+      // В случае ошибки выводим сообщение, но возвращаем стейт обратно
+      emit(ProfileState.error(message: e.toString()));
+      
+      // Через секунду возвращаем состояние loaded с прошлыми данными, 
+      // чтобы Switch не «завис» в неправильном положении
+      await Future.delayed(const Duration(seconds: 1));
+      emit(prevState);
+    }
+  }
+
+
 }
 
 @freezed

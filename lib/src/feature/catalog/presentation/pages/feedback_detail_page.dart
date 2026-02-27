@@ -388,6 +388,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
   }
 
   Widget _mainFeedback(FeedbackDTO feedbackDTO) {
+    print(feedbackDTO.user?.showRealName);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -407,7 +408,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(feedbackDTO.user?.name ?? '',
+                      Text(feedbackDTO.user?.showRealName == true ? '@${feedbackDTO.user?.username}' : '${feedbackDTO.user?.name}' ,
                           style: AppTextStyles.fs14w600.copyWith(
                               color: const Color(0xff605b5b), height: 1.3)),
                       const SizedBox(height: 4),

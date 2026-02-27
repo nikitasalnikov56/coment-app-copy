@@ -572,4 +572,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get minCharacters => 'Minimum 9 characters';
+
+  @override
+  String get incorrectLogin => 'Incorrect login';
+
+  @override
+  String get birthDate => 'Birth date';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get emailAlreadyRegistered => 'This email is already registered';
+
+  @override
+  String get phoneAlreadyTaken => 'This phone number is already taken';
+
+  @override
+  String get usernameAlreadyTaken => 'This username is already taken';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get enterYourUsername => 'Enter username';
+
+  @override
+  String get usernameRequired => 'Username field is required';
 }

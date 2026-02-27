@@ -50,6 +50,7 @@ class RegisterPage extends StatefulWidget implements AutoRouteWrapper {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController surnameNameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -59,6 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final ValueNotifier<String?> _passwordError = ValueNotifier(null);
   final ValueNotifier<String?> _phoneError = ValueNotifier(null);
   final ValueNotifier<String?> _surnameNameError = ValueNotifier(null);
+  final ValueNotifier<String?> _userNameError = ValueNotifier(null);
   final ValueNotifier<String?> _classError = ValueNotifier(null);
   final ValueNotifier<bool> _allowTapButton = ValueNotifier(false);
   final ValueNotifier<String?> _emailError = ValueNotifier(null);
@@ -95,9 +97,11 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     surnameNameController.dispose();
+    usernameController.dispose();
     phoneController.dispose();
     emailController.dispose();
     _surnameNameError.dispose();
+    _userNameError.dispose();
     _classError.dispose();
     _emailError.dispose();
     passwordController.dispose();
@@ -112,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool checkAllowTapButton() {
     final isEmailValid = ValidatorUtil.emailValidator(
           emailController.text,
-          errorLabel: 'Неверный логин',
+          errorLabel: context.localized.incorrectLogin,
         ) ==
         null;
     final isPasswordValid = passwordController.text.length >= 9;
@@ -149,18 +153,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 18.0),
+                     Padding(
+                      padding: const EdgeInsets.only(left: 18.0),
                       child: Text(
-                        "Дата рождения",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                        context.localized.birthDate,
+                        style: AppTextStyles.fs16w600
                       ),
                     ),
                     CupertinoButton(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        "Отменить",
+                        context.localized.cancel,
                         style: AppTextStyles.fs16w400
                             .copyWith(color: AppColors.greyTextColor),
                       ),
@@ -205,7 +208,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     minimumSize: Size(MediaQuery.of(context).size.width, 40),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      "Подтвердить",
+                     context.localized.confirm,
                       style: AppTextStyles.fs16w400
                           .copyWith(color: AppColors.kF5F6F7),
                     ),
@@ -235,70 +238,23 @@ class _RegisterPageState extends State<RegisterPage> {
             loading: () => context.loaderOverlay.show(),
             error: (message) {
               context.loaderOverlay.hide();
-// Логика подмены системного сообщения на человеческое
-//               String userFriendlyMessage = message;
-//               bool isPhoneConflict = message.contains('UQ_phoneNumber') ||
-//                   message.toLowerCase().contains('phone');
-//               bool isEmailConflict = message.contains('UQ_email') ||
-//                   message.toLowerCase().contains('email');
-//               bool isAlreadyExists =
-//                   message.contains('already exists') || message.contains('409');
-
-//               if (isPhoneConflict) {
-//                 userFriendlyMessage = "Этот номер телефона уже используется";
-//                 _phoneError.value = userFriendlyMessage;
-//               } else if (isEmailConflict) {
-//                 userFriendlyMessage = "Этот email уже зарегистрирован";
-//                 _emailError.value = userFriendlyMessage;
-//               } else if (isAlreadyExists) {
-//                 userFriendlyMessage =
-//                     "Пользователь с такими данными уже существует";
-//                 // Если сервер не уточнил что именно, показываем общую ошибку
-//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
-//               } else if (message.contains('network-request-failed')) {
-//                 userFriendlyMessage = "Проверьте соединение с интернетом";
-//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
-//               } else {
-//                 // Для всех остальных системных ошибок
-//                 userFriendlyMessage = "Ошибка сервера. Попробуйте позже";
-//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
-//               }
-
-//               // 2. Распределяем ошибку: под поле или в общий тост
-//               if (message.contains("email")) {
-//                 // Ошибка связана с почтой (существует или неверный формат)
-//                 _emailError.value = userFriendlyMessage;
-//               } else if (message.contains("phone")) {
-//                 // Ошибка связана с телефоном
-//                 _phoneError.value = userFriendlyMessage;
-//               } else {
-//                 // Если ошибка общая (интернет, сервер упал и т.д.), показываем тостер
-//                 Toaster.showErrorTopShortToast(context, userFriendlyMessage);
-//               }
-
-// // Опционально: подсветить конкретное поле красным
-//               if (message.contains('email')) {
-//                 _emailError.value = "Этот email уже занят";
-//               }
 // 1. Обнуляем старые ошибки
               _emailError.value = null;
               _phoneError.value = null;
-
-              // 2. Пытаемся достать массив конфликтов из ошибки бэкенда
-              // message у тебя обычно приходит как строка, но в ней может лежать JSON из catch
-              // Если твой RestClient прокидывает statusCode 409, данные обычно лежат в объекте исключения
+              _userNameError.value = null;
 
               final msg = message.toLowerCase();
-
               // Проверка по тексту (на всякий случай, если структура ответа изменится)
               if (msg.contains('email')) {
-                _emailError.value = "Этот email уже зарегистрирован";
+                _emailError.value = context.localized.emailAlreadyRegistered;
               }
 
               if (msg.contains('phone')) {
-                _phoneError.value = "Этот номер телефона уже занят";
+                _phoneError.value = context.localized.phoneAlreadyTaken;
               }
-
+              if (msg.contains('username')) {
+                _userNameError.value = context.localized.usernameAlreadyTaken;
+              }
               // 3. ПРИНУДИТЕЛЬНАЯ ВАЛИДАЦИЯ
               // Это тот самый «пинок», который заставит поля перекраситься в красный
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -308,7 +264,9 @@ class _RegisterPageState extends State<RegisterPage> {
               });
 
               // Если ошибок в полях нет, но ошибка пришла — покажем тост
-              if (_emailError.value == null && _phoneError.value == null) {
+              if (_emailError.value == null &&
+                  _phoneError.value == null &&
+                  _userNameError.value == null) {
                 Toaster.showErrorTopShortToast(context, message);
               }
               Future<void>.delayed(
@@ -322,7 +280,7 @@ class _RegisterPageState extends State<RegisterPage> {
               BlocProvider.of<AppBloc>(context)
                   .add(AppEvent.logining(user: user));
               context.router.replaceAll([LauncherRoute()]);
-              Toaster.showTopShortToast(context, message: 'Успешно');
+              Toaster.showTopShortToast(context, message: context.localized.success);
             },
             orElse: () => context.loaderOverlay.hide(),
           );
@@ -340,34 +298,34 @@ class _RegisterPageState extends State<RegisterPage> {
                   )
                 ],
               ),
-              body: Form(
-                key: _formKey,
-                // autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          context.localized.accountRegister, //accountRegister
-                          style: AppTextStyles.fs26w700.copyWith(height: 1.25),
-                        ),
-                        const Gap(8),
-                        Text(
-                          context.localized.joinInSecond, //joinInSecond
-                          style: AppTextStyles.fs16w500.copyWith(height: 1.7),
-                        ),
-                        const Gap(20),
-                        Text(
-                          context
-                              .localized.enterYourFullName, //enterYourFullName
-                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
-                        ),
-                        const Gap(8),
-                        SizedBox(
-                          height: 44,
-                          child: CustomValidatorTextfield(
+              body: SafeArea(
+                child: Form(
+                  key: _formKey,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: SingleChildScrollView(
+                    physics:const AlwaysScrollableScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.localized.accountRegister, //accountRegister
+                            style: AppTextStyles.fs26w700.copyWith(height: 1.25),
+                          ),
+                          const Gap(4),
+                          Text(
+                            context.localized.joinInSecond, //joinInSecond
+                            style: AppTextStyles.fs16w500.copyWith(height: 1.7),
+                          ),
+                          const Gap(12),
+                          Text(
+                            context
+                                .localized.enterYourFullName, //enterYourFullName
+                            style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                          ),
+                          const Gap(6),
+                          CustomValidatorTextfield(
                             controller: surnameNameController,
                             valueListenable: _surnameNameError,
                             hintText: context.localized.fullname, //fulname
@@ -378,315 +336,264 @@ class _RegisterPageState extends State<RegisterPage> {
                               return null;
                             },
                           ),
-                        ),
-                        const Gap(16),
-                        Text(
-                          context.localized
-                              .enterYourEmailAddress, // enterYourEmailAddress
-                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
-                        ),
-                        const Gap(8),
-                        CustomValidatorTextfield(
-                          controller: emailController,
-                          valueListenable: _emailError,
-                          hintText: context.localized.email,
-                          keyboardType: TextInputType.emailAddress,
-                          onChanged: (value) {
-                            checkAllowTapButton();
-                          },
-                          validator: (String? value) {
-                            return null;
-                          },
-                        ),
-                        const Gap(16),
-                        Text(
-                          context.localized.enterYourBirthDate,
-                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
-                        ),
-                        const Gap(8),
-                        CustomValidatorTextfield(
-                          controller: birthDateController,
-                          valueListenable: birthDateError,
-                          hintText: context.localized.enterYourBirthDate,
-                          onTap: () => showBirthdayPicker(
-                            context,
-                            initialDate: DateTime.now().subtract(
-                              const Duration(days: 18 * 365),
-                            ),
+                           const Gap(12),
+                          Text(
+                            context.localized.enterYourUsername,
+                            style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                           ),
-                        ),
-                        const Gap(16),
-                        Text(
-                          context.localized.enterYourPhoneNumber,
-                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
-                        ),
-
-                        const Gap(8),
-                        CustomValidatorTextfield(
-                          controller: phoneController,
-                          valueListenable:
-                              _phoneError, // Убедитесь, что это именно этот нотификатор
-                          hintText: selectedCountry!.mask.replaceAll('#', '_'),
-                          keyboardType: TextInputType.phone,
-                          prefixIconWidget: Padding(
-                            padding: const EdgeInsets.only(left: 18.0),
-                            child: DropdownButton<Country>(
-                              value: selectedCountry,
-                              underline: const SizedBox(),
-                              items: countries
-                                  .map((country) => DropdownMenuItem(
-                                        value: country,
-                                        child: Text(
-                                            '${country.name} ${country.code}'),
-                                      ))
-                                  .toList(),
-                              onChanged: (Country? newCountry) {
-                                if (newCountry != null) {
-                                  setState(() {
-                                    selectedCountry = newCountry;
-                                    phoneController.clear();
-                                    _phoneError.value =
-                                        null; // Сбрасываем ошибку при смене страны
-                                  });
-                                }
-                              },
-                            ),
+                          const Gap(6),
+                          CustomValidatorTextfield(
+                            controller: usernameController,
+                            valueListenable: _userNameError,
+                            hintText: context.localized.enterYourUsername, //fulname
+                            onChanged: (value) {
+                              // Сбрасываем ошибку сервера при начале ввода новых данных
+                              if (_userNameError.value != null) {
+                                _userNameError.value = null;
+                              }
+                              checkAllowTapButton();
+                            },
+                            validator: (String? value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return context.localized.usernameRequired;
+                              }
+                              return _userNameError.value;
+                            },
                           ),
-                          inputFormatters: [
-                            MaskTextInputFormatter(
-                              mask: selectedCountry!.mask,
-                              filter: {"#": RegExp(r'[0-9]')},
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (_phoneError.value != null) {
-                              _phoneError.value =
-                                  null; // Убираем ошибку при вводе
-                            }
-                            checkAllowTapButton();
-                          },
-                          validator: (value) => _phoneError
-                              .value, // Привязываем валидатор к нотификатору
-                        ),
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: CustomValidatorTextfield(
-                        //               valueListenable: _phoneError,
-                        //               // height: 44,
-                        //               obscureText: ValueNotifier(false),
-                        //               focusedBorder: OutlineInputBorder(
-                        //                   borderSide: const BorderSide(
-                        //                     width: 1,
-                        //                   ),
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(12)),
-                        //               enabledBorder: OutlineInputBorder(
-                        //                   borderSide: const BorderSide(
-                        //                       width: 1,
-                        //                       color: AppColors.borderTextField),
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(12)),
-                        //               prefixIconWidget: Padding(
-                        //                 padding:
-                        //                     const EdgeInsets.only(left: 18.0),
-                        //                 child: DropdownButton<Country>(
-                        //                   value: selectedCountry,
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(12),
-                        //                   items: countries.map((country) {
-                        //                     return DropdownMenuItem<Country>(
-                        //                       value: country,
-                        //                       child: Text(
-                        //                           '${country.name} ${country.code}'),
-                        //                     );
-                        //                   }).toList(),
-                        //                   onChanged: (Country? newCountry) {
-                        //                     if (newCountry != null) {
-                        //                       setState(() {
-                        //                         selectedCountry = newCountry;
-                        //                         phoneController.clear();
-                        //                       });
-                        //                     }
-                        //                   },
-                        //                   dropdownColor: Colors.white,
-                        //                   underline: const SizedBox(),
-                        //                 ),
-                        //               ),
-                        //               controller: phoneController,
-                        //               inputFormatters: [
-                        //                 MaskTextInputFormatter(
-                        //                   mask: selectedCountry!.mask,
-                        //                   filter: {"#": RegExp(r'[0-9]')},
-                        //                 ),
-                        //               ],
-                        //               keyboardType: TextInputType.phone,
-                        //               hintText: selectedCountry!.mask
-                        //                   .replaceAll('#', '_'),
-                        //               onChanged: (value) {
-                        //                 checkAllowTapButton();
-                        //               },
-                        //               validator: (String? value) {
-                        //                 if (value == null || value.isEmpty) {
-                        //                   return _phoneError.value = context
-                        //                       .localized.required_to_fill;
-                        //                 }
-                        //                 String unmasked = value.replaceAll(
-                        //                     RegExp(r'[^0-9]'), '');
-                        //                 if (unmasked.length !=
-                        //                     selectedCountry!.digitLength) {
-                        //                   // return _phoneError.value =
-                        //                   //     context.localized.incorrectNumberFormat;
-                        //                 }
-                        //                 return _phoneError.value = null;
-                        //               },
-                        //             ),
-                        //     ),
-                        //   ],
-                        // ),
-
-                        const Gap(16),
-                        Text(
-                          '${context.localized.enterThePassword} (${context.localized.helperText})',
-                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
-                        ),
-                        const Gap(6),
-                        ValueListenableBuilder(
-                          valueListenable: _obscureText,
-                          builder: (context, v, c) {
-                            return CustomValidatorTextfield(
-                              obscureText: _obscureText,
-                              controller: passwordController,
-                              valueListenable: _passwordError,
-                              hintText: context.localized.password,
-                              onChanged: (value) {
-                                if (value.isEmpty) {
-                                  _passwordError.value =
-                                      context.localized.required_to_fill;
-                                } else if (value.length < 9) {
-                                  _passwordError.value =
-                                      context.localized.minCharacters;
-                                } else {
-                                  _passwordError.value = null;
-                                }
-                                checkAllowTapButton();
-                              },
-                              validator: null,
-                            );
-                          },
-                        ),
-                        const Gap(16),
-                        Text(
-                          context.localized.userRole,
-                          style: AppTextStyles.fs14w500.copyWith(height: 1.3),
-                        ),
-                        const Gap(6),
-                        SizedBox(
-                          width: double.infinity,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: AppColors.borderTextField,
-                                ),
-                                borderRadius: BorderRadius.circular(12)),
-                            child: DropdownButton<UserRole>(
-                              alignment: Alignment.center,
-                              isExpanded: true,
-                              padding:
-                                  const EdgeInsets.only(right: 12, left: 16),
-                              underline: const SizedBox(),
-                              menuWidth:
-                                  MediaQuery.of(context).size.width / 0.8,
-                              items: [
-                                DropdownMenuItem(
-                                  value: UserRole.user,
-                                  child: Text(context.localized.user,
-                                      style: AppTextStyles.fs14w500
-                                          .copyWith(height: 1.3)),
-                                ),
-                                DropdownMenuItem(
-                                  value: UserRole.owner,
-                                  child: Text(context.localized.owner,
-                                      style: AppTextStyles.fs14w500
-                                          .copyWith(height: 1.3)),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedRole = value ?? UserRole.user;
-                                });
-                              },
-                              value: selectedRole,
-                            ),
+                          const Gap(12),
+                          Text(
+                            context.localized
+                                .enterYourEmailAddress, // enterYourEmailAddress
+                            style: AppTextStyles.fs14w500.copyWith(height: 1.3),
                           ),
-                        ),
-
-                        const Gap(34),
-                        CustomButton(
-                          allowTapButton: _allowTapButton,
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) return;
-                            String nationalNumber = phoneController.text
-                                .replaceAll(RegExp(r'[^0-9]'), '');
-                            String fullPhoneNumber =
-                                selectedCountry!.code + nationalNumber;
-                            fullPhoneNumber = fullPhoneNumber.trim();
-                            BlocProvider.of<RegisterCubit>(context).register(
-                              email: emailController.text,
-                              name: surnameNameController.text,
-                              password: passwordController.text,
-                              phone: fullPhoneNumber,
-                              deviceType:
-                                  Platform.isAndroid ? 'Android' : 'IOS',
-                              birthDate: birthDateController.text,
-                              role: selectedRole.name,
-                            );
-                          },
-                          style: CustomButtonStyles.mainButtonStyle(context),
-                          text: context.localized.signUp,
-                          child: null,
-                        ),
-                        const Gap(24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              context.localized.doYouHaveAccount,
-                              style: AppTextStyles.fs14w500.copyWith(
-                                  height: 1.3, color: AppColors.grey969696),
-                            ),
-                            const Gap(8),
-                            GestureDetector(
-                              onTap: () {
-                                context.router.push(const LoginRoute());
-                              },
-                              child: Text(
-                                context.localized.login,
-                                style: AppTextStyles.fs14w600.copyWith(
-                                    height: 1.3, color: AppColors.mainColor),
+                          const Gap(6),
+                          CustomValidatorTextfield(
+                            controller: emailController,
+                            valueListenable: _emailError,
+                            hintText: context.localized.email,
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: (value) {
+                              checkAllowTapButton();
+                            },
+                            validator: (String? value) {
+                              return null;
+                            },
+                          ),
+                          const Gap(12),
+                          Text(
+                            context.localized.enterYourBirthDate,
+                            style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                          ),
+                          const Gap(6),
+                          CustomValidatorTextfield(
+                            controller: birthDateController,
+                            valueListenable: birthDateError,
+                            hintText: context.localized.enterYourBirthDate,
+                            onTap: () => showBirthdayPicker(
+                              context,
+                              initialDate: DateTime.now().subtract(
+                                const Duration(days: 18 * 365),
                               ),
                             ),
-                          ],
-                        ),
-                        const Gap(24),
-                        // Positioned(
-                        //   bottom: 0,
-                        //   left: 0,
-                        //   child: IgnorePointer(
-                        //     ignoring: true,
-                        //     child: ReCaptchaWebView(
-                        //       width: 1,
-                        //       height: 1,
-                        //       onTokenReceived: (token) {
-                        //         // Токен сохраняется автоматически в RecaptchaHandler.instance.captchaToken
-                        //       },
-                        //       // Обязательно укажите URL, где лежит валидный HTML-файл с reCAPTCHA
-                        //       url:
-                        //           'https://emerald-eran-52.tiiny.site', // 👈 ВАЖНО!
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
+                          ),
+                          const Gap(12),
+                          Text(
+                            context.localized.enterYourPhoneNumber,
+                            style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                          ),
+                
+                          const Gap(6),
+                          CustomValidatorTextfield(
+                            controller: phoneController,
+                            valueListenable:
+                                _phoneError, // Убедитесь, что это именно этот нотификатор
+                            hintText: selectedCountry!.mask.replaceAll('#', '_'),
+                            keyboardType: TextInputType.phone,
+                            prefixIconWidget: Padding(
+                              padding: const EdgeInsets.only(left: 18.0),
+                              child: DropdownButton<Country>(
+                                value: selectedCountry,
+                                underline: const SizedBox(),
+                                items: countries
+                                    .map((country) => DropdownMenuItem(
+                                          value: country,
+                                          child: Text(
+                                              '${country.name} ${country.code}'),
+                                        ))
+                                    .toList(),
+                                onChanged: (Country? newCountry) {
+                                  if (newCountry != null) {
+                                    setState(() {
+                                      selectedCountry = newCountry;
+                                      phoneController.clear();
+                                      _phoneError.value =
+                                          null; // Сбрасываем ошибку при смене страны
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                            inputFormatters: [
+                              MaskTextInputFormatter(
+                                mask: selectedCountry!.mask,
+                                filter: {"#": RegExp(r'[0-9]')},
+                              ),
+                            ],
+                            onChanged: (value) {
+                              if (_phoneError.value != null) {
+                                _phoneError.value =
+                                    null; // Убираем ошибку при вводе
+                              }
+                              checkAllowTapButton();
+                            },
+                            validator: (value) => _phoneError
+                                .value, // Привязываем валидатор к нотификатору
+                          ),
+                
+                          const Gap(12),
+                          Text(
+                            '${context.localized.enterThePassword} (${context.localized.helperText})',
+                            style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                          ),
+                          const Gap(6),
+                          ValueListenableBuilder(
+                            valueListenable: _obscureText,
+                            builder: (context, v, c) {
+                              return CustomValidatorTextfield(
+                                obscureText: _obscureText,
+                                controller: passwordController,
+                                valueListenable: _passwordError,
+                                hintText: context.localized.password,
+                                onChanged: (value) {
+                                  if (value.isEmpty) {
+                                    _passwordError.value =
+                                        context.localized.required_to_fill;
+                                  } else if (value.length < 9) {
+                                    _passwordError.value =
+                                        context.localized.minCharacters;
+                                  } else {
+                                    _passwordError.value = null;
+                                  }
+                                  checkAllowTapButton();
+                                },
+                                validator: null,
+                              );
+                            },
+                          ),
+                          const Gap(12),
+                          Text(
+                            context.localized.userRole,
+                            style: AppTextStyles.fs14w500.copyWith(height: 1.3),
+                          ),
+                          const Gap(6),
+                          SizedBox(
+                            width: double.infinity,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColors.borderTextField,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: DropdownButton<UserRole>(
+                                alignment: Alignment.center,
+                                isExpanded: true,
+                                padding:
+                                    const EdgeInsets.only(right: 12, left: 16),
+                                underline: const SizedBox(),
+                                menuWidth:
+                                    MediaQuery.of(context).size.width / 0.8,
+                                items: [
+                                  DropdownMenuItem(
+                                    value: UserRole.user,
+                                    child: Text(context.localized.user,
+                                        style: AppTextStyles.fs14w500
+                                            .copyWith(height: 1.3)),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: UserRole.owner,
+                                    child: Text(context.localized.owner,
+                                        style: AppTextStyles.fs14w500
+                                            .copyWith(height: 1.3)),
+                                  ),
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedRole = value ?? UserRole.user;
+                                  });
+                                },
+                                value: selectedRole,
+                              ),
+                            ),
+                          ),
+                
+                          const Gap(20),
+                          CustomButton(
+                            allowTapButton: _allowTapButton,
+                            onPressed: () {
+                              if (!_formKey.currentState!.validate()) return;
+                              String nationalNumber = phoneController.text
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
+                              String fullPhoneNumber =
+                                  selectedCountry!.code + nationalNumber;
+                              fullPhoneNumber = fullPhoneNumber.trim();
+                              BlocProvider.of<RegisterCubit>(context).register(
+                                email: emailController.text,
+                                name: surnameNameController.text,
+                                username: usernameController.text,
+                                password: passwordController.text,
+                                phone: fullPhoneNumber,
+                                deviceType:
+                                    Platform.isAndroid ? 'Android' : 'IOS',
+                                birthDate: birthDateController.text,
+                                role: selectedRole.name,
+                              );
+                            },
+                            style: CustomButtonStyles.mainButtonStyle(context),
+                            text: context.localized.signUp,
+                            child: null,
+                          ),
+                          const Gap(16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                context.localized.doYouHaveAccount,
+                                style: AppTextStyles.fs14w500.copyWith(
+                                    height: 1.3, color: AppColors.grey969696),
+                              ),
+                              const Gap(8),
+                              GestureDetector(
+                                onTap: () {
+                                  context.router.push(const LoginRoute());
+                                },
+                                child: Text(
+                                  context.localized.login,
+                                  style: AppTextStyles.fs14w600.copyWith(
+                                      height: 1.3, color: AppColors.mainColor),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Gap(24),
+                          // Positioned(
+                          //   bottom: 0,
+                          //   left: 0,
+                          //   child: IgnorePointer(
+                          //     ignoring: true,
+                          //     child: ReCaptchaWebView(
+                          //       width: 1,
+                          //       height: 1,
+                          //       onTokenReceived: (token) {
+                          //         // Токен сохраняется автоматически в RecaptchaHandler.instance.captchaToken
+                          //       },
+                          //       // Обязательно укажите URL, где лежит валидный HTML-файл с reCAPTCHA
+                          //       url:
+                          //           'https://emerald-eran-52.tiiny.site', // 👈 ВАЖНО!
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

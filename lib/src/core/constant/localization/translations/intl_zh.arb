@@ -181,5 +181,15 @@
   "noMessagesYet": "暂无消息",
   "writeAComment": "写评论...",
   "chatWithCompany": "与公司聊天",
-  "minCharacters": "至少9个字符"
+  "minCharacters": "至少9个字符",
+  "incorrectLogin": "登录名错误",
+  "birthDate": "出生日期",
+  "cancel": "取消",
+  "confirm": "确认",
+  "emailAlreadyRegistered": "该电子邮件已被注册",
+  "phoneAlreadyTaken": "该电话号码已被占用",
+  "usernameAlreadyTaken": "该用户名已被占用",
+  "success": "成功",
+  "enterYourUsername": "输入用户名",
+  "usernameRequired": "用户名为必填项"
 }

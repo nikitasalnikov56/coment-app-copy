@@ -33,6 +33,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> register({
     required String name,
+    required String username,
     required String email,
     required String password,
     required String phone,
@@ -57,6 +58,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       final data = await _repository.register(
         email: email,
         name: name,
+        username: username,
         password: password,
         deviceType: deviceType,
         phone: cleanedPhone,

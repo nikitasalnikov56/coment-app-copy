@@ -573,4 +573,32 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get minCharacters => 'Кемінде 9 таңба';
+
+  @override
+  String get incorrectLogin => 'Қате логин';
+
+  @override
+  String get birthDate => 'Туған күн';
+
+  @override
+  String get confirm => 'Растау';
+
+  @override
+  String get emailAlreadyRegistered =>
+      'Бұл электрондық пошта бұрыннан тіркелген';
+
+  @override
+  String get phoneAlreadyTaken => 'Бұл телефон нөмірі бұрыннан алынған';
+
+  @override
+  String get usernameAlreadyTaken => 'Бұл пайдаланушы аты бұрыннан алынған';
+
+  @override
+  String get success => 'Сәтті';
+
+  @override
+  String get enterYourUsername => 'Пайдаланушы атын енгізіңіз';
+
+  @override
+  String get usernameRequired => 'Пайдаланушы атын толтыру міндетті';
 }

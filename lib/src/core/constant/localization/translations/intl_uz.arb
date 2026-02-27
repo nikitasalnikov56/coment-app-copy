@@ -180,5 +180,15 @@
   "noMessagesYet": "Hozircha xabarlar yo‘q",
   "writeAComment": "Izoh yozing...",
   "chatWithCompany": "Kompaniya bilan chat",
-  "minCharacters": "Kamida 9 ta belgi"
+  "minCharacters": "Kamida 9 ta belgi",
+  "incorrectLogin": "Noto'g'ri login",
+  "birthDate": "Tug'ilgan sana",
+  "cancel": "Bekor qilish",
+  "confirm": "Tasdiqlash",
+  "emailAlreadyRegistered": "Bu email allaqachon ro'yxatdan o'tgan",
+  "phoneAlreadyTaken": "Bu telefon raqami allaqachon band",
+  "usernameAlreadyTaken": "Bu foydalanuvchi nomi allaqachon band",
+  "success": "Muvaffaqiyatli",
+  "enterYourUsername": "Foydalanuvchi nomini kiriting",
+  "usernameRequired": "Foydalanuvchi nomi majburiy to'ldiriladi"
 }

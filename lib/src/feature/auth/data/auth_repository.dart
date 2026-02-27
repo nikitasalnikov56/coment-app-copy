@@ -370,6 +370,7 @@ abstract interface class IAuthRepository {
 
   Future<UserDTO> register({
     required String name,
+    required String username,
     required String email,
     required String password,
     required String phone,
@@ -601,6 +602,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   @override
   Future<UserDTO> register({
     required String name,
+    required String username,
     required String email,
     required String password,
     required String phone,
@@ -613,6 +615,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     try {
       final user = await _remoteDS.register(
         name: name,
+        username:username,
         email: email,
         password: password,
         deviceToken: dv,

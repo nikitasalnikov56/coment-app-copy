@@ -15,10 +15,26 @@ class ChatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String nameToDisplay =
-        (conversation.title != null && conversation.title!.isNotEmpty)
-            ? conversation.title!
-            : (conversation.partner?.name ?? 'Неизвестный');
+    // final String nameToDisplay =
+    //     (conversation.title != null && conversation.title!.isNotEmpty)
+    //         ? conversation.title!
+    //         : (conversation.partner?.name ?? 'Неизвестный');
+    final partner = conversation.partner;
+
+    // Логика выбора имени:
+    // 1. Если showRealName == true, берем ник (username)
+    // 2. Если данных нет или флаг false, берем обычное имя
+    // 3. Если и его нет, берем заголовок диалога
+    String nameToDisplay;
+
+    if (partner?.showRealName == true) {
+      nameToDisplay = partner?.username ?? partner?.displayName ?? 'Скрыто';
+    } else {
+      nameToDisplay =
+          (conversation.title != null && conversation.title!.isNotEmpty)
+              ? conversation.title!
+              : (partner?.name ?? 'Неизвестный');
+    }
 
 // 2. Логика для отображения текста последнего сообщения
     String subtitleText = 'Нет сообщений';
@@ -51,7 +67,13 @@ class ChatListItem extends StatelessWidget {
           ),
         ),
       ),
-      title: Text(nameToDisplay),
+      title: Text(
+        partner?.showRealName == true ? '@$nameToDisplay' : nameToDisplay,
+        style: AppTextStyles.fs16w400.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: 17,
+        ),
+      ),
       subtitle: Text(
         // conversation.lastMessage?.content ?? 'Нет сообщений',
         subtitleText,
@@ -60,13 +82,15 @@ class ChatListItem extends StatelessWidget {
         style: AppTextStyles.fs12w400.copyWith(
           color: subtitleText == '🎙 Голосовое сообщение'
               ? AppColors.mainColor
-              : AppColors.greyTextColor,
+              : AppColors.greyTextColor2,
+              fontWeight: FontWeight.w600
         ),
       ),
       trailing: lastMsg?.createdAt != null
           ? Text(
               '${lastMsg!.createdAt.hour}:${lastMsg.createdAt.minute.toString().padLeft(2, '0')}',
-              style: AppTextStyles.fs12w400.copyWith(color: AppColors.greyTextColor),
+              style: AppTextStyles.fs12w400
+                  .copyWith(color: AppColors.greyTextColor),
             )
           : null,
       onTap: () {

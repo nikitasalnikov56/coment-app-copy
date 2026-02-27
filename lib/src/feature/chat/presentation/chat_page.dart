@@ -311,181 +311,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 
-  // Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
-  //   // 1. Получаем доступ к кубиту и состоянию
-  //   final cubit = context.read<ChatCubit>();
-  //   final isSelected = cubit.selectedIds.contains(message.id);
-  //   final isSelectionMode = cubit.selectedIds.isNotEmpty;
-
-  //   return GestureDetector(
-  //     behavior: HitTestBehavior.translucent,
-  //     onLongPress: () {
-  //       cubit.toggleSelection(message.id);
-  //       HapticFeedback.mediumImpact();
-  //     },
-  //     onTap: () {
-  //       if (isSelectionMode) {
-  //         cubit.toggleSelection(message.id);
-  //       }
-  //     },
-  //     child: Container(
-  //       color: isSelected
-  //           ? AppColors.mainColor.withValues(alpha: 0.1)
-  //           : Colors.transparent,
-  //       child: Padding(
-  //         padding: EdgeInsets.only(
-  //           left: isOwnMessage ? 60 : 16,
-  //           right: isOwnMessage ? 16 : 60,
-  //           top: 8,
-  //           bottom: 8,
-  //         ),
-  //         child: Row(
-  //           mainAxisAlignment:
-  //               isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-  //           children: [
-  //             AnimatedContainer(
-  //               duration: const Duration(milliseconds: 200),
-  //               width: isSelectionMode ? 32 : 0,
-  //               curve: Curves.easeInOut,
-  //               child: isSelectionMode
-  //                   ? Container(
-  //                       margin: const EdgeInsets.only(right: 10),
-  //                       width: 22,
-  //                       height: 22,
-  //                       decoration: BoxDecoration(
-  //                         shape: BoxShape.circle,
-  //                         border: Border.all(
-  //                             color: isSelected
-  //                                 ? AppColors.mainColor
-  //                                 : AppColors.grey969696,
-  //                             width: 2),
-  //                         color: isSelected
-  //                             ? AppColors.mainColor
-  //                             : Colors.transparent,
-  //                       ),
-  //                       child: isSelected
-  //                           ? const Icon(
-  //                               Icons.check,
-  //                               size: 16,
-  //                               color: Colors.white,
-  //                             )
-  //                           : null,
-  //                     )
-  //                   : null,
-  //             ),
-  //             if (!isOwnMessage)
-  //               Container(
-  //                 width: 32,
-  //                 height: 32,
-  //                 decoration: const BoxDecoration(
-  //                   shape: BoxShape.circle,
-  //                   color: AppColors.grey,
-  //                 ),
-  //                 child: message.sender.avatar != null
-  //                     ? CircleAvatar(
-  //                         backgroundImage: NetworkImage(message.sender.avatar!),
-  //                         radius: 16,
-  //                       )
-  //                     : const Icon(
-  //                         Icons.person,
-  //                         size: 16,
-  //                         color: Colors.white,
-  //                       ),
-  //               ),
-  //             Flexible(
-  //               child: Container(
-  //                 padding: const EdgeInsets.symmetric(
-  //                   horizontal: 12,
-  //                   vertical: 8,
-  //                 ),
-  //                 margin: EdgeInsets.only(
-  //                   left: !isOwnMessage ? 8 : 0,
-  //                   right: isOwnMessage ? 8 : 0,
-  //                 ),
-  //                 decoration: BoxDecoration(
-  //                   color: isOwnMessage
-  //                       ? AppColors.mainColor
-  //                       : AppColors.backgroundInputGrey,
-  //                   borderRadius: BorderRadius.circular(18),
-  //                 ),
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     if (message.replyTo != null)
-  //                       Container(
-  //                         margin: const EdgeInsets.only(bottom: 6),
-  //                         padding:
-  //                             const EdgeInsets.only(left: 8, top: 2, bottom: 2),
-  //                         decoration: BoxDecoration(
-  //                           border: Border(
-  //                             left: BorderSide(
-  //                               color: isOwnMessage
-  //                                   ? Colors.white70
-  //                                   : AppColors.mainColor,
-  //                               width: 3,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Text(
-  //                               message.replyTo!.sender.name ?? 'User',
-  //                               style: AppTextStyles.fs12w700.copyWith(
-  //                                 color: isOwnMessage
-  //                                     ? Colors.white
-  //                                     : AppColors.mainColor,
-  //                               ),
-  //                             ),
-  //                             Text(
-  //                               message.replyTo!.content,
-  //                               maxLines: 1,
-  //                               overflow: TextOverflow.ellipsis,
-  //                               style: AppTextStyles.fs12w400.copyWith(
-  //                                 color: isOwnMessage
-  //                                     ? Colors.white70
-  //                                     : Colors.black54,
-  //                               ),
-  //                             )
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     Text(
-  //                       message.content,
-  //                       style: AppTextStyles.fs14w400.copyWith(
-  //                         color: isOwnMessage ? Colors.white : AppColors.text,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //             if (isOwnMessage)
-  //               Container(
-  //                 width: 32,
-  //                 height: 32,
-  //                 decoration: const BoxDecoration(
-  //                   shape: BoxShape.circle,
-  //                   color: AppColors.mainColor,
-  //                 ),
-  //                 child: widget.currentUser.avatar != null
-  //                     ? CircleAvatar(
-  //                         backgroundImage:
-  //                             NetworkImage(widget.currentUser.avatar!),
-  //                         radius: 16,
-  //                       )
-  //                     : const Icon(
-  //                         Icons.person,
-  //                         size: 16,
-  //                         color: Colors.white,
-  //                       ),
-  //               ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
   Widget _buildMessageBubble(ChatMessageDTO message, bool isOwnMessage) {
     // 1. Получаем доступ к кубиту и состоянию
     final cubit = context.read<ChatCubit>();
@@ -1091,22 +916,42 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final chatCubit = context.read<ChatCubit>();
-    final activeRepo = chatCubit.repository;
+    // 1. Используем watch, чтобы виджет обновлялся при загрузке сообщений
+  final chatCubit = context.watch<ChatCubit>();
+  final activeRepo = chatCubit.repository;
 
-    // БЕРЕМ СОБЕСЕДНИКА ИЗ ПАРАМЕТРОВ ВИДЖЕТА!
-    final targetUser = widget.widget.targetUser;
+  // 2. Достаем сообщения из стейта (учитываем 3 аргумента в loaded)
+  final messages = chatCubit.state.maybeWhen(
+    loaded: (msgs, _, __) => msgs,
+    orElse: () => <ChatMessageDTO>[],
+  );
 
-    // Если собеседника нет (групповой чат или баг), просто выводим название
-    // ignore: unnecessary_null_comparison
-    if (targetUser == null) {
-      return CustomAppBar(
-        title: widget.widget.companyName,
-        subTitle: '...',
-      );
+  // 3. Пытаемся найти "свежего" пользователя в сообщениях
+  UserDTO? senderFromMessages;
+  if (messages.isNotEmpty) {
+    for (var msg in messages) {
+      if (msg.sender.id != widget.currentUser.id) {
+        senderFromMessages = msg.sender;
+        break; // Нашли первого встречного собеседника и выходим
+      }
     }
+  }
 
-    final int targetId = int.tryParse(targetUser.id.toString()) ?? 0;
+  // 4. Итоговый объект пользователя для отображения:
+  // Если в сообщениях нашли — берем его (там есть username и флаг), 
+  // если нет — берем старый из параметров виджета.
+  final userToDisplay = senderFromMessages ?? widget.widget.targetUser;
+
+  // Если совсем никого нет (групповой чат без данных)
+  // ignore: unnecessary_null_comparison
+  if (userToDisplay == null) {
+    return CustomAppBar(
+      title: widget.widget.companyName,
+      subTitle: '...',
+    );
+  }
+
+  final int targetId = int.tryParse(userToDisplay.id.toString()) ?? 0;
 
     // ТОЛЬКО STREAM BUILDER
     return StreamBuilder<Map<int, Map<String, dynamic>>>(
@@ -1128,13 +973,18 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
           }
         } else {
           // Фолбэк на исторические данные из профиля
-          isOnline = targetUser.isOnline;
-          lastSeenDate = targetUser.lastSeen;
+          // isOnline = targetUser.isOnline;
+          // lastSeenDate = targetUser.lastSeen;
+          isOnline = userToDisplay.isOnline;
+          lastSeenDate = userToDisplay.lastSeen;
         }
-
+      
         return CustomAppBar(
           isOnline: isOnline,
-          title: targetUser.name ?? widget.widget.companyName,
+          // title: targetUser.name ?? widget.widget.companyName,
+          title: userToDisplay.showRealName == true
+              ? '@${userToDisplay.username}'
+              : userToDisplay.displayName,
           subTitle: isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
           textStyle: AppTextStyles.fs18w700,
           subTitleStyle: AppTextStyles.fs12w400.copyWith(
@@ -1145,15 +995,3 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
     );
   }
 }
-
-
-//  IconButton(
-//             color: AppColors.black,
-//             padding: const EdgeInsets.all(0),
-//             onPressed: () {
-//               //вставить код записи
-//             },
-//             icon: const Icon(
-//               Icons.mic_none_rounded,
-//             ),
-//           );

@@ -14,6 +14,7 @@ abstract interface class IAuthRemoteDS {
 
   Future<UserDTO> register({
     required String name,
+    required String username,
     required String email,
     required String password,
     required String phone,
@@ -106,6 +107,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
   @override
   Future<UserDTO> register({
     required String? name,
+    required String? username,
     required String? email,
     required String? password,
     required String? phone,
@@ -120,6 +122,7 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
         'auth/register',
         body: {
           'name': name,
+          'username': username,
           'email': email,
           'password': password,
           'phoneNumber': phone,

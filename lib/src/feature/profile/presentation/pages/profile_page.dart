@@ -68,6 +68,24 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 0.5,
             ),
           ),
+          actions: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: const Color(0x33BBB5FE),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            
+              // padding: EdgeInsets.only(bottom: 25),
+              margin: const EdgeInsets.only(right: 15),
+              child: IconButton(
+                  onPressed: () {
+                    context.pushRoute(const SettingsRoute());
+                  },
+                  icon: const Icon(Icons.settings)),
+            )
+          ],
         ),
         body: BlocConsumer<ProfileBLoC, ProfileState>(
           listener: (context, state) {
@@ -108,8 +126,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               },
               loaded: (userDTO, verificationStatus) {
-
-
                 final userRole = userDTO.role?.toLowerCase().trim() ?? '';
                 final isOwner = userRole == 'owner';
                 return SmartRefresher(
@@ -140,7 +156,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   color: AppColors.white,
                                   borderRadius: BorderRadius.circular(16)),
                               alignment: Alignment.center,
-                              child: Row(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
@@ -155,34 +172,100 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   const Gap(12),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        userDTO.name ?? '',
-                                        style: AppTextStyles.fs18w500.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.text,
-                                          height: 1.2,
-                                        ),
+                                  ListTile(
+                                    leading: Container(
+                                      width: 34,
+                                      height: 34,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0x33BBB5FE),
+                                        borderRadius: BorderRadius.circular(12),
                                       ),
-                                      if (verificationStatus != null)
-                                        _buildVerificationStatus(
-                                            verificationStatus),
-                                      const Gap(8),
-                                      Text(
-                                        userDTO.email ?? '',
-                                        style: AppTextStyles.fs14w400.copyWith(
-                                          color: AppColors.text,
-                                          height: 1.2,
-                                        ),
+                                      child: const Icon(
+                                        Icons.person_3_outlined,
+                                        size: 20,
                                       ),
-                                    ],
+                                    ),
+                                    title: Text(
+                                      userDTO.name ?? '',
+                                      style: AppTextStyles.fs18w500.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.text,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                    subtitle: verificationStatus != null
+                                        ? _buildVerificationStatus(
+                                            verificationStatus)
+                                        : const Text('Статус неизвестен'),
+                                    contentPadding: const EdgeInsets.all(0),
+                                    minVerticalPadding: 0,
+                                    minTileHeight: 60,
+                                  ),
+                                  ListTile(
+                                    leading: Container(
+                                      width: 34,
+                                      height: 34,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0x33BBB5FE),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: const Icon(
+                                        Icons.email_outlined,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      userDTO.email ?? '',
+                                      style: AppTextStyles.fs18w500.copyWith(
+                                        color: AppColors.text,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      'Почта пользователя',
+                                      style: AppTextStyles.fs12w400.copyWith(
+                                        color: AppColors.greyTextColor,
+                                      ),
+                                    ),
+                                    contentPadding: const EdgeInsets.all(0),
+                                    minVerticalPadding: 0,
+                                    minTileHeight: 60,
                                   ),
                                 ],
                               ),
                             ),
+                            ListTile(
+                              leading: Container(
+                                width: 34,
+                                height: 34,
+                                decoration: BoxDecoration(
+                                  color: const Color(0x33BBB5FE),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Icon(
+                                  Icons.alternate_email,
+                                  size: 20,
+                                ),
+                              ),
+                              title: Text(
+                                userDTO.username ??
+                                    'Имя пользователя не установлено',
+                                style: AppTextStyles.fs18w500.copyWith(
+                                  color: AppColors.text,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Имя пользователя',
+                                style: AppTextStyles.fs12w400.copyWith(
+                                  color: AppColors.greyTextColor,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.all(0),
+                              minVerticalPadding: 0,
+                              minTileHeight: 60,
+                            ),
+
                             const Gap(16),
 
                             ///

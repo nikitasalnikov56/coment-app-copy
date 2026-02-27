@@ -3,6 +3,7 @@ import 'package:coment_app/src/feature/catalog/model/create_product_model.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:coment_app/src/feature/profile/bloc/profile_cubit.dart';
 import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,6 +81,14 @@ class _SettingsScopeState extends State<SettingsScope> {
               create: (context) => AppBloc(context.repository.authRepository),
             ),
             BlocProvider(
+              create: (context) => ProfileCubit(
+                repository: context.repository.profileRepository,
+                appBloc: context.read<AppBloc>(),
+                password:
+                    '', // Если пароль нужен только для удаления, можно передать пустой или хранить в Dao
+              )..getProfile(), // Сразу запрашиваем данные
+            ),
+            BlocProvider(
               create: (context) => ProfileBLoC(
                 authRepository: context.repository.authRepository,
                 profileRepository: context.repository.profileRepository,
@@ -98,7 +107,6 @@ class _SettingsScopeState extends State<SettingsScope> {
             ),
             BlocProvider(
               create: (context) => LoadDocumentsCubit(
-                
                 context.read<IProfileRemoteDS>(),
               ),
             ),

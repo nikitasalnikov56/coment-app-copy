@@ -574,4 +574,32 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get minCharacters => 'Kamida 9 ta belgi';
+
+  @override
+  String get incorrectLogin => 'Noto\'g\'ri login';
+
+  @override
+  String get birthDate => 'Tug\'ilgan sana';
+
+  @override
+  String get confirm => 'Tasdiqlash';
+
+  @override
+  String get emailAlreadyRegistered =>
+      'Bu email allaqachon ro\'yxatdan o\'tgan';
+
+  @override
+  String get phoneAlreadyTaken => 'Bu telefon raqami allaqachon band';
+
+  @override
+  String get usernameAlreadyTaken => 'Bu foydalanuvchi nomi allaqachon band';
+
+  @override
+  String get success => 'Muvaffaqiyatli';
+
+  @override
+  String get enterYourUsername => 'Foydalanuvchi nomini kiriting';
+
+  @override
+  String get usernameRequired => 'Foydalanuvchi nomi majburiy to\'ldiriladi';
 }
