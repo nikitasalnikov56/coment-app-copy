@@ -1,8 +1,10 @@
 // lib/src/feature/chat/bloc/chat_cubit.dart
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
+import 'package:coment_app/src/feature/chat/data/file_repository.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,6 +13,7 @@ part 'chat_cubit.freezed.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   final IChatRepository _repository;
+  final IFileRepository _fileRepository;
   final int conversationId;
   final String _token;
 
@@ -18,7 +21,8 @@ class ChatCubit extends Cubit<ChatState> {
 
   // int get conversationId => _companyId;
 
-  ChatCubit(this._repository, this.conversationId, this._token)
+  ChatCubit(
+      this._repository, this._fileRepository, this.conversationId, this._token)
       : super(const ChatState.initial()) {
     _repository.connectToChat(conversationId, _token);
     _messagesSubscription = _listenToMessages();
@@ -94,12 +98,30 @@ class ChatCubit extends Cubit<ChatState> {
     });
   }
 
-  Future<void> sendMessage(String content) async {
-    if (content.trim().isEmpty) return;
+  Future<void> sendMessage(String content, {List<File>? files}) async {
+    if (content.trim().isEmpty && (files == null || files.isEmpty)) return;
     final replyToId = replyMessage?.id;
     // state.mapOrNull(loaded: (s) => replyToId = s.replyMessage?.id);
     try {
-      await _repository.sendMessage(content, replyToId: replyToId);
+      List<String>? attachmentUrls;
+      if (files != null && files.isNotEmpty) {
+        log('[ChatCubit] Начинаю загрузку ${files.length} файлов...');
+
+        try {
+          attachmentUrls = await _fileRepository.uploadChatFiles(files);
+          log('[ChatCubit] Файлы успешно загружены: $attachmentUrls');
+        } catch (e, stack){
+          log('[ChatCubit] КРИТИЧЕСКАЯ ОШИБКА ЗАГРУЗКИ ФАЙЛОВ: $e');
+        log('[ChatCubit] StackTrace: $stack');
+        // Если загрузка файлов упала, мы не должны отправлять пустое сообщение со ссылками
+        rethrow;
+        }
+      }
+      await _repository.sendMessage(
+        content,
+        replyToId: replyToId,
+        attachments: attachmentUrls,
+      );
       cancelReply();
     } catch (e) {
       emit(ChatState.error(e.toString()));
@@ -107,21 +129,22 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   // === НОВЫЙ МЕТОД ДЛЯ АУДИО ===
-  Future<void> sendVoiceMessage(String url) async {
+  Future<void> sendVoiceMessage(String url, int durationMs) async {
     // Получаем ID сообщения, на которое отвечаем (если есть)
     final replyToId = replyMessage?.id;
-    
+
     try {
       // Вызываем обновленный метод репозитория.
       // Текст оставляем пустым, а url передаем в voiceUrl.
       await _repository.sendMessage(
-        "", 
-        replyToId: replyToId, 
+        "",
+        replyToId: replyToId,
         voiceUrl: url,
+        voiceDuration: durationMs,
       );
-      
+
       // Сбрасываем состояние ответа после успешной отправки
-      cancelReply(); 
+      cancelReply();
     } catch (e) {
       log("Ошибка отправки голосового сообщения: $e");
       emit(ChatState.error(e.toString()));
@@ -190,6 +213,7 @@ class ChatState with _$ChatState {
     List<ChatMessageDTO> messages, {
     @Default({}) Set<int> selectedIds,
     ChatMessageDTO? replyMessage,
+    @Default(false) bool isUploading,
   }) = _Loaded;
   const factory ChatState.error(String message) = _Error;
 }

@@ -1,23 +1,26 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/assets_constants.dart';
 import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
-import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
+import 'package:coment_app/src/feature/catalog/presentation/widgets/choose_image_bs.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
-import 'package:coment_app/src/feature/chat/bloc/voice_recorder_cubit.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
+import 'package:coment_app/src/feature/chat/presentation/widgets/status_user_widget.dart';
+import 'package:coment_app/src/feature/chat/presentation/widgets/voice_message_player.dart';
+import 'package:coment_app/src/feature/chat/presentation/widgets/voice_recorder_button.dart';
 import 'package:coment_app/src/feature/chat/ui/widgets/date_chip.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:voice_message_package/voice_message_package.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class ChatPage extends StatefulWidget implements AutoRouteWrapper {
@@ -45,6 +48,7 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     return BlocProvider(
       create: (context) => ChatCubit(
         context.repository.chatRepository,
+        context.repository.fileRepository,
         // companyId,
         conversationId,
         accessToken,
@@ -58,6 +62,12 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late ChatCubit _cubit;
+
+  final List<File> _imageFiles = [];
+  final List<File> _documentFiles = [];
+  static const int _maxTotalFiles = 10;
+  bool get _canAddMore =>
+      _imageFiles.length + _documentFiles.length < _maxTotalFiles;
 
   @override
   void initState() {
@@ -95,6 +105,15 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     return date1.year == date2.year &&
         date1.month == date2.month &&
         date1.day == date2.day;
+  }
+
+  bool _isImage(String url) {
+    final ext = url.toLowerCase();
+    return ext.contains('.jpg') ||
+        ext.contains('.jpeg') ||
+        ext.contains('.png') ||
+        ext.contains('.gif') ||
+        ext.contains('.webp');
   }
 
   @override
@@ -165,6 +184,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
                     final messages = snapshot.data!;
                     WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!mounted) return;
                       if (_scrollController.hasClients) {
                         _scrollController.animateTo(
                           _scrollController.position.minScrollExtent,
@@ -210,6 +230,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               const SizedBox(
                 height: 10,
               ),
+              _buildSelectedFilesList(),
               AnimatedSize(
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
@@ -229,13 +250,13 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                       ),
                     );
                   },
+
                   // ЕСЛИ ВЫДЕЛЕНО -> ПОКАЗЫВАЕМ МЕНЮ, ИНАЧЕ -> ПОЛЕ ВВОДА
                   child: isSelectionMode
                       ? _buildSelectionMenu(cubit, context)
                       : _buildInputArea(cubit),
                 ),
               ),
-              // _buildInputArea(cubit),
               const SizedBox(
                 height: 20,
               ),
@@ -454,60 +475,135 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           ),
                         ),
 
+                      if (message.attachments != null &&
+                          message.attachments!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 6),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: message.attachments!.map((url) {
+                              if (_isImage(url)) {
+                                final String heroTag = '${message.id}_$url';
+                                // ОТОБРАЖЕНИЕ КАРТИНКИ
+                                return GestureDetector(
+                                  onTap: () async {
+                                    if (isSelectionMode) {
+                                      cubit.toggleSelection(message.id);
+                                      return;
+                                    }
+
+                                    // Открываем на весь экран
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            FullScreenImagePage(
+                                          imageUrl: url,
+                                          tag: heroTag,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 4),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Hero(
+                                        tag: heroTag,
+                                        child: Image.network(
+                                          url,
+                                          width: 200,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, e, s) =>
+                                              const Icon(Icons.broken_image),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                // ОТОБРАЖЕНИЕ ФАЙЛА (PDF, DOC, TXT)
+                                return GestureDetector(
+                                  onTap: () async {
+                                    final uri = Uri.parse(url);
+                                    if (await canLaunchUrl(uri)) {
+                                      await launchUrl(uri,
+                                          mode: LaunchMode
+                                              .platformDefault);
+                                    }
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(bottom: 4),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: isOwnMessage
+                                          ? Colors.white.withOpacity(0.2)
+                                          : Colors.black.withOpacity(0.05),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.insert_drive_file,
+                                          color: isOwnMessage
+                                              ? Colors.white
+                                              : AppColors.mainColor,
+                                          size: 28,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                url
+                                                    .split('/')
+                                                    .last, // Вырезаем имя файла из URL
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: isOwnMessage
+                                                      ? Colors.white
+                                                      : Colors.black87,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                'Нажмите, чтобы открыть',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: isOwnMessage
+                                                      ? Colors.white70
+                                                      : Colors.black54,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            }).toList(),
+                          ),
+                        ),
                       // --- ЛОГИКА ОТОБРАЖЕНИЯ: ГОЛОСОВОЕ ИЛИ ТЕКСТ ---
                       if (message.voiceUrl != null &&
                           message.voiceUrl!.isNotEmpty)
                         // Рисуем плеер
                         Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: VoiceMessageView(
-                            backgroundColor: isOwnMessage
-                                ? AppColors.mainColor
-                                : AppColors.backgroundInputGrey,
-                            controller: VoiceController(
-                              audioSrc: message.voiceUrl!,
-                              maxDuration: const Duration(seconds: 10),
-                              isFile: false,
-                              onComplete: () {},
-                              onPause: () {},
-                              onPlaying: () {},
-                            ),
-                            activeSliderColor: isOwnMessage
-                                ? AppColors.white
-                                : AppColors.black,
-                            circlesColor: isOwnMessage
-                                ? AppColors.mainColor
-                                : AppColors.white,
-                            circlesTextStyle: AppTextStyles.fs12w400.copyWith(
-                              fontSize: 11,
-                              color: isOwnMessage
-                                  ? AppColors.white
-                                  : AppColors.black,
-                            ),
-                            playIcon: Icon(
-                              Icons.play_arrow_rounded,
-                              color: isOwnMessage
-                                  ? AppColors.white
-                                  : AppColors.black,
-                            ),
-                            playPauseButtonDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                color: isOwnMessage
-                                    ? AppColors.backgroundColor2
-                                    : AppColors.black,
-                              ),
-                            ),
-                            counterTextStyle: TextStyle(
-                              color: isOwnMessage
-                                  ? AppColors.mainColor
-                                  : AppColors.black,
-                              fontSize: 11,
-                            ),
-                            innerPadding: 2,
-                            cornerRadius: 12,
-                          ),
-                        )
+                            padding: const EdgeInsets.all(0),
+                            child: VoiceMessagePlayer(
+                              duration: message.voiceDuration ?? 0,
+                              url: message.voiceUrl!,
+                              isOwnMessage: isOwnMessage,
+                            ))
                       else
                         // Рисуем обычный текст
                         Text(
@@ -543,6 +639,135 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showAddOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo, color: AppColors.mainColor),
+              title: Text(context.localized.selectFromGallery),
+              onTap: () {
+                Navigator.pop(context);
+                ChooseImageBottomSheet.show(
+                  context,
+                  avatar: false,
+                  image: (File? file) {
+                    if (file != null && _canAddMore) {
+                      setState(() => _imageFiles.add(file));
+                    }
+                  },
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.document_scanner,
+                  color: AppColors.mainColor),
+              title: const Text('PDF, DOC, DOCX'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickDocument();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickDocument() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx'],
+      );
+
+      if (result?.files.singleOrNull != null && _canAddMore) {
+        final path = result!.files.single.path;
+        if (path != null) {
+          setState(() {
+            _documentFiles.add(File(path));
+          });
+        }
+      }
+    } catch (e) {
+      // Логирование ошибки (опционально)
+      debugPrint('FilePicker error: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать файл: $e')),
+        );
+      }
+    }
+  }
+
+  Widget _buildSelectedFilesList() {
+    final allFiles = [
+      ..._imageFiles.map((f) => {'file': f, 'isImage': true}),
+      ..._documentFiles.map((f) => {'file': f, 'isImage': false}),
+    ];
+
+    if (allFiles.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      height: 90,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: allFiles.length,
+        itemBuilder: (context, index) {
+          final item = allFiles[index];
+          final file = item['file'] as File;
+          final isImage = item['isImage'] as bool;
+
+          return Stack(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 12),
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border:
+                      Border.all(color: AppColors.mainColor.withOpacity(0.3)),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: isImage
+                      ? Image.file(file, fit: BoxFit.cover)
+                      : const Icon(Icons.insert_drive_file,
+                          size: 30, color: AppColors.mainColor),
+                ),
+              ),
+              Positioned(
+                right: 4,
+                top: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (isImage) {
+                        _imageFiles.remove(file);
+                      } else {
+                        _documentFiles.remove(file);
+                      }
+                    });
+                  },
+                  child: const CircleAvatar(
+                    radius: 10,
+                    backgroundColor: Colors.red,
+                    child: Icon(Icons.close, size: 14, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -623,11 +848,17 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                         color: AppColors.greyTextColor,
                         padding: const EdgeInsets.all(0),
                         onPressed: () {
-                          // вставить код прикрепления файлов
+                          _showAddOptions();
                         },
                         icon: const Icon(Icons.attach_file_rounded),
                       ),
                       suffixIcon: const VoiceRecorderButton(),
+                      suffixIconConstraints: const BoxConstraints(
+                        // maxHeight: 50,
+                        // maxWidth: 50,
+                        minWidth: 30,
+                        minHeight: 30,
+                      ),
                       hintText: context.localized.writeAComment,
                       hintStyle: AppTextStyles.fs14w400.copyWith(
                         color: AppColors.greyTextColor,
@@ -638,8 +869,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
+                      contentPadding: const EdgeInsets.only(
+                          left: 16, top: 12, bottom: 12, right: 25),
                     ),
                     textInputAction: TextInputAction.send,
                     onTap: () =>
@@ -672,26 +903,60 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 
-  void _sendMessage() {
+//   void _sendMessage() async {
+//     final text = _textController.text.trim();
+//     if (text.isEmpty && _imageFiles.isEmpty && _documentFiles.isEmpty) return;
+
+// // Собираем все файлы из твоих существующих списков в один массив
+//     final allFiles = [..._imageFiles, ..._documentFiles];
+
+//     if (text.isNotEmpty || allFiles.isNotEmpty) {
+//       context.read<ChatCubit>().sendMessage(
+//             text,
+//             files: allFiles,
+//           );
+//     }
+
+//     ChatMessageDTO(
+//       id: 0,
+//       content: text,
+//       createdAt: DateTime.now(),
+//       sender: widget.currentUser,
+//       conversationId: widget.conversationId,
+//       attachments: [],
+//     );
+
+//     _textController.clear();
+//     setState(() {
+//       _imageFiles.clear();
+//       _documentFiles.clear();
+//     });
+//   }
+  void _sendMessage() async {
     final text = _textController.text.trim();
-    if (text.isEmpty) return;
+    final allFiles = [..._imageFiles, ..._documentFiles];
 
-    context.read<ChatCubit>().sendMessage(text);
-    // final newMessage =
-    ChatMessageDTO(
-      id: 0,
-      content: text,
-      createdAt: DateTime.now(),
-      sender: widget.currentUser,
-      conversationId: widget.conversationId,
-    );
+    if (text.isEmpty && allFiles.isEmpty) return;
 
-    // context.read<ConversationsCubit>().updateConversationLastMessage(
-    //       conversationId: widget.conversationId,
-    //       message: newMessage,
-    //     );
+    try {
+      // 1. ЖДЕМ (await), пока кубит реально загрузит файлы
+      await context.read<ChatCubit>().sendMessage(
+            text,
+            files: allFiles,
+          );
 
-    _textController.clear();
+      // Если дошли сюда — всё отправилось успешно
+    } catch (e) {
+      // 2. Если упало (например, тот самый 403), мы логируем это
+      log('Ошибка при отправке: $e');
+    } finally {
+      // 3. ГАРАНТИРОВАННО очищаем UI в любом случае
+      _textController.clear();
+      setState(() {
+        _imageFiles.clear();
+        _documentFiles.clear();
+      });
+    }
   }
 
   void _showForwardSheet(BuildContext context, ChatCubit cubit) {
@@ -794,14 +1059,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                   ),
                                 ),
                                 onTap: () async {
-                                  // // Тут логика: либо отправляем через текущий кубит,
-                                  // // либо (что правильнее) вызываем метод репозитория напрямую
-                                  // final selectedContent = cubit.currentMessages
-                                  //     .where((m) =>
-                                  //         cubit.selectedIds.contains(m.id))
-                                  //     .map((m) => m.content)
-                                  //     .join('\n');
-
                                   // Закрываем шторку
                                   Navigator.pop(context);
 
@@ -833,165 +1090,35 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   }
 }
 
-class VoiceRecorderButton extends StatelessWidget {
-  const VoiceRecorderButton({
-    super.key,
-  });
+class FullScreenImagePage extends StatelessWidget {
+  final String imageUrl;
+  final String tag; // Для Hero
+
+  const FullScreenImagePage(
+      {super.key, required this.imageUrl, required this.tag});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          VoiceRecorderCubit(context.repository.voiceRepository),
-      child: BlocConsumer<VoiceRecorderCubit, VoiceRecorderState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            success: (url) {
-              // Обращаемся напрямую к ChatCubit, который живет выше по дереву виджетов
-              context.read<ChatCubit>().sendVoiceMessage(url);
-
-              // Сбрасываем кнопку обратно в состояние микрофона через метод кубита
-              context.read<VoiceRecorderCubit>().reset();
-            },
-            error: (msg) => ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(msg))),
-            orElse: () {},
-          );
-        },
-        builder: (context, state) {
-          return state.maybeWhen(
-            recording: (_) => IconButton(
-              icon: const Icon(Icons.stop_circle, color: Colors.red),
-              onPressed: () => context.read<VoiceRecorderCubit>().stopAndSend(),
-            ),
-            uploading: () => const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
-            orElse: () => IconButton(
-              color: AppColors.black,
-              onPressed: () => context.read<VoiceRecorderCubit>().start(),
-              icon: const Icon(Icons.mic_none_rounded),
-            ),
-          );
-        },
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-    );
-  }
-}
-
-class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
-  const StatusUserWidget({
-    super.key,
-    required this.widget,
-    required this.currentUser,
-  });
-
-  final ChatPage widget;
-  final UserDTO currentUser;
-
-  @override
-  State<StatusUserWidget> createState() => _StatusUserWidgetState();
-
-  @override
-  Size get preferredSize => const Size(double.infinity, kToolbarHeight);
-}
-
-class _StatusUserWidgetState extends State<StatusUserWidget> {
-  // Форматирование даты
-  String _formatDate(DateTime? time) {
-    if (time == null) return 'недавно';
-    final localTime = time.toLocal();
-    final now = DateTime.now();
-    final diff = now.difference(localTime);
-
-    if (diff.inMinutes < 1) return 'только что';
-    if (diff.inMinutes < 60) return '${diff.inMinutes} мин. назад';
-    if (diff.inHours < 24) {
-      return 'сегодня в ${localTime.hour.toString().padLeft(2, '0')}:${localTime.minute.toString().padLeft(2, '0')}';
-    }
-    return '${localTime.day}.${localTime.month}';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // 1. Используем watch, чтобы виджет обновлялся при загрузке сообщений
-  final chatCubit = context.watch<ChatCubit>();
-  final activeRepo = chatCubit.repository;
-
-  // 2. Достаем сообщения из стейта (учитываем 3 аргумента в loaded)
-  final messages = chatCubit.state.maybeWhen(
-    loaded: (msgs, _, __) => msgs,
-    orElse: () => <ChatMessageDTO>[],
-  );
-
-  // 3. Пытаемся найти "свежего" пользователя в сообщениях
-  UserDTO? senderFromMessages;
-  if (messages.isNotEmpty) {
-    for (var msg in messages) {
-      if (msg.sender.id != widget.currentUser.id) {
-        senderFromMessages = msg.sender;
-        break; // Нашли первого встречного собеседника и выходим
-      }
-    }
-  }
-
-  // 4. Итоговый объект пользователя для отображения:
-  // Если в сообщениях нашли — берем его (там есть username и флаг), 
-  // если нет — берем старый из параметров виджета.
-  final userToDisplay = senderFromMessages ?? widget.widget.targetUser;
-
-  // Если совсем никого нет (групповой чат без данных)
-  // ignore: unnecessary_null_comparison
-  if (userToDisplay == null) {
-    return CustomAppBar(
-      title: widget.widget.companyName,
-      subTitle: '...',
-    );
-  }
-
-  final int targetId = int.tryParse(userToDisplay.id.toString()) ?? 0;
-
-    // ТОЛЬКО STREAM BUILDER
-    return StreamBuilder<Map<int, Map<String, dynamic>>>(
-      stream: activeRepo.userStatusStream,
-      initialData: activeRepo.currentStatusCache,
-      builder: (context, snapshot) {
-        final allStatuses = snapshot.data ?? {};
-        final userStatusFromWs = allStatuses[targetId];
-
-        bool isOnline;
-        DateTime? lastSeenDate;
-
-        if (userStatusFromWs != null) {
-          // Если пришел ивент по сокету
-          isOnline = userStatusFromWs['isOnline'] == true;
-          if (userStatusFromWs['lastSeen'] != null) {
-            lastSeenDate =
-                DateTime.tryParse(userStatusFromWs['lastSeen'].toString());
-          }
-        } else {
-          // Фолбэк на исторические данные из профиля
-          // isOnline = targetUser.isOnline;
-          // lastSeenDate = targetUser.lastSeen;
-          isOnline = userToDisplay.isOnline;
-          lastSeenDate = userToDisplay.lastSeen;
-        }
-      
-        return CustomAppBar(
-          isOnline: isOnline,
-          // title: targetUser.name ?? widget.widget.companyName,
-          title: userToDisplay.showRealName == true
-              ? '@${userToDisplay.username}'
-              : userToDisplay.displayName,
-          subTitle: isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
-          textStyle: AppTextStyles.fs18w700,
-          subTitleStyle: AppTextStyles.fs12w400.copyWith(
-            color: isOnline ? AppColors.green : AppColors.greyTextColor,
+      body: Center(
+        child: InteractiveViewer(
+          // Позволяет зумить картинку пальцами
+          child: Hero(
+            tag: tag,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              width: double.infinity,
+              height: double.infinity,
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

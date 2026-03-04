@@ -40,11 +40,15 @@ class ChatListItem extends StatelessWidget {
     String subtitleText = 'Нет сообщений';
     final lastMsg = conversation.lastMessage;
 
+print(lastMsg?.attachments);
     if (lastMsg != null) {
       // Проверяем, есть ли ссылка на голосовое
       if (lastMsg.voiceUrl != null && lastMsg.voiceUrl!.isNotEmpty) {
         subtitleText =
             '🎙 Голосовое сообщение'; // Иконка микрофона для наглядности
+      } else if (lastMsg.attachments != null &&
+          lastMsg.attachments!.isNotEmpty) {
+        subtitleText = '📎 Файл';
       } else if (lastMsg.content.isNotEmpty) {
         subtitleText = lastMsg.content;
       }
@@ -80,11 +84,10 @@ class ChatListItem extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: AppTextStyles.fs12w400.copyWith(
-          color: subtitleText == '🎙 Голосовое сообщение'
-              ? AppColors.mainColor
-              : AppColors.greyTextColor2,
-              fontWeight: FontWeight.w600
-        ),
+            color: subtitleText == '🎙 Голосовое сообщение'
+                ? AppColors.mainColor
+                : AppColors.greyTextColor2,
+            fontWeight: FontWeight.w600),
       ),
       trailing: lastMsg?.createdAt != null
           ? Text(

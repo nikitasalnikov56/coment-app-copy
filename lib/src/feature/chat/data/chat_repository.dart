@@ -7,8 +7,10 @@ abstract class IChatRepository {
   Future<void> sendMessage(
     String content, {
     int? replyToId,
-    int? targetConversationId,
     String? voiceUrl,
+    int? voiceDuration,
+    int? targetConversationId,
+    List<String>? attachments,
   });
   Future<void> connectToChat(int conversationId, String token);
   Future<void> disconnect();
@@ -22,4 +24,5 @@ abstract class IChatRepository {
   void deleteMessages(List<int> ids);
   void leaveChat();
   void scheduleReconnect();
+  
 }

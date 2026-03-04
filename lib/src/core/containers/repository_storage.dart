@@ -2,6 +2,8 @@ import 'package:coment_app/src/feature/catalog/data/catalog_remote_ds.dart';
 import 'package:coment_app/src/feature/catalog/data/catalog_repository.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository.dart';
 import 'package:coment_app/src/feature/chat/data/chat_repository_impl.dart';
+import 'package:coment_app/src/feature/chat/data/file_repository.dart';
+import 'package:coment_app/src/feature/chat/data/file_repository_impl.dart';
 import 'package:coment_app/src/feature/chat/data/voice_recorder_repository.dart';
 import 'package:coment_app/src/feature/chat/data/voice_recorder_repository_impl.dart';
 import 'package:coment_app/src/feature/profile/data/payment_remote_ds.dart';
@@ -21,6 +23,7 @@ import 'package:coment_app/src/feature/main/data/main_remote_ds.dart';
 import 'package:coment_app/src/feature/main/data/main_repository.dart';
 import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
 import 'package:coment_app/src/feature/profile/data/profile_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class IRepositoryStorage {
   // dao's
@@ -46,9 +49,9 @@ abstract class IRepositoryStorage {
   IPaymentRepository get paymentRepository;
   PaymentRemoteDs get paymentRemoteDS;
 
-
   IChatRepository get chatRepository;
   IVoiceRepository get voiceRepository;
+  IFileRepository get fileRepository;
 
   void close();
 }
@@ -96,7 +99,7 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         // baseUrl: 'http://10.0.2.2:5000/api/v1/',
-         baseUrl: 'https://abca-94-158-58-248.ngrok-free.app/api/v1/',
+        baseUrl: 'https://abca-94-158-58-248.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           // baseUrl: 'http://10.0.2.2:5000/api/v1/',
@@ -173,10 +176,11 @@ class RepositoryStorage implements IRepositoryStorage {
         authRepository: authRepository, // ← уже есть
       );
 
-
   @override
   IChatRepository get chatRepository => ChatRepositoryImpl(restClient);
-@override
+  @override
   IVoiceRepository get voiceRepository => VoiceRepositoryImpl();
 
+  @override
+  IFileRepository get fileRepository => FileRepositoryImpl(Supabase.instance.client);
 }

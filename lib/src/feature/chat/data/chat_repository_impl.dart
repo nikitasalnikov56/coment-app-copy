@@ -301,8 +301,10 @@ class ChatRepositoryImpl implements IChatRepository {
     int? replyToId,
     int? targetConversationId,
     String? voiceUrl,
+    int? voiceDuration,
+    List<String>? attachments,
   }) async {
-    if (content.trim().isEmpty && voiceUrl == null) return;
+    if (content.trim().isEmpty && voiceUrl == null && (attachments == null || attachments.isEmpty)) return;
     if (_channel == null || _channel!.closeCode != null) {
       log("⚠️ Connection lost. Reconnecting before sending...");
       await ensureConnection(); // Пробуем восстановить связь
@@ -322,6 +324,8 @@ class ChatRepositoryImpl implements IChatRepository {
           'content': content.trim(),
           if (replyToId != null) 'replyToId': replyToId,
           if (voiceUrl != null) 'voiceUrl': voiceUrl,
+          if (voiceDuration != null) 'voiceDuration': voiceDuration,
+          if (attachments != null && attachments.isNotEmpty) 'attachments': attachments,
         },
       });
       log('Sending message to Chat #$finalConversationId');
@@ -336,6 +340,8 @@ class ChatRepositoryImpl implements IChatRepository {
           'content': content.trim(),
           if (replyToId != null) 'replyToId': replyToId,
           if (voiceUrl != null) 'voiceUrl': voiceUrl,
+          if (voiceDuration != null) 'voiceDuration': voiceDuration,
+          if (attachments != null && attachments.isNotEmpty) 'attachments': attachments,
         },
       });
     }
@@ -361,7 +367,12 @@ class ChatRepositoryImpl implements IChatRepository {
 
   void _sendJson(Map<String, dynamic> data) {
     if (_channel != null) {
-      _channel!.sink.add(jsonEncode(data));
+      // _channel!.sink.add(jsonEncode(data));
+      final String rawJson = jsonEncode(data);
+      log("📤 WS SENDING: $rawJson"); // СМОТРИ ЭТОТ ЛОГ В КОНСОЛИ
+      _channel!.sink.add(rawJson);
+    } else{
+      log("⚠️ WS CANNOT SEND: Channel is null");
     }
   }
 
