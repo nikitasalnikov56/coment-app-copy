@@ -20,6 +20,9 @@ class SettingsPage extends StatelessWidget {
             width: 0.5,
           ),
         ),
+        actions: [
+          SizedBox(width: 50,)
+        ],
       ),
       // AppBar(title: const Text('Настройки')),
       body: BlocBuilder<ProfileCubit, ProfileState>(

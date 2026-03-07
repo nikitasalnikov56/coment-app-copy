@@ -444,7 +444,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             //   },
                             // ),
                             // : const SizedBox(),
-                            const Gap(12),
+                       
 
                             ///
                             /// <-- `Logout` -->

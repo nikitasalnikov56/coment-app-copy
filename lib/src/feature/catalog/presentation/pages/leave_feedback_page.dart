@@ -109,6 +109,16 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                     style: AppTextStyles.fs20w600.copyWith(height: 1.6)),
                 const Gap(10),
                 _buildStarRating(),
+                const Gap(10),
+                if (selectedRating == 0 && _controller.text.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      "Выберите количество звезд", // Добавь в локализацию
+                      style:
+                          AppTextStyles.fs12w400.copyWith(color: AppColors.red),
+                    ),
+                  ),
                 const SizedBox(height: 26),
 
                 ///
@@ -123,10 +133,22 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                     controller: _controller,
                     decoration: InputDecoration(
                       hintText: context.localized.writeReview,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: (_controller.text.isNotEmpty &&
+                                    countWords(_controller.text) < 15)
+                                ? AppColors.red
+                                : Colors.grey,
+                          )),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            const BorderSide(color: Colors.black, width: 1),
+                        borderSide: BorderSide(
+                            color: (_controller.text.isNotEmpty &&
+                                    countWords(_controller.text) < 15)
+                                ? AppColors.red
+                                : Colors.black,
+                            width: 1),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -144,11 +166,12 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (visibleError)
+                      // if (visibleError)
+                      if (_controller.text.isNotEmpty && countWords(_controller.text) < 15)
                         Text(
                           context.localized.minFiveWords,
-                          style: AppTextStyles.fs12w600
-                              .copyWith(color: AppColors.red2),
+                          style: AppTextStyles.fs12w400
+                              .copyWith(color: AppColors.red),
                         )
                       else
                         Container(),
@@ -411,44 +434,47 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: CustomButton(
-                      onPressed: () async {
-                        log(_controller.text, name: 'text');
-                        log('${imageFileList.length}', name: 'images');
-                        log('$selectedRating', name: 'rating');
-                        log('${widget.productID}', name: 'product id');
-                        // if (countWords(_controller.text) >= 15) {
-                        final comment = _controller.text.trim();
-                        if (comment.isEmpty || countWords(comment) < 15) {
-                          return;
-                        }
-                        final FeedbackPayload feedbackPayload = FeedbackPayload(
-                          productId: widget.productID,
-                          comment: comment,
-                          rating: selectedRating,
-                        );
-               
-                        await BlocProvider.of<LeaveFeedbackCubit>(context)
-                            .createFeedback(
-                          feedbackPayload: feedbackPayload,
-                          imageFeedback: imageFileList,
+                      onPressed: selectedRating > 0
+                          ? () async {
+                              log(_controller.text, name: 'text');
+                              log('${imageFileList.length}', name: 'images');
+                              log('$selectedRating', name: 'rating');
+                              log('${widget.productID}', name: 'product id');
+                              // if (countWords(_controller.text) >= 15) {
+                              final comment = _controller.text.trim();
+                              if (comment.isEmpty || countWords(comment) < 15) {
+                                return;
+                              }
+                              final FeedbackPayload feedbackPayload =
+                                  FeedbackPayload(
+                                productId: widget.productID,
+                                comment: comment,
+                                rating: selectedRating,
+                              );
 
-                        );
-                        // }
-                      },
-                      style: countWords(_controller.text) >= 15 && selectedRating > 0 ||
-                              imageFileList.isNotEmpty 
+                              await BlocProvider.of<LeaveFeedbackCubit>(context)
+                                  .createFeedback(
+                                feedbackPayload: feedbackPayload,
+                                imageFeedback: imageFileList,
+                              );
+                              // }
+                            }
+                          : null,
+                      style: countWords(_controller.text) >= 15 &&
+                                  selectedRating > 0 ||
+                              imageFileList.isNotEmpty
                           ? CustomButtonStyles.mainButtonStyle(context)
                           : CustomButtonStyles.greyButtonStyle(context),
                       child: Text(context.localized.leaveFeedback,
                           style: AppTextStyles.fs16w600.copyWith(
-                              color: countWords(_controller.text) >= 15 && selectedRating > 0 ||
-                                      imageFileList.isNotEmpty 
+                              color: countWords(_controller.text) >= 15 &&
+                                          selectedRating > 0 ||
+                                      imageFileList.isNotEmpty
                                   ? AppColors.white
                                   : Colors.black)),
                     ),
                   ),
                 ),
-              
               ],
             ),
           ),

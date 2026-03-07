@@ -169,6 +169,7 @@ class _MessagePageState extends State<MessagePage> {
                         ? 'Компания #$companyId'
                         : (displayName ?? 'Чат');
                   }
+    
                   return ChatListItem(
                     conversation: conv,
                     onTap: () async {
@@ -177,10 +178,12 @@ class _MessagePageState extends State<MessagePage> {
                       await context.router.push(
                         ChatRoute(
                           conversationId: conv.id,
-                          companyName: chatTitle,
+                          companyName: '${conv.companyName}',
                           currentUser: currentUser,
                           accessToken: currentUser.accessToken!,
                           targetUser: conv.partner!,
+                          isChatPageActive: true,
+                          conversationDTO: conv,
                         ),
                       );
                       // Когда вернулись — обновляем список

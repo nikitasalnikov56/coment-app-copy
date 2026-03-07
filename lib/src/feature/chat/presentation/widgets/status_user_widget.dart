@@ -12,11 +12,14 @@ class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
     super.key,
     required this.widget,
     required this.currentUser,
+    required this.isChatPageActive,
+    // required this.conversation,
   });
 
   final ChatPage widget;
   final UserDTO currentUser;
-
+  final bool isChatPageActive;
+// final ConversationDTO conversation;
   @override
   State<StatusUserWidget> createState() => _StatusUserWidgetState();
 
@@ -67,6 +70,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
 
   @override
   Widget build(BuildContext context) {
+   
     // 1. Используем watch, чтобы виджет обновлялся при загрузке сообщений
     final chatCubit = context.watch<ChatCubit>();
     final activeRepo = chatCubit.repository;
@@ -99,6 +103,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
       return CustomAppBar(
         title: widget.widget.companyName,
         subTitle: '...',
+        isChatPageActive: true,
       );
     }
 
@@ -144,14 +149,18 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
                   : (userToDisplay.name?.isNotEmpty ?? false)
                       ? userToDisplay.name!
                       : widget.widget.companyName,
+          companyName: widget.widget.companyName,
+          companyStyle: AppTextStyles.fs12w400,
           subTitle: isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
           textStyle: AppTextStyles.fs18w700,
           subTitleStyle: AppTextStyles.fs12w400.copyWith(
             color: isOnline ? AppColors.green : AppColors.greyTextColor,
           ),
+          isChatPageActive: true,
+  
+                                     
         );
       },
     );
   }
 }
-

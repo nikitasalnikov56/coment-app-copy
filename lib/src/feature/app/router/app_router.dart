@@ -15,6 +15,7 @@ import 'package:coment_app/src/feature/catalog/presentation/pages/select_categor
 import 'package:coment_app/src/feature/catalog/presentation/pages/subcatalog_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/product_detail_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/feedback_detail_page.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:coment_app/src/feature/chat/presentation/chat_page.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/main_dto.dart';

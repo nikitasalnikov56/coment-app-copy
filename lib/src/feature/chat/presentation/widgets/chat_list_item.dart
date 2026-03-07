@@ -2,6 +2,7 @@ import 'package:coment_app/src/core/constant/constants.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ChatListItem extends StatelessWidget {
   final ConversationDTO conversation;
@@ -20,12 +21,14 @@ class ChatListItem extends StatelessWidget {
     //         ? conversation.title!
     //         : (conversation.partner?.name ?? 'Неизвестный');
     final partner = conversation.partner;
+    print(partner?.avatar);
 
     // Логика выбора имени:
     // 1. Если showRealName == true, берем ник (username)
     // 2. Если данных нет или флаг false, берем обычное имя
     // 3. Если и его нет, берем заголовок диалога
     String nameToDisplay;
+    String? companyNameToDisplay = conversation.companyName;
 
     if (partner?.showRealName == true) {
       nameToDisplay = partner?.username ?? partner?.displayName ?? 'Скрыто';
@@ -40,7 +43,7 @@ class ChatListItem extends StatelessWidget {
     String subtitleText = 'Нет сообщений';
     final lastMsg = conversation.lastMessage;
 
-print(lastMsg?.attachments);
+
     if (lastMsg != null) {
       // Проверяем, есть ли ссылка на голосовое
       if (lastMsg.voiceUrl != null && lastMsg.voiceUrl!.isNotEmpty) {
@@ -71,15 +74,23 @@ print(lastMsg?.attachments);
           ),
         ),
       ),
-      title: Text(
-        partner?.showRealName == true ? '@$nameToDisplay' : nameToDisplay,
-        style: AppTextStyles.fs16w400.copyWith(
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-        ),
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            partner?.showRealName == true ? '@$nameToDisplay' : nameToDisplay,
+            style: AppTextStyles.fs16w400.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+          ),
+          Text(companyNameToDisplay ?? 'Компания не указана', style: AppTextStyles.fs12w400,),
+          const Gap(10)
+        ],
       ),
       subtitle: Text(
-        // conversation.lastMessage?.content ?? 'Нет сообщений',
         subtitleText,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

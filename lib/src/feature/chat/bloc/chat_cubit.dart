@@ -14,22 +14,31 @@ part 'chat_cubit.freezed.dart';
 class ChatCubit extends Cubit<ChatState> {
   final IChatRepository _repository;
   final IFileRepository _fileRepository;
-  final int conversationId;
+  int currentConversationId;
   final String _token;
 
-  late final StreamSubscription _messagesSubscription;
+  StreamSubscription? _messagesSubscription;
 
   // int get conversationId => _companyId;
 
   ChatCubit(
-      this._repository, this._fileRepository, this.conversationId, this._token)
-      : super(const ChatState.initial()) {
-    _repository.connectToChat(conversationId, _token);
-    _messagesSubscription = _listenToMessages();
+    this._repository,
+    this._fileRepository,
+    this.currentConversationId,
+    this._token,
+    bool isCompanyId,
+  ) : super(const ChatState.initial()) {
+    // _repository.connectToChat(conversationId, _token);
+    // _messagesSubscription = _listenToMessages();
+    if (isCompanyId) {
+      _initByCompanyId(currentConversationId);
+    } else {
+      _initByChatId(currentConversationId);
+    }
   }
   IChatRepository get repository => _repository;
   Stream<List<ChatMessageDTO>> get messagesStream =>
-      _repository.getMessagesStream(conversationId);
+      _repository.getMessagesStream(currentConversationId);
   List<ChatMessageDTO> get currentMessages => state.maybeMap(
         loaded: (s) => s.messages,
         orElse: () => _repository.currentMessages,
@@ -44,6 +53,29 @@ class ChatCubit extends Cubit<ChatState> {
         loaded: (s) => s.replyMessage,
         orElse: () => null,
       );
+
+// Если мы зашли со страницы компании (где ID = 500)
+  Future<void> _initByCompanyId(int companyId) async {
+    emit(const ChatState.loading());
+    try {
+      // 1. Узнаем реальный ID чата у репозитория
+      final realId = await _repository.getConversationIdByCompany(companyId, _token);
+      currentConversationId = realId;
+      
+      // 2. Теперь подключаемся нормально
+      _initByChatId(realId);
+    } catch (e) {
+      emit(ChatState.error("Не удалось найти чат с компанией: $e"));
+    }
+  }
+
+  // Обычное подключение, когда ID уже правильный
+  void _initByChatId(int chatId) {
+    _repository.connectToChat(chatId, _token);
+    _messagesSubscription?.cancel();
+    _messagesSubscription = _listenToMessages();
+  }
+
 // ---------------------------------------
   // === ЛОГИКА ВЫДЕЛЕНИЯ ===
   void toggleSelection(int messageId) {
@@ -85,7 +117,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   StreamSubscription _listenToMessages() {
-    return _repository.getMessagesStream(conversationId).listen((messages) {
+    return _repository.getMessagesStream(currentConversationId).listen((messages) {
       final currentSelected = selectedIds;
       final currentReply = replyMessage;
       emit(ChatState.loaded(
@@ -110,11 +142,11 @@ class ChatCubit extends Cubit<ChatState> {
         try {
           attachmentUrls = await _fileRepository.uploadChatFiles(files);
           log('[ChatCubit] Файлы успешно загружены: $attachmentUrls');
-        } catch (e, stack){
+        } catch (e, stack) {
           log('[ChatCubit] КРИТИЧЕСКАЯ ОШИБКА ЗАГРУЗКИ ФАЙЛОВ: $e');
-        log('[ChatCubit] StackTrace: $stack');
-        // Если загрузка файлов упала, мы не должны отправлять пустое сообщение со ссылками
-        rethrow;
+          log('[ChatCubit] StackTrace: $stack');
+          // Если загрузка файлов упала, мы не должны отправлять пустое сообщение со ссылками
+          rethrow;
         }
       }
       await _repository.sendMessage(
@@ -154,7 +186,7 @@ class ChatCubit extends Cubit<ChatState> {
   // 🔥 КЛЮЧЕВОЙ МОМЕНТ: ЗАКРЫВАЕМ ВСЁ ПРИ УНИЧТОЖЕНИИ CUBIT
   @override
   Future<void> close() {
-    _messagesSubscription.cancel(); // Отписываемся от стрима
+    _messagesSubscription!.cancel(); // Отписываемся от стрима
     // _repository.disconnect(); // Закрываем WebSocket
     _repository.leaveChat(); // Закрываем WebSocket
     // ⚠️ НЕ вызываем _repository.dispose() здесь, если репозиторий используется где-то ещё!

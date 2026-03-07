@@ -92,7 +92,9 @@ class ConversationDTO with _$ConversationDTO {
     // ignore: invalid_annotation_target
     @JsonKey(fromJson: _userFromJson) UserDTO? partner,
     int? companyId,
-    List<String>? attachments
+    List<String>? attachments,
+
+    String? companyName,
   }) = _ConversationDTO;
 
   factory ConversationDTO.fromJson(Map<String, dynamic> json) =>

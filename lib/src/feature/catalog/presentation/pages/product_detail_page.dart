@@ -913,8 +913,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             accessToken: accessToken ?? '',
             currentUser: currentUser,
             targetUser: target,
+            isCompanyId: true,
+            
           ),
         );
+        
       },
       child: SvgPicture.asset(
         AssetsConstants.message,

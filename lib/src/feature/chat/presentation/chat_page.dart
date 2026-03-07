@@ -32,6 +32,9 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     required this.currentUser,
     required this.accessToken,
     required this.targetUser,
+     this.conversationDTO,
+    this.isCompanyId = false,
+    this.isChatPageActive = false,
   });
   final int conversationId;
   // final int companyId;
@@ -39,6 +42,9 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
   final String accessToken;
   final UserDTO currentUser;
   final UserDTO targetUser;
+  final bool isCompanyId;
+  final bool isChatPageActive;
+  final ConversationDTO? conversationDTO;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -52,6 +58,7 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
         // companyId,
         conversationId,
         accessToken,
+        isCompanyId,
       ),
       child: this,
     );
@@ -166,6 +173,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               : StatusUserWidget(
                   widget: widget,
                   currentUser: widget.currentUser,
+                  isChatPageActive: widget.isChatPageActive,
+                
                 ),
           body: Column(
             children: [
@@ -903,35 +912,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 
-//   void _sendMessage() async {
-//     final text = _textController.text.trim();
-//     if (text.isEmpty && _imageFiles.isEmpty && _documentFiles.isEmpty) return;
 
-// // Собираем все файлы из твоих существующих списков в один массив
-//     final allFiles = [..._imageFiles, ..._documentFiles];
-
-//     if (text.isNotEmpty || allFiles.isNotEmpty) {
-//       context.read<ChatCubit>().sendMessage(
-//             text,
-//             files: allFiles,
-//           );
-//     }
-
-//     ChatMessageDTO(
-//       id: 0,
-//       content: text,
-//       createdAt: DateTime.now(),
-//       sender: widget.currentUser,
-//       conversationId: widget.conversationId,
-//       attachments: [],
-//     );
-
-//     _textController.clear();
-//     setState(() {
-//       _imageFiles.clear();
-//       _documentFiles.clear();
-//     });
-//   }
   void _sendMessage() async {
     final text = _textController.text.trim();
     final allFiles = [..._imageFiles, ..._documentFiles];
@@ -1025,7 +1006,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             itemBuilder: (context, index) {
                               final chat = conversations[index];
 
-                              if (chat.id == cubit.conversationId) {
+                              if (chat.id == cubit.currentConversationId) {
                                 return const SizedBox.shrink();
                               }
                               final userData = chat.partner;

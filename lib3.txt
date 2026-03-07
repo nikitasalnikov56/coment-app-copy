@@ -21841,14 +21841,17 @@ lib\src\feature\app\presentation\widgets\custom_appbar_widget.dart
 ------------------------------------------------------------------
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/assets_constants.dart';
+import 'package:coment_app/src/core/constant/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:gap/gap.dart';
+import 'package:marquee/marquee.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final String? subTitle;
+  final String? companyName;
 
   final String? svg;
   final Color? color;
@@ -21858,13 +21861,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? onBack;
   final ShapeBorder? shape;
   final TextStyle? textStyle;
+  final TextStyle? companyStyle;
   final bool isBackButton;
   final bool isOnline;
   final TextStyle? subTitleStyle;
   final bool btnBack;
+  final bool isChatPageActive;
+  // final String? avatarUrl;
+  final String? decorationImageUrl;
+
+  final Widget? titleWidget;
+
   const CustomAppBar({
     super.key,
     this.title,
+    this.companyName,
     this.subTitle,
     this.actions,
     this.onPressed,
@@ -21873,46 +21884,142 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.quarterTurns,
     this.shape,
     this.textStyle,
+    this.companyStyle,
     this.subTitleStyle,
     this.isBackButton = true,
     this.isOnline = false,
     this.btnBack = false,
-    this.onBack = false ,
-
+    this.onBack = false,
+    this.isChatPageActive = false,
+    this.titleWidget,
+    // this.avatarUrl = '',
+    this.decorationImageUrl,
   });
+
+  String companyNameData() {
+    if (companyName != null) {
+      return '$companyName';
+    } else {
+      return '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: 57,
-      leading: !btnBack ? IconButton(
-        padding: EdgeInsets.zero,
-        onPressed: () {
-           context.router.maybePop();
-        },
-        splashRadius: 21,
-        icon: isBackButton
-            ? SvgPicture.asset(svg ?? AssetsConstants.backButton)
-            : Container(
-                width: 74,
-              ),
-      ) : null,
+      leading: !btnBack
+          ? IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                context.router.maybePop();
+              },
+              splashRadius: 21,
+              icon: isBackButton
+                  ? SvgPicture.asset(svg ?? AssetsConstants.backButton)
+                  : Container(
+                      width: 74,
+                    ),
+            )
+          : null,
       centerTitle: true,
-      title: Column(
-        children: [
-          title != null
-              ? Text(title!,
-                  style: textStyle ??
-                      AppTextStyles.fs16w700.copyWith(color: AppColors.text))
-              : const SizedBox(),
-          const Gap(2),
-          subTitle != null
-              ? Text(subTitle!, style: subTitleStyle)
-              : const SizedBox(),
-        ],
-      ),
+      title:isChatPageActive ? _buildChatTitle() :  _buildTitleColumn(isChatPageActive),
       actions: actions,
       shape: shape,
+    );
+  }
+
+  Widget _buildChatTitle() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildAvatar(),
+        const Gap(15),
+        Flexible(
+          child: _buildTitleColumn(isChatPageActive),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAvatar() {
+     return Container(
+       height: 40, width: 40,
+       decoration: BoxDecoration(
+         shape: BoxShape.circle,
+         border: Border.all(color: const Color(0xFF7573F3), width: 3),
+         image: DecorationImage(
+           fit: BoxFit.cover,
+           image: NetworkImage(decorationImageUrl ?? NOT_FOUND_IMAGE),
+         ),
+       ),
+     );
+  }
+
+  Widget _buildTitleColumn(bool isChatPageActive) {
+    return Column(
+      children: [
+        title != null
+            ? SizedBox(
+                height: 22, // Задай фиксированную высоту для Marquee
+                width: double.infinity,
+                child: _buildTitleWidget(isChatPageActive),
+              )
+            : const SizedBox(),
+        const Gap(2),
+        const Gap(2),
+        subTitle != null
+            ? Text(subTitle!, style: subTitleStyle)
+            : const SizedBox(),
+      ],
+    );
+  }
+
+  Widget _buildTitleWidget(bool isChatPageActive) {
+    final String fullText =
+        '${companyNameData()} ${isChatPageActive ? '($title)' : '$title'}';
+    final TextStyle style =
+        textStyle ?? AppTextStyles.fs16w700.copyWith(color: AppColors.text);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 1. Измеряем ширину текста при заданном стиле
+        final textPainter = TextPainter(
+          text: TextSpan(text: fullText, style: style),
+          maxLines: 1,
+          textDirection: TextDirection.ltr,
+        )..layout();
+
+        // 2. Сравниваем ширину текста с шириной экрана (минус отступы для кнопок)
+        // constraints.maxWidth обычно дает доступную ширину заголовка в AppBar
+        final bool isOverflowing = textPainter.width > constraints.maxWidth;
+
+        if (isOverflowing) {
+          // ТЕКСТ НЕ ВЛЕЗАЕТ — включаем бегущую строку
+          return Marquee(
+            text: fullText,
+            style: style,
+            scrollAxis: Axis.horizontal,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            blankSpace: 80.0,
+            velocity: 35.0,
+            pauseAfterRound: const Duration(days: 5),
+            startAfter: const Duration(seconds: 2),
+            startPadding: 0.0,
+            accelerationDuration: const Duration(seconds: 1),
+            decelerationDuration: const Duration(seconds: 1),
+          );
+        } else {
+          // ТЕКСТ ВЛЕЗАЕТ — показываем просто текст по центру
+          return Center(
+            child: Text(
+              fullText,
+              style: style,
+              maxLines: 1,
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -22064,6 +22171,7 @@ import 'package:coment_app/src/feature/catalog/presentation/pages/select_categor
 import 'package:coment_app/src/feature/catalog/presentation/pages/subcatalog_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/product_detail_page.dart';
 import 'package:coment_app/src/feature/catalog/presentation/pages/feedback_detail_page.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:coment_app/src/feature/chat/presentation/chat_page.dart';
 import 'package:coment_app/src/feature/main/model/feedback_dto.dart';
 import 'package:coment_app/src/feature/main/model/main_dto.dart';
@@ -22347,6 +22455,9 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
     required UserDTO currentUser,
     required String accessToken,
     required UserDTO targetUser,
+    ConversationDTO? conversationDTO,
+    bool isCompanyId = false,
+    bool isChatPageActive = false,
     List<PageRouteInfo>? children,
   }) : super(
          ChatRoute.name,
@@ -22357,6 +22468,9 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
            currentUser: currentUser,
            accessToken: accessToken,
            targetUser: targetUser,
+           conversationDTO: conversationDTO,
+           isCompanyId: isCompanyId,
+           isChatPageActive: isChatPageActive,
          ),
          initialChildren: children,
        );
@@ -22375,6 +22489,9 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
           currentUser: args.currentUser,
           accessToken: args.accessToken,
           targetUser: args.targetUser,
+          conversationDTO: args.conversationDTO,
+          isCompanyId: args.isCompanyId,
+          isChatPageActive: args.isChatPageActive,
         ),
       );
     },
@@ -22389,6 +22506,9 @@ class ChatRouteArgs {
     required this.currentUser,
     required this.accessToken,
     required this.targetUser,
+    this.conversationDTO,
+    this.isCompanyId = false,
+    this.isChatPageActive = false,
   });
 
   final Key? key;
@@ -22403,9 +22523,15 @@ class ChatRouteArgs {
 
   final UserDTO targetUser;
 
+  final ConversationDTO? conversationDTO;
+
+  final bool isCompanyId;
+
+  final bool isChatPageActive;
+
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, conversationId: $conversationId, companyName: $companyName, currentUser: $currentUser, accessToken: $accessToken, targetUser: $targetUser}';
+    return 'ChatRouteArgs{key: $key, conversationId: $conversationId, companyName: $companyName, currentUser: $currentUser, accessToken: $accessToken, targetUser: $targetUser, conversationDTO: $conversationDTO, isCompanyId: $isCompanyId, isChatPageActive: $isChatPageActive}';
   }
 }
 
@@ -44051,6 +44177,16 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                     style: AppTextStyles.fs20w600.copyWith(height: 1.6)),
                 const Gap(10),
                 _buildStarRating(),
+                const Gap(10),
+                if (selectedRating == 0 && _controller.text.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      "Выберите количество звезд", // Добавь в локализацию
+                      style:
+                          AppTextStyles.fs12w400.copyWith(color: AppColors.red),
+                    ),
+                  ),
                 const SizedBox(height: 26),
 
                 ///
@@ -44065,10 +44201,22 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                     controller: _controller,
                     decoration: InputDecoration(
                       hintText: context.localized.writeReview,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: (_controller.text.isNotEmpty &&
+                                    countWords(_controller.text) < 15)
+                                ? AppColors.red
+                                : Colors.grey,
+                          )),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            const BorderSide(color: Colors.black, width: 1),
+                        borderSide: BorderSide(
+                            color: (_controller.text.isNotEmpty &&
+                                    countWords(_controller.text) < 15)
+                                ? AppColors.red
+                                : Colors.black,
+                            width: 1),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -44086,11 +44234,12 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (visibleError)
+                      // if (visibleError)
+                      if (_controller.text.isNotEmpty && countWords(_controller.text) < 15)
                         Text(
                           context.localized.minFiveWords,
-                          style: AppTextStyles.fs12w600
-                              .copyWith(color: AppColors.red2),
+                          style: AppTextStyles.fs12w400
+                              .copyWith(color: AppColors.red),
                         )
                       else
                         Container(),
@@ -44353,44 +44502,47 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: CustomButton(
-                      onPressed: () async {
-                        log(_controller.text, name: 'text');
-                        log('${imageFileList.length}', name: 'images');
-                        log('$selectedRating', name: 'rating');
-                        log('${widget.productID}', name: 'product id');
-                        // if (countWords(_controller.text) >= 15) {
-                        final comment = _controller.text.trim();
-                        if (comment.isEmpty || countWords(comment) < 15) {
-                          return;
-                        }
-                        final FeedbackPayload feedbackPayload = FeedbackPayload(
-                          productId: widget.productID,
-                          comment: comment,
-                          rating: selectedRating,
-                        );
-               
-                        await BlocProvider.of<LeaveFeedbackCubit>(context)
-                            .createFeedback(
-                          feedbackPayload: feedbackPayload,
-                          imageFeedback: imageFileList,
+                      onPressed: selectedRating > 0
+                          ? () async {
+                              log(_controller.text, name: 'text');
+                              log('${imageFileList.length}', name: 'images');
+                              log('$selectedRating', name: 'rating');
+                              log('${widget.productID}', name: 'product id');
+                              // if (countWords(_controller.text) >= 15) {
+                              final comment = _controller.text.trim();
+                              if (comment.isEmpty || countWords(comment) < 15) {
+                                return;
+                              }
+                              final FeedbackPayload feedbackPayload =
+                                  FeedbackPayload(
+                                productId: widget.productID,
+                                comment: comment,
+                                rating: selectedRating,
+                              );
 
-                        );
-                        // }
-                      },
-                      style: countWords(_controller.text) >= 15 && selectedRating > 0 ||
-                              imageFileList.isNotEmpty 
+                              await BlocProvider.of<LeaveFeedbackCubit>(context)
+                                  .createFeedback(
+                                feedbackPayload: feedbackPayload,
+                                imageFeedback: imageFileList,
+                              );
+                              // }
+                            }
+                          : null,
+                      style: countWords(_controller.text) >= 15 &&
+                                  selectedRating > 0 ||
+                              imageFileList.isNotEmpty
                           ? CustomButtonStyles.mainButtonStyle(context)
                           : CustomButtonStyles.greyButtonStyle(context),
                       child: Text(context.localized.leaveFeedback,
                           style: AppTextStyles.fs16w600.copyWith(
-                              color: countWords(_controller.text) >= 15 && selectedRating > 0 ||
-                                      imageFileList.isNotEmpty 
+                              color: countWords(_controller.text) >= 15 &&
+                                          selectedRating > 0 ||
+                                      imageFileList.isNotEmpty
                                   ? AppColors.white
                                   : Colors.black)),
                     ),
                   ),
                 ),
-              
               ],
             ),
           ),
@@ -45487,8 +45639,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             accessToken: accessToken ?? '',
             currentUser: currentUser,
             targetUser: target,
+            isCompanyId: true,
+            
           ),
         );
+        
       },
       child: SvgPicture.asset(
         AssetsConstants.message,
@@ -51401,21 +51556,31 @@ part 'chat_cubit.freezed.dart';
 class ChatCubit extends Cubit<ChatState> {
   final IChatRepository _repository;
   final IFileRepository _fileRepository;
-  final int conversationId;
+  int currentConversationId;
   final String _token;
 
-  late final StreamSubscription _messagesSubscription;
+  StreamSubscription? _messagesSubscription;
 
   // int get conversationId => _companyId;
 
-  ChatCubit(this._repository, this._fileRepository, this.conversationId, this._token)
-      : super(const ChatState.initial()) {
-    _repository.connectToChat(conversationId, _token);
-    _messagesSubscription = _listenToMessages();
+  ChatCubit(
+    this._repository,
+    this._fileRepository,
+    this.currentConversationId,
+    this._token,
+    bool isCompanyId,
+  ) : super(const ChatState.initial()) {
+    // _repository.connectToChat(conversationId, _token);
+    // _messagesSubscription = _listenToMessages();
+    if (isCompanyId) {
+      _initByCompanyId(currentConversationId);
+    } else {
+      _initByChatId(currentConversationId);
+    }
   }
   IChatRepository get repository => _repository;
   Stream<List<ChatMessageDTO>> get messagesStream =>
-      _repository.getMessagesStream(conversationId);
+      _repository.getMessagesStream(currentConversationId);
   List<ChatMessageDTO> get currentMessages => state.maybeMap(
         loaded: (s) => s.messages,
         orElse: () => _repository.currentMessages,
@@ -51430,6 +51595,29 @@ class ChatCubit extends Cubit<ChatState> {
         loaded: (s) => s.replyMessage,
         orElse: () => null,
       );
+
+// Если мы зашли со страницы компании (где ID = 500)
+  Future<void> _initByCompanyId(int companyId) async {
+    emit(const ChatState.loading());
+    try {
+      // 1. Узнаем реальный ID чата у репозитория
+      final realId = await _repository.getConversationIdByCompany(companyId, _token);
+      currentConversationId = realId;
+      
+      // 2. Теперь подключаемся нормально
+      _initByChatId(realId);
+    } catch (e) {
+      emit(ChatState.error("Не удалось найти чат с компанией: $e"));
+    }
+  }
+
+  // Обычное подключение, когда ID уже правильный
+  void _initByChatId(int chatId) {
+    _repository.connectToChat(chatId, _token);
+    _messagesSubscription?.cancel();
+    _messagesSubscription = _listenToMessages();
+  }
+
 // ---------------------------------------
   // === ЛОГИКА ВЫДЕЛЕНИЯ ===
   void toggleSelection(int messageId) {
@@ -51471,7 +51659,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   StreamSubscription _listenToMessages() {
-    return _repository.getMessagesStream(conversationId).listen((messages) {
+    return _repository.getMessagesStream(currentConversationId).listen((messages) {
       final currentSelected = selectedIds;
       final currentReply = replyMessage;
       emit(ChatState.loaded(
@@ -51491,7 +51679,17 @@ class ChatCubit extends Cubit<ChatState> {
     try {
       List<String>? attachmentUrls;
       if (files != null && files.isNotEmpty) {
-        attachmentUrls = await _fileRepository.uploadChatFiles(files);
+        log('[ChatCubit] Начинаю загрузку ${files.length} файлов...');
+
+        try {
+          attachmentUrls = await _fileRepository.uploadChatFiles(files);
+          log('[ChatCubit] Файлы успешно загружены: $attachmentUrls');
+        } catch (e, stack) {
+          log('[ChatCubit] КРИТИЧЕСКАЯ ОШИБКА ЗАГРУЗКИ ФАЙЛОВ: $e');
+          log('[ChatCubit] StackTrace: $stack');
+          // Если загрузка файлов упала, мы не должны отправлять пустое сообщение со ссылками
+          rethrow;
+        }
       }
       await _repository.sendMessage(
         content,
@@ -51505,7 +51703,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   // === НОВЫЙ МЕТОД ДЛЯ АУДИО ===
-  Future<void> sendVoiceMessage(String url,  int durationMs) async {
+  Future<void> sendVoiceMessage(String url, int durationMs) async {
     // Получаем ID сообщения, на которое отвечаем (если есть)
     final replyToId = replyMessage?.id;
 
@@ -51530,7 +51728,7 @@ class ChatCubit extends Cubit<ChatState> {
   // 🔥 КЛЮЧЕВОЙ МОМЕНТ: ЗАКРЫВАЕМ ВСЁ ПРИ УНИЧТОЖЕНИИ CUBIT
   @override
   Future<void> close() {
-    _messagesSubscription.cancel(); // Отписываемся от стрима
+    _messagesSubscription!.cancel(); // Отписываемся от стрима
     // _repository.disconnect(); // Закрываем WebSocket
     _repository.leaveChat(); // Закрываем WebSocket
     // ⚠️ НЕ вызываем _repository.dispose() здесь, если репозиторий используется где-то ещё!
@@ -53968,7 +54166,7 @@ abstract class IChatRepository {
   void deleteMessages(List<int> ids);
   void leaveChat();
   void scheduleReconnect();
-  
+  Future<int> getConversationIdByCompany(int companyId, String token);
 }
 
 
@@ -54281,7 +54479,9 @@ class ChatRepositoryImpl implements IChatRepository {
     int? voiceDuration,
     List<String>? attachments,
   }) async {
-    if (content.trim().isEmpty && voiceUrl == null) return;
+    if (content.trim().isEmpty &&
+        voiceUrl == null &&
+        (attachments == null || attachments.isEmpty)) return;
     if (_channel == null || _channel!.closeCode != null) {
       log("⚠️ Connection lost. Reconnecting before sending...");
       await ensureConnection(); // Пробуем восстановить связь
@@ -54302,7 +54502,8 @@ class ChatRepositoryImpl implements IChatRepository {
           if (replyToId != null) 'replyToId': replyToId,
           if (voiceUrl != null) 'voiceUrl': voiceUrl,
           if (voiceDuration != null) 'voiceDuration': voiceDuration,
-          if (attachments != null && attachments.isNotEmpty) 'attachments': attachments,
+          if (attachments != null && attachments.isNotEmpty)
+            'attachments': attachments,
         },
       });
       log('Sending message to Chat #$finalConversationId');
@@ -54318,7 +54519,8 @@ class ChatRepositoryImpl implements IChatRepository {
           if (replyToId != null) 'replyToId': replyToId,
           if (voiceUrl != null) 'voiceUrl': voiceUrl,
           if (voiceDuration != null) 'voiceDuration': voiceDuration,
-          if (attachments != null && attachments.isNotEmpty) 'attachments': attachments,
+          if (attachments != null && attachments.isNotEmpty)
+            'attachments': attachments,
         },
       });
     }
@@ -54344,7 +54546,12 @@ class ChatRepositoryImpl implements IChatRepository {
 
   void _sendJson(Map<String, dynamic> data) {
     if (_channel != null) {
-      _channel!.sink.add(jsonEncode(data));
+      // _channel!.sink.add(jsonEncode(data));
+      final String rawJson = jsonEncode(data);
+      log("📤 WS SENDING: $rawJson"); // СМОТРИ ЭТОТ ЛОГ В КОНСОЛИ
+      _channel!.sink.add(rawJson);
+    } else {
+      log("⚠️ WS CANNOT SEND: Channel is null");
     }
   }
 
@@ -54457,6 +54664,21 @@ class ChatRepositoryImpl implements IChatRepository {
       }
     });
   }
+
+  @override
+  Future<int> getConversationIdByCompany(int companyId, String token) async {
+    try {
+      final response = await _restClient.get(
+        'conversations/by-company/$companyId',
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      // Предполагаем, что бэк возвращает { "id": 123 }
+      return response['id'] as int;
+    } catch (e) {
+      log("❌ Ошибка получения ID чата по компании: $e");
+      rethrow;
+    }
+  }
 }
 
 
@@ -54476,6 +54698,7 @@ abstract class IFileRepository {
 
 lib\src\feature\chat\data\file_repository_impl.dart
 ---------------------------------------------------
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:coment_app/src/feature/chat/data/file_repository.dart';
@@ -54491,18 +54714,27 @@ class FileRepositoryImpl implements IFileRepository {
     final List<String> urls = [];
 
     for (var file in files) {
-      final fileName = '${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
-      
-      // Загружаем в бакет 'chat_attachments'
-      await _supabase.storage.from('chat_attachments').upload(
-        fileName,
-        file,
-        fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
-      );
+      try {
+        final fileName =
+            '${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
+        log('[FileRepository] Загрузка файла: $fileName');
 
-      // Получаем публичную ссылку
-      final String publicUrl = _supabase.storage.from('chat_attachments').getPublicUrl(fileName);
-      urls.add(publicUrl);
+        // Загружаем в бакет 'chat_attachments'
+        await _supabase.storage.from('chat_attachments').upload(
+              fileName,
+              file,
+              fileOptions:
+                  const FileOptions(cacheControl: '3600', upsert: false),
+            );
+
+        // Получаем публичную ссылку
+        final String publicUrl =
+            _supabase.storage.from('chat_attachments').getPublicUrl(fileName);
+        urls.add(publicUrl);
+      } catch (e) {
+        log('[FileRepository] Ошибка при работе с Supabase Storage: $e');
+        rethrow;
+      }
     }
     return urls;
   }
@@ -54515,6 +54747,7 @@ class FileRepositoryImpl implements IFileRepository {
     return _supabase.storage.from('chat_voices').getPublicUrl(fileName);
   }
 }
+
 
 
 lib\src\feature\chat\data\voice_recorder_repository.dart
@@ -55146,6 +55379,9 @@ class ConversationDTO with _$ConversationDTO {
     // ignore: invalid_annotation_target
     @JsonKey(fromJson: _userFromJson) UserDTO? partner,
     int? companyId,
+    List<String>? attachments,
+
+    String? companyName,
   }) = _ConversationDTO;
 
   factory ConversationDTO.fromJson(Map<String, dynamic> json) =>
@@ -55245,6 +55481,8 @@ mixin _$ConversationDTO {
   @JsonKey(fromJson: _userFromJson)
   UserDTO? get partner => throw _privateConstructorUsedError;
   int? get companyId => throw _privateConstructorUsedError;
+  List<String>? get attachments => throw _privateConstructorUsedError;
+  String? get companyName => throw _privateConstructorUsedError;
 
   /// Serializes this ConversationDTO to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55268,7 +55506,9 @@ abstract class $ConversationDTOCopyWith<$Res> {
       @JsonKey(fromJson: _chatMessageFromJson) ChatMessageDTO? lastMessage,
       DateTime? lastMessageDate,
       @JsonKey(fromJson: _userFromJson) UserDTO? partner,
-      int? companyId});
+      int? companyId,
+      List<String>? attachments,
+      String? companyName});
 
   $ChatMessageDTOCopyWith<$Res>? get lastMessage;
   $UserDTOCopyWith<$Res>? get partner;
@@ -55295,6 +55535,8 @@ class _$ConversationDTOCopyWithImpl<$Res, $Val extends ConversationDTO>
     Object? lastMessageDate = freezed,
     Object? partner = freezed,
     Object? companyId = freezed,
+    Object? attachments = freezed,
+    Object? companyName = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -55321,6 +55563,14 @@ class _$ConversationDTOCopyWithImpl<$Res, $Val extends ConversationDTO>
           ? _value.companyId
           : companyId // ignore: cast_nullable_to_non_nullable
               as int?,
+      attachments: freezed == attachments
+          ? _value.attachments
+          : attachments // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      companyName: freezed == companyName
+          ? _value.companyName
+          : companyName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -55367,7 +55617,9 @@ abstract class _$$ConversationDTOImplCopyWith<$Res>
       @JsonKey(fromJson: _chatMessageFromJson) ChatMessageDTO? lastMessage,
       DateTime? lastMessageDate,
       @JsonKey(fromJson: _userFromJson) UserDTO? partner,
-      int? companyId});
+      int? companyId,
+      List<String>? attachments,
+      String? companyName});
 
   @override
   $ChatMessageDTOCopyWith<$Res>? get lastMessage;
@@ -55394,6 +55646,8 @@ class __$$ConversationDTOImplCopyWithImpl<$Res>
     Object? lastMessageDate = freezed,
     Object? partner = freezed,
     Object? companyId = freezed,
+    Object? attachments = freezed,
+    Object? companyName = freezed,
   }) {
     return _then(_$ConversationDTOImpl(
       id: null == id
@@ -55420,6 +55674,14 @@ class __$$ConversationDTOImplCopyWithImpl<$Res>
           ? _value.companyId
           : companyId // ignore: cast_nullable_to_non_nullable
               as int?,
+      attachments: freezed == attachments
+          ? _value._attachments
+          : attachments // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      companyName: freezed == companyName
+          ? _value.companyName
+          : companyName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -55433,7 +55695,10 @@ class _$ConversationDTOImpl implements _ConversationDTO {
       @JsonKey(fromJson: _chatMessageFromJson) this.lastMessage,
       this.lastMessageDate,
       @JsonKey(fromJson: _userFromJson) this.partner,
-      this.companyId});
+      this.companyId,
+      final List<String>? attachments,
+      this.companyName})
+      : _attachments = attachments;
 
   factory _$ConversationDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$ConversationDTOImplFromJson(json);
@@ -55454,10 +55719,22 @@ class _$ConversationDTOImpl implements _ConversationDTO {
   final UserDTO? partner;
   @override
   final int? companyId;
+  final List<String>? _attachments;
+  @override
+  List<String>? get attachments {
+    final value = _attachments;
+    if (value == null) return null;
+    if (_attachments is EqualUnmodifiableListView) return _attachments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? companyName;
 
   @override
   String toString() {
-    return 'ConversationDTO(id: $id, title: $title, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, partner: $partner, companyId: $companyId)';
+    return 'ConversationDTO(id: $id, title: $title, lastMessage: $lastMessage, lastMessageDate: $lastMessageDate, partner: $partner, companyId: $companyId, attachments: $attachments, companyName: $companyName)';
   }
 
   @override
@@ -55473,13 +55750,25 @@ class _$ConversationDTOImpl implements _ConversationDTO {
                 other.lastMessageDate == lastMessageDate) &&
             (identical(other.partner, partner) || other.partner == partner) &&
             (identical(other.companyId, companyId) ||
-                other.companyId == companyId));
+                other.companyId == companyId) &&
+            const DeepCollectionEquality()
+                .equals(other._attachments, _attachments) &&
+            (identical(other.companyName, companyName) ||
+                other.companyName == companyName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, title, lastMessage, lastMessageDate, partner, companyId);
+      runtimeType,
+      id,
+      title,
+      lastMessage,
+      lastMessageDate,
+      partner,
+      companyId,
+      const DeepCollectionEquality().hash(_attachments),
+      companyName);
 
   /// Create a copy of ConversationDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -55506,7 +55795,9 @@ abstract class _ConversationDTO implements ConversationDTO {
       final ChatMessageDTO? lastMessage,
       final DateTime? lastMessageDate,
       @JsonKey(fromJson: _userFromJson) final UserDTO? partner,
-      final int? companyId}) = _$ConversationDTOImpl;
+      final int? companyId,
+      final List<String>? attachments,
+      final String? companyName}) = _$ConversationDTOImpl;
 
   factory _ConversationDTO.fromJson(Map<String, dynamic> json) =
       _$ConversationDTOImpl.fromJson;
@@ -55525,6 +55816,10 @@ abstract class _ConversationDTO implements ConversationDTO {
   UserDTO? get partner;
   @override
   int? get companyId;
+  @override
+  List<String>? get attachments;
+  @override
+  String? get companyName;
 
   /// Create a copy of ConversationDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -55557,6 +55852,10 @@ _$ConversationDTOImpl _$$ConversationDTOImplFromJson(
           : DateTime.parse(json['lastMessageDate'] as String),
       partner: _userFromJson(json['partner']),
       companyId: (json['companyId'] as num?)?.toInt(),
+      attachments: (json['attachments'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      companyName: json['companyName'] as String?,
     );
 
 Map<String, dynamic> _$$ConversationDTOImplToJson(
@@ -55568,6 +55867,8 @@ Map<String, dynamic> _$$ConversationDTOImplToJson(
       'lastMessageDate': instance.lastMessageDate?.toIso8601String(),
       'partner': instance.partner,
       'companyId': instance.companyId,
+      'attachments': instance.attachments,
+      'companyName': instance.companyName,
     };
 
 
@@ -55596,7 +55897,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
@@ -55609,6 +55909,9 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     required this.currentUser,
     required this.accessToken,
     required this.targetUser,
+     this.conversationDTO,
+    this.isCompanyId = false,
+    this.isChatPageActive = false,
   });
   final int conversationId;
   // final int companyId;
@@ -55616,6 +55919,9 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
   final String accessToken;
   final UserDTO currentUser;
   final UserDTO targetUser;
+  final bool isCompanyId;
+  final bool isChatPageActive;
+  final ConversationDTO? conversationDTO;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -55629,6 +55935,7 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
         // companyId,
         conversationId,
         accessToken,
+        isCompanyId,
       ),
       child: this,
     );
@@ -55743,6 +56050,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               : StatusUserWidget(
                   widget: widget,
                   currentUser: widget.currentUser,
+                  isChatPageActive: widget.isChatPageActive,
+                
                 ),
           body: Column(
             children: [
@@ -55807,7 +56116,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               const SizedBox(
                 height: 10,
               ),
-                 _buildSelectedFilesList(),
+              _buildSelectedFilesList(),
               AnimatedSize(
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
@@ -55827,14 +56136,13 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                       ),
                     );
                   },
-                  
+
                   // ЕСЛИ ВЫДЕЛЕНО -> ПОКАЗЫВАЕМ МЕНЮ, ИНАЧЕ -> ПОЛЕ ВВОДА
                   child: isSelectionMode
                       ? _buildSelectionMenu(cubit, context)
                       : _buildInputArea(cubit),
                 ),
               ),
-           
               const SizedBox(
                 height: 20,
               ),
@@ -56061,17 +56369,41 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: message.attachments!.map((url) {
                               if (_isImage(url)) {
+                                final String heroTag = '${message.id}_$url';
                                 // ОТОБРАЖЕНИЕ КАРТИНКИ
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      url,
-                                      width: 200,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, e, s) =>
-                                          const Icon(Icons.broken_image),
+                                return GestureDetector(
+                                  onTap: () async {
+                                    if (isSelectionMode) {
+                                      cubit.toggleSelection(message.id);
+                                      return;
+                                    }
+
+                                    // Открываем на весь экран
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            FullScreenImagePage(
+                                          imageUrl: url,
+                                          tag: heroTag,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 4),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Hero(
+                                        tag: heroTag,
+                                        child: Image.network(
+                                          url,
+                                          width: 200,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, e, s) =>
+                                              const Icon(Icons.broken_image),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );
@@ -56082,7 +56414,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                     final uri = Uri.parse(url);
                                     if (await canLaunchUrl(uri)) {
                                       await launchUrl(uri,
-                                          mode: LaunchMode.externalApplication);
+                                          mode: LaunchMode
+                                              .platformDefault);
                                     }
                                   },
                                   child: Container(
@@ -56456,34 +56789,32 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 
+
   void _sendMessage() async {
     final text = _textController.text.trim();
-    if (text.isEmpty && _imageFiles.isEmpty && _documentFiles.isEmpty) return;
-
-// Собираем все файлы из твоих существующих списков в один массив
     final allFiles = [..._imageFiles, ..._documentFiles];
 
-    if (text.isNotEmpty || allFiles.isNotEmpty) {
-      context.read<ChatCubit>().sendMessage(
+    if (text.isEmpty && allFiles.isEmpty) return;
+
+    try {
+      // 1. ЖДЕМ (await), пока кубит реально загрузит файлы
+      await context.read<ChatCubit>().sendMessage(
             text,
             files: allFiles,
           );
+
+      // Если дошли сюда — всё отправилось успешно
+    } catch (e) {
+      // 2. Если упало (например, тот самый 403), мы логируем это
+      log('Ошибка при отправке: $e');
+    } finally {
+      // 3. ГАРАНТИРОВАННО очищаем UI в любом случае
+      _textController.clear();
+      setState(() {
+        _imageFiles.clear();
+        _documentFiles.clear();
+      });
     }
-
-    ChatMessageDTO(
-      id: 0,
-      content: text,
-      createdAt: DateTime.now(),
-      sender: widget.currentUser,
-      conversationId: widget.conversationId,
-      attachments: [],
-    );
-
-    _textController.clear();
-    setState(() {
-      _imageFiles.clear();
-      _documentFiles.clear();
-    });
   }
 
   void _showForwardSheet(BuildContext context, ChatCubit cubit) {
@@ -56552,7 +56883,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             itemBuilder: (context, index) {
                               final chat = conversations[index];
 
-                              if (chat.id == cubit.conversationId) {
+                              if (chat.id == cubit.currentConversationId) {
                                 return const SizedBox.shrink();
                               }
                               final userData = chat.partner;
@@ -56613,6 +56944,39 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               );
             });
       },
+    );
+  }
+}
+
+class FullScreenImagePage extends StatelessWidget {
+  final String imageUrl;
+  final String tag; // Для Hero
+
+  const FullScreenImagePage(
+      {super.key, required this.imageUrl, required this.tag});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Center(
+        child: InteractiveViewer(
+          // Позволяет зумить картинку пальцами
+          child: Hero(
+            tag: tag,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -56777,6 +57141,7 @@ import 'package:coment_app/src/core/constant/constants.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ChatListItem extends StatelessWidget {
   final ConversationDTO conversation;
@@ -56801,6 +57166,7 @@ class ChatListItem extends StatelessWidget {
     // 2. Если данных нет или флаг false, берем обычное имя
     // 3. Если и его нет, берем заголовок диалога
     String nameToDisplay;
+    String? companyNameToDisplay = conversation.companyName;
 
     if (partner?.showRealName == true) {
       nameToDisplay = partner?.username ?? partner?.displayName ?? 'Скрыто';
@@ -56815,11 +57181,15 @@ class ChatListItem extends StatelessWidget {
     String subtitleText = 'Нет сообщений';
     final lastMsg = conversation.lastMessage;
 
+
     if (lastMsg != null) {
       // Проверяем, есть ли ссылка на голосовое
       if (lastMsg.voiceUrl != null && lastMsg.voiceUrl!.isNotEmpty) {
         subtitleText =
             '🎙 Голосовое сообщение'; // Иконка микрофона для наглядности
+      } else if (lastMsg.attachments != null &&
+          lastMsg.attachments!.isNotEmpty) {
+        subtitleText = '📎 Файл';
       } else if (lastMsg.content.isNotEmpty) {
         subtitleText = lastMsg.content;
       }
@@ -56842,24 +57212,31 @@ class ChatListItem extends StatelessWidget {
           ),
         ),
       ),
-      title: Text(
-        partner?.showRealName == true ? '@$nameToDisplay' : nameToDisplay,
-        style: AppTextStyles.fs16w400.copyWith(
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-        ),
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            partner?.showRealName == true ? '@$nameToDisplay' : nameToDisplay,
+            style: AppTextStyles.fs16w400.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+          ),
+          Text(companyNameToDisplay ?? 'Компания не указана', style: AppTextStyles.fs12w400,),
+          const Gap(10)
+        ],
       ),
       subtitle: Text(
-        // conversation.lastMessage?.content ?? 'Нет сообщений',
         subtitleText,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: AppTextStyles.fs12w400.copyWith(
-          color: subtitleText == '🎙 Голосовое сообщение'
-              ? AppColors.mainColor
-              : AppColors.greyTextColor2,
-              fontWeight: FontWeight.w600
-        ),
+            color: subtitleText == '🎙 Голосовое сообщение'
+                ? AppColors.mainColor
+                : AppColors.greyTextColor2,
+            fontWeight: FontWeight.w600),
       ),
       trailing: lastMsg?.createdAt != null
           ? Text(
@@ -56884,6 +57261,7 @@ import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_wi
 import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
 import 'package:coment_app/src/feature/chat/model/chat_message_dto.dart';
+import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
 import 'package:coment_app/src/feature/chat/presentation/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56893,11 +57271,14 @@ class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
     super.key,
     required this.widget,
     required this.currentUser,
+    required this.isChatPageActive,
+    // required this.conversation,
   });
 
   final ChatPage widget;
   final UserDTO currentUser;
-
+  final bool isChatPageActive;
+// final ConversationDTO conversation;
   @override
   State<StatusUserWidget> createState() => _StatusUserWidgetState();
 
@@ -56948,6 +57329,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
 
   @override
   Widget build(BuildContext context) {
+   
     // 1. Используем watch, чтобы виджет обновлялся при загрузке сообщений
     final chatCubit = context.watch<ChatCubit>();
     final activeRepo = chatCubit.repository;
@@ -56980,6 +57362,7 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
       return CustomAppBar(
         title: widget.widget.companyName,
         subTitle: '...',
+        isChatPageActive: true,
       );
     }
 
@@ -57025,17 +57408,21 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
                   : (userToDisplay.name?.isNotEmpty ?? false)
                       ? userToDisplay.name!
                       : widget.widget.companyName,
+          companyName: widget.widget.companyName,
+          companyStyle: AppTextStyles.fs12w400,
           subTitle: isOnline ? 'В сети' : 'Был(а) ${_formatDate(lastSeenDate)}',
           textStyle: AppTextStyles.fs18w700,
           subTitleStyle: AppTextStyles.fs12w400.copyWith(
             color: isOnline ? AppColors.green : AppColors.greyTextColor,
           ),
+          isChatPageActive: true,
+  
+                                     
         );
       },
     );
   }
 }
-
 
 
 
@@ -81444,6 +81831,7 @@ class _MessagePageState extends State<MessagePage> {
                         ? 'Компания #$companyId'
                         : (displayName ?? 'Чат');
                   }
+    
                   return ChatListItem(
                     conversation: conv,
                     onTap: () async {
@@ -81452,10 +81840,12 @@ class _MessagePageState extends State<MessagePage> {
                       await context.router.push(
                         ChatRoute(
                           conversationId: conv.id,
-                          companyName: chatTitle,
+                          companyName: '${conv.companyName}',
                           currentUser: currentUser,
                           accessToken: currentUser.accessToken!,
                           targetUser: conv.partner!,
+                          isChatPageActive: true,
+                          conversationDTO: conv,
                         ),
                       );
                       // Когда вернулись — обновляем список

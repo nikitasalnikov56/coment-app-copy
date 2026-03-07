@@ -24,5 +24,5 @@ abstract class IChatRepository {
   void deleteMessages(List<int> ids);
   void leaveChat();
   void scheduleReconnect();
-  
+  Future<int> getConversationIdByCompany(int companyId, String token);
 }

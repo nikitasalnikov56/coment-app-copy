@@ -16,7 +16,7 @@ class UserDTO with _$UserDTO {
     @JsonKey(name: 'showRealName', defaultValue: false) bool? showRealName,
     String? email,
     @JsonKey(name: 'phoneNumber') String? phone,
-    @JsonKey(name: 'avatar_url') String? avatar,
+    @JsonKey(name: 'avatar', readValue: _readAvatar) String? avatar,
     CityDTO? city,
     LanguageDTO? language,
     @JsonKey(defaultValue: 0) int? rating,
@@ -35,4 +35,9 @@ class UserDTO with _$UserDTO {
   }) = _UserDTO;
   factory UserDTO.fromJson(Map<String, dynamic> json) =>
       _$UserDTOFromJson(json);
+}
+
+Object? _readAvatar(Map json, String key) {
+  // Пробуем взять 'avatar', если там пусто — берем 'avatar_url'
+  return json['avatar'] ?? json['avatar_url'];
 }

@@ -304,7 +304,9 @@ class ChatRepositoryImpl implements IChatRepository {
     int? voiceDuration,
     List<String>? attachments,
   }) async {
-    if (content.trim().isEmpty && voiceUrl == null && (attachments == null || attachments.isEmpty)) return;
+    if (content.trim().isEmpty &&
+        voiceUrl == null &&
+        (attachments == null || attachments.isEmpty)) return;
     if (_channel == null || _channel!.closeCode != null) {
       log("⚠️ Connection lost. Reconnecting before sending...");
       await ensureConnection(); // Пробуем восстановить связь
@@ -325,7 +327,8 @@ class ChatRepositoryImpl implements IChatRepository {
           if (replyToId != null) 'replyToId': replyToId,
           if (voiceUrl != null) 'voiceUrl': voiceUrl,
           if (voiceDuration != null) 'voiceDuration': voiceDuration,
-          if (attachments != null && attachments.isNotEmpty) 'attachments': attachments,
+          if (attachments != null && attachments.isNotEmpty)
+            'attachments': attachments,
         },
       });
       log('Sending message to Chat #$finalConversationId');
@@ -341,7 +344,8 @@ class ChatRepositoryImpl implements IChatRepository {
           if (replyToId != null) 'replyToId': replyToId,
           if (voiceUrl != null) 'voiceUrl': voiceUrl,
           if (voiceDuration != null) 'voiceDuration': voiceDuration,
-          if (attachments != null && attachments.isNotEmpty) 'attachments': attachments,
+          if (attachments != null && attachments.isNotEmpty)
+            'attachments': attachments,
         },
       });
     }
@@ -371,7 +375,7 @@ class ChatRepositoryImpl implements IChatRepository {
       final String rawJson = jsonEncode(data);
       log("📤 WS SENDING: $rawJson"); // СМОТРИ ЭТОТ ЛОГ В КОНСОЛИ
       _channel!.sink.add(rawJson);
-    } else{
+    } else {
       log("⚠️ WS CANNOT SEND: Channel is null");
     }
   }
@@ -484,5 +488,20 @@ class ChatRepositoryImpl implements IChatRepository {
         _isReconnecting = false;
       }
     });
+  }
+
+  @override
+  Future<int> getConversationIdByCompany(int companyId, String token) async {
+    try {
+      final response = await _restClient.get(
+        'conversations/by-company/$companyId',
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      // Предполагаем, что бэк возвращает { "id": 123 }
+      return response['id'] as int;
+    } catch (e) {
+      log("❌ Ошибка получения ID чата по компании: $e");
+      rethrow;
+    }
   }
 }
