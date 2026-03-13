@@ -190,5 +190,12 @@
   "usernameAlreadyTaken": "Bu foydalanuvchi nomi allaqachon band",
   "success": "Muvaffaqiyatli",
   "enterYourUsername": "Foydalanuvchi nomini kiriting",
-  "usernameRequired": "Foydalanuvchi nomi majburiy to'ldiriladi"
+  "usernameRequired": "Foydalanuvchi nomi majburiy to'ldiriladi",
+  "invalidEmailOrPassword": "Email yoki parol noto‘g‘ri",
+
+  "choosePaymentMethod": "Qulay to‘lov usulini tanlang",
+  "paymentSecurityInfo": "Barcha operatsiyalar himoyalangan va rasmiy to‘lov xizmatlari shlyuzlari orqali amalga oshiriladi",
+  "paySecurelyVia": "Quyidagi orqali xavfsiz to‘lov",
+  "redirectToSecurePage": "Siz xizmatning himoyalangan veb-sahifasiga yo‘naltirilasiz",
+  "proceedToPayment": "To‘lovga o‘tish"
 }

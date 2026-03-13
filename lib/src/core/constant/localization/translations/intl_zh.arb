@@ -191,5 +191,12 @@
   "usernameAlreadyTaken": "该用户名已被占用",
   "success": "成功",
   "enterYourUsername": "输入用户名",
-  "usernameRequired": "用户名为必填项"
+  "usernameRequired": "用户名为必填项",
+  "invalidEmailOrPassword": "电子邮件或密码错误",
+
+  "choosePaymentMethod": "选择方便的支付方式",
+  "paymentSecurityInfo": "所有交易均受到保护，并通过官方支付服务网关进行处理",
+  "paySecurelyVia": "通过以下方式安全支付",
+  "redirectToSecurePage": "您将被重定向到服务的安全网页",
+  "proceedToPayment": "继续支付"
 }

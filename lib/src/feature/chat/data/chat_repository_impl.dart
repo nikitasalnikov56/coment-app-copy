@@ -136,7 +136,7 @@ class ChatRepositoryImpl implements IChatRepository {
 
     final uri = Uri(
       scheme: 'wss',
-      host: 'abca-94-158-58-248.ngrok-free.app',
+      host: '8813-94-158-59-67.ngrok-free.app',
       path: '/chat',
       queryParameters: {'token': token},
     );

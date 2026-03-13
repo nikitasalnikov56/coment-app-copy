@@ -191,5 +191,13 @@
   "usernameAlreadyTaken": "This username is already taken",
   "success": "Success",
   "enterYourUsername": "Enter username",
-  "usernameRequired": "Username field is required"
+  "usernameRequired": "Username field is required",
+  "invalidEmailOrPassword": "Invalid email or password",
+  
+  "choosePaymentMethod": "Choose a convenient payment method",
+  "paymentSecurityInfo": "All transactions are secure and processed through official payment service gateways",
+  "paySecurelyVia": "Pay securely via",
+  "redirectToSecurePage": "You will be redirected to the secure page of the service",
+  "proceedToPayment": "Proceed to payment"
+
 }

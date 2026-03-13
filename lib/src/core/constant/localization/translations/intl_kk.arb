@@ -191,5 +191,12 @@
   "usernameAlreadyTaken": "Бұл пайдаланушы аты бұрыннан алынған",
   "success": "Сәтті",
   "enterYourUsername": "Пайдаланушы атын енгізіңіз",
-  "usernameRequired": "Пайдаланушы атын толтыру міндетті"
+  "usernameRequired": "Пайдаланушы атын толтыру міндетті",
+  "invalidEmailOrPassword": "Email немесе құпиясөз қате",
+
+  "choosePaymentMethod": "Ыңғайлы төлем әдісін таңдаңыз",
+  "paymentSecurityInfo": "Барлық операциялар қорғалған және ресми төлем сервистерінің шлюздері арқылы жүргізіледі",
+  "paySecurelyVia": "Келесі арқылы қауіпсіз төлеу",
+  "redirectToSecurePage": "Сіз сервистің қауіпсіз веб-бетіне бағытталасыз",
+  "proceedToPayment": "Төлемге өту"
 }

@@ -583,4 +583,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get usernameRequired => '用户名为必填项';
+
+  @override
+  String get invalidEmailOrPassword => '电子邮件或密码错误';
+
+  @override
+  String get choosePaymentMethod => '选择方便的支付方式';
+
+  @override
+  String get paymentSecurityInfo => '所有交易均受到保护，并通过官方支付服务网关进行处理';
+
+  @override
+  String get paySecurelyVia => '通过以下方式安全支付';
+
+  @override
+  String get redirectToSecurePage => '您将被重定向到服务的安全网页';
+
+  @override
+  String get proceedToPayment => '继续支付';
 }

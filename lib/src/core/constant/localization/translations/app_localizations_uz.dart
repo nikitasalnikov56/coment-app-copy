@@ -602,4 +602,24 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get usernameRequired => 'Foydalanuvchi nomi majburiy to\'ldiriladi';
+
+  @override
+  String get invalidEmailOrPassword => 'Email yoki parol noto‘g‘ri';
+
+  @override
+  String get choosePaymentMethod => 'Qulay to‘lov usulini tanlang';
+
+  @override
+  String get paymentSecurityInfo =>
+      'Barcha operatsiyalar himoyalangan va rasmiy to‘lov xizmatlari shlyuzlari orqali amalga oshiriladi';
+
+  @override
+  String get paySecurelyVia => 'Quyidagi orqali xavfsiz to‘lov';
+
+  @override
+  String get redirectToSecurePage =>
+      'Siz xizmatning himoyalangan veb-sahifasiga yo‘naltirilasiz';
+
+  @override
+  String get proceedToPayment => 'To‘lovga o‘tish';
 }

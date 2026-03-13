@@ -1249,6 +1249,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Username field is required'**
   String get usernameRequired;
+
+  /// No description provided for @invalidEmailOrPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get invalidEmailOrPassword;
+
+  /// No description provided for @choosePaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a convenient payment method'**
+  String get choosePaymentMethod;
+
+  /// No description provided for @paymentSecurityInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'All transactions are secure and processed through official payment service gateways'**
+  String get paymentSecurityInfo;
+
+  /// No description provided for @paySecurelyVia.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay securely via'**
+  String get paySecurelyVia;
+
+  /// No description provided for @redirectToSecurePage.
+  ///
+  /// In en, this message translates to:
+  /// **'You will be redirected to the secure page of the service'**
+  String get redirectToSecurePage;
+
+  /// No description provided for @proceedToPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed to payment'**
+  String get proceedToPayment;
 }
 
 class _AppLocalizationsDelegate

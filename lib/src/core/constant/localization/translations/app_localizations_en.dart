@@ -599,4 +599,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get usernameRequired => 'Username field is required';
+
+  @override
+  String get invalidEmailOrPassword => 'Invalid email or password';
+
+  @override
+  String get choosePaymentMethod => 'Choose a convenient payment method';
+
+  @override
+  String get paymentSecurityInfo =>
+      'All transactions are secure and processed through official payment service gateways';
+
+  @override
+  String get paySecurelyVia => 'Pay securely via';
+
+  @override
+  String get redirectToSecurePage =>
+      'You will be redirected to the secure page of the service';
+
+  @override
+  String get proceedToPayment => 'Proceed to payment';
 }

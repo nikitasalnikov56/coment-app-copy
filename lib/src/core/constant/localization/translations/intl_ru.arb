@@ -191,7 +191,14 @@
   "usernameAlreadyTaken": "Этот username уже занят",
   "success": "Успешно",
   "enterYourUsername": "Введите Имя пользователя",
-  "usernameRequired": "Поле Имя пользователя обязательно для заполнения"
+  "usernameRequired": "Поле Имя пользователя обязательно для заполнения",
+  "invalidEmailOrPassword" : "Неверный email или пароль",
+  
+  "choosePaymentMethod": "Выберите удобный способ оплаты",
+  "paymentSecurityInfo": "Все операции защищены и проводятся через официальные шлюзы платежных сервисов",
+  "paySecurelyVia": "Оплатить безопасно через",
+  "redirectToSecurePage": "Вы будете перенаправлены на защищенную веб-страницу сервиса",
+  "proceedToPayment": "Перейти к оплате"
 
 
 }

@@ -14,6 +14,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final String? svg;
   final Color? color;
+  final Color? backgroundColor;
+  final Color? svgColor;
   final int? quarterTurns;
   final List<Widget>? actions;
   final void Function()? onPressed;
@@ -39,6 +41,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.onPressed,
     this.color,
+    this.backgroundColor,
+    this.svgColor,
     this.svg,
     this.quarterTurns,
     this.shape,
@@ -66,6 +70,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: backgroundColor,
       leadingWidth: 57,
       leading: !btnBack
           ? IconButton(
@@ -75,7 +80,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
               splashRadius: 21,
               icon: isBackButton
-                  ? SvgPicture.asset(svg ?? AssetsConstants.backButton)
+                  ? SvgPicture.asset(
+                      svg ?? AssetsConstants.backButton,
+                      colorFilter: ColorFilter.mode(
+                        svgColor ?? Colors.black,
+                        BlendMode.srcIn,
+                      ),
+                    )
                   : Container(
                       width: 74,
                     ),

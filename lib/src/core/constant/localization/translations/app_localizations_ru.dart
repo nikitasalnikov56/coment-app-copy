@@ -600,4 +600,24 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get usernameRequired =>
       'Поле Имя пользователя обязательно для заполнения';
+
+  @override
+  String get invalidEmailOrPassword => 'Неверный email или пароль';
+
+  @override
+  String get choosePaymentMethod => 'Выберите удобный способ оплаты';
+
+  @override
+  String get paymentSecurityInfo =>
+      'Все операции защищены и проводятся через официальные шлюзы платежных сервисов';
+
+  @override
+  String get paySecurelyVia => 'Оплатить безопасно через';
+
+  @override
+  String get redirectToSecurePage =>
+      'Вы будете перенаправлены на защищенную веб-страницу сервиса';
+
+  @override
+  String get proceedToPayment => 'Перейти к оплате';
 }

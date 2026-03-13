@@ -601,4 +601,24 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get usernameRequired => 'Пайдаланушы атын толтыру міндетті';
+
+  @override
+  String get invalidEmailOrPassword => 'Email немесе құпиясөз қате';
+
+  @override
+  String get choosePaymentMethod => 'Ыңғайлы төлем әдісін таңдаңыз';
+
+  @override
+  String get paymentSecurityInfo =>
+      'Барлық операциялар қорғалған және ресми төлем сервистерінің шлюздері арқылы жүргізіледі';
+
+  @override
+  String get paySecurelyVia => 'Келесі арқылы қауіпсіз төлеу';
+
+  @override
+  String get redirectToSecurePage =>
+      'Сіз сервистің қауіпсіз веб-бетіне бағытталасыз';
+
+  @override
+  String get proceedToPayment => 'Төлемге өту';
 }

@@ -1,10 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
-import 'package:coment_app/src/feature/profile/presentation/widgets/add_payment_cards.dart';
-import 'package:coment_app/src/feature/profile/presentation/widgets/make_payment.dart';
+import 'package:coment_app/src/feature/profile/presentation/widgets/select_payment_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:payment_card/payment_card.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/profile/bloc/payment_cubit.dart';
@@ -83,63 +81,21 @@ class _PaymentView extends StatefulWidget {
 }
 
 class _PaymentViewState extends State<_PaymentView> {
-  int _currentIndex = 0;
-
-  void onTap(int value) {
-    setState(() {
-      _currentIndex = value;
-    });
-  }
-
-  List<Widget> screens = [
-    const AddPaymentCards(),
-    const MakePayment(),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.localized.payment),
-      bottomNavigationBar: SizedBox(
-
-        height: MediaQuery.of(context).size.height / 10,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: _currentIndex == 0 ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-          children: [
-            ColoredBox(
-              color: AppColors.mainColor,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                height: 3,
-              ),
-            ),
-            Expanded(
-              // height: MediaQuery.of(context).size.height / 10,
-              child: BottomNavigationBar(
-                backgroundColor: AppColors.backgroundColor,
-                selectedLabelStyle: AppTextStyles.fs12w600,
-                unselectedLabelStyle: AppTextStyles.fs12w600,
-                selectedItemColor: AppColors.mainColor,
-                unselectedItemColor: AppColors.greyText,
-                iconSize: 30,
-                currentIndex: _currentIndex,
-                onTap: (value) => onTap(value),
-                items: [
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.add_card),
-                    label: context.localized.add_new_card,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.payments_outlined),
-                    label: context.localized.payment,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      appBar: CustomAppBar(
+        backgroundColor: const Color(0xFFD3E7FE),
+        svgColor: const Color(0xFF6571D5),
+        title: context.localized.payment,
+        textStyle: AppTextStyles.fs18w500,
+        actions: const [
+          SizedBox(
+            width: 50,
+          ),
+        ],
       ),
-      body: screens[_currentIndex],
+      body: const SelectPaymentMethod(),
     );
   }
 }
