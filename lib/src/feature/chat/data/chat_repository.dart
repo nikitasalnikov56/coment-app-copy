@@ -18,11 +18,12 @@ abstract class IChatRepository {
   Future<List<ConversationDTO>> findConversationsForUser(String token);
   // Stream<Map<String, dynamic>> get userStatusStream;
   Stream<Map<int, Map<String, dynamic>>> get userStatusStream;
-  Stream<void> get conversationsUpdateStream;
+  Stream<ChatMessageDTO> get conversationsUpdateStream;
   List<ChatMessageDTO> get currentMessages;
   Map<int, Map<String, dynamic>> get currentStatusCache;
   void deleteMessages(List<int> ids);
   void leaveChat();
   void scheduleReconnect();
   Future<int> getConversationIdByCompany(int companyId, String token);
+   Future<void> connectGlobalSocket(String token);
 }

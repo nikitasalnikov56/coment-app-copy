@@ -1,4 +1,3 @@
-import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/chat/bloc/chat_cubit.dart';
 import 'package:coment_app/src/feature/chat/bloc/voice_recorder_cubit.dart';
@@ -42,7 +41,7 @@ class VoiceRecorderButton extends StatelessWidget {
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
             orElse: () => IconButton(
-              color: AppColors.black,
+              color: Theme.of(context).appBarTheme.iconTheme?.color,
               onPressed: () => context.read<VoiceRecorderCubit>().start(),
               icon: const Icon(Icons.mic_none_rounded),
             ),

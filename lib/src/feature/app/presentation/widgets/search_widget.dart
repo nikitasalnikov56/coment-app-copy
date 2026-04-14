@@ -40,8 +40,10 @@ class _SearchWidgetState extends State<SearchWidget> {
       child: Container(
         height: 46,
         width: double.infinity,
-        decoration: const BoxDecoration(
-          color: AppColors.backgroundColor, // BorderRadius applied to the Container
+        decoration: BoxDecoration(
+          color: Theme.of(context)
+              .inputDecorationTheme
+              .fillColor, // BorderRadius applied to the Container
         ),
         child: TextFormField(
           autofocus: widget.autofocus ?? false,
@@ -49,7 +51,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           controller: widget.searchController,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
-            fillColor: AppColors.backgroundColor,
+            fillColor: Theme.of(context).inputDecorationTheme.fillColor,
             isCollapsed: true,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(
@@ -58,25 +60,33 @@ class _SearchWidgetState extends State<SearchWidget> {
               ),
               child: SvgPicture.asset(
                 AssetsConstants.search,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).iconTheme.color ?? Colors.grey,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
             hintText: context.localized.search,
-            hintStyle: AppTextStyles.fs16w500.copyWith(color: AppColors.greyTextColor),
+            hintStyle: AppTextStyles.fs16w500.copyWith(
+              color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
             suffixIcon: widget.suffixIcon,
             suffixIconConstraints: widget.suffixIconConstraints,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
             enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.outlineVariant,
+                width: 0.5,
+              ),
+            ),
+            focusedBorder: widget.focusedBorder ??
+            OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: AppColors.borderColor,
-                )),
-            focusedBorder: widget.focusedBorder,
-            // OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(16),
-            //     borderSide: const BorderSide(color: AppColors.tabActive, width: 0.5)),
+                borderSide:  BorderSide(color: Theme.of(context).colorScheme.primary, width: 0.5)),
           ),
-          style: const TextStyle(
-            color: Colors.black,
+          style:  TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
           textAlignVertical: TextAlignVertical.center,
           onTap: widget.onTap,

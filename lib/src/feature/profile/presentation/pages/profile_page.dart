@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return LoaderOverlay(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: CustomAppBar(
           title: context.localized.profile,
           isBackButton: false,
@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: const Color(0x33BBB5FE),
                 borderRadius: BorderRadius.circular(12),
               ),
-            
+
               // padding: EdgeInsets.only(bottom: 25),
               margin: const EdgeInsets.only(right: 15),
               child: IconButton(
@@ -121,8 +121,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               },
               orElse: () {
-                return const Center(
-                  child: Text("Ошибка загрузки"),
+                return Center(
+                  child: Text(context.localized.loadingError),
                 );
               },
               loaded: (userDTO, verificationStatus) {
@@ -153,7 +153,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ///
                             Container(
                               decoration: BoxDecoration(
-                                  color: AppColors.white,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.circular(16)),
                               alignment: Alignment.center,
                               child: Column(
@@ -180,23 +181,30 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: const Color(0x33BBB5FE),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.person_3_outlined,
                                         size: 20,
+                                        color: Theme.of(context)
+                                            .appBarTheme
+                                            .iconTheme
+                                            ?.color,
                                       ),
                                     ),
                                     title: Text(
                                       userDTO.name ?? '',
                                       style: AppTextStyles.fs18w500.copyWith(
                                         fontWeight: FontWeight.w600,
-                                        color: AppColors.text,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color,
                                         height: 1.2,
                                       ),
                                     ),
                                     subtitle: verificationStatus != null
                                         ? _buildVerificationStatus(
                                             verificationStatus)
-                                        : const Text('Статус неизвестен'),
+                                        : Text(context.localized.statusUnknown),
                                     contentPadding: const EdgeInsets.all(0),
                                     minVerticalPadding: 0,
                                     minTileHeight: 60,
@@ -209,20 +217,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: const Color(0x33BBB5FE),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.email_outlined,
                                         size: 20,
+                                        color: Theme.of(context)
+                                            .appBarTheme
+                                            .iconTheme
+                                            ?.color,
                                       ),
                                     ),
                                     title: Text(
                                       userDTO.email ?? '',
                                       style: AppTextStyles.fs18w500.copyWith(
-                                        color: AppColors.text,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     subtitle: Text(
-                                      'Почта пользователя',
+                                      context.localized.userEmail,
                                       style: AppTextStyles.fs12w400.copyWith(
                                         color: AppColors.greyTextColor,
                                       ),
@@ -242,21 +257,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                   color: const Color(0x33BBB5FE),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.alternate_email,
                                   size: 20,
+                                  color: Theme.of(context)
+                                      .appBarTheme
+                                      .iconTheme
+                                      ?.color,
                                 ),
                               ),
                               title: Text(
                                 userDTO.username ??
-                                    'Имя пользователя не установлено',
+                                    context.localized.userNameNotSet,
                                 style: AppTextStyles.fs18w500.copyWith(
-                                  color: AppColors.text,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                               subtitle: Text(
-                                'Имя пользователя',
+                                context.localized.userName,
                                 style: AppTextStyles.fs12w400.copyWith(
                                   color: AppColors.greyTextColor,
                                 ),
@@ -444,7 +466,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             //   },
                             // ),
                             // : const SizedBox(),
-                       
 
                             ///
                             /// <-- `Logout` -->
@@ -486,22 +507,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
     switch (status.status) {
       case 'approved':
-        message = 'Верифицирован';
+        message = context.localized.verified;
         color = Colors.green;
         icon = Icons.check_circle;
         break;
       case 'pending':
-        message = 'На рассмотрении';
+        message = context.localized.pending;
         color = Colors.orange;
         icon = Icons.hourglass_empty;
         break;
       case 'rejected':
-        message = ' Отклонено';
+        message = context.localized.rejected;
         color = Colors.red;
         icon = Icons.cancel;
         break;
       default:
-        message = 'Не запрашивалось';
+        message = context.localized.notRequested;
         color = Colors.grey;
         icon = Icons.info_outline;
     }

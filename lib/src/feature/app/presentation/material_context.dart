@@ -1,3 +1,4 @@
+import 'package:coment_app/src/feature/settings/bloc/theme_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:coment_app/src/core/constant/localization/localization.dart';
@@ -8,6 +9,7 @@ import 'package:coment_app/src/feature/app/presentation/widgets/app_router_build
 import 'package:coment_app/src/feature/app/router/app_router.dart';
 
 import 'package:coment_app/src/feature/settings/widget/settings_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// {@template material_context}
 /// [MaterialContext] is an entry point to the material context.
@@ -29,31 +31,39 @@ class MaterialContext extends StatelessWidget {
 
     return AppRouterBuilder(
       createRouter: (context) => AppRouter(),
-      builder: (context, informationParser, routerDelegate, router) => MaterialApp.router(
+      builder: (context, informationParser, routerDelegate, router) =>
+          MaterialApp.router(
         title: 'coment_app',
         onGenerateTitle: (context) => 'coment_app',
         routerDelegate: routerDelegate,
         routeInformationParser: informationParser,
+        themeMode: context.watch<ThemeCubit>().state.maybeWhen(
+          loaded: (themeMode) => themeMode,
+              orElse: () => ThemeMode.system,
+            ),
         theme: AppTheme.light,
-        darkTheme: AppTheme.light,
+        darkTheme: AppTheme.dark,
         debugShowCheckedModeBanner: false,
-        // theme: theme.lightTheme,
-        // darkTheme: theme.darkTheme,
-        // themeMode: ThemeMode.light, // theme.mode,
         localizationsDelegates: Localization.localizationDelegates,
         supportedLocales: Localization.supportedLocales,
-        locale: settings.locale,
-        // home: const HomeScreen(),
-        // builder: (context, child) => MediaQuery.withClampedTextScaling(
-        //   maxScaleFactor: 1,
-        //   minScaleFactor: 1,
-        //   child: LoaderOverlay(child: child!),
-        // ),
+        locale: settings.locale?.languageCode == null ||
+                settings.locale?.languageCode == ''
+            ? const Locale('en')
+            : settings.locale,
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          // Если пользователь вручную в приложении НЕ выбирал язык
+          if (settings.locale == null) {
+            return const Locale('en'); // Возвращаем английский по умолчанию
+          }
+          return settings.locale; // Иначе используем то, что выбрал юзер
+        },
         builder: (context, child) => MediaQuery(
           // key: _globalKey,
           data: mediaQueryData.copyWith(
             textScaler: TextScaler.linear(
-              mediaQueryData.textScaler.scale(settings.textScale ?? 1).clamp(0.5, 2),
+              mediaQueryData.textScaler
+                  .scale(settings.textScale ?? 1)
+                  .clamp(0.5, 2),
             ),
           ),
           child: child!,

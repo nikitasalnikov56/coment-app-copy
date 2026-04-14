@@ -32,7 +32,7 @@ class ChatPage extends StatefulWidget implements AutoRouteWrapper {
     required this.currentUser,
     required this.accessToken,
     required this.targetUser,
-     this.conversationDTO,
+    this.conversationDTO,
     this.isCompanyId = false,
     this.isChatPageActive = false,
   });
@@ -157,8 +157,10 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                         await Clipboard.setData(
                             ClipboardData(text: selectedMsgs));
                         cubit.clearSelection();
-                        Toaster.showTopShortToast(context,
-                            message: 'Скопировано');
+                        Toaster.showTopShortToast(
+                          context,
+                          message: context.localized.copied,
+                        );
                       },
                       icon: const Icon(Icons.copy),
                     ),
@@ -174,7 +176,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                   widget: widget,
                   currentUser: widget.currentUser,
                   isChatPageActive: widget.isChatPageActive,
-                
                 ),
           body: Column(
             children: [
@@ -281,7 +282,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       key: const ValueKey('selectionMenu'), // <--- ВАЖНО ДЛЯ АНИМАЦИИ
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.primaryContainer,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -298,41 +299,25 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
           if (cubit.selectedIds.length == 1)
             Expanded(
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(0),
-                  backgroundColor: AppColors.backgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
+                style: Theme.of(context).elevatedButtonTheme.style,
                 onPressed: () {
                   final msgId = cubit.selectedIds.first;
                   final msg =
                       cubit.currentMessages.firstWhere((e) => e.id == msgId);
                   cubit.setReplyMessage(msg);
                 },
-                child: Text("Ответить",
-                    style: AppTextStyles.fs14w500
-                        .copyWith(color: AppColors.greyTextColor2)
-                    // TextStyle(color: AppColors.greyTextColor2),
-                    ),
+                child:  Text(
+                  context.localized.reply,
+                ),
               ),
             ),
           const SizedBox(width: 18),
           Expanded(
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.backgroundColor,
-                padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-              ),
+              style: Theme.of(context).elevatedButtonTheme.style,
               onPressed: () => _showForwardSheet(context, cubit),
-              child: Text(
-                'Переслать',
-                style: AppTextStyles.fs14w500
-                    .copyWith(color: AppColors.greyTextColor2),
+              child:  Text(
+                context.localized.forward,
               ),
             ),
           ),
@@ -407,9 +392,9 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.grey,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                   child: message.sender.avatar != null
                       ? CircleAvatar(
@@ -435,7 +420,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                   decoration: BoxDecoration(
                     color: isOwnMessage
                         ? AppColors.mainColor
-                        : AppColors.backgroundInputGrey,
+                        : Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Column(
@@ -537,8 +522,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                     final uri = Uri.parse(url);
                                     if (await canLaunchUrl(uri)) {
                                       await launchUrl(uri,
-                                          mode: LaunchMode
-                                              .platformDefault);
+                                          mode: LaunchMode.platformDefault);
                                     }
                                   },
                                   child: Container(
@@ -583,7 +567,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               Text(
-                                                'Нажмите, чтобы открыть',
+                                               context.localized.tapToOpen,
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   color: isOwnMessage
@@ -618,7 +602,9 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                         Text(
                           message.content,
                           style: AppTextStyles.fs14w400.copyWith(
-                            color: isOwnMessage ? Colors.white : AppColors.text,
+                            color: isOwnMessage
+                                ? Colors.white
+                                : Theme.of(context).textTheme.titleLarge?.color,
                           ),
                         ),
                     ],
@@ -710,7 +696,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       debugPrint('FilePicker error: $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось выбрать файл: $e')),
+          SnackBar(content: Text('${context.localized.failedToSelectFile}: $e')),
         );
       }
     }
@@ -790,9 +776,10 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
           if (cubit.replyMessage != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF5F5F5),
-                border: Border(top: BorderSide(color: Colors.grey, width: 0.5)),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                border: const Border(
+                    top: BorderSide(color: Colors.grey, width: 0.5)),
               ),
               child: Row(
                 children: [
@@ -808,7 +795,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Ответ пользователю ${cubit.replyMessage!.sender.name}',
+                          '${context.localized.replyToUser} \t${cubit.replyMessage!.sender.name}',
                           style: AppTextStyles.fs12w500.copyWith(
                             color: AppColors.mainColor,
                             fontSize: 10,
@@ -820,7 +807,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.fs12w500.copyWith(
                             fontSize: 13,
-                            color: AppColors.black,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       ],
@@ -838,7 +825,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.primaryContainer,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -854,7 +841,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                     controller: _textController,
                     decoration: InputDecoration(
                       prefixIcon: IconButton(
-                        color: AppColors.greyTextColor,
+                        color: Theme.of(context).appBarTheme.iconTheme?.color,
                         padding: const EdgeInsets.all(0),
                         onPressed: () {
                           _showAddOptions();
@@ -873,7 +860,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                         color: AppColors.greyTextColor,
                       ),
                       filled: true,
-                      fillColor: AppColors.backgroundInputGrey,
+                      fillColor: Theme.of(context).colorScheme.primaryContainer,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
@@ -911,7 +898,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       ),
     );
   }
-
 
   void _sendMessage() async {
     final text = _textController.text.trim();
@@ -967,9 +953,9 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Переслать в...',
+                          '${context.localized.forwardTo}...',
                           style: AppTextStyles.fs16w700.copyWith(
-                            color: Colors.black,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         )
                       ],
@@ -990,11 +976,11 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                         if (snapshot.hasError) {
                           return Center(
                               child:
-                                  Text("Ошибка загрузки: ${snapshot.error}"));
+                                  Text("${context.localized.uploadError}: ${snapshot.error}"));
                         }
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Center(
-                              child: Text("Нет доступных чатов"));
+                          return  Center(
+                              child: Text(context.localized.noChatsAvailable));
                         }
                         final conversations = snapshot.data!;
                         return Flexible(
@@ -1030,8 +1016,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                 ),
                                 subtitle: Text(
                                   userData?.isOnline == true
-                                      ? 'В сети'
-                                      : 'Офлайн',
+                                      ? context.localized.online
+                                      : context.localized.offline,
                                   style: TextStyle(
                                     color: userData?.isOnline == true
                                         ? AppColors.green
@@ -1045,7 +1031,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
                                   // Показываем лоадер или тост
                                   Toaster.showTopShortToast(context,
-                                      message: 'Пересылаем...');
+                                      message: '${context.localized.forwarding}...');
 
                                   // Отправка (упрощенно)
                                   await cubit.forwardSelectedMessages(chat.id);
@@ -1053,7 +1039,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                   // cubit.clearSelection();
                                   if (mounted) {
                                     Toaster.showTopShortToast(context,
-                                        message: 'Отправлено');
+                                        message: context.localized.sent);
                                   }
                                 },
                               );

@@ -80,25 +80,25 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                                   : const Color(0xFF8C8E8C),
                             ),
                             borderRadius: BorderRadius.circular(16)),
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(4),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             SizedBox(
-                              width: 80,
-                              height: 80,
+                              width: 120,
+                              height: 120,
                               child: Card(
                                 color: const Color(0xFFC4EEF8),
                                 child: Padding(
                                   padding: index != 0
                                       ? const EdgeInsetsGeometry.all(0)
                                       : const EdgeInsets.symmetric(
-                                          vertical: 30, horizontal: 8),
+                                          vertical: 30, horizontal: 5),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.asset(
                                       paymentsLogos[index],
-                                      fit: BoxFit.cover,
+                                      fit: index == 0 ? BoxFit.contain : BoxFit.cover,
                                     ),
                                   ),
                                 ),

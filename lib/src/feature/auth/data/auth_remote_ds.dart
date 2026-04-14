@@ -47,6 +47,11 @@ abstract interface class IAuthRemoteDS {
 
   Future<Map<String, dynamic>> refreshToken(String refreshToken);
   UserDTO updateUserFromToken(UserDTO user);
+
+  Future<void> updateNotificationSettings({
+    required bool enabled,
+    String? deviceToken,
+  });
 }
 
 class AuthRemoteDSImpl implements IAuthRemoteDS {
@@ -241,6 +246,25 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
       return response; // должно содержать {"access_token": "..."}
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#refreshToken - $e', e, st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateNotificationSettings({
+    required bool enabled,
+    String? deviceToken,
+  }) async {
+    try {
+      await restClient.patch(
+        '/notifications/toggle-notifications', // ваш эндпоинт
+        body: {
+          'enabled': enabled,
+          if (deviceToken != null) 'device_token': deviceToken,
+        },
+      );
+    } catch (e) {
+      // Логирование через ваш TalkerLoggerUtil
       rethrow;
     }
   }

@@ -5,7 +5,7 @@ import 'package:coment_app/src/feature/main/model/main_dto.dart';
 import 'package:coment_app/src/feature/main/model/product_dto.dart';
 
 abstract interface class IMainRepository {
-  Future<MainDTO> dictionary();
+  Future<MainDTO> dictionary({String? languageCode});
 
   Future<List<SubCatalogDTO>> subcatalogList({required int catalogId});
 
@@ -30,9 +30,9 @@ class MainRepositoryImpl implements IMainRepository {
   final IMainRemoteDS _remoteDS;
 
   @override
-  Future<MainDTO> dictionary() async {
+  Future<MainDTO> dictionary({String? languageCode}) async {
     try {
-      final user = await _remoteDS.dictionary();
+      final user = await _remoteDS.dictionary(languageCode: languageCode);
       return user;
     } catch (e) {
       rethrow;

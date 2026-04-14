@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:coment_app/src/feature/settings/data/app_settings_datasource.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -81,8 +82,10 @@ class DioClient {
             final appSettings = await appSettingsDS.getAppSettings();
             options.headers['Accept'] = 'application/json';
             options.headers['version'] = packageInfo.version;
-            options.headers['Accept-Language'] =
-                appSettings?.locale?.languageCode;
+            final String languageCode = appSettings?.locale?.languageCode ??
+                PlatformDispatcher.instance.locale.languageCode;
+            options.headers['Accept-Language'] = languageCode;
+          
 
             final userStr = authDao.user.value;
             if (userStr != null && userStr != 'null') {

@@ -6,7 +6,7 @@ import 'package:coment_app/src/feature/main/model/product_dto.dart';
 import 'package:flutter/foundation.dart';
 
 abstract interface class IMainRemoteDS {
-  Future<MainDTO> dictionary();
+  Future<MainDTO> dictionary({String? languageCode});
 
   Future<List<SubCatalogDTO>> subcatalogList({required int catalogId});
 
@@ -31,10 +31,11 @@ class MainRemoteDSImpl implements IMainRemoteDS {
   final IRestClient restClient;
 
   @override
-  Future<MainDTO> dictionary() async {
+  Future<MainDTO> dictionary({String? languageCode}) async {
     try {
       final Map<String, dynamic> response = await restClient.get(
         '/dictionary',
+        headers: languageCode != null ? {'Accept-Language': languageCode} : null,
         queryParams: {},
       );
 

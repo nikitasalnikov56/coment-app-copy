@@ -10,6 +10,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 late final WebViewController controller;
 
 Future<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   final supabaseKey = dotenv.get('ANON_KEY');
 
@@ -17,7 +19,7 @@ Future<void> main() async {
 
   runZonedGuarded(
     () async {
-      WidgetsFlutterBinding.ensureInitialized();
+      
       await Supabase.initialize(
         url: 'https://djauryivkhshlpvnbiax.supabase.co',
         anonKey: supabaseKey,

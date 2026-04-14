@@ -619,4 +619,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proceedToPayment => 'Proceed to payment';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get fio => 'Full Name';
+
+  @override
+  String get userName => 'Username';
+
+  @override
+  String get loadingError => 'Loading error';
+
+  @override
+  String get statusUnknown => 'Status unknown';
+
+  @override
+  String get userEmail => 'User email';
+
+  @override
+  String get userNameNotSet => 'Username not set';
+
+  @override
+  String get verified => 'Verified';
+
+  @override
+  String get pending => 'Under review';
+
+  @override
+  String get rejected => 'Rejected';
+
+  @override
+  String get notRequested => 'Not requested';
+
+  @override
+  String get copied => 'Copied';
+
+  @override
+  String get reply => 'Reply';
+
+  @override
+  String get forward => 'Forward';
+
+  @override
+  String get tapToOpen => 'Tap to open';
+
+  @override
+  String get failedToSelectFile => 'Failed to select file';
+
+  @override
+  String get replyToUser => 'Reply to user';
+
+  @override
+  String get forwardTo => 'Forward to';
+
+  @override
+  String get uploadError => 'Upload error';
+
+  @override
+  String get noChatsAvailable => 'No chats available';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get offline => 'Offline';
+
+  @override
+  String get forwarding => 'Forwarding';
+
+  @override
+  String get chatSearch => 'Search chats';
 }

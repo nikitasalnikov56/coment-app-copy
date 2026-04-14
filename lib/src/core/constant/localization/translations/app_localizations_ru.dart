@@ -620,4 +620,76 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get proceedToPayment => 'Перейти к оплате';
+
+  @override
+  String get settings => 'Настройки';
+
+  @override
+  String get fio => 'ФИО';
+
+  @override
+  String get userName => 'Имя пользователя';
+
+  @override
+  String get loadingError => 'Ошибка загрузки';
+
+  @override
+  String get statusUnknown => 'Статус неизвестен';
+
+  @override
+  String get userEmail => 'Почта пользователя';
+
+  @override
+  String get userNameNotSet => 'Имя пользователя не установлено';
+
+  @override
+  String get verified => 'Верифицирован';
+
+  @override
+  String get pending => 'На рассмотрении';
+
+  @override
+  String get rejected => 'Отклонено';
+
+  @override
+  String get notRequested => 'Не запрашивалось';
+
+  @override
+  String get copied => 'Скопировано';
+
+  @override
+  String get reply => 'Ответить';
+
+  @override
+  String get forward => 'Переслать';
+
+  @override
+  String get tapToOpen => 'Нажмите, чтобы открыть';
+
+  @override
+  String get failedToSelectFile => 'Не удалось выбрать файл';
+
+  @override
+  String get replyToUser => 'Ответ пользователю';
+
+  @override
+  String get forwardTo => 'Переслать в';
+
+  @override
+  String get uploadError => 'Ошибка загрузки';
+
+  @override
+  String get noChatsAvailable => 'Нет доступных чатов';
+
+  @override
+  String get online => 'В сети';
+
+  @override
+  String get offline => 'Офлайн';
+
+  @override
+  String get forwarding => 'Пересылаем';
+
+  @override
+  String get chatSearch => 'Поиск чатов';
 }

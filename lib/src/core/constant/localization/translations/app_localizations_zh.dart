@@ -498,7 +498,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get documentsSentForReview => '您的文件已送审。';
 
   @override
-  String get sent => '发送';
+  String get sent => '已发送';
 
   @override
   String get companyAdd => '添加一家公司';
@@ -601,4 +601,76 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get proceedToPayment => '继续支付';
+
+  @override
+  String get settings => '设置';
+
+  @override
+  String get fio => '姓名';
+
+  @override
+  String get userName => '用户名';
+
+  @override
+  String get loadingError => '加载错误';
+
+  @override
+  String get statusUnknown => '状态未知';
+
+  @override
+  String get userEmail => '用户邮箱';
+
+  @override
+  String get userNameNotSet => '用户名未设置';
+
+  @override
+  String get verified => '已验证';
+
+  @override
+  String get pending => '审核中';
+
+  @override
+  String get rejected => '已拒绝';
+
+  @override
+  String get notRequested => '未申请';
+
+  @override
+  String get copied => '已复制';
+
+  @override
+  String get reply => '回复';
+
+  @override
+  String get forward => '转发';
+
+  @override
+  String get tapToOpen => '点击打开';
+
+  @override
+  String get failedToSelectFile => '无法选择文件';
+
+  @override
+  String get replyToUser => '回复用户';
+
+  @override
+  String get forwardTo => '转发至';
+
+  @override
+  String get uploadError => '上传错误';
+
+  @override
+  String get noChatsAvailable => '没有可用聊天';
+
+  @override
+  String get online => '在线';
+
+  @override
+  String get offline => '离线';
+
+  @override
+  String get forwarding => '正在转发';
+
+  @override
+  String get chatSearch => '搜索聊天';
 }

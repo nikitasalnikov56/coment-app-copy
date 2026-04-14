@@ -17,7 +17,8 @@ class ChatMessageDTO with _$ChatMessageDTO {
     int? voiceDuration,
      int? conversationId,
      ChatMessageDTO? replyTo,
-     List<String>? attachments
+     List<String>? attachments,
+     @Default(false) bool isRead,
   }) = _ChatMessageDTO;
 
   factory ChatMessageDTO.fromJson(Map<String, dynamic> json) =>

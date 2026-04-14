@@ -198,6 +198,34 @@
   "paymentSecurityInfo": "All transactions are secure and processed through official payment service gateways",
   "paySecurelyVia": "Pay securely via",
   "redirectToSecurePage": "You will be redirected to the secure page of the service",
-  "proceedToPayment": "Proceed to payment"
+  "proceedToPayment": "Proceed to payment",
+
+  "settings": "Settings",
+  "fio": "Full Name",
+  "userName": "Username",
+  "loadingError": "Loading error",
+  "statusUnknown": "Status unknown",
+  "userEmail": "User email",
+  "userNameNotSet": "Username not set",
+  "verified": "Verified",
+  "pending": "Under review",
+  "rejected": "Rejected",
+  "notRequested": "Not requested",
+
+   "copied": "Copied",
+  "reply": "Reply",
+  "forward": "Forward",
+  "tapToOpen": "Tap to open",
+  "failedToSelectFile": "Failed to select file",
+  "replyToUser": "Reply to user",
+  "forwardTo": "Forward to",
+  "uploadError": "Upload error",
+  "noChatsAvailable": "No chats available",
+  "online": "Online",
+  "offline": "Offline",
+  "forwarding": "Forwarding",
+  "sent": "Sent",
+
+  "chatSearch": "Search chats"
 
 }

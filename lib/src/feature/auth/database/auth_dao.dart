@@ -8,6 +8,7 @@ abstract class IAuthDao {
   PreferencesEntry<String> get deviceToken;
 
   PreferencesEntry<int> get cityId;
+  PreferencesEntry<bool> get notificationsEnabled;
 }
 
 class AuthDao extends TypedPreferencesDao implements IAuthDao {
@@ -23,4 +24,7 @@ class AuthDao extends TypedPreferencesDao implements IAuthDao {
 
   @override
   PreferencesEntry<int> get cityId => intEntry('cityId');
+
+   @override
+  PreferencesEntry<bool> get notificationsEnabled => boolEntry('notifications_enabled');
 }

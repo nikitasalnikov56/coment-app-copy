@@ -27,18 +27,19 @@ class PopularFeedbackItem extends StatelessWidget {
     if (user != null) {
       if (user.showRealName == true && user.username!.isNotEmpty) {
         displayName = user.username ?? 'Имя пользователя не установлено';
-      } else{
-        displayName = (user.name != null && user.name!.isNotEmpty) 
-        ? user.name! :   'Неизвестный пользователь';
+      } else {
+        displayName = (user.name != null && user.name!.isNotEmpty)
+            ? user.name!
+            : 'Неизвестный пользователь';
       }
     }
- 
+
     return Container(
       width: 330,
       margin: const EdgeInsets.only(right: 10),
-      decoration: const BoxDecoration(
-          color: AppColors.grey2,
-          borderRadius: BorderRadius.all(Radius.circular(12))),
+      decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
       child: Material(
         borderRadius: BorderRadius.circular(12),
         color: Colors.transparent,
@@ -57,24 +58,40 @@ class PopularFeedbackItem extends StatelessWidget {
                       child: Row(
                         children: [
                           const Gap(2),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: CachedNetworkImage(
-                              imageUrl: data.user?.avatar ?? NOT_FOUND_IMAGE,
-                              fit: BoxFit.cover,
-                              height: 40,
-                              width: 40,
-                              progressIndicatorBuilder:
-                                  ImageUtil.cachedLoadingBuilder,
-                            ),
-                          ),
+                          data.user?.avatar != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: CachedNetworkImage(
+                                    imageUrl: '${data.user?.avatar}',
+                                    fit: BoxFit.cover,
+                                    height: 40,
+                                    width: 40,
+                                    progressIndicatorBuilder:
+                                        ImageUtil.cachedLoadingBuilder,
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Theme.of(context).colorScheme.onSecondary,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    NO_IMAGE,
+                                    height: 40,
+                                    width: 40,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                           const Gap(14),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                 user?.showRealName == true ? '@$displayName' : displayName,
+                                  user?.showRealName == true
+                                      ? '@$displayName'
+                                      : displayName,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppTextStyles.fs14w600
                                       .copyWith(height: 1.2),
@@ -167,17 +184,3 @@ String formatDate(DateTime dateTime, String locale) {
   String formattedDate = DateFormat("MMMM d, yyyy", locale).format(dateTime);
   return formattedDate[0].toUpperCase() + formattedDate.substring(1);
 }
-// String formatDate(String dateString, String locale) {
-//   DateTime? dateTime = DateTime.tryParse(dateString);
-//   if (dateTime == null) {
-//     String trimmed = dateString.replaceFirst(RegExp(r'\.\d{3}Z$'), '');
-//     dateTime = DateTime.tryParse(trimmed);
-//   }
-//   if (dateTime == null) {
-//     return dateString;
-//   }
-//   String formattedDate = DateFormat("MMMM d, yyyy", locale).format(dateTime);
-
-//   // Делаем первую букву заглавной
-//   return formattedDate[0].toUpperCase() + formattedDate.substring(1);
-// }

@@ -60,8 +60,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   String companyNameData() {
-    if (companyName != null) {
-      return '$companyName';
+    if (companyName != null &&
+        companyName!.isNotEmpty &&
+        companyName != 'null') {
+      return companyName!;
     } else {
       return '';
     }
@@ -69,55 +71,70 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final defaultIconColor = isDark ? Colors.white : Colors.black;
     return AppBar(
       backgroundColor: backgroundColor,
+      toolbarHeight: preferredSize.height,
       leadingWidth: 57,
       leading: !btnBack
-          ? IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                context.router.maybePop();
-              },
-              splashRadius: 21,
-              icon: isBackButton
-                  ? SvgPicture.asset(
-                      svg ?? AssetsConstants.backButton,
-                      colorFilter: ColorFilter.mode(
-                        svgColor ?? Colors.black,
-                        BlendMode.srcIn,
-                      ),
-                    )
-                  : Container(
-                      width: 74,
-                    ),
-            )
+          ? Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: IconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    context.router.maybePop();
+                  },
+                  splashRadius: 21,
+                  icon: isBackButton
+                      ? SvgPicture.asset(
+                          svg ?? AssetsConstants.backButton,
+                          colorFilter: ColorFilter.mode(
+                            svgColor ?? defaultIconColor,
+                            BlendMode.srcIn,
+                          ),
+                        )
+                      : Container(
+                          width: 74,
+                        ),
+                ),
+            ),
+          )
           : null,
       centerTitle: true,
-      title: isChatPageActive
-          ? _buildChatTitle()
-          : _buildTitleColumn(isChatPageActive),
+      // title: isChatPageActive
+      //     ? _buildChatTitle(context)
+      //     : _buildTitleColumn(context, isChatPageActive),
+      flexibleSpace: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 57),
+        child: isChatPageActive
+            ? _buildChatTitle(context)
+            : _buildTitleColumn(context, isChatPageActive),
+      ),
       actions: actions,
       shape: shape,
     );
   }
 
-  Widget _buildChatTitle() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+  Widget _buildChatTitle(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildAvatar(),
-        const Gap(15),
-        Flexible(
-          child: _buildTitleColumn(isChatPageActive),
-        ),
+        const Gap(10),
+        _buildTitleColumn(context, isChatPageActive),
       ],
     );
   }
 
   Widget _buildAvatar() {
     return Container(
-      height: 40,
-      width: 40,
+      height: 60,
+      width: 60,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: const Color(0xFF7573F3), width: 3),
@@ -129,31 +146,56 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildTitleColumn(bool isChatPageActive) {
+  Widget _buildTitleColumn(BuildContext context, bool isChatPageActive) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final defaultSubTitleColor =
+        isDark ? const Color(0xFF9E9E9E) : AppColors.greyTextColor3;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         title != null
             ? SizedBox(
-                height: 22, // Задай фиксированную высоту для Marquee
+                height: 22,
                 width: double.infinity,
-                child: _buildTitleWidget(isChatPageActive),
+                child: _buildTitleWidget(context, isChatPageActive),
               )
             : const SizedBox(),
         const Gap(2),
-        const Gap(2),
         subTitle != null
-            ? Text(subTitle!, style: subTitleStyle)
+            ? Text(
+                subTitle!,
+                style: subTitleStyle ??
+                    AppTextStyles.fs12w700.copyWith(
+                      color: defaultSubTitleColor,
+                    ),
+              )
             : const SizedBox(),
       ],
     );
   }
 
-  Widget _buildTitleWidget(bool isChatPageActive) {
-    final String fullText =
-        '${companyNameData()} ${isChatPageActive ? '($title)' : '$title'}';
+  Widget _buildTitleWidget(BuildContext context, bool isChatPageActive) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final defaultTextColor = isDark ? Colors.white : AppColors.text;
+
+    final String companyNamePart = companyNameData();
+
+    final String fullText;
+
+    if (isChatPageActive) {
+      if (companyNamePart.isNotEmpty) {
+        fullText = '$companyNamePart ($title)';
+      } else {
+        fullText = title ?? '';
+      }
+    } else {
+      fullText = '$companyNamePart $title'.trim();
+    }
+
     final TextStyle style =
-        textStyle ?? AppTextStyles.fs16w700.copyWith(color: AppColors.text);
+        textStyle ?? AppTextStyles.fs16w700.copyWith(color: defaultTextColor);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -198,5 +240,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize =>  Size.fromHeight(isChatPageActive ? 150 : kToolbarHeight);
 }

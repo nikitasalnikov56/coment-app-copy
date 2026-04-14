@@ -1285,6 +1285,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Proceed to payment'**
   String get proceedToPayment;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @fio.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fio;
+
+  /// No description provided for @userName.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get userName;
+
+  /// No description provided for @loadingError.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading error'**
+  String get loadingError;
+
+  /// No description provided for @statusUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Status unknown'**
+  String get statusUnknown;
+
+  /// No description provided for @userEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'User email'**
+  String get userEmail;
+
+  /// No description provided for @userNameNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Username not set'**
+  String get userNameNotSet;
+
+  /// No description provided for @verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get verified;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get pending;
+
+  /// No description provided for @rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get rejected;
+
+  /// No description provided for @notRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Not requested'**
+  String get notRequested;
+
+  /// No description provided for @copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copied;
+
+  /// No description provided for @reply.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get reply;
+
+  /// No description provided for @forward.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward'**
+  String get forward;
+
+  /// No description provided for @tapToOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to open'**
+  String get tapToOpen;
+
+  /// No description provided for @failedToSelectFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to select file'**
+  String get failedToSelectFile;
+
+  /// No description provided for @replyToUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply to user'**
+  String get replyToUser;
+
+  /// No description provided for @forwardTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward to'**
+  String get forwardTo;
+
+  /// No description provided for @uploadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload error'**
+  String get uploadError;
+
+  /// No description provided for @noChatsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No chats available'**
+  String get noChatsAvailable;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// No description provided for @offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// No description provided for @forwarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Forwarding'**
+  String get forwarding;
+
+  /// No description provided for @chatSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search chats'**
+  String get chatSearch;
 }
 
 class _AppLocalizationsDelegate

@@ -22,9 +22,10 @@ class ProfileRowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: AppColors.muteGrey, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+          color: AppColors.muteGrey, borderRadius: BorderRadius.circular(16)),
       child: Material(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
@@ -43,6 +44,10 @@ class ProfileRowButton extends StatelessWidget {
                   child: SvgPicture.asset(
                     icon,
                     fit: BoxFit.contain,
+                    colorFilter: ColorFilter.mode(
+                      Theme.of(context).appBarTheme.iconTheme!.color ?? Colors.white,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),

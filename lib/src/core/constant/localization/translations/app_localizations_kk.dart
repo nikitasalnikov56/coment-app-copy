@@ -621,4 +621,76 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get proceedToPayment => 'Төлемге өту';
+
+  @override
+  String get settings => 'Параметрлер';
+
+  @override
+  String get fio => 'Т.А.Ә.';
+
+  @override
+  String get userName => 'Пайдаланушы аты';
+
+  @override
+  String get loadingError => 'Жүктеу қатесі';
+
+  @override
+  String get statusUnknown => 'Күйі белгісіз';
+
+  @override
+  String get userEmail => 'Пайдаланушының поштасы';
+
+  @override
+  String get userNameNotSet => 'Пайдаланушы аты орнатылмаған';
+
+  @override
+  String get verified => 'Расталған';
+
+  @override
+  String get pending => 'Қаралуда';
+
+  @override
+  String get rejected => 'Қабылданбады';
+
+  @override
+  String get notRequested => 'Сұралмаған';
+
+  @override
+  String get copied => 'Көшірілді';
+
+  @override
+  String get reply => 'Жауап беру';
+
+  @override
+  String get forward => 'Жіберу';
+
+  @override
+  String get tapToOpen => 'Ашу үшін басыңыз';
+
+  @override
+  String get failedToSelectFile => 'Файлды таңдау мүмкін болмады';
+
+  @override
+  String get replyToUser => 'Пайдаланушыға жауап беру';
+
+  @override
+  String get forwardTo => 'Кімге жіберу';
+
+  @override
+  String get uploadError => 'Жүктеу қатесі';
+
+  @override
+  String get noChatsAvailable => 'Қолжетімді чаттар жоқ';
+
+  @override
+  String get online => 'Желіде';
+
+  @override
+  String get offline => 'Желіде емес';
+
+  @override
+  String get forwarding => 'Жіберілуде';
+
+  @override
+  String get chatSearch => 'Чаттарды іздеу';
 }

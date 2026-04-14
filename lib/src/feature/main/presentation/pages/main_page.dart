@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/constant/assets_constants.dart';
@@ -8,6 +7,7 @@ import 'package:coment_app/src/core/presentation/widgets/scroll/pull_to_refresh_
 import 'package:coment_app/src/core/presentation/widgets/shimmer/shimmer_box.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
+
 import 'package:coment_app/src/feature/app/presentation/widgets/search_widget.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
 import 'package:coment_app/src/feature/catalog/presentation/widgets/catalog_grid_items.dart';
@@ -21,6 +21,7 @@ import 'package:coment_app/src/feature/main/presentation/widgets/popular_feedbac
 import 'package:coment_app/src/feature/main/presentation/widgets/popular_product_item.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/language_bottom_sheet.dart';
+import 'package:coment_app/src/feature/settings/widget/settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -80,14 +81,21 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    BlocProvider.of<DictionaryCubit>(context).getDictionary();
+    // Получаем настройки ДО запроса
+    final settings = SettingsScope.settingsOf(context, listen: false);
+    final localeCode = settings.locale?.languageCode ?? 'en';
+
+    // Передаем язык в кубит (тебе нужно будет обновить метод getDictionary в кубите, чтобы он принимал String)
+    BlocProvider.of<DictionaryCubit>(context)
+        .getDictionary(languageCode: localeCode);
+    // BlocProvider.of<DictionaryCubit>(context).getDictionary();
     BlocProvider.of<ProductListCubit>(context).getPopularProductList();
     BlocProvider.of<PopularFeedbacksCubit>(context).getPopularFeedbacks();
     if (context.appBloc.isAuthenticated) {
       BlocProvider.of<ProfileBLoC>(context)
           .add(const ProfileEvent.getProfile());
     } else {
-      selectedLanguage = languageFlag[1];
+      selectedLanguage = languageFlag[3];
     }
     super.initState();
   }
@@ -101,11 +109,11 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SmartRefresher(
         header: const RefreshClassicHeader(),
         controller: _refreshController,
         onRefresh: () {
-          log('${context.repository.authRepository.user?.city?.name}');
           BlocProvider.of<DictionaryCubit>(context).getDictionary();
           BlocProvider.of<ProductListCubit>(context).getPopularProductList(
               cityId: context.repository.authRepository.cityId);
@@ -154,8 +162,14 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         DecoratedBox(
                           decoration: BoxDecoration(
-                              color: AppColors.backgroundColor,
-                              border: Border.all(color: AppColors.borderColor),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest,
+                              border: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant,
+                              ),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(16))),
                           child: Material(
@@ -195,8 +209,9 @@ class _MainPageState extends State<MainPage> {
                             child: SearchWidget(
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(16),
-                                    borderSide: const BorderSide(
-                                      color: AppColors.borderColor,
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
                                     )),
                                 readOnly: true,
                                 onTap: () => context.router
@@ -204,8 +219,14 @@ class _MainPageState extends State<MainPage> {
                         const Gap(4),
                         DecoratedBox(
                           decoration: BoxDecoration(
-                              color: AppColors.backgroundColor,
-                              border: Border.all(color: AppColors.borderColor),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest,
+                              border: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant,
+                              ),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(16))),
                           child: Material(
@@ -268,64 +289,77 @@ class _MainPageState extends State<MainPage> {
                   return state.maybeWhen(
                       orElse: () => _catalogSkeleton(),
                       loaded: (mainDTO) => SizedBox(
-                            height: 208,
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.only(left: 16, top: 2),
-                              scrollDirection: Axis.horizontal,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 1,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 8,
-                              ),
-                              itemCount: mainDTO.catalog?.length,
-                              // itemCount: catalogTitle.length,
-                              itemBuilder: (context, index) {
-                                return CatalogGridItem(
-                                  title: context.currentLocale.toString() ==
-                                          'kk'
-                                      ? '${mainDTO.catalog?[index].nameKk}'
-                                      : context.currentLocale.toString() == 'en'
-                                          ? '${mainDTO.catalog?[index].nameEn}'
-                                          : context.currentLocale.toString() ==
-                                                  'uz'
-                                              ? '${mainDTO.catalog?[index].nameUz}'
-                                              : context.currentLocale
-                                                          .toString() ==
-                                                      'zh'
-                                                  ? '${mainDTO.catalog?[index].nameZh}'
-                                                  : '${mainDTO.catalog?[index].name}',
-                                  image: mainDTO.catalog?[index].image ??
-                                      NOT_FOUND_IMAGE,
-                                  index: index,
-                                  onTap: () {
-                                    context.router.push(SubcatalogRoute(
-                                        title: context.currentLocale
+                        height: 208,
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          padding:
+                              const EdgeInsets.only(left: 16, top: 2),
+                          scrollDirection: Axis.horizontal,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                          ),
+                          itemCount: mainDTO.catalog?.length,
+                          // itemCount: catalogTitle.length,
+                          itemBuilder: (context, index) {
+                            final settings =
+                                SettingsScope.settingsOf(context);
+                            final localeCode =
+                                settings.locale?.languageCode ?? 'en';
+                            final item = mainDTO.catalog?[index];
+                      
+                            // ЛОГИКА ВЫБОРА ЗАГОЛОВКА:
+                            String title =
+                                item?.name ?? ''; // По умолчанию (RU)
+                      
+                            if (localeCode == 'en') {
+                              // Если в конфиге EN, то ДАЖЕ если сервер прислал RU в поле name,
+                              // мы принудительно берем поле nameEn
+                              title = (item?.nameEn != null &&
+                                      item!.nameEn!.isNotEmpty)
+                                  ? item.nameEn!
+                                  : title;
+                            } else if (localeCode == 'kk') {
+                              title = item?.nameKk ?? title;
+                            } else if (localeCode == 'uz') {
+                              title = item?.nameUz ?? title;
+                            }
+                      
+                            return CatalogGridItem(
+                              title: title,
+                              image: mainDTO.catalog?[index].image ??
+                                  NOT_FOUND_IMAGE,
+                              index: index,
+                              onTap: () {
+                                context.router.push(SubcatalogRoute(
+                                    title: context.currentLocale
+                                                .toString() ==
+                                            'kk'
+                                        ? '${mainDTO.catalog?[index].nameKk}'
+                                        : context.currentLocale
                                                     .toString() ==
-                                                'kk'
-                                            ? '${mainDTO.catalog?[index].nameKk}'
+                                                'en'
+                                            ? '${mainDTO.catalog?[index].nameEn}'
                                             : context.currentLocale
                                                         .toString() ==
-                                                    'en'
-                                                ? '${mainDTO.catalog?[index].nameEn}'
+                                                    'uz'
+                                                ? '${mainDTO.catalog?[index].nameUz}'
                                                 : context.currentLocale
                                                             .toString() ==
-                                                        'uz'
-                                                    ? '${mainDTO.catalog?[index].nameUz}'
-                                                    : context.currentLocale
-                                                                .toString() ==
-                                                            'zh'
-                                                        ? '${mainDTO.catalog?[index].nameZh}'
-                                                        : '${mainDTO.catalog?[index].name}',
-                                        catalogId:
-                                            mainDTO.catalog?[index].id ?? 0));
-                                  },
-                                );
+                                                        'zh'
+                                                    ? '${mainDTO.catalog?[index].nameZh}'
+                                                    : '${mainDTO.catalog?[index].name}',
+                                    catalogId:
+                                        mainDTO.catalog?[index].id ??
+                                            0));
                               },
-                            ),
-                          ));
+                            );
+                          },
+                        ),
+                      ));
                 },
               ),
 

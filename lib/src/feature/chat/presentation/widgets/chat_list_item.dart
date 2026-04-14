@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:coment_app/src/core/constant/constants.dart';
 import 'package:coment_app/src/core/theme/resources.dart';
 import 'package:coment_app/src/feature/chat/model/conversation_dto.dart';
@@ -16,12 +17,8 @@ class ChatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final String nameToDisplay =
-    //     (conversation.title != null && conversation.title!.isNotEmpty)
-    //         ? conversation.title!
-    //         : (conversation.partner?.name ?? 'Неизвестный');
+    log("🟠 [ChatListItem] Отрисовка чата ${conversation.id}. unreadCount = ${conversation.unreadCount}");
     final partner = conversation.partner;
-    print(partner?.avatar);
 
     // Логика выбора имени:
     // 1. Если showRealName == true, берем ник (username)
@@ -43,7 +40,6 @@ class ChatListItem extends StatelessWidget {
     String subtitleText = 'Нет сообщений';
     final lastMsg = conversation.lastMessage;
 
-
     if (lastMsg != null) {
       // Проверяем, есть ли ссылка на голосовое
       if (lastMsg.voiceUrl != null && lastMsg.voiceUrl!.isNotEmpty) {
@@ -57,59 +53,119 @@ class ChatListItem extends StatelessWidget {
       }
     }
 
-    return ListTile(
-      leading: Container(
-        height: 90,
-        width: 90,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: const Color(0xFF7573F3), width: 3),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(
-              conversation.partner?.avatar != null
-                  ? '${conversation.partner?.avatar}'
-                  : NOT_FOUND_IMAGE,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: const Color(0xFFF5F5F5),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.barrierColor,
+              offset: Offset(
+                1,
+                2,
+              ),
+              blurRadius: 4,
+            ),
+          ]),
+      child: ListTile(
+        titleAlignment: ListTileTitleAlignment.center,
+        isThreeLine: true,
+        leading: Container(
+          height: 90,
+          width: 90,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: const Color(0xFF7573F3), width: 3),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: conversation.partner?.avatar != null
+                  ? NetworkImage(
+                      '${conversation.partner?.avatar}',
+                    )
+                  : const AssetImage(NO_IMAGE),
             ),
           ),
         ),
-      ),
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            partner?.showRealName == true ? '@$nameToDisplay' : nameToDisplay,
-            style: AppTextStyles.fs16w400.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              partner?.showRealName == true ? '@$nameToDisplay' : nameToDisplay,
+              style: AppTextStyles.fs16w400.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
             ),
-          ),
-          Text(companyNameToDisplay ?? 'Компания не указана', style: AppTextStyles.fs12w400,),
-          const Gap(10)
-        ],
-      ),
-      subtitle: Text(
-        subtitleText,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.fs12w400.copyWith(
+            if (companyNameToDisplay != null &&
+                companyNameToDisplay.isNotEmpty &&
+                companyNameToDisplay != 'null')
+              Text(
+                companyNameToDisplay,
+                style: AppTextStyles.fs12w400,
+              ),
+            companyNameToDisplay == null || companyNameToDisplay.isEmpty
+                ? const Gap(0)
+                : const Gap(10)
+          ],
+        ),
+        subtitle: Text(
+          subtitleText,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.fs12w400.copyWith(
             color: subtitleText == '🎙 Голосовое сообщение'
                 ? AppColors.mainColor
                 : AppColors.greyTextColor2,
-            fontWeight: FontWeight.w600),
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+          ),
+        ),
+        trailing: Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (conversation.unreadCount > 0)
+                Container(
+                  width: 18,
+                  height: 18,
+                  decoration: const BoxDecoration(
+                    color: AppColors.blue,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${conversation.unreadCount}',
+                      style: AppTextStyles.fs12w400.copyWith(
+                        color: AppColors.backgroundColor2,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                const SizedBox(
+                  height: 12,
+                ),
+              if (lastMsg?.createdAt != null)
+                Text(
+                  '${lastMsg!.createdAt.hour}:${lastMsg.createdAt.minute.toString().padLeft(2, '0')}',
+                  style: AppTextStyles.fs12w400.copyWith(
+                    color: Theme.of(context).textTheme.titleSmall?.color,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        onTap: () {
+          onTap();
+        },
       ),
-      trailing: lastMsg?.createdAt != null
-          ? Text(
-              '${lastMsg!.createdAt.hour}:${lastMsg.createdAt.minute.toString().padLeft(2, '0')}',
-              style: AppTextStyles.fs12w400
-                  .copyWith(color: AppColors.greyTextColor),
-            )
-          : null,
-      onTap: () {
-        onTap();
-      },
     );
   }
 }

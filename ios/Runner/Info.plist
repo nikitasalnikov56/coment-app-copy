@@ -70,5 +70,22 @@
 	<string>Приложению нужен доступ к микрофону, если вы захотите записать аудио.</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.your.package.name</string> <key>CFBundleURLSchemes</key>
+			<array>
+				<string>comentapp</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

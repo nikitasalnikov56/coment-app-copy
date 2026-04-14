@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/feature/app/logic/reactivex_service.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
+import 'package:coment_app/src/feature/auth/data/auth_remote_ds.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -112,26 +115,6 @@ class NotificationService {
     });
   }
 
-  /// Handle firebase notification tap
-  // void _handleOnTap(RemoteMessage event, BuildContext context) {
-  //   log('"ONTAP:::" data --- ${event.data}', name: _tag);
-  //   log('"ONTAP:" data --- ${event.data['type']}', name: _tag);
-
-  //   try {
-  //     final data = PushDataDTO.fromJson(event.data);
-  //     log('${data.feedbackId}', name: 'feedback id from push');
-  //     context.router.replaceAll([
-  //       LauncherRoute(),
-  //       FeedbackDetailRoute(
-  //           id: int.parse(data.feedbackId ?? '0'),
-  //           userId: 0,
-  //           needPageCard: true),
-  //     ]);
-  //   } catch (e, stackTrace) {
-  //     log('Error navigating to detail screen: $e\n$stackTrace', name: _tag);
-  //   }
-  // }
-
   void _handleOnTap(RemoteMessage event, BuildContext context) {
     log('"ONTAP:::" data --- ${event.data}', name: _tag);
     log('"ONTAP:" data --- ${event.data['type']}', name: _tag);
@@ -214,6 +197,81 @@ class NotificationService {
       await FirebaseMessaging.instance.unsubscribeFromTopic('push_$topic');
     } catch (e) {
       log('$e', name: _tag);
+    }
+  }
+
+  /// Включает/выключает уведомления
+  Future<void> setNotificationsEnabled({
+    required bool enabled,
+    required IAuthDao authDao,
+    required IAuthRemoteDS
+        authRemoteDS, // ← передаём remote DS для API-запросов
+  }) async {
+    try {
+      // 1. Сохраняем локально (используем .value и .setValue())
+      await authDao.notificationsEnabled.setValue(enabled);
+
+      // 2. Подписываем/отписываем от топиков
+      if (enabled) {
+        await subscribeToTopic(topic: 'all');
+      } else {
+        await unsubscribeFromTopic(topic: 'all');
+      }
+
+      // 2. Получаем токен и тип устройства
+      final deviceToken = authDao.deviceToken.value;
+      // final deviceType = Platform.isAndroid ? 'android' : 'ios';
+
+      if (deviceToken != null) {
+        await authRemoteDS.updateNotificationSettings(
+          deviceToken: deviceToken,
+          enabled: enabled,
+        );
+      }
+
+      // // 3. Если пользователь авторизован — отправляем предпочтение на бэкенд
+      // final userStr = authDao.user.value; // ← .value, не .getValue()
+      // if (userStr != null && userStr != 'null') {
+      //   final user =
+      //       UserDTO.fromJson(jsonDecode(userStr) as Map<String, dynamic>);
+      //   if (user.accessToken != null) {
+      //     await _sendNotificationPreferenceToBackend(
+      //       enabled,
+      //       user.accessToken!,
+      //       authRemoteDS, // ← используем remote DS для запроса
+      //       deviceToken,
+      //     );
+      //   }
+      // }
+    } catch (e) {
+      log('Failed to set notification preference: $e', name: _tag);
+      rethrow;
+    }
+  }
+
+  /// Получает текущее состояние уведомлений
+  Future<bool> getNotificationsEnabled(IAuthDao authDao) async {
+    // ← .value возвращает T?, не нужен await
+    return authDao.notificationsEnabled.value ?? true;
+  }
+
+  /// Отправляет предпочтение на бэкенд
+  Future<void> _sendNotificationPreferenceToBackend(
+    bool enabled,
+    String accessToken,
+    IAuthRemoteDS authRemoteDS, // ← интерфейс для API
+    String? deviceToken,
+  ) async {
+    try {
+      // Используем ваш существующий remote DS для отправки
+      await authRemoteDS.updateNotificationSettings(
+        enabled: enabled,
+        deviceToken: deviceToken,
+        // deviceToken можно получить отдельно, если нужно
+      );
+    } catch (e) {
+      log('Failed to send notification preference to backend: $e', name: _tag);
+      // Не выбрасываем ошибку, чтобы не ломать локальное сохранение
     }
   }
 }

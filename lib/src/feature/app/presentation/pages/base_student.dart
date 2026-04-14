@@ -111,14 +111,14 @@ class _BaseStudentBottomNavbarState extends State<BaseStudentBottomNavbar> {
         top: 2,
         bottom: MediaQuery.viewPaddingOf(context).bottom,
       ),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration:  BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
-        boxShadow: [
-          BoxShadow(
+        boxShadow:const [
+           BoxShadow(
             color: Color.fromRGBO(16, 5, 5, 0.078),
             blurRadius: 80,
           ),

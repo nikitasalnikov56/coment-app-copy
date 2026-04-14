@@ -72,38 +72,18 @@ class RepositoryStorage implements IRepositoryStorage {
   @override
   Future<void> close() async {
     _restClient = null;
-    // _portalRestClient = null;
-    // _marketplaceRestClient = null;
-    // _gamificationRestClient = null;
   }
-
-  ///
-  /// Network
-  ///
-  // @override
-  // IRestClient get restClient => _restClient ??= RestClientDio(
-  //       // baseUrl: 'http://localhost:3001/api/v1/',
-  //       // baseUrl: 'http://46.226.123.73/api/',
-  //       baseUrl: 'http://10.0.2.2:3001/api/v1/',
-  //       dioClient: DioClient(
-  //         // baseUrl: 'http://localhost:3001/api/v1/',
-  //         baseUrl: 'http://10.0.2.2:3001/api/v1/',
-  //         // baseUrl: 'http://46.226.123.73/api/',
-  //         interceptor: const DioInterceptor(),
-  //         authDao: authDao,
-  //         packageInfo: _packageInfo, appSettingsDS: _appSettingsDatasource,
-  //         // settings: SettingsDao(sharedPreferences: sharedPreferences),
-  //       ),
-  //     );
 
   @override
   IRestClient get restClient => _restClient ??= RestClientDio(
         // baseUrl: 'http://10.0.2.2:5000/api/v1/',
-        baseUrl: 'https://8813-94-158-59-67.ngrok-free.app/api/v1/',
+        baseUrl: 'https://coment.kz/api/v1/',
+        // baseUrl: 'https://92f1-94-158-60-134.ngrok-free.app/api/v1/',
         // baseUrl: 'http://192.168.0.100:3001/api/v1/',
         dioClient: DioClient(
           // baseUrl: 'http://10.0.2.2:5000/api/v1/',
-          baseUrl: 'https://8813-94-158-59-67.ngrok-free.app/api/v1/',
+          baseUrl: 'https://coment.kz/api/v1/',
+          // baseUrl: 'https://92f1-94-158-60-134.ngrok-free.app/api/v1/',
           // baseUrl: 'http://192.168.0.100:3001/api/v1/',
           interceptor: DioInterceptor(), // ← обычный, без параметров
           authDao: authDao,
@@ -182,5 +162,6 @@ class RepositoryStorage implements IRepositoryStorage {
   IVoiceRepository get voiceRepository => VoiceRepositoryImpl();
 
   @override
-  IFileRepository get fileRepository => FileRepositoryImpl(Supabase.instance.client);
+  IFileRepository get fileRepository =>
+      FileRepositoryImpl(Supabase.instance.client);
 }

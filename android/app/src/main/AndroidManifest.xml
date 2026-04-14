@@ -16,7 +16,8 @@
     <application
         android:label="Coment"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -50,7 +51,7 @@
                     android:name="android.intent.category.DEFAULT"/>
                 <category
                     android:name="android.intent.category.BROWSABLE"/>
-                    
+                <data android:scheme="comentapp" android:host="payment-success" />    
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

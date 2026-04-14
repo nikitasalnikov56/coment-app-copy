@@ -198,7 +198,36 @@
   "paymentSecurityInfo": "Все операции защищены и проводятся через официальные шлюзы платежных сервисов",
   "paySecurelyVia": "Оплатить безопасно через",
   "redirectToSecurePage": "Вы будете перенаправлены на защищенную веб-страницу сервиса",
-  "proceedToPayment": "Перейти к оплате"
+  "proceedToPayment": "Перейти к оплате",
+
+  "settings":"Настройки",
+  "fio": "ФИО",
+  "userName": "Имя пользователя",
+  "loadingError": "Ошибка загрузки",
+  "statusUnknown": "Статус неизвестен",
+  "userEmail": "Почта пользователя",
+  "userNameNotSet": "Имя пользователя не установлено",
+  
+  "verified": "Верифицирован",
+  "pending": "На рассмотрении",
+  "rejected": "Отклонено",
+  "notRequested": "Не запрашивалось",
+
+  "copied": "Скопировано",
+  "reply": "Ответить",
+  "forward": "Переслать",
+  "tapToOpen": "Нажмите, чтобы открыть",
+  "failedToSelectFile": "Не удалось выбрать файл",
+  "replyToUser": "Ответ пользователю",
+  "forwardTo": "Переслать в",
+  "uploadError": "Ошибка загрузки",
+  "noChatsAvailable": "Нет доступных чатов",
+  "online": "В сети",
+  "offline": "Офлайн",
+  "forwarding": "Пересылаем",
+  "sent": "Отправлено",
+
+   "chatSearch": "Поиск чатов"
 
 
 }

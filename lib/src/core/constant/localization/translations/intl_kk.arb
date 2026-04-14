@@ -198,5 +198,33 @@
   "paymentSecurityInfo": "Барлық операциялар қорғалған және ресми төлем сервистерінің шлюздері арқылы жүргізіледі",
   "paySecurelyVia": "Келесі арқылы қауіпсіз төлеу",
   "redirectToSecurePage": "Сіз сервистің қауіпсіз веб-бетіне бағытталасыз",
-  "proceedToPayment": "Төлемге өту"
+  "proceedToPayment": "Төлемге өту",
+
+  "settings": "Параметрлер",
+   "fio": "Т.А.Ә.",
+  "userName": "Пайдаланушы аты",
+  "loadingError": "Жүктеу қатесі",
+  "statusUnknown": "Күйі белгісіз",
+  "userEmail": "Пайдаланушының поштасы",
+  "userNameNotSet": "Пайдаланушы аты орнатылмаған",
+  "verified": "Расталған",
+  "pending": "Қаралуда",
+  "rejected": "Қабылданбады",
+  "notRequested": "Сұралмаған",
+
+   "copied": "Көшірілді",
+  "reply": "Жауап беру",
+  "forward": "Жіберу",
+  "tapToOpen": "Ашу үшін басыңыз",
+  "failedToSelectFile": "Файлды таңдау мүмкін болмады",
+  "replyToUser": "Пайдаланушыға жауап беру",
+  "forwardTo": "Кімге жіберу",
+  "uploadError": "Жүктеу қатесі",
+  "noChatsAvailable": "Қолжетімді чаттар жоқ",
+  "online": "Желіде",
+  "offline": "Желіде емес",
+  "forwarding": "Жіберілуде",
+  "sent": "Жіберілді",
+
+  "chatSearch": "Чаттарды іздеу"
 }

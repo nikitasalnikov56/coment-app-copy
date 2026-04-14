@@ -49,12 +49,14 @@ class ChatRepositoryImpl implements IChatRepository {
   int? loadingConversationId;
 
   // 1. Добавляем контроллер для уведомления об обновлении списка бесед
-  final PublishSubject<void> _conversationsUpdateController =
-      PublishSubject<void>();
+  // final PublishSubject<void> _conversationsUpdateController =
+  //     PublishSubject<void>();
+  final PublishSubject<ChatMessageDTO> _conversationsUpdateController =
+      PublishSubject<ChatMessageDTO>();
 
 // 2. Добавляем геттер для этого стрима
   @override
-  Stream<void> get conversationsUpdateStream =>
+  Stream<ChatMessageDTO> get conversationsUpdateStream =>
       _conversationsUpdateController.stream;
 
   ChatRepositoryImpl(this._restClient);
@@ -134,18 +136,33 @@ class ChatRepositoryImpl implements IChatRepository {
       _channel = null;
     }
 
+//для релиза расскоментировать
     final uri = Uri(
       scheme: 'wss',
-      host: '8813-94-158-59-67.ngrok-free.app',
-      path: '/chat',
+      host: 'coment.kz',
+      path: '/api/v1/chat',
       queryParameters: {'token': token},
     );
 
+    // final uri = Uri(
+    //   scheme: 'wss',
+    //   host: '92f1-94-158-60-134.ngrok-free.app',
+    //   path: '/chat',
+    //   queryParameters: {'token': token},
+    // );
+
+//для релиза расскоментировать
     _channel = IOWebSocketChannel.connect(
       uri.toString(),
-      headers: {'ngrok-skip-browser-warning': 'true'},
+      // headers: {'ngrok-skip-browser-warning': 'true'},
       pingInterval: const Duration(seconds: 5),
     );
+
+    // _channel = IOWebSocketChannel.connect(
+    //   uri.toString(),
+    //   headers: {'ngrok-skip-browser-warning': 'true'},
+    //   pingInterval: const Duration(seconds: 5),
+    // );
 
     _channel!.stream.listen(_handleMessage, onError: (e) {
       log("❌ WS Error: $e");
@@ -165,64 +182,96 @@ class ChatRepositoryImpl implements IChatRepository {
       final msgData = message['data'];
 
       log("📥 WS EVENT: $event | DATA: $msgData");
-
+ final int? incomingId = msgData['conversationId'] as int?;
       // --- ИСПРАВЛЕННЫЙ ФИЛЬТР ---
-      if (event == 'message.new' || event == 'messages.deleted') {
-        final int? incomingId = msgData['conversationId'] as int?;
+      // if (event == 'message.new' || event == 'messages.deleted') {
+      //   final int? incomingId = msgData['conversationId'] as int?;
 
-        // 1. Если это НОВОЕ сообщение, ID чата обязан быть и совпадать
-        if (event == 'message.new') {
-          if (_currentConversationId == null ||
-              incomingId != _currentConversationId) {
-            // log("ℹ️ Ignored NEW message for conversation: $incomingId");
-            return;
-          }
-        }
+      //   // 1. Если это НОВОЕ сообщение, ID чата обязан быть и совпадать
+      //   // if (event == 'message.new') {
+      //   //   if (_currentConversationId == null ||
+      //   //       incomingId != _currentConversationId) {
+      //   //     // log("ℹ️ Ignored NEW message for conversation: $incomingId");
+      //   //     return;
+      //   //   }
+      //   // }
 
-        // 2. Если это УДАЛЕНИЕ, ID чата может не прийти (null).
-        // Если он пришел - проверяем. Если null - пропускаем (доверяем, что это наши сообщения).
-        if (event == 'messages.deleted') {
-          if (incomingId != null && incomingId != _currentConversationId) {
-            log("ℹ️ Ignored DELETE event for another conversation: $incomingId");
-            return;
-          }
-        }
-      }
+      //   // 2. Если это УДАЛЕНИЕ, ID чата может не прийти (null).
+      //   // Если он пришел - проверяем. Если null - пропускаем (доверяем, что это наши сообщения).
+      //   if (event == 'messages.deleted') {
+      //     if (incomingId != null && incomingId != _currentConversationId) {
+      //       log("ℹ️ Ignored DELETE event for another conversation: $incomingId");
+      //       return;
+      //     }
+      //   }
+      // }
       // ---------------------------
 
       switch (event) {
         case 'message.new':
           final newMessage =
               ChatMessageDTO.fromJson(msgData as Map<String, dynamic>);
-          final current = _messagesController.value;
-          _messagesController.add([newMessage, ...current]);
-          _conversationsUpdateController.add(null);
-          break;
-
-        case 'messages.deleted':
-          final deletedData = msgData; // msgData уже есть data из json
-          if (deletedData != null && deletedData['messageIds'] != null) {
-            final List<int> deletedIds =
-                List<int>.from(deletedData['messageIds']);
-
-            // Получаем текущий список
-            final currentMessages = _messagesController.value;
-
-            // Проверяем, есть ли вообще у нас сообщения с такими ID, чтобы зря не эмитить
-            // (Это защита от удаления сообщений из чужих чатов, если id уникальны)
-            final bool hasChanges =
-                currentMessages.any((msg) => deletedIds.contains(msg.id));
-
-            if (hasChanges) {
-              final updatedMessages = currentMessages.where((msg) {
-                return !deletedIds.contains(msg.id);
-              }).toList();
-
-              _messagesController.add(updatedMessages);
-              log("🗑️ [ChatRepo] Удалены сообщения: $deletedIds");
-            }
+          // final current = _messagesController.value;
+          // _messagesController.add([newMessage, ...current]);
+          // 1. Если мы прямо сейчас сидим внутри этого чата — обновляем экран переписки
+          if (_currentConversationId != null &&
+              newMessage.conversationId == _currentConversationId) {
+            final current = _messagesController.value;
+            _messagesController.add([newMessage, ...current]);
           }
+          _conversationsUpdateController.add(newMessage);
           break;
+
+        // case 'messages.deleted':
+        //   final deletedData = msgData; // msgData уже есть data из json
+        //   if (deletedData != null && deletedData['messageIds'] != null) {
+        //     final List<int> deletedIds =
+        //         List<int>.from(deletedData['messageIds']);
+
+        //     // Получаем текущий список
+        //     final currentMessages = _messagesController.value;
+
+        //     // Проверяем, есть ли вообще у нас сообщения с такими ID, чтобы зря не эмитить
+        //     // (Это защита от удаления сообщений из чужих чатов, если id уникальны)
+        //     final bool hasChanges =
+        //         currentMessages.any((msg) => deletedIds.contains(msg.id));
+
+        //     if (hasChanges) {
+        //       final updatedMessages = currentMessages.where((msg) {
+        //         return !deletedIds.contains(msg.id);
+        //       }).toList();
+
+        //       _messagesController.add(updatedMessages);
+        //       log("🗑️ [ChatRepo] Удалены сообщения: $deletedIds");
+        //     }
+            
+        //   }
+        //   break;
+        case 'messages.deleted':
+        if (msgData != null && msgData['messageIds'] != null) {
+          final List<int> deletedIds = List<int>.from(msgData['messageIds']);
+
+          // А) Обновляем экран переписки (если открыт этот чат)
+          if (_currentConversationId != null && incomingId == _currentConversationId) {
+            final currentMessages = _messagesController.value;
+            final updatedMessages = currentMessages.where((msg) => !deletedIds.contains(msg.id)).toList();
+            _messagesController.add(updatedMessages);
+            log("🗑️ [ChatRepo] Сообщения удалены из UI переписки");
+          }
+
+          // Б) ВАЖНО: Уведомляем список чатов, чтобы он пересчитал unreadCount
+          // Отправляем "пустышку" с нужным conversationId, чтобы Cubit понял, какой чат обновить
+          _conversationsUpdateController.add(ChatMessageDTO(
+            id: -1, // Наш флаг для Cubit
+            conversationId: incomingId ?? 0,
+            content: 'REFRESH_LIST',
+            createdAt: DateTime.now(),
+            // Передаем пустого юзера, так как поле required
+            sender: const UserDTO(id: 0, email: ''), 
+            isRead: true,
+          ));
+        }
+        break;
         case 'users.online_list':
           final List<dynamic> onlineIds = msgData['onlineIds'] ?? [];
           log("🌐 Получен список пользователей онлайн: $onlineIds");
@@ -259,6 +308,7 @@ class ChatRepositoryImpl implements IChatRepository {
       log("❌ Error handling WebSocket message: $e");
     }
   }
+
 
   void _updateStatusFromSocket(dynamic statusData) {
     if (statusData == null) return;
@@ -370,11 +420,17 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   void _sendJson(Map<String, dynamic> data) {
-    if (_channel != null) {
+    if (_channel != null && _channel!.sink != null) {
       // _channel!.sink.add(jsonEncode(data));
-      final String rawJson = jsonEncode(data);
-      log("📤 WS SENDING: $rawJson"); // СМОТРИ ЭТОТ ЛОГ В КОНСОЛИ
-      _channel!.sink.add(rawJson);
+      if (_channel!.closeCode == null) {
+        final String rawJson = jsonEncode(data);
+        log("📤 WS SENDING: $rawJson"); // СМОТРИ ЭТОТ ЛОГ В КОНСОЛИ
+        _channel!.sink.add(rawJson);
+      } else {
+        log("⚠️ WS CANNOT SEND: Socket is closing/closed. Code: ${_channel!.closeCode}");
+        // Здесь можно вызвать переподключение
+        scheduleReconnect();
+      }
     } else {
       log("⚠️ WS CANNOT SEND: Channel is null");
     }
@@ -502,6 +558,18 @@ class ChatRepositoryImpl implements IChatRepository {
     } catch (e) {
       log("❌ Ошибка получения ID чата по компании: $e");
       rethrow;
+    }
+  }
+
+// Добавь этот метод в ChatRepositoryImpl (и не забудь добавить его в интерфейс IChatRepository)
+  @override
+  Future<void> connectGlobalSocket(String token) async {
+    _currentToken = token;
+    // Если сокет еще не подключен — подключаем
+    if (_channel == null) {
+      await _establishSocketConnection(token);
+      _startPing();
+      log("✅ [ChatRepo] Global socket connected for real-time list updates");
     }
   }
 }

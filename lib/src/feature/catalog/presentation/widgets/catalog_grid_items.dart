@@ -33,7 +33,10 @@ class CatalogGridItem extends StatelessWidget {
               width: 72,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.grey,
+                color: 
+                Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xFF242C39) // Тёмный фон в тёмной теме
+                    : AppColors.grey,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -44,19 +47,18 @@ class CatalogGridItem extends StatelessWidget {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: CachedNetworkImage(
-                    imageUrl: (image ?? '').trim(),
-                    placeholder: (context, url) =>
-                      const Center(
-                         child:  CircularProgressIndicator(
-                         strokeWidth: 2,
-                         constraints: BoxConstraints(
-                           minHeight: 15,
-                           minWidth: 15
-                         ),
-                                                  ),
-                       ),
-                        errorWidget: (context, url, error) => Image.asset(NOT_FOUND_IMAGE),
-                        fit: BoxFit.cover,
+                    // imageUrl: (image ?? '').trim(),
+                    imageUrl: '${(image ?? '').trim()}?v=${DateTime.now().millisecondsSinceEpoch}',
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        constraints:
+                            BoxConstraints(minHeight: 15, minWidth: 15),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        Image.asset(NOT_FOUND_IMAGE),
+                    fit: BoxFit.cover,
                   )
                   // Image.network(image ?? NOT_FOUND_IMAGE),
                   ),
@@ -66,7 +68,11 @@ class CatalogGridItem extends StatelessWidget {
               title,
               // catalogTitle[index],
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.fs14w500,
+              style: AppTextStyles.fs14w500.copyWith(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : null,
+              ),
             )
           ],
         ),

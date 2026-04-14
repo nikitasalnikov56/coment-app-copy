@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:coment_app/src/core/presentation/widgets/dialog/toaster.dart';
@@ -49,10 +50,18 @@ class _MessagePageState extends State<MessagePage> {
       final chatRepo = context.repository.chatRepository;
       final token = context.repository.authRepository.user?.accessToken;
       if (token != null) {
+        chatRepo.connectGlobalSocket(token);
+
         _conversationsSubscription =
-            chatRepo.conversationsUpdateStream.listen((_) {
+            chatRepo.conversationsUpdateStream.listen((newMessage) {
+          log("🟢 [MessagePage] ПОЙМАЛИ СООБЩЕНИЕ ИЗ СТРИМА: chatId=${newMessage.conversationId}, text=${newMessage.content}");
           if (mounted) {
-            context.read<ConversationsCubit>().loadConversations(token);
+            // context.read<ConversationsCubit>().loadConversations(token);
+            context
+                .read<ConversationsCubit>()
+                .updateConversationWithNewMessage(newMessage);
+          } else {
+            log("🔴 [MessagePage] Виджет не mounted, игнорируем обновление.");
           }
         });
       }
@@ -106,7 +115,7 @@ class _MessagePageState extends State<MessagePage> {
                     controller: searchController,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    hintText: context.localized.search,
+                    hintText: context.localized.chatSearch,
                     onChanged: (value) {
                       setState(() {
                         searchQuery = value.toLowerCase();
@@ -136,9 +145,13 @@ class _MessagePageState extends State<MessagePage> {
                 // Ищем по заголовку (title) или по имени партнера (если есть)
                 final title = conv.title?.toLowerCase() ?? '';
                 final partnerName = conv.partner?.name?.toLowerCase() ?? '';
+                final companyName = conv.companyName?.toLowerCase() ?? '';
 
-                return title.contains(searchQuery) ||
-                    partnerName.contains(searchQuery);
+                final matches = title.contains(searchQuery) ||
+                    partnerName.contains(searchQuery) ||
+                    companyName.contains(searchQuery);
+
+                return matches;
               }).toList();
 
               if (filteredConversations.isEmpty) {
@@ -148,7 +161,8 @@ class _MessagePageState extends State<MessagePage> {
                   ),
                 );
               }
-              return ListView.builder(
+              return ListView.separated(
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
                 // itemCount: conversations.length,
                 itemCount: filteredConversations.length,
                 itemBuilder: (context, index) {
@@ -169,7 +183,7 @@ class _MessagePageState extends State<MessagePage> {
                         ? 'Компания #$companyId'
                         : (displayName ?? 'Чат');
                   }
-    
+
                   return ChatListItem(
                     conversation: conv,
                     onTap: () async {

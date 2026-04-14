@@ -622,4 +622,76 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get proceedToPayment => 'To‘lovga o‘tish';
+
+  @override
+  String get settings => 'Sozlamalar';
+
+  @override
+  String get fio => 'F.I.Sh.';
+
+  @override
+  String get userName => 'Foydalanuvchi nomi';
+
+  @override
+  String get loadingError => 'Yuklashda xatolik';
+
+  @override
+  String get statusUnknown => 'Holat noma\'lum';
+
+  @override
+  String get userEmail => 'Foydalanuvchi pochtasi';
+
+  @override
+  String get userNameNotSet => 'Foydalanuvchi nomi o‘rnatilmagan';
+
+  @override
+  String get verified => 'Tasdiqlangan';
+
+  @override
+  String get pending => 'Ko‘rib chiqilmoqda';
+
+  @override
+  String get rejected => 'Rad etilgan';
+
+  @override
+  String get notRequested => 'So‘ralmagan';
+
+  @override
+  String get copied => 'Nusxa olindi';
+
+  @override
+  String get reply => 'Javob berish';
+
+  @override
+  String get forward => 'Yuborish';
+
+  @override
+  String get tapToOpen => 'Ochish uchun bosing';
+
+  @override
+  String get failedToSelectFile => 'Faylni tanlab bo‘lmadi';
+
+  @override
+  String get replyToUser => 'Foydalanuvchiga javob berish';
+
+  @override
+  String get forwardTo => 'Kimga yuborish';
+
+  @override
+  String get uploadError => 'Yuklash xatosi';
+
+  @override
+  String get noChatsAvailable => 'Mavjud chatlar yo‘q';
+
+  @override
+  String get online => 'Onlayn';
+
+  @override
+  String get offline => 'Oflayn';
+
+  @override
+  String get forwarding => 'Yuborilmoqda';
+
+  @override
+  String get chatSearch => 'Chatlarni qidirish';
 }

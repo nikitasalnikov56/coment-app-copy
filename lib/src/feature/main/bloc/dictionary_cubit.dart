@@ -12,11 +12,11 @@ class DictionaryCubit extends Cubit<DictionaryState> {
         super(const DictionaryState.initial());
   final IMainRepository _repository;
 
-  Future<void> getDictionary() async {
+  Future<void> getDictionary({String? languageCode}) async {
     try {
       emit(const DictionaryState.loading());
 
-      final result = await _repository.dictionary();
+      final result = await _repository.dictionary(languageCode: languageCode);
 
       if (isClosed) return;
 

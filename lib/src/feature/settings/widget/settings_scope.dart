@@ -1,10 +1,14 @@
+import 'package:coment_app/src/feature/app/logic/notification_service.dart';
 import 'package:coment_app/src/feature/auth/bloc/register_cubit.dart';
 import 'package:coment_app/src/feature/catalog/model/create_product_model.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
+import 'package:coment_app/src/feature/profile/bloc/notification_settings_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_cubit.dart';
 import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
+import 'package:coment_app/src/feature/settings/bloc/theme_cubit.dart';
+import 'package:coment_app/src/feature/settings/data/app_settings_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -77,6 +81,30 @@ class _SettingsScopeState extends State<SettingsScope> {
         bloc: _appSettingsBloc,
         builder: (context, state) => MultiBlocProvider(
           providers: [
+            BlocProvider(
+              create: (context) {
+                final authDao = context.repository.authDao;
+                final authRemoteDs = context.repository.authRemoteDS;
+                final notificationService = NotificationService();
+                return NotificationSettingsCubit(
+                  authDao: authDao,
+                  notificationService: notificationService,
+                  authRemoteDS: authRemoteDs,
+                )..loadSettings(); // Загружаем состояние при инициализации
+              },
+            ),
+            BlocProvider(
+              create: (context) {
+                // Получаем datasource из контейнера зависимостей
+                final datasource =
+                    DependenciesScope.of(context).appSettingsDatasource;
+                // Создаём репозиторий на его основе
+                final repository =
+                    AppSettingsRepositoryImpl(datasource: datasource);
+                // Создаём и инициализируем кубит
+                return ThemeCubit(settingsRepository: repository)..loadTheme();
+              },
+            ),
             BlocProvider(
               create: (context) => AppBloc(context.repository.authRepository),
             ),

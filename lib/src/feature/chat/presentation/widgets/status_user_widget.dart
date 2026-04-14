@@ -24,7 +24,8 @@ class StatusUserWidget extends StatefulWidget implements PreferredSizeWidget {
   State<StatusUserWidget> createState() => _StatusUserWidgetState();
 
   @override
-  Size get preferredSize => const Size(double.infinity, kToolbarHeight);
+  Size get preferredSize =>
+      Size(double.infinity, isChatPageActive ? 150 : kToolbarHeight);
 }
 
 class _StatusUserWidgetState extends State<StatusUserWidget> {
@@ -70,7 +71,6 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-   
     // 1. Используем watch, чтобы виджет обновлялся при загрузке сообщений
     final chatCubit = context.watch<ChatCubit>();
     final activeRepo = chatCubit.repository;
@@ -156,9 +156,21 @@ class _StatusUserWidgetState extends State<StatusUserWidget> {
           subTitleStyle: AppTextStyles.fs12w400.copyWith(
             color: isOnline ? AppColors.green : AppColors.greyTextColor,
           ),
-          isChatPageActive: true,
-  
-                                     
+          isChatPageActive: widget.isChatPageActive,
+          actions: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.settings,
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
