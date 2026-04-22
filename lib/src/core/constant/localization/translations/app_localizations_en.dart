@@ -691,4 +691,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatSearch => 'Search chats';
+
+  @override
+  String get editCompany => 'Edit company';
+
+  @override
+  String get darkTheme => 'Dark theme';
+
+  @override
+  String get profileLoading => 'Profile loading';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get selectStars => 'Select number of stars';
+
+  @override
+  String get alreadyReviewed =>
+      'You have already left a review for this company';
+
+  @override
+  String get loginToReview => 'Please log in to leave a review';
+
+  @override
+  String get submitError =>
+      'An error occurred while submitting. Please try again later.';
+
+  @override
+  String get attention => 'Attention';
+
+  @override
+  String get moderationWarning =>
+      'You violated the community guidelines. Your comment contained inappropriate language and has been sent for moderation.';
+
+  @override
+  String get followGuidelines => 'Please follow the community guidelines.';
+
+  @override
+  String get commentAutoCorrected =>
+      'Your comment contained inappropriate language and was automatically corrected.';
+
+  @override
+  String get commentRejected =>
+      'Your comment contained inappropriate language and was not published';
+
+  @override
+  String get companyAdded => 'Company successfully added!';
+
+  @override
+  String get selectSubcategory => 'Select a subcategory';
+
+  @override
+  String get subcategoryName => 'Subcategory name';
+
+  @override
+  String get addresses => 'Addresses';
+
+  @override
+  String get addressPhone => 'Address phone number';
+
+  @override
+  String get websiteUrl => 'Website link';
+
+  @override
+  String get link => 'Link';
+
+  @override
+  String get cityName => 'City name';
+
+  @override
+  String get noCompany => 'You don\'t have a company yet';
+
+  @override
+  String get createCompanyHint =>
+      'To edit data, you first need to create a company profile.';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get updateCompany => 'Updating company data';
 }

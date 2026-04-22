@@ -225,5 +225,40 @@
   "forwarding": "Yuborilmoqda",
   "sent": "Yuborildi",
 
-  "chatSearch": "Chatlarni qidirish"
+  "chatSearch": "Chatlarni qidirish",
+  "editCompany": "Kompaniyani tahrirlash",
+
+    "darkTheme": "Qorong‘i rejim",
+  "profileLoading": "Profil yuklanmoqda",
+  "notifications": "Bildirishnomalar",
+  
+  "selectStars": "Yulduzlar sonini tanlang",
+  "alreadyReviewed": "Siz bu kompaniya uchun allaqachon sharh qoldirgansiz",
+  "loginToReview": "Sharh qoldirish uchun tizimga kiring",
+  "submitError": "Yuborishda xatolik yuz berdi. Keyinroq qayta urinib ko‘ring.",
+  "attention": "Diqqat",
+  "moderationWarning": "Siz hamjamiyat qoidalarini buzdingiz. Sizning izohingizda nomaqbul iboralar bor edi va u moderatsiyaga yuborildi.",
+  "followGuidelines": "Iltimos, hamjamiyat qoidalariga rioya qiling.",
+  "commentAutoCorrected": "Sizning izohingizda nomaqbul iboralar bor edi va u avtomatik ravishda tuzatildi.",
+  "commentRejected": "Sizning izohingizda nomaqbul iboralar bor edi va u chop etilmadi",
+
+  "companyAdded": "Kompaniya muvaffaqiyatli qo‘shildi!",
+"add": "Qo‘shish",
+"selectSubcategory": "Kichik kategoriyani tanlang",
+"subcategoryName": "Kichik kategoriya nomi",
+"addresses": "Manzillar",
+"addressPhone": "Manzil telefon raqami",
+"websiteUrl": "Sayt havolasi",
+"link": "Havola",
+"country": "Mamlakat",
+"countryName": "Mamlakat nomi",
+"city": "Shahar",
+"cityName": "Shahar nomi",
+
+"noCompany": "Sizda hali kompaniya yo‘q",
+"createCompanyHint": "Ma'lumotlarni tahrirlash uchun avval kompaniya kartasini yaratishingiz kerak.",
+"cancel": "Bekor qilish",
+"create": "Yaratish",
+"success": "Muvaffaqiyatli",
+"updateCompany": "Kompaniya ma'lumotlarini yangilash"
 }

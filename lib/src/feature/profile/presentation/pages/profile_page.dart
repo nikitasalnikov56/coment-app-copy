@@ -9,10 +9,13 @@ import 'package:coment_app/src/core/utils/extensions/context_extension.dart';
 import 'package:coment_app/src/feature/app/bloc/app_bloc.dart';
 import 'package:coment_app/src/feature/app/presentation/widgets/custom_appbar_widget.dart';
 import 'package:coment_app/src/feature/app/router/app_router.dart';
+import 'package:coment_app/src/feature/auth/models/user_dto.dart';
 import 'package:coment_app/src/feature/main/bloc/dictionary_cubit.dart';
 import 'package:coment_app/src/feature/main/presentation/widgets/city_main_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:coment_app/src/feature/profile/bloc/verification_cubit.dart';
 import 'package:coment_app/src/feature/profile/models/response/verification_status.dart';
+import 'package:coment_app/src/feature/profile/presentation/pages/settings_page.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/language_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/logout_bottom_sheet.dart';
 import 'package:coment_app/src/feature/profile/presentation/widgets/profile_avatar.dart';
@@ -52,6 +55,30 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
+  void _showNoCompanyDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title:  Text(context.localized.noCompany),
+        content:  Text(
+            context.localized.createCompanyHint),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child:  Text( context.localized.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.router.push(const SelectCategoriesRoute());
+            },
+            child:  Text(context.localized.create),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // log('${context.appBloc.isAuthenticated}', name: 'profile page');
@@ -68,24 +95,6 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 0.5,
             ),
           ),
-          actions: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: const Color(0x33BBB5FE),
-                borderRadius: BorderRadius.circular(12),
-              ),
-
-              // padding: EdgeInsets.only(bottom: 25),
-              margin: const EdgeInsets.only(right: 15),
-              child: IconButton(
-                  onPressed: () {
-                    context.pushRoute(const SettingsRoute());
-                  },
-                  icon: const Icon(Icons.settings)),
-            )
-          ],
         ),
         body: BlocConsumer<ProfileBLoC, ProfileState>(
           listener: (context, state) {
@@ -100,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               exited: (message) {
                 context.loaderOverlay.hide();
-                Toaster.showTopShortToast(context, message: 'Успешно');
+                Toaster.showTopShortToast(context, message: context.localized.success);
                 // context.router.popUntil((route) => route.settings.name == LauncherRoute.name);
                 BlocProvider.of<AppBloc>(context).add(const AppEvent.exiting());
               },
@@ -173,122 +182,148 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   const Gap(12),
-                                  ListTile(
-                                    leading: Container(
-                                      width: 34,
-                                      height: 34,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0x33BBB5FE),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Icon(
-                                        Icons.person_3_outlined,
-                                        size: 20,
-                                        color: Theme.of(context)
-                                            .appBarTheme
-                                            .iconTheme
-                                            ?.color,
-                                      ),
-                                    ),
-                                    title: Text(
-                                      userDTO.name ?? '',
-                                      style: AppTextStyles.fs18w500.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.color,
-                                        height: 1.2,
-                                      ),
-                                    ),
-                                    subtitle: verificationStatus != null
-                                        ? _buildVerificationStatus(
-                                            verificationStatus)
-                                        : Text(context.localized.statusUnknown),
-                                    contentPadding: const EdgeInsets.all(0),
-                                    minVerticalPadding: 0,
-                                    minTileHeight: 60,
-                                  ),
-                                  ListTile(
-                                    leading: Container(
-                                      width: 34,
-                                      height: 34,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0x33BBB5FE),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Icon(
-                                        Icons.email_outlined,
-                                        size: 20,
-                                        color: Theme.of(context)
-                                            .appBarTheme
-                                            .iconTheme
-                                            ?.color,
-                                      ),
-                                    ),
-                                    title: Text(
-                                      userDTO.email ?? '',
-                                      style: AppTextStyles.fs18w500.copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.color,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      context.localized.userEmail,
-                                      style: AppTextStyles.fs12w400.copyWith(
-                                        color: AppColors.greyTextColor,
-                                      ),
-                                    ),
-                                    contentPadding: const EdgeInsets.all(0),
-                                    minVerticalPadding: 0,
-                                    minTileHeight: 60,
-                                  ),
                                 ],
                               ),
                             ),
-                            ListTile(
-                              leading: Container(
-                                width: 34,
-                                height: 34,
-                                decoration: BoxDecoration(
-                                  color: const Color(0x33BBB5FE),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  Icons.alternate_email,
-                                  size: 20,
-                                  color: Theme.of(context)
-                                      .appBarTheme
-                                      .iconTheme
-                                      ?.color,
-                                ),
-                              ),
-                              title: Text(
-                                userDTO.username ??
-                                    context.localized.userNameNotSet,
-                                style: AppTextStyles.fs18w500.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+
+                            ProfilePageListTileWidget(
+                              userDTO: userDTO,
+                              icon: Icons.person_3_outlined,
+                              text: userDTO.name ?? '',
+                              subtitle: verificationStatus != null
+                                  ? _buildVerificationStatus(verificationStatus)
+                                  : Text(context.localized.statusUnknown),
+                            ),
+                            ProfilePageListTileWidget(
+                              icon: Icons.email_outlined,
+                              userDTO: userDTO,
+                              text: userDTO.email ?? '',
                               subtitle: Text(
-                                context.localized.userName,
+                                context.localized.userEmail,
                                 style: AppTextStyles.fs12w400.copyWith(
                                   color: AppColors.greyTextColor,
                                 ),
                               ),
-                              contentPadding: const EdgeInsets.all(0),
-                              minVerticalPadding: 0,
-                              minTileHeight: 60,
+                            ),
+                            if (isOwner)
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ///
+                                  /// <--`ADD COMPANY`-->
+                                  ///
+                                  ProfileRowButton(
+                                    icon: AssetsConstants.companyAdd,
+                                    title: context.localized.companyAdd,
+                                    onTap: () {
+                                      context.router
+                                          .push(const SelectCategoriesRoute());
+                                    },
+                                  ),
+
+                                  ///
+                                  /// <--`ADD COMPANY DOCUMENTS`-->
+                                  ///
+                                  ProfileRowButton(
+                                    icon: AssetsConstants.documentsAdd,
+                                    title: context.localized.loadDocuments,
+                                    onTap: () {
+                                      context.router.push(
+                                        const LoadDocumentsRoute(),
+                                      );
+                                    },
+                                  ),
+
+                                  ///
+                                  /// <--`EDIT COMPANY`-->
+                                  ///
+                                  BlocConsumer<VerificationCubit,
+                                      VerificationState>(
+                                    listener: (context, state) {
+                                      // Если мы ждали загрузки и она случилась — переходим
+                                      state.maybeWhen(
+                                        companiesLoaded: (companies) {
+                                          if (companies.isNotEmpty) {
+                                            // Можно убрать уведомление о загрузке, если оно висело
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+
+                                            // Если вам нужно, чтобы переход случился сам сразу после появления данных:
+                                            context.router.push(
+                                                EditCompanyRoute(
+                                                    company: companies.first));
+                                          }
+                                        },
+                                        orElse: () {},
+                                      );
+                                    },
+                                    builder: (context, state) {
+                                      // Проверяем, идет ли сейчас загрузка
+                                      final isLoading = state.maybeWhen(
+                                          loading: () => true,
+                                          orElse: () => false);
+
+                                      return ProfileRowButton(
+                                        icon: AssetsConstants.editCompany,
+                                        title: context.localized.editCompany,
+                                        onTap: isLoading
+                                            ? null
+                                            : () {
+                                                state.maybeMap(
+                                                  // СЛУЧАЙ 1: Данные уже есть
+                                                  companiesLoaded: (s) {
+                                                    if (s
+                                                        .companies.isNotEmpty) {
+                                                      context.router.push(
+                                                          EditCompanyRoute(
+                                                              company: s
+                                                                  .companies
+                                                                  .first));
+                                                    } else {
+                                                      _showNoCompanyDialog(
+                                                          context);
+                                                    }
+                                                  },
+                                                  // СЛУЧАЙ 2: Данных еще нет (initial или loading)
+                                                  orElse: () {
+                                                    // Запускаем загрузку, если она еще не шла
+                                                    context
+                                                        .read<
+                                                            VerificationCubit>()
+                                                        .fetchMyCompanies();
+
+                                                    // Вместо диалога ошибки показываем уведомление, что данные обновляются
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                             SnackBar(
+                                                                content: Text(
+                                                                    '${context.localized.updateCompany}...')));
+                                                  },
+                                                );
+                                              },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+
+                            ///
+                            /// <--`PAYMENT`-->
+                            ///
+                            ProfileRowButton(
+                              icon: AssetsConstants.payment,
+                              title: context.localized.payment,
+                              onTap: () {
+                                context.router.push(const PaymentRoute());
+                              },
                             ),
 
-                            const Gap(16),
+                             ///
+                            /// <--`SETTINGS`-->
+                            ///
+                            const SettingsPage(),
+                            // const Gap(10),
 
                             ///
                             /// <-- `edit profile` -->
@@ -304,7 +339,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
-                            const Gap(12),
+                            // const Gap(20),
 
                             ///
                             /// rating
@@ -316,7 +351,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context.router.push(const RaitingRoute());
                               },
                             ),
-                            const Gap(12),
+                            // const Gap(12),
 
                             ///
                             /// history of my reviews
@@ -330,7 +365,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
-                            const Gap(12),
+                            // const Gap(12),
 
                             ///
                             /// helpdesk
@@ -343,7 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     user: userDTO);
                               },
                             ),
-                            const Gap(12),
+                            // const Gap(12),
 
                             ///
                             /// language
@@ -362,7 +397,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
-                            const Gap(12),
+                            // const Gap(12),
 
                             ///
                             /// <-- `City` -->
@@ -426,46 +461,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ));
                               },
                             ),
-                            const Gap(12),
-                            if (isOwner)
-                              Column(
-                                spacing: 12,
-                                children: [
-                                  ProfileRowButton(
-                                    icon: AssetsConstants.documentsAdd,
-                                    title: context.localized.loadDocuments,
-                                    onTap: () {
-                                      context.router.push(
-                                        const LoadDocumentsRoute(),
-                                      );
-                                    },
-                                  ),
-                                  ProfileRowButton(
-                                    icon: AssetsConstants.companyAdd,
-                                    title: context.localized.companyAdd,
-                                    onTap: () {
-                                      context.router
-                                          .push(const SelectCategoriesRoute());
-                                    },
-                                  ),
-                                  ProfileRowButton(
-                                    icon: AssetsConstants.payment,
-                                    title: context.localized.payment,
-                                    onTap: () {
-                                      context.router.push(const PaymentRoute());
-                                    },
-                                  )
-                                ],
-                              ),
-                            if (isOwner) const Gap(12),
-                            // ProfileRowButton(
-                            //   icon: AssetsConstants.message,
-                            //   title: context.localized.message,
-                            //   onTap: () {
-                            //     context.router.push(const MessageRoute());
-                            //   },
-                            // ),
-                            // : const SizedBox(),
 
                             ///
                             /// <-- `Logout` -->
@@ -485,7 +480,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
-                            const Gap(20),
                           ],
                         ),
                       ),
@@ -536,6 +530,51 @@ class _ProfilePageState extends State<ProfilePage> {
           style: AppTextStyles.fs14w500.copyWith(color: color),
         ),
       ],
+    );
+  }
+}
+
+class ProfilePageListTileWidget extends StatelessWidget {
+  const ProfilePageListTileWidget({
+    super.key,
+    required this.userDTO,
+    required this.icon,
+    required this.text,
+    this.subtitle,
+  });
+  final UserDTO userDTO;
+  final IconData icon;
+  final String text;
+  final Widget? subtitle;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60,
+      child: ListTile(
+        leading: Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: const Color(0x33BBB5FE),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: Theme.of(context).appBarTheme.iconTheme?.color,
+          ),
+        ),
+        title: Text(
+          text,
+          style: AppTextStyles.fs16w500.copyWith(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            height: 1.2,
+          ),
+        ),
+        subtitle: subtitle,
+        contentPadding: const EdgeInsets.all(0),
+        minVerticalPadding: 0,
+      ),
     );
   }
 }

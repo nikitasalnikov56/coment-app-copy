@@ -15,11 +15,13 @@ class SelectPaymentMethod extends StatefulWidget {
 }
 
 class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
-  List<String> paymentMethods = ['Payme', 'Click', 'Uzum Bank'];
+  List<String> paymentMethods = ['Payme', 'Click', 'Uzum Bank', 'Stripe'];
   List<String> paymentsLogos = [
     AssetsConstants.payme,
     AssetsConstants.click,
-    AssetsConstants.uzumBank
+    AssetsConstants.uzumBank,
+    AssetsConstants.stripe,
+
   ];
 
   int? selectedIndex;
@@ -185,30 +187,3 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
   }
 }
 
-
-// crossAxisCount: 3,
-//               mainAxisSpacing: 6,
-//               crossAxisSpacing: 6,
-//               children: [
-//                 Card(
-//                   child: Center(
-//                     child: Image.asset(AssetsConstants.payme),
-//                   ),
-//                 ),
-//                 Card(
-//                   child: Center(
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(14.0),
-//                       child: ClipRRect(
-//                         borderRadius: BorderRadius.circular(14),
-//                         child: Image.asset(AssetsConstants.click),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 Card(
-//                   child: Center(
-//                     child: Image.asset(AssetsConstants.uzumBank),
-//                   ),
-//                 ),
-//               ],

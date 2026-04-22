@@ -12,7 +12,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get accountRegister => 'Hisobni ro\'yxatdan o\'tkazish';
 
   @override
-  String get add => 'Qo\'shish';
+  String get add => 'Qo‘shish';
 
   @override
   String get addPhoto => 'Surat qo\'shish';
@@ -694,4 +694,86 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get chatSearch => 'Chatlarni qidirish';
+
+  @override
+  String get editCompany => 'Kompaniyani tahrirlash';
+
+  @override
+  String get darkTheme => 'Qorong‘i rejim';
+
+  @override
+  String get profileLoading => 'Profil yuklanmoqda';
+
+  @override
+  String get notifications => 'Bildirishnomalar';
+
+  @override
+  String get selectStars => 'Yulduzlar sonini tanlang';
+
+  @override
+  String get alreadyReviewed =>
+      'Siz bu kompaniya uchun allaqachon sharh qoldirgansiz';
+
+  @override
+  String get loginToReview => 'Sharh qoldirish uchun tizimga kiring';
+
+  @override
+  String get submitError =>
+      'Yuborishda xatolik yuz berdi. Keyinroq qayta urinib ko‘ring.';
+
+  @override
+  String get attention => 'Diqqat';
+
+  @override
+  String get moderationWarning =>
+      'Siz hamjamiyat qoidalarini buzdingiz. Sizning izohingizda nomaqbul iboralar bor edi va u moderatsiyaga yuborildi.';
+
+  @override
+  String get followGuidelines =>
+      'Iltimos, hamjamiyat qoidalariga rioya qiling.';
+
+  @override
+  String get commentAutoCorrected =>
+      'Sizning izohingizda nomaqbul iboralar bor edi va u avtomatik ravishda tuzatildi.';
+
+  @override
+  String get commentRejected =>
+      'Sizning izohingizda nomaqbul iboralar bor edi va u chop etilmadi';
+
+  @override
+  String get companyAdded => 'Kompaniya muvaffaqiyatli qo‘shildi!';
+
+  @override
+  String get selectSubcategory => 'Kichik kategoriyani tanlang';
+
+  @override
+  String get subcategoryName => 'Kichik kategoriya nomi';
+
+  @override
+  String get addresses => 'Manzillar';
+
+  @override
+  String get addressPhone => 'Manzil telefon raqami';
+
+  @override
+  String get websiteUrl => 'Sayt havolasi';
+
+  @override
+  String get link => 'Havola';
+
+  @override
+  String get cityName => 'Shahar nomi';
+
+  @override
+  String get noCompany => 'Sizda hali kompaniya yo‘q';
+
+  @override
+  String get createCompanyHint =>
+      'Ma\'lumotlarni tahrirlash uchun avval kompaniya kartasini yaratishingiz kerak.';
+
+  @override
+  String get create => 'Yaratish';
+
+  @override
+  String get updateCompany => 'Kompaniya ma\'lumotlarini yangilash';
 }

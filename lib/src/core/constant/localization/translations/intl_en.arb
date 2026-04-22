@@ -226,6 +226,41 @@
   "forwarding": "Forwarding",
   "sent": "Sent",
 
-  "chatSearch": "Search chats"
+  "chatSearch": "Search chats",
+   "editCompany": "Edit company",
+
+   "darkTheme": "Dark theme",
+    "profileLoading": "Profile loading",
+    "notifications": "Notifications",
+
+     "selectStars": "Select number of stars",
+  "alreadyReviewed": "You have already left a review for this company",
+  "loginToReview": "Please log in to leave a review",
+  "submitError": "An error occurred while submitting. Please try again later.",
+  "attention": "Attention",
+  "moderationWarning": "You violated the community guidelines. Your comment contained inappropriate language and has been sent for moderation.",
+  "followGuidelines": "Please follow the community guidelines.",
+  "commentAutoCorrected": "Your comment contained inappropriate language and was automatically corrected.",
+  "commentRejected": "Your comment contained inappropriate language and was not published",
+
+  "companyAdded": "Company successfully added!",
+"add": "Add",
+"selectSubcategory": "Select a subcategory",
+"subcategoryName": "Subcategory name",
+"addresses": "Addresses",
+"addressPhone": "Address phone number",
+"websiteUrl": "Website link",
+"link": "Link",
+"country": "Country",
+"countryName": "Country name",
+"city": "City",
+"cityName": "City name",
+
+"noCompany": "You don't have a company yet",
+"createCompanyHint": "To edit data, you first need to create a company profile.",
+"cancel": "Cancel",
+"create": "Create",
+"success": "Success",
+"updateCompany": "Updating company data"
 
 }

@@ -226,5 +226,41 @@
   "forwarding": "正在转发",
   "sent": "已发送",
 
-  "chatSearch": "搜索聊天"
+  "chatSearch": "搜索聊天",
+
+  "editCompany": "编辑公司",
+
+  "darkTheme": "深色模式",
+  "profileLoading": "正在加载个人资料",
+  "notifications": "通知",
+
+  "selectStars": "请选择星级数量",
+  "alreadyReviewed": "您已经为该公司留下过评价",
+  "loginToReview": "请登录以留下评价",
+  "submitError": "提交时发生错误。请稍后再试。",
+  "attention": "注意",
+  "moderationWarning": "您违反了社区规则。您的评论包含不当内容，已被送去审核。",
+  "followGuidelines": "请遵守社区规则。",
+  "commentAutoCorrected": "您的评论包含不当内容，已被自动修正。",
+  "commentRejected": "您的评论包含不当内容，未被发布",
+
+  "companyAdded": "公司已成功添加！",
+"add": "添加",
+"selectSubcategory": "选择子类别",
+"subcategoryName": "子类别名称",
+"addresses": "地址",
+"addressPhone": "地址电话号码",
+"websiteUrl": "网站链接",
+"link": "链接",
+"country": "国家",
+"countryName": "国家名称",
+"city": "城市",
+"cityName": "城市名称",
+
+"noCompany": "您还没有公司",
+"createCompanyHint": "要编辑数据，您需要先创建公司资料。",
+"cancel": "取消",
+"create": "创建",
+"success": "成功",
+"updateCompany": "更新公司信息"
 }

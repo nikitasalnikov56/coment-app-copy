@@ -693,4 +693,84 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get chatSearch => 'Чаттарды іздеу';
+
+  @override
+  String get editCompany => 'Компанияны өңдеу';
+
+  @override
+  String get darkTheme => 'Қараңғы режим';
+
+  @override
+  String get profileLoading => 'Профиль жүктелуде';
+
+  @override
+  String get notifications => 'Хабарландырулар';
+
+  @override
+  String get selectStars => 'Жұлдыздар санын таңдаңыз';
+
+  @override
+  String get alreadyReviewed => 'Сіз бұл компанияға бұрын пікір қалдырғансыз';
+
+  @override
+  String get loginToReview => 'Пікір қалдыру үшін жүйеге кіріңіз';
+
+  @override
+  String get submitError =>
+      'Жіберу кезінде қате орын алды. Кейінірек қайталап көріңіз.';
+
+  @override
+  String get attention => 'Назар аударыңыз';
+
+  @override
+  String get moderationWarning =>
+      'Сіз қауымдастық ережелерін бұздыңыз. Сіздің пікіріңізде рұқсат етілмеген сөздер болды және ол модерацияға жіберілді.';
+
+  @override
+  String get followGuidelines => 'Қауымдастық ережелерін сақтаңыз.';
+
+  @override
+  String get commentAutoCorrected =>
+      'Сіздің пікіріңізде рұқсат етілмеген сөздер болды және ол автоматты түрде түзетілді.';
+
+  @override
+  String get commentRejected =>
+      'Сіздің пікіріңізде рұқсат етілмеген сөздер болды және ол жарияланбады';
+
+  @override
+  String get companyAdded => 'Компания сәтті қосылды!';
+
+  @override
+  String get selectSubcategory => 'Ішкі санатты таңдаңыз';
+
+  @override
+  String get subcategoryName => 'Ішкі санат атауы';
+
+  @override
+  String get addresses => 'Мекенжайлар';
+
+  @override
+  String get addressPhone => 'Мекенжайдың телефон нөмірі';
+
+  @override
+  String get websiteUrl => 'Сайтқа сілтеме';
+
+  @override
+  String get link => 'Сілтеме';
+
+  @override
+  String get cityName => 'Қала атауы';
+
+  @override
+  String get noCompany => 'Сізде әлі компания жоқ';
+
+  @override
+  String get createCompanyHint =>
+      'Деректерді өңдеу үшін алдымен ұйым карточкасын жасау қажет.';
+
+  @override
+  String get create => 'Құру';
+
+  @override
+  String get updateCompany => 'Компания деректерін жаңарту';
 }

@@ -12,7 +12,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get accountRegister => 'Регистрация аккаунта';
 
   @override
-  String get add => 'Добавлять';
+  String get add => 'Добавить';
 
   @override
   String get addPhoto => 'Добавить фото';
@@ -49,7 +49,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get camera => 'Камера';
 
   @override
-  String get cancel => 'Отменить';
+  String get cancel => 'Отмена';
 
   @override
   String get catalog => 'Каталог';
@@ -692,4 +692,83 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get chatSearch => 'Поиск чатов';
+
+  @override
+  String get editCompany => 'Редактировать компанию';
+
+  @override
+  String get darkTheme => 'Тёмная тема';
+
+  @override
+  String get profileLoading => 'Загрузка профиля';
+
+  @override
+  String get notifications => 'Уведомления';
+
+  @override
+  String get selectStars => 'Выберите количество звезд';
+
+  @override
+  String get alreadyReviewed => 'Вы уже оставляли отзыв для этой компании';
+
+  @override
+  String get loginToReview => 'Пожалуйста, авторизуйтесь, чтобы оставить отзыв';
+
+  @override
+  String get submitError => 'Произошла ошибка при отправке. Попробуйте позже.';
+
+  @override
+  String get attention => 'Внимание';
+
+  @override
+  String get moderationWarning =>
+      'Вы нарушили правила сообщества. Ваш комментарий содержал недопустимые выражения и был отправлен на модерацию.';
+
+  @override
+  String get followGuidelines => 'Пожалуйста, соблюдайте правила сообщества.';
+
+  @override
+  String get commentAutoCorrected =>
+      'Ваш комментарий содержал недопустимые выражения и был автоматически исправлен.';
+
+  @override
+  String get commentRejected =>
+      'Ваш комментарий содержал недопустимые выражения и не был опубликован';
+
+  @override
+  String get companyAdded => 'Компания успешно добавлена!';
+
+  @override
+  String get selectSubcategory => 'Выберите подкатегорию';
+
+  @override
+  String get subcategoryName => 'Название подкатегории';
+
+  @override
+  String get addresses => 'Адреса';
+
+  @override
+  String get addressPhone => 'Номер телефона адреса';
+
+  @override
+  String get websiteUrl => 'Ссылка на сайт';
+
+  @override
+  String get link => 'Ссылка';
+
+  @override
+  String get cityName => 'Название города';
+
+  @override
+  String get noCompany => 'У вас еще нет компании';
+
+  @override
+  String get createCompanyHint =>
+      'Чтобы редактировать данные, сначала нужно создать карточку организации.';
+
+  @override
+  String get create => 'Создать';
+
+  @override
+  String get updateCompany => 'Обновление данных компании';
 }

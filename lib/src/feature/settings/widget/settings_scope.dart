@@ -6,6 +6,7 @@ import 'package:coment_app/src/feature/profile/bloc/load_documents_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/notification_settings_cubit.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:coment_app/src/feature/profile/bloc/profile_cubit.dart';
+import 'package:coment_app/src/feature/profile/bloc/verification_cubit.dart';
 import 'package:coment_app/src/feature/profile/data/profile_remote_ds.dart';
 import 'package:coment_app/src/feature/settings/bloc/theme_cubit.dart';
 import 'package:coment_app/src/feature/settings/data/app_settings_repository.dart';
@@ -136,6 +137,11 @@ class _SettingsScopeState extends State<SettingsScope> {
             BlocProvider(
               create: (context) => LoadDocumentsCubit(
                 context.read<IProfileRemoteDS>(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => VerificationCubit(
+                context.repository.profileRepository,
               ),
             ),
             ChangeNotifierProvider(

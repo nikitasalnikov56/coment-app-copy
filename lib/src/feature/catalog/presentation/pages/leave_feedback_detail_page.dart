@@ -124,31 +124,6 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
   Country? selectedCountry;
   MaskTextInputFormatter? _phoneMaskFormatter;
 
-  // void checkAllowTapButton() {
-  //   final isSubCatValid = subCategoryController.text.isNotEmpty;
-  //   final isNameValid = nameController.text.isNotEmpty;
-  //   final isAddressValid = addressController.text.isNotEmpty;
-  //   final isPhoneValid = phoneController.text.length == 16;
-  //   final isCountryValid = countryController.text.isNotEmpty;
-  //   final isCityValid = cityController.text.isNotEmpty;
-  //   final isProductImagesValid = imageFileList.isNotEmpty;
-
-  //   final isFeedbackImagesValid = feedbackImageFileList.isNotEmpty;
-  //   final isRatingValid = _selectedRating != 0;
-  //   final isFeedbackTextValid = feedbackController.text.isNotEmpty;
-
-  //   allowTapButton = isSubCatValid &&
-  //       isNameValid &&
-  //       isAddressValid &&
-  //       isPhoneValid &&
-  //       isCountryValid &&
-  //       isProductImagesValid &&
-  //       isRatingValid &&
-  //       isFeedbackTextValid &&
-  //       isFeedbackImagesValid &&
-  //       isCityValid;
-  //   setState(() {});
-  // }
   void checkAllowTapButton() {
     final phoneUnmasked =
         phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
@@ -189,11 +164,6 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
     phoneController.text = widget.value.phoneNumber ?? '';
     linkController.text = widget.value.link ?? '';
     subCategoryController.text = widget.value.subCategoryTitle ?? '';
-    // if (phoneController.text != '') {
-    //   parsePhoneNumber('${widget.value.phoneNumber}');
-    // } else {
-    //   selectedCountry = countries.first;
-    // }
     final phone = widget.value.phoneNumber;
     if (phone != null && phone.isNotEmpty) {
       if (phone.startsWith('+7')) {
@@ -207,7 +177,6 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
           initialPhone: phone,
         );
       } else {
-        // fallback
         _updateCountryAndFormat(countries.first, initialPhone: phone);
       }
     } else {
@@ -269,7 +238,6 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
         final digitsOnly = initialPhone.replaceAll(RegExp(r'[^0-9]'), '');
         // Применяем маску
         phoneController.text = _phoneMaskFormatter!.maskText(digitsOnly);
-        // format(digitsOnly);
       } else {
         phoneController.clear();
       }
@@ -365,9 +333,10 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                               value.rating = null;
                               value.feedbackText = null;
                               context.router.popUntil((route) =>
-                                  route.settings.name ==
-                                  LauncherRoute.name);
-                              !_isOwner ? SuccsesfulAddedBs.show(context) : null;
+                                  route.settings.name == LauncherRoute.name);
+                              !_isOwner
+                                  ? SuccsesfulAddedBs.show(context)
+                                  : null;
                             },
                           );
                         },
@@ -753,7 +722,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               );
               if (!mounted) return;
               Toaster.showTopShortToast(context,
-                  message: 'Компания успешно добавлена!');
+                  message: context.localized.companyAdded);
             } catch (e) {
               Toaster.showTopShortToast(context, message: e.toString());
             }
@@ -798,7 +767,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
           padding: const EdgeInsets.symmetric(vertical: 12),
         ),
         child: Text(
-          'Добавить',
+          context.localized.add,
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -886,7 +855,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 checkAllowTapButton();
               },
               controller: subCategoryController,
-              hintText: 'Выберите подкатегорию',
+              hintText: context.localized.selectSubcategory,
               fillColor: AppColors.btnGrey,
               hintStyle:
                   AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
@@ -912,7 +881,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
             child: CustomTextField(
               textStyle: AppTextStyles.fs14w500,
               controller: subCategoryController,
-              hintText: 'Название подкатегорий',
+              hintText: context.localized.subcategoryName,
               onChanged: (text) {
                 value.subCategoryTitle = text;
                 checkAllowTapButton();
@@ -965,7 +934,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
         /// `address`
         Text(
-          'Адрес',
+          context.localized.addresses,
           style: AppTextStyles.fs14w500.copyWith(height: 1.2),
         ),
         const Gap(8),
@@ -979,7 +948,8 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               value.address = text;
               checkAllowTapButton();
             },
-            hintText: '${context.localized.name} адреса',
+            hintText:
+                '${context.localized.name} ${context.localized.addresses}',
             hintStyle:
                 AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
             focusedBorder: OutlineInputBorder(
@@ -996,7 +966,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
         /// `phone number`
         Text(
-          'Номер телефона адреса',
+            context.localized.addressPhone,
           style: AppTextStyles.fs14w500.copyWith(height: 1.2),
         ),
         const Gap(8),
@@ -1031,10 +1001,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                     onChanged: (Country? newCountry) {
                       if (newCountry != null) {
                         _updateCountryAndFormat(newCountry);
-                        // setState(() {
-                        //   selectedCountry = newCountry;
-                        //   phoneController.clear();
-                        // });
+                   
                       }
                     },
                     dropdownColor: Colors.white,
@@ -1045,10 +1012,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                 inputFormatters: [
                   _phoneMaskFormatter ??
                       MaskTextInputFormatter(mask: '##########')
-                  // MaskTextInputFormatter(
-                  //   mask: selectedCountry?.mask,
-                  //   filter: {"#": RegExp(r'[0-9]')},
-                  // ),
+              
                 ],
                 keyboardType: TextInputType.phone,
                 hintText: selectedCountry?.mask.replaceAll('#', '_'),
@@ -1079,7 +1043,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
         /// `link`
         Text(
-          'Ссылка на сайт',
+          context.localized.websiteUrl,
           style: AppTextStyles.fs14w500.copyWith(height: 1.2),
         ),
         const Gap(8),
@@ -1088,7 +1052,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
           child: CustomTextField(
             textStyle: AppTextStyles.fs14w500,
             controller: linkController,
-            hintText: 'Ссылка',
+            hintText: context.localized.link,
             onChanged: (text) {
               value.link = text;
               checkAllowTapButton();
@@ -1110,7 +1074,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
 
         /// `country`
         Text(
-          'Страна',
+          context.localized.country,
           style: AppTextStyles.fs14w500.copyWith(height: 1.2),
         ),
         const Gap(8),
@@ -1140,7 +1104,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
               checkAllowTapButton();
             },
             controller: countryController,
-            hintText: 'Название страны',
+            hintText: context.localized.countryName,
             fillColor: AppColors.btnGrey,
             hintStyle:
                 AppTextStyles.fs14w500.copyWith(color: AppColors.base400),
@@ -1185,7 +1149,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Город',
+                        context.localized.city,
                         style: AppTextStyles.fs14w500.copyWith(height: 1.2),
                       ),
                       const Gap(8),
@@ -1213,7 +1177,7 @@ class _LeaveFeedbackDetailPageState extends State<LeaveFeedbackDetailPage> {
                             checkAllowTapButton();
                           },
                           controller: cityController,
-                          hintText: 'Название город',
+                          hintText: context.localized.cityName,
                           fillColor: AppColors.btnGrey,
                           hintStyle: AppTextStyles.fs14w500
                               .copyWith(color: AppColors.base400),

@@ -114,7 +114,7 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      "Выберите количество звезд", // Добавь в локализацию
+                     context.localized.selectStars, // Добавь в локализацию
                       style:
                           AppTextStyles.fs12w400.copyWith(color: AppColors.red),
                     ),
@@ -167,7 +167,8 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // if (visibleError)
-                      if (_controller.text.isNotEmpty && countWords(_controller.text) < 15)
+                      if (_controller.text.isNotEmpty &&
+                          countWords(_controller.text) < 15)
                         Text(
                           context.localized.minFiveWords,
                           style: AppTextStyles.fs12w400
@@ -338,8 +339,27 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                     // print();
                     state.maybeWhen(
                       error: (message) {
+                        String userFriendlyMessage;
+
+                        // 1. Проверка на дубликат отзыва (Ошибка 409 Conflict)
+                        if (message.contains('already reviewed') ||
+                            message.contains('409')) {
+                          userFriendlyMessage =
+                              context.localized.alreadyReviewed;
+                        }
+                        // 2. Проверка на авторизацию (Ошибка 401 Unauthorized)
+                        else if (message.contains('Unauthorized') ||
+                            message.contains('401')) {
+                          userFriendlyMessage =
+                               context.localized.loginToReview;
+                        }
+                        // 3. Другие ошибки (например, 500 или проблемы с сетью)
+                        else {
+                          userFriendlyMessage =
+                              context.localized.submitError;
+                        }
                         context.loaderOverlay.hide();
-                        Toaster.showErrorTopShortToast(context, message);
+                        Toaster.showErrorTopShortToast(context, userFriendlyMessage);
                       },
                       loading: () {
                         context.loaderOverlay.show();
@@ -352,10 +372,10 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                               context: context,
                               barrierDismissible: false,
                               builder: (context) => AlertDialog(
-                                title: const Text('Внимание'),
-                                content: const Text(
-                                    '''Вы нарушили правила сообщества. Ваш комментарий содержал недопустимые выражения и был отправлен на модерацию. 
-                                    Пожалуйста, соблюдайте правила сообщества.'''),
+                                title:  Text( context.localized.attention),
+                                content:  Text(
+                                    '''${context.localized.moderationWarning}. 
+                                    ${context.localized.followGuidelines}.'''),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
@@ -375,10 +395,10 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                               context: context,
                               barrierDismissible: false,
                               builder: (context) => AlertDialog(
-                                title: const Text('Внимание'),
+                                title:  Text(context.localized.attention),
                                 content: Text(
-                                    '''Ваш комментарий содержал недопустимые выражения и был автоматически исправлен.
-                                     Пожалуйста, соблюдайте правила сообщества.'''
+                                    '''${context.localized.commentAutoCorrected}.
+                                     ${context.localized.followGuidelines}.'''
                                         .trim()),
                                 actions: [
                                   TextButton(
@@ -407,10 +427,10 @@ class _LeaveFeedbackPageState extends State<LeaveFeedbackPage> {
                           context: context,
                           barrierDismissible: false,
                           builder: (context) => AlertDialog(
-                            title: const Text('Внимание'),
+                            title:  Text(context.localized.attention),
                             content: Text(
-                                '''Ваш комментарий содержал недопустимые выражения и не был опубликован.
-                                     Пожалуйста, соблюдайте правила сообщества.'''
+                                '''${context.localized.commentRejected}.
+                                     ${context.localized.followGuidelines}.'''
                                     .trim()),
                             actions: [
                               TextButton(

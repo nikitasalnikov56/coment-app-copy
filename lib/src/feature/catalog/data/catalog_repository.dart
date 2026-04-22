@@ -12,7 +12,8 @@ abstract interface class ICatalogRepository {
 
   Future<FeedbackDTO> userFeedback({required int id, required String isView});
 
-  Future<ComplainDTO> complain({required String text, required int feedId, required String type});
+  Future<ComplainDTO> complain(
+      {required String text, required int feedId, required String type});
 
   Future<Map<String, dynamic>> createFeedback({
     required FeedbackPayload feedbackPayload,
@@ -36,17 +37,28 @@ abstract interface class ICatalogRepository {
 
   Future<List<ProductDTO>> searchProductList({required String search});
 
-  Future<Map<String, dynamic>> replyFeedback({required int feedbackId, required String comment, int? parentId});
+  Future<Map<String, dynamic>> replyFeedback(
+      {required int feedbackId, required String comment, int? parentId});
 
   Future<BasicResponse> like({required int feedbackId, required String type});
 
   Future<BasicResponse> dislike({required int feedbackId});
 
-    Future<Map<String, dynamic>> translateReview(
+  Future<Map<String, dynamic>> translateReview(
       {required int reviewId, required String targetLang});
-      
+
   Future<Map<String, dynamic>> translateReply(
       {required int replyId, required String targetLang});
+
+  Future<void> updateCompany({
+    required int id,
+    required Map<String, dynamic> data,
+  });
+
+  Future<void> uploadCompanyLogo({
+    required int id,
+    required File image,
+  });
 }
 
 class CatalogRepositoryImpl implements ICatalogRepository {
@@ -66,7 +78,8 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future<ComplainDTO> complain({required String text, required int feedId, required String type}) async {
+  Future<ComplainDTO> complain(
+      {required String text, required int feedId, required String type}) async {
     try {
       return await _remoteDS.complain(text: text, feedId: feedId, type: type);
     } catch (e) {
@@ -75,7 +88,8 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future<FeedbackDTO> userFeedback({required int id, required String isView}) async {
+  Future<FeedbackDTO> userFeedback(
+      {required int id, required String isView}) async {
     try {
       final response = await _remoteDS.userFeedback(id: id, isView: isView);
       return response;
@@ -85,9 +99,12 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> createFeedback({required FeedbackPayload feedbackPayload, List<File>? imageFeedback}) async {
+  Future<Map<String, dynamic>> createFeedback(
+      {required FeedbackPayload feedbackPayload,
+      List<File>? imageFeedback}) async {
     try {
-      return await _remoteDS.createFeedback(feedbackPayload: feedbackPayload, imageFeedback: imageFeedback);
+      return await _remoteDS.createFeedback(
+          feedbackPayload: feedbackPayload, imageFeedback: imageFeedback);
     } catch (e) {
       rethrow;
     }
@@ -140,9 +157,11 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> replyFeedback({required int feedbackId, required String comment, int? parentId}) async {
+  Future<Map<String, dynamic>> replyFeedback(
+      {required int feedbackId, required String comment, int? parentId}) async {
     try {
-      final response = await _remoteDS.replyFeedback(feedbackId: feedbackId, comment: comment, parentId: parentId);
+      final response = await _remoteDS.replyFeedback(
+          feedbackId: feedbackId, comment: comment, parentId: parentId);
       return response;
     } catch (e) {
       rethrow;
@@ -150,7 +169,8 @@ class CatalogRepositoryImpl implements ICatalogRepository {
   }
 
   @override
-  Future<BasicResponse> like({required int feedbackId, required String type}) async {
+  Future<BasicResponse> like(
+      {required int feedbackId, required String type}) async {
     try {
       final response = await _remoteDS.like(feedbackId: feedbackId, type: type);
       return response;
@@ -169,26 +189,52 @@ class CatalogRepositoryImpl implements ICatalogRepository {
     }
   }
 
-@override
- Future<Map<String, dynamic>> translateReview(
-      {required int reviewId, required String targetLang}) async{
-        try {
-          final response = await _remoteDS.translateReview(reviewId: reviewId, targetLang: targetLang);
-          return response;
-        } catch (e) {
-          rethrow;
-        }
-      }
+  @override
+  Future<Map<String, dynamic>> translateReview(
+      {required int reviewId, required String targetLang}) async {
+    try {
+      final response = await _remoteDS.translateReview(
+          reviewId: reviewId, targetLang: targetLang);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-@override
-Future<Map<String, dynamic>> translateReply(
-      {required int replyId, required String targetLang}) async{
-        try {
-           final response = await _remoteDS.translateReply(replyId: replyId, targetLang: targetLang);
-           return response;
-        } catch (e) {
-          rethrow;
-        }
-      }
+  @override
+  Future<Map<String, dynamic>> translateReply(
+      {required int replyId, required String targetLang}) async {
+    try {
+      final response = await _remoteDS.translateReply(
+          replyId: replyId, targetLang: targetLang);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
+
+  @override
+  Future<void> updateCompany({
+    required int id,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      await _remoteDS.updateCompany(id: id, data: data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> uploadCompanyLogo({
+    required int id,
+    required File image,
+  }) async {
+    try {
+      await _remoteDS.uploadCompanyLogo(id: id, image: image);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

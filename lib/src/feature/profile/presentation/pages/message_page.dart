@@ -162,11 +162,10 @@ class _MessagePageState extends State<MessagePage> {
                 );
               }
               return ListView.separated(
+                padding: const EdgeInsets.only(top: 14),
                 separatorBuilder: (_, __) => const SizedBox(height: 8),
-                // itemCount: conversations.length,
                 itemCount: filteredConversations.length,
                 itemBuilder: (context, index) {
-                  // final conv = conversations[index];
                   final conv = filteredConversations[index];
                   // 2. Логика определения названия чата (перенесена из ChatListItem)
                   final displayName =

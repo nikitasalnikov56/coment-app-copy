@@ -123,44 +123,43 @@ class ChatListItem extends StatelessWidget {
             fontSize: 13,
           ),
         ),
-        trailing: Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              if (conversation.unreadCount > 0)
-                Container(
-                  width: 18,
-                  height: 18,
-                  decoration: const BoxDecoration(
-                    color: AppColors.blue,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${conversation.unreadCount}',
-                      style: AppTextStyles.fs12w400.copyWith(
-                        color: AppColors.backgroundColor2,
-                        fontWeight: FontWeight.w700,
-                      ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (conversation.unreadCount > 0)
+              Container(
+                width: 18,
+                height: 18,
+                decoration: const BoxDecoration(
+                  color: AppColors.blue,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    '${conversation.unreadCount}',
+                    style: AppTextStyles.fs12w400.copyWith(
+                      color: AppColors.backgroundColor2,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                )
-              else
-                const SizedBox(
-                  height: 12,
                 ),
-              if (lastMsg?.createdAt != null)
-                Text(
-                  '${lastMsg!.createdAt.hour}:${lastMsg.createdAt.minute.toString().padLeft(2, '0')}',
-                  style: AppTextStyles.fs12w400.copyWith(
-                    color: Theme.of(context).textTheme.titleSmall?.color,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
+              )
+            else
+              const SizedBox(
+                height: 12,
+              ),
+            if (lastMsg?.createdAt != null)
+              Text(
+                '${lastMsg!.createdAt.hour}:${lastMsg.createdAt.minute.toString().padLeft(2, '0')}',
+                style: AppTextStyles.fs12w400.copyWith(
+                  color: Theme.of(context).textTheme.titleSmall?.color,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
         onTap: () {
           onTap();

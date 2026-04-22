@@ -1429,6 +1429,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search chats'**
   String get chatSearch;
+
+  /// No description provided for @editCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit company'**
+  String get editCompany;
+
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark theme'**
+  String get darkTheme;
+
+  /// No description provided for @profileLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile loading'**
+  String get profileLoading;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @selectStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Select number of stars'**
+  String get selectStars;
+
+  /// No description provided for @alreadyReviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'You have already left a review for this company'**
+  String get alreadyReviewed;
+
+  /// No description provided for @loginToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Please log in to leave a review'**
+  String get loginToReview;
+
+  /// No description provided for @submitError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while submitting. Please try again later.'**
+  String get submitError;
+
+  /// No description provided for @attention.
+  ///
+  /// In en, this message translates to:
+  /// **'Attention'**
+  String get attention;
+
+  /// No description provided for @moderationWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You violated the community guidelines. Your comment contained inappropriate language and has been sent for moderation.'**
+  String get moderationWarning;
+
+  /// No description provided for @followGuidelines.
+  ///
+  /// In en, this message translates to:
+  /// **'Please follow the community guidelines.'**
+  String get followGuidelines;
+
+  /// No description provided for @commentAutoCorrected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your comment contained inappropriate language and was automatically corrected.'**
+  String get commentAutoCorrected;
+
+  /// No description provided for @commentRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your comment contained inappropriate language and was not published'**
+  String get commentRejected;
+
+  /// No description provided for @companyAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Company successfully added!'**
+  String get companyAdded;
+
+  /// No description provided for @selectSubcategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a subcategory'**
+  String get selectSubcategory;
+
+  /// No description provided for @subcategoryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory name'**
+  String get subcategoryName;
+
+  /// No description provided for @addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Addresses'**
+  String get addresses;
+
+  /// No description provided for @addressPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Address phone number'**
+  String get addressPhone;
+
+  /// No description provided for @websiteUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Website link'**
+  String get websiteUrl;
+
+  /// No description provided for @link.
+  ///
+  /// In en, this message translates to:
+  /// **'Link'**
+  String get link;
+
+  /// No description provided for @cityName.
+  ///
+  /// In en, this message translates to:
+  /// **'City name'**
+  String get cityName;
+
+  /// No description provided for @noCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have a company yet'**
+  String get noCompany;
+
+  /// No description provided for @createCompanyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'To edit data, you first need to create a company profile.'**
+  String get createCompanyHint;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @updateCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating company data'**
+  String get updateCompany;
 }
 
 class _AppLocalizationsDelegate

@@ -673,4 +673,79 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get chatSearch => '搜索聊天';
+
+  @override
+  String get editCompany => '编辑公司';
+
+  @override
+  String get darkTheme => '深色模式';
+
+  @override
+  String get profileLoading => '正在加载个人资料';
+
+  @override
+  String get notifications => '通知';
+
+  @override
+  String get selectStars => '请选择星级数量';
+
+  @override
+  String get alreadyReviewed => '您已经为该公司留下过评价';
+
+  @override
+  String get loginToReview => '请登录以留下评价';
+
+  @override
+  String get submitError => '提交时发生错误。请稍后再试。';
+
+  @override
+  String get attention => '注意';
+
+  @override
+  String get moderationWarning => '您违反了社区规则。您的评论包含不当内容，已被送去审核。';
+
+  @override
+  String get followGuidelines => '请遵守社区规则。';
+
+  @override
+  String get commentAutoCorrected => '您的评论包含不当内容，已被自动修正。';
+
+  @override
+  String get commentRejected => '您的评论包含不当内容，未被发布';
+
+  @override
+  String get companyAdded => '公司已成功添加！';
+
+  @override
+  String get selectSubcategory => '选择子类别';
+
+  @override
+  String get subcategoryName => '子类别名称';
+
+  @override
+  String get addresses => '地址';
+
+  @override
+  String get addressPhone => '地址电话号码';
+
+  @override
+  String get websiteUrl => '网站链接';
+
+  @override
+  String get link => '链接';
+
+  @override
+  String get cityName => '城市名称';
+
+  @override
+  String get noCompany => '您还没有公司';
+
+  @override
+  String get createCompanyHint => '要编辑数据，您需要先创建公司资料。';
+
+  @override
+  String get create => '创建';
+
+  @override
+  String get updateCompany => '更新公司信息';
 }

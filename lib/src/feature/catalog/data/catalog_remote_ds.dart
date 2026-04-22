@@ -52,6 +52,16 @@ abstract interface class ICatalogRemoteDS {
 
   Future<Map<String, dynamic>> translateReply(
       {required int replyId, required String targetLang});
+
+  Future<void> updateCompany({
+    required int id,
+    required Map<String, dynamic> data,
+  });
+
+  Future<void> uploadCompanyLogo({
+    required int id,
+    required File image,
+  });
 }
 
 class CatalogRemoteDsImpl implements ICatalogRemoteDS {
@@ -83,7 +93,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         'feedback/complaint/$feedId',
         body: {'text': text, 'type': type},
       );
-     
+
       return ComplainDTO.fromJson(response);
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#catalog page complain - $e', e, st);
@@ -165,8 +175,7 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
         'companies/${feedbackPayload.productId}/reviews',
         body: formData,
       );
-      print('Response data = $response');
-
+     
       return response;
     } catch (e, st) {
       TalkerLoggerUtil.talker.error('#catalog page crate - $e', e, st);
@@ -206,9 +215,11 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
           url = 'https://$url';
         }
         data['website_url'] = url;
-        }
+      }
       if (catalogId != 0) data['catalog_id'] = catalogId;
-      if (subCatalogId != null && subCatalogId > 0) data['sub_catalog_id'] = subCatalogId;
+      if (subCatalogId != null && subCatalogId > 0) {
+        data['sub_catalog_id'] = subCatalogId;
+      }
       if (comment.isNotEmpty) data['comment'] = comment;
       if (rating != 0) data['rating'] = rating;
       if ((nameSubCatalog ?? '').isNotEmpty) {
@@ -320,5 +331,49 @@ class CatalogRemoteDsImpl implements ICatalogRemoteDS {
       body: {'targetLang': targetLang},
     );
     return response;
+  }
+
+  @override
+  Future<void> updateCompany({
+    required int id,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      // Используем твой restClient.put
+      // Путь 'companies/$id' соответствует эндпоинту в NestJS
+      await restClient.put(
+        'companies/$id',
+        body: data,
+      );
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#updateCompany - $e', e, st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> uploadCompanyLogo({
+    required int id,
+    required File image,
+  }) async {
+    try {
+      // Создаем FormData для отправки файла через Dio
+      final formData = FormData.fromMap({
+        // Ключ 'logo' должен совпадать с FileInterceptor('logo') на бэкенде
+        'logo': await MultipartFile.fromFile(
+          image.path,
+          filename: image.path.split('/').last,
+        ),
+      });
+
+      // Отправляем POST запрос на эндпоинт загрузки логотипа
+      await restClient.post(
+        'companies/$id/logo',
+        body: formData,
+      );
+    } catch (e, st) {
+      TalkerLoggerUtil.talker.error('#uploadCompanyLogo - $e', e, st);
+      rethrow;
+    }
   }
 }

@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:coment_app/src/core/rest_client/src/exception/rest_client_exception.dart';
 import 'package:coment_app/src/feature/catalog/data/catalog_repository.dart';
 import 'package:coment_app/src/feature/catalog/model/feedback_payload.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,6 +52,22 @@ class LeaveFeedbackCubit extends Cubit<LeaveFeedbackState> {
       }
       // emit(const LeaveFeedbackState.loaded());
     } catch (e) {
+
+  
+  String errorMessage = e.toString();
+
+  // Если это ваша кастомная ошибка бэкенда, достаем из неё текст
+  if (e is CustomBackendException) {
+    // Проверяем, есть ли сообщение в поле 'cause' или 'message'
+    final cause = e.cause;
+    if (cause is Map && cause.containsKey('message')) {
+      errorMessage = cause['message'].toString();
+    } else {
+      errorMessage = e.message;
+    }
+  }
+
+
       emit(LeaveFeedbackState.error(message: e.toString()));
     }
   }
